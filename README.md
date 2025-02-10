@@ -1,14 +1,15 @@
-# [Name of the Project] : [Team Number]
+# [Name of the Project] : 17
 # Members
-Project Manager: [Name] ([GitHub Name])\
-Communications Lead: [Name] ([GitHub Name])\
-Git Master: [Name] ([GitHub Name])\
-Design Lead: [Name] ([GitHub Name])\
-Quality Assurance Tester: [Name] ([GitHub Name])
+Project Manager: Cash Cooper (Rcoop31)\
+Communications Lead: Micah Broussard (MicahBroussard)\
+Git Master: Bella Frederick (bells)\
+Design Lead: Alexander Hollier (Alexander Hollier)\
+Quality Assurance Tester: Vasu Arora (va2324)
 
 # About Our Software
 
-Describe a little about what the project is about here.
+A mobile music synthesizer/beat recording app with Duolingo style learning incentives and challenges. This will differ from other music creation apps by incorporating a reward system for consistent use, i.e more instruments, sound packs, etc. 
+
 ## Platforms Tested on
 - MacOS
 - Android
@@ -16,8 +17,8 @@ Describe a little about what the project is about here.
 - Linux
 - Windows
 # Important Links
-Kanban Board: [link]\
-Designs: [link]\
+Kanban Board: [https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1/timeline?assignee=unassigned]\
+Designs: [https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?node-id=20-78&p=f&t=BQzAb3eBOK7TijSp-0]\
 Styles Guide(s): [link]
 
 # How to Run Dev and Test Environment
