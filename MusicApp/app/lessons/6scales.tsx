@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text, ScrollView} from 'react-native';
+import {Text, ScrollView, StyleSheet} from 'react-native';
 import {Link} from 'expo-router';
 
 export default function Scales(){
     return(
-        <ScrollView>
-            <Text>
+        <ScrollView style={styles.container}>
+            <Text style={styles.text}>
                 Scales
             </Text>
             <Link href='./5meter'>
@@ -17,3 +17,15 @@ export default function Scales(){
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: 'white',
+        alignItems: 'center'
+    },
+    text: {
+        color: 'black',
+        fontSize: 14
+    }
+})
