@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as Router from 'expo-router';
 
 export * from 'expo-router';
