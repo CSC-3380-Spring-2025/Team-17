@@ -1,11 +1,11 @@
 import React from 'react';
-import {ScrollView, Text} from 'react-native';
+import {ScrollView, Text, StyleSheet} from 'react-native';
 import {Link} from 'expo-router';
 
 export default function Notation(){
     return(
-        <ScrollView>
-            <Text>
+        <ScrollView style={styles.container}>
+            <Text style={styles.text}>
                 Notation
             </Text>
             <Link href='./1intro'>
@@ -17,3 +17,15 @@ export default function Notation(){
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: 'white',
+        alignItems: 'center'
+    },
+    text: {
+        color: 'black',
+        fontSize: 14
+    }
+})
