@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text, ScrollView} from 'react-native';
+import {Text, ScrollView, StyleSheet} from 'react-native';
 import {Link} from 'expo-router';
 
 export default function Modes(){
     return(
-        <ScrollView>
-            <Text>
+        <ScrollView style={styles.container}>
+            <Text style={styles.text}>
                 Modes
             </Text>
             <Link href='./6'>
@@ -17,3 +17,15 @@ export default function Modes(){
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: 'white',
+        alignItems: 'center'
+    },
+    text: {
+        color: 'black',
+        fontSize: 14
+    }
+})

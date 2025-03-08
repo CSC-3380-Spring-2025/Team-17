@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text, ScrollView} from 'react-native';
+import {Text, ScrollView, StyleSheet} from 'react-native';
 import {Link} from 'expo-router';
 
 export default function Melody(){
     return(
-        <ScrollView>
-            <Text>
+        <ScrollView style={styles.container}>
+            <Text style={styles.text}>
                 Melody
             </Text>
             <Link href='./8intervals'>
@@ -17,3 +17,15 @@ export default function Melody(){
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: 'white',
+        alignItems: 'center'
+    },
+    text: {
+        color: 'black',
+        fontSize: 14
+    }
+})
