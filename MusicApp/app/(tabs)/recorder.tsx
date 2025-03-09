@@ -1,62 +1,48 @@
-import { StyleSheet, View, Pressable, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Button, StyleSheet } from "react-native";
+import TrackPlayer from "react-native-track-player";
 
-type Props = {
-    label: string;
+const tracks = [
+  {
+    id: "track1",
+    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    title: "Track 1",
+    artist: "Artist 1",
+  },
+  {
+    //comment
+    id: "track2",
+    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    title: "Track 2",
+    artist: "Artist 2",
+  },
+];
+
+const MixingScreen: React.FC = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    async function loadTracks() {
+      await TrackPlayer.setupPlayer();
+      await TrackPlayer.add(tracks);
+    }
+    loadTracks();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Mixing Page</Text>
+      <Button title="Play" onPress={() => { TrackPlayer.play(); setIsPlaying(true); }} />
+      <Button title="Pause" onPress={() => { TrackPlayer.pause(); setIsPlaying(false); }} />
+    </View>
+  );
 };
 
-export default function Button({ label }: Props) {
-    return (
-        <View style={styles.container}>
-            {/* Circular Button */}
-            <Pressable style={styles.circularButton} onPress={() => alert("You pressed the circular button!")}>
-                <Text style={styles.circularButtonText}>+</Text>
-            </Pressable>
-        </View>
-    );
-}
-
 const styles = StyleSheet.create({
-    container: {
-      backgroundColor: '#D2D2D2',
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    buttonContainer: {
-        width: 320,
-        height: 68,
-        marginHorizontal: 20,
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 3,
-    },
-    button: {
-        borderRadius: 10,
-        width: "100%",
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "row",
-        backgroundColor: "#000", // Keeping background consistent (color wasn't provided in original)
-    },
-    buttonLabel: {
-        color: "#fff",
-        fontSize: 16,
-    },
-    circularButton: {
-        position: "absolute",
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        backgroundColor: "#000", // Same as original button
-        alignItems: "center",
-        justifyContent: "center",
-        bottom: "45%", // Centered vertically
-    },
-    circularButtonText: {
-        color: "#fff",
-        fontSize: 24,
-        fontWeight: "bold",
-    },
+  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  title: { fontSize: 20, fontWeight: "bold" },
 });
+
+export default MixingScreen;
+
 
