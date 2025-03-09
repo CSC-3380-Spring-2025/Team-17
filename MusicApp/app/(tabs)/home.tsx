@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet } from "react-native";
 import ImageViewer from '@/components/ImageViewer';
-import { Link, Stack } from 'expo-router';
+
 import Button from "@/components/Button";
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 
@@ -13,12 +13,6 @@ export default function HomeScreen() {
       <View style={styles.footerContainer}>
         <Button label="Choose a photo" />
         <Button label="Use this photo" />
-        
-      </View>
-      <View style={styles.container2}>
-      <Link href="/lessons/0contents" style={styles.button}>
-                                Challenges
-                                    </Link>
       </View>
     </View>
   );
@@ -30,13 +24,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#D2D2D2',
     alignItems: 'center',
   },
-  container2: {
-    flex: -.5,
-    
-    backgroundColor: '#333232',
-    alignSelf: 'center',
-    bottom:250,
-  },
   imageContainer: {
     flex: 1,
   },
@@ -44,10 +31,4 @@ const styles = StyleSheet.create({
     flex: 1 / 3,
     alignItems: 'center',
   },
-  button: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
-    color: '#fff',
-},
 });
-
