@@ -16,7 +16,7 @@ export default function Notation(){
                 based on its location on a <b>staff</b>. A <b>staff</b> is a series of five horizontal lines like
                 the one seen below.
             </Text>
-            <Image source={require('./staff.png')}/>
+            <Image source={require('@/assets/images/staff.png')}/>
             <Text style={styles.text}>
                 Notes with a higher pitch are written higher on the staff than notes with a lower pitch. 
                 Essentially, higher notes are placed above lower ones. 
@@ -33,7 +33,7 @@ export default function Notation(){
                 line of a staff, its stem points up. If a note is located on the middle line, its stem can point up or down 
                 depending on the context of the surrounding notes. 
             </Text>
-            <Image source={require('./notes.png')} />
+            <Image source={require('@/assets/images/notes.png')} />
             <Text style={styles.header}>
                 Ledger Lines
             </Text>
@@ -41,7 +41,7 @@ export default function Notation(){
                 If notes are too high or too low to be written on a staff, one can use <b>ledger lines</b> to extend the staff
                 and write higher & lower notes. 
             </Text>
-            <Image source={require('./ledger.png')} />
+            <Image source={require('@/assets/images/ledger.png')} />
             <Text style={styles.header}>
                 Dynamics
             </Text>
@@ -62,7 +62,7 @@ export default function Notation(){
                 get softer. One can either write out <i>cresc.</i> and <i>decresc.</i>, or they can use hairpin symbols to notate
                 dynamic changes, like the ones seen in the chart below. 
             </Text>
-            <Image source={require('./dynamics.png')} />
+            <Image source={require('@/assets/images/dynamics.png')} />
             <Text style={styles.header}>
                 Tempo
             </Text>
@@ -77,7 +77,7 @@ export default function Notation(){
                 Like dynamics, most tempo markings are written in Italian. They often appear at the beginning of a work, movement, or 
                 section.  
             </Text>
-            <Image source={require('./tempo.png')} />
+            <Image source={require('@/assets/images/tempo.png')} />
             <Text style={styles.header}>
                 Articulation
             </Text>
@@ -90,17 +90,17 @@ export default function Notation(){
                 <b>Legato:</b> play or sing notes smoothly and connected. This articulation is indicated by a curved slur over the 
                 notes. 
             </Text>
-            <Image source={require('./slur.png')} />
+            <Image source={require('@/assets/images/slur.png')} />
             <Text style={styles.text}>
                 <b>Stacatto:</b> play or sing notes separately, leaving space in between. This articulation is indicated by 
                 placing dots above or below each of the notes.  
             </Text>
-            <Image source={require('./stacatto.png')} />
+            <Image source={require('@/assets/images/stacatto.png')} />
             <Text style={styles.text}>
                 <b>Accent:</b> play or sing a note with extra emphasis. This articulation is indicated by a sideways V over the 
                 notes. 
             </Text>
-            <Image source={require('./accent.png')} />
+            <Image source={require('@/assets/images/accent.png')} />
             <Link href='./1intro'>
                 Previous: Introduction
             </Link>
