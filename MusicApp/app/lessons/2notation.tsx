@@ -117,12 +117,17 @@ export default function Notation(){
                 <Button color='green' title="Play accent" onPress={() => accentPlayer.play()} />
                 <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
             </View>
-            <Link href='./1intro'>
-                Previous: Introduction
-            </Link>
-            <Link href='./3pitch'>
-                Next: Pitch
-            </Link>
+            <View style={styles.buttons}>
+                <Link href='./1intro'>
+                    Previous: Introduction
+                </Link>
+                <Link href='/(tabs)/home'>
+                    MusicApp
+                </Link>
+                <Link href='./3pitch'>
+                    Next: Pitch
+                </Link>
+            </View>
         </ScrollView>
     );
 }
