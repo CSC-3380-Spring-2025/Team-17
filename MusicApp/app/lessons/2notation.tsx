@@ -1,8 +1,12 @@
 import React from 'react';
-import {ScrollView, Text, StyleSheet, Image} from 'react-native';
+import {ScrollView, View, Text, StyleSheet, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
+import { useAudioPlayer } from 'expo-audio';
 
 export default function Notation(){
+    const slurPlayer = useAudioPlayer(require('@/assets/sounds/a-slur.mp3'));
+    const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
+    const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
     return(
         <ScrollView style={styles.container}>
             <Text style={styles.title}>
@@ -91,16 +95,28 @@ export default function Notation(){
                 notes. 
             </Text>
             <Image source={require('@/assets/images/slur.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play slur" onPress={() => slurPlayer.play()} />
+                <Button color='red' title="Pause slur" onPress={() => slurPlayer.pause()} />
+            </View>
             <Text style={styles.text}>
-                <b>Stacatto:</b> play or sing notes separately, leaving space in between. This articulation is indicated by 
+                <b>Staccato:</b> play or sing notes separately, leaving space in between. This articulation is indicated by 
                 placing dots above or below each of the notes.  
             </Text>
             <Image source={require('@/assets/images/stacatto.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play staccato" onPress={() => staccatoPlayer.play()} />
+                <Button color='red' title="Pause staccato" onPress={() => staccatoPlayer.pause()} />
+            </View>
             <Text style={styles.text}>
                 <b>Accent:</b> play or sing a note with extra emphasis. This articulation is indicated by a sideways V over the 
                 notes. 
             </Text>
             <Image source={require('@/assets/images/accent.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play accent" onPress={() => accentPlayer.play()} />
+                <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
+            </View>
             <Link href='./1intro'>
                 Previous: Introduction
             </Link>
@@ -136,5 +152,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         padding: 20,
         textAlign: 'left',
+    },
+    buttons: {
+        flexDirection: 'row'
     }
 })
