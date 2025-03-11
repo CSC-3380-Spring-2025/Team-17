@@ -14,7 +14,7 @@ export default function App() {
     // The recording will be available on `audioRecorder.uri`.
     await audioRecorder.stop();
   };
-
+//comment
   useEffect(() => {
     (async () => {
       const status = await AudioModule.requestRecordingPermissionsAsync();
