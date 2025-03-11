@@ -3,7 +3,7 @@ import ImageViewer from '@/components/ImageViewer';
 
 import Button from "@/components/Button";
 const PlaceholderImage = require('@/assets/images/dog.jpg');
-
+//be ahead
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
