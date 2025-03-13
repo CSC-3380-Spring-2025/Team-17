@@ -118,13 +118,13 @@ export default function Notation(){
                 <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
             </View>
             <View style={styles.links}>
-                <Link href='./1intro' style={styles.prevlink}>
+                <Link href='./1intro' style={styles.edgelinks}>
                     Previous: Introduction
                 </Link>
                 <Link href='../(tabs)/home' style={styles.homelink}>
                     MusicApp
                 </Link>
-                <Link href='./3pitch' style={styles.nextlink}>
+                <Link href='./3pitch' style={styles.edgelinks}>
                     Next: Pitch
                 </Link>
             </View>
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
         padding: 40,
         gap: 500
     },
-    prevlink: {
+    edgelinks: {
         color: 'purple',
         fontSize: 30
     },
@@ -177,9 +177,5 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
-    },
-    nextlink: {
-        color: 'purple',
-        fontSize: 30
     }
 })
