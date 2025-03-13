@@ -8,7 +8,7 @@ export default function Notation(){
     const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
     const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
     return(
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
                 Music Notation
             </Text>
@@ -117,14 +117,14 @@ export default function Notation(){
                 <Button color='green' title="Play accent" onPress={() => accentPlayer.play()} />
                 <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
             </View>
-            <View style={styles.buttons}>
-                <Link href='./1intro'>
+            <View style={styles.links}>
+                <Link href='./1intro' style={styles.prevlink}>
                     Previous: Introduction
                 </Link>
-                <Link href='/(tabs)/home'>
+                <Link href='../(tabs)/home' style={styles.homelink}>
                     MusicApp
                 </Link>
-                <Link href='./3pitch'>
+                <Link href='./3pitch' style={styles.nextlink}>
                     Next: Pitch
                 </Link>
             </View>
@@ -140,25 +140,46 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'black',
-        fontSize: 30,
+        fontSize: 80,
         fontFamily: 'TIMES_NEW_ROMAN',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+        paddingBottom: 20
     },
     text: {
         color: 'black',
-        fontSize: 14,
+        fontSize: 20,
         fontFamily: 'ARIAL',
         padding: 10
     },
     header: {
         color: 'black',
-        fontSize: 20,
+        fontSize: 36,
         fontFamily: 'ARIAL',
         fontWeight: 'bold',
-        padding: 20,
+        padding: 40,
+        paddingTop: 60,
         textAlign: 'left',
     },
     buttons: {
         flexDirection: 'row'
+    },
+    links: {
+        flexDirection: 'row',
+        padding: 40,
+        gap: 500
+    },
+    prevlink: {
+        color: 'purple',
+        fontSize: 30
+    },
+    homelink: {
+        color: 'purple',
+        fontSize: 30,
+        alignSelf: 'center'
+    },
+    nextlink: {
+        color: 'purple',
+        fontSize: 30
     }
 })
