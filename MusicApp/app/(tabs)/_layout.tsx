@@ -47,7 +47,7 @@ export default function TabLayout() {
     <Tabs.Screen
         name="recorder"
         options={{
-            title: 'Recorder',
+            title: 'Mixing',
             tabBarIcon: ({ color, focused }) => (
                 <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color = {color} size = {24} />
 
@@ -75,7 +75,7 @@ export default function TabLayout() {
         }}
     />
     <Tabs.Screen
-        name="recordertest"
+        name="Recording"
         options={{
             title: 'RecorderTest',
             tabBarIcon: ({ color, focused }) => (
