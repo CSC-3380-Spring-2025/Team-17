@@ -29,7 +29,7 @@ export default function ChallengesScreen() {
     { title: "Upload 4 custom recordings", progress: 3, goal: 4 }, // Change here
     { title: "Score 80% or higher in 5 lessons", progress: 1, goal: 5 }, // Change here
   ]);
-
+//comment
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Daily</Text>
