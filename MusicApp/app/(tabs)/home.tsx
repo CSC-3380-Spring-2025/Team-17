@@ -1,6 +1,5 @@
 import { Text, View, StyleSheet } from "react-native";
 import ImageViewer from '@/components/ImageViewer';
-import {Link} from 'expo-router';
 
 import Button from "@/components/Button";
 const PlaceholderImage = require('@/assets/images/dog.jpg');
@@ -8,9 +7,6 @@ const PlaceholderImage = require('@/assets/images/dog.jpg');
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Link href='../lessons/0contents'>
-          Lessons
-        </Link>
       <View style={styles.imageContainer}>
         <ImageViewer imgSource={PlaceholderImage} />
       </View>
