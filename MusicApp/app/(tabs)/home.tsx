@@ -14,6 +14,11 @@ export default function HomeScreen() {
       headerTitle: () => (
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Home</Text>
+          <View style={styles.account}>
+        <Link href="/account" style={styles.text}>
+          oVo
+        </Link>
+      </View>
           <View style={styles.streakContainer}>
           <Text style={styles.streak}>🔥: 0</Text>
         </View>
@@ -61,15 +66,26 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   titleContainer: {
     alignItems:"center",
+    top:30,
   },
   streakContainer: {
-    bottom:20,
+    bottom:70,
     right:170,
   },
   gemContainer: {
-    bottom:20,
+    bottom:70,
     right:170,
   },
+  account:{
+    width: 45,
+    height: 45,
+    borderRadius: 35,
+    backgroundColor: "#000", // Same as original button
+    alignItems: "center",
+    justifyContent: "center",
+    left:170,
+    bottom: 30, // Centered vertically
+},
   title: {
     fontSize: 30,
     color: "#fff",
