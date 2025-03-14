@@ -6,7 +6,7 @@ export default function App() {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [recordings, setRecordings] = useState([]); // Array to store all recorded sounds
-
+//why
   async function startRecording() {
     try {
       if (permissionResponse.status !== 'granted') {
