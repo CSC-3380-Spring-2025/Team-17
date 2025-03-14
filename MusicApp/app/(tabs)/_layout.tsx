@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { View } from 'react-native';
 
 export default function TabLayout() {
     return (
@@ -9,28 +8,12 @@ export default function TabLayout() {
             tabBarActiveTintColor: '#ffd33d',
             headerStyle: {
                 backgroundColor: '#333232',
-                height: 60,
             },
-            headerBackground: () => (
-                <View style={{
-                    backgroundColor: '#333232', 
-                    borderBottomLeftRadius: 20,
-                    borderBottomRightRadius: 20,
-                    flex: 1
-                }} />
-            ),
             headerShadowVisible: false,
             headerTintColor: '#fff',
-            headerTitleAlign: 'center',
-            headerTitleStyle: {
-                fontWeight: 'bold',
-                fontSize: 22,
-                marginTop: 10,
-            },
             tabBarStyle: {
                 backgroundColor: '#333232',
             },
-            
         }}
     >
         <Tabs.Screen
