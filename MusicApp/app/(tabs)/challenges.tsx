@@ -23,7 +23,7 @@ const ChallengeBox = ({ title, progress, goal }: ChallengeProps) => {
 export default function ChallengesScreen() {
   const [challenges] = useState([
     { title: "Complete 2 lessons", progress: 1, goal: 2 }, // Change progress manually
-    { title: "Spend 10 minutes learning", progress: 14, goal: 20 }, // Change here
+    { title: "Spend 10 minutes learning", progress: 3, goal: 20 }, // Change here
     { title: "Use the acoustic guitar in a track", progress: 1, goal: 1 }, // Change here
     { title: "Create a 3-minute track", progress: 2, goal: 3 }, // Change here
     { title: "Upload 4 custom recordings", progress: 3, goal: 4 }, // Change here
