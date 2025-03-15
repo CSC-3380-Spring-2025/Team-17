@@ -5,6 +5,9 @@ import {Link} from 'expo-router';
 export default function Intro() {
     return(
         <View style={styles.container}>
+            <Text style={styles.title}>
+                Introduction
+            </Text>
             <Text style={styles.text}>
                 Hello there, and welcome to the Music Theory Lessons! Are you trying to write an original song
                 but have no idea where to start? Well, you have come to the right place! In these lessons, you will 
@@ -15,8 +18,11 @@ export default function Intro() {
                 the world. Well, what are you waiting for? Let's get started! Click the link below to navigate to your 
                 first lesson.
             </Text>
-            <Link href='./2notation'>
+            <Link href='./2notation' style={styles.link}>
                 Next: Music Notation
+            </Link>
+            <Link href='../(tabs)/home' style={styles.link}>
+                MusicApp
             </Link>
         </View>
     );
@@ -28,8 +34,23 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center'
     },
+    title: {
+        color: 'black',
+        fontSize: 80,
+        fontFamily: 'TIMES_NEW_ROMAN',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+        paddingBottom: 20
+    },
     text: {
         color: 'black',
-        fontSize: 14
+        fontSize: 24,
+        fontFamily: 'ARIAL',
+        padding: 10
+    },
+    link: {
+        color: 'purple',
+        fontSize: 30,
+        padding: 20
     }
 })
