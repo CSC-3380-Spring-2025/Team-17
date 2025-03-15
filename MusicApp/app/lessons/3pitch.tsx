@@ -1,8 +1,20 @@
 import React from 'react';
-import {Text, ScrollView, StyleSheet, View, Image} from 'react-native';
+import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
+import { useAudioPlayer } from 'expo-audio';
 
 export default function Pitch(){
+    const flute1 = useAudioPlayer(require('@/assets/sounds/flute1.mp3'));
+    const flute2 = useAudioPlayer(require('@/assets/sounds/flute2.mp3'));
+    const trombone1 = useAudioPlayer(require('@/assets/sounds/trombone1.mp3'));
+    const trombone2 = useAudioPlayer(require('@/assets/sounds/trombone2.mp3'));
+    const viola1 = useAudioPlayer(require('@/assets/sounds/viola1.mp3'));
+    const viola2 = useAudioPlayer(require('@/assets/sounds/viola2.mp3'));
+    const cello1 = useAudioPlayer(require('@/assets/sounds/cello1.mp3'));
+    const cello2 = useAudioPlayer(require('@/assets/sounds/cello2.mp3'));
+    const piano1 = useAudioPlayer(require('@/assets/sounds/piano1.mp3'));
+    const piano2 = useAudioPlayer(require('@/assets/sounds/piano2.mp3'));
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -28,11 +40,19 @@ export default function Pitch(){
                 "Every Good Boy Does Fine". 
             </Text>
             <Image source={require('@/assets/images/egbdf.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play flute" onPress={() => flute1.play()} />
+                <Button color='red' title="Pause flute" onPress={() => flute1.pause()} />
+            </View>
             <Text style={styles.text}>
                 The spaces in the treble clef are used to notate the pitches F, A, C, E. This pattern can be remembered by the fact 
                 that they spell the word "face". 
             </Text>
             <Image source={require('@/assets/images/face.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play flute" onPress={() => flute2.play()} />
+                <Button color='red' title="Pause flute" onPress={() => flute2.pause()} />
+            </View>
             <Text style={styles.text}>
                 <b>Bass Clef: </b> The bass clef is the other most widely used clefs in Western music. It is typically used for 
                 lower-range voices and instruments, such as bassoon, cello, trombone, or bass voice. Because this clef curls around the 
@@ -41,11 +61,19 @@ export default function Pitch(){
                 remembered by the mnemonic device "Good Bikes Don't Fall Apart".
             </Text>
             <Image source={require('@/assets/images/gbdfa.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play trombone" onPress={() => trombone1.play()} />
+                <Button color='red' title="Pause trombone" onPress={() => trombone1.pause()} />
+            </View>
             <Text style={styles.text}>
                 The spaces in the bass clef are used to notate the pitches A, C, E, G. This pattern can be remembered by the 
                 mnemonic device "All Cows Eat Grass". 
             </Text>
             <Image source={require('@/assets/images/aceg.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play trombone" onPress={() => trombone2.play()} />
+                <Button color='red' title="Pause trombone" onPress={() => trombone2.pause()} />
+            </View>
             <Text style={styles.text}>
                 <b>Alto Clef: </b> The alto clef is a less widely used clef in Western music. It is typically used for the viola, which is a 
                 middle-range instrument. Because this clef is centered around the C line (the middle line), it is also called the 
@@ -53,11 +81,19 @@ export default function Pitch(){
                 remembered by the mnemonic device "Fat Alley Cats Eat Garbage".
             </Text>
             <Image source={require('@/assets/images/faceg.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play viola" onPress={() => viola1.play()} />
+                <Button color='red' title="Pause viola" onPress={() => viola1.pause()} />
+            </View>
             <Text style={styles.text}>
                 The spaces in the alto clef are used to notate the pitches G, B, D, F. This pattern can be remembered by the 
                 mnemonic device "Grand Boats Drift Flamboyantly".
             </Text>   
             <Image source={require('@/assets/images/gbdf.png')} />
+            <View style={styles.buttons}>
+                    <Button color='green' title="Play viola" onPress={() => viola2.play()} />
+                    <Button color='red' title="Pause viola" onPress={() => viola2.pause()} />
+            </View>
             <Text style={styles.text}>
                 <b>Tenor Clef: </b> The tenor clef is another less widely used clef in Western music. It is typically used for 
                 lower-range instruments, like the cello, bassoon, and trombone, but their main clef is the bass clef. 
@@ -66,11 +102,19 @@ export default function Pitch(){
                 remembered by the mnemonic device "Dodges, Fords, and Chevys Everywhere".
             </Text>
             <Image source={require('@/assets/images/dface.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play cello" onPress={() => cello1.play()} />
+                <Button color='red' title="Pause cello" onPress={() => cello1.pause()} />
+            </View>
             <Text style={styles.text}>
                 The spaces in the tenor clef are used to notate the pitches E, G, B, D. This pattern can be remembered by the 
                 mnemonic device "Elvis' Guitar Broke Down".
             </Text>
             <Image source={require('@/assets/images/egbd.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play cello" onPress={() => cello2.play()} />
+                <Button color='red' title="Pause cello" onPress={() => cello2.pause()} />
+            </View>
             <Text style={styles.header}>
                 Piano & the Grand Staff
             </Text>
@@ -95,6 +139,10 @@ export default function Pitch(){
                 grand staff, but also because it lies in the middle of the piano keyboard. 
             </Text>
             <Image source={require('@/assets/images/grand_staff.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => piano1.play()} />
+                <Button color='red' title="Pause piano" onPress={() => piano1.pause()} />
+            </View>
             <Text style={styles.header}>
                 Half Steps, Whole Steps, & Accidentals
             </Text>
@@ -126,6 +174,10 @@ export default function Pitch(){
                 as Fb. C is also known as B#, and B is also known as Cb. 
             </Text>
             <Image source={require('@/assets/images/keys.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => piano2.play()} />
+                <Button color='red' title="Pause piano" onPress={() => piano2.pause()} />
+            </View>
             <Text style={styles.text}>
                 Each key on the keyboard has more than one name. <b>Enharmonic equivalence</b> is when two notes have different names, 
                 but they have the same sound. C# & Db are enharmonically equivalent, so playing either of those notes will result in the 
