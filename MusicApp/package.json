@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint"
@@ -42,9 +42,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "expo-audio": "~0.3.5",
-    "@react-native-async-storage/async-storage": "1.23.1",
-    "expo-secure-store": "~14.0.1"
+    "expo-audio": "~0.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
