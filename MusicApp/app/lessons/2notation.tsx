@@ -17,7 +17,7 @@ export default function Notation(){
             </Text>
             <Text style={styles.text}> 
                 A musical note indicates both pitch and rhythm. The pitch of the note is determined
-                based on its location on a <b>staff</b>. A <b>staff</b> is a series of five horizontal lines like
+                based on its location on a staff. A <b>staff</b> is a series of five horizontal lines like
                 the one seen below.
             </Text>
             <Image source={require('@/assets/images/staff.png')}/>
