@@ -4,7 +4,7 @@ import {Link} from 'expo-router';
 
 export default function Structure(){
     return(
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.text}>
                 Song Structures
             </Text>

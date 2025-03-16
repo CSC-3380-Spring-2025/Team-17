@@ -4,7 +4,7 @@ import {Link} from 'expo-router';
 
 export default function Progressions(){
     return(
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.text}>
                 Harmonic Progressions
             </Text>

@@ -4,14 +4,14 @@ import {Link} from 'expo-router';
 
 export default function Modes(){
     return(
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.text}>
                 Modes
             </Text>
-            <Link href='./6'>
+            <Link href='./6scales'>
                 Previous: Scales
             </Link>
-            <Link href='./8'>
+            <Link href='./8intervals'>
                 Next: Intervals
             </Link>
         </ScrollView>

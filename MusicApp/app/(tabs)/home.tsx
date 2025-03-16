@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Link, Stack } from 'expo-router';
 import ImageViewer from '@/components/ImageViewer';
+import {Link} from 'expo-router';
 
 import Button from "@/components/Button";
 const PlaceholderImage = require('@/assets/images/dog.jpg');
@@ -8,6 +9,7 @@ const PlaceholderImage = require('@/assets/images/dog.jpg');
 
 export default function HomeScreen() {
   return (
+
     <>
     <Stack.Screen
      options={{
@@ -18,6 +20,14 @@ export default function HomeScreen() {
         <Link href="/account" style={styles.text}>
           oVo
         </Link>
+
+    <View style={styles.container}>
+      <Link href='../lessons/0contents'>
+          Lessons
+        </Link>
+      <View style={styles.imageContainer}>
+        <ImageViewer imgSource={PlaceholderImage} />
+
       </View>
           <View style={styles.streakContainer}>
           <Text style={styles.streak}>🔥: 0</Text>
