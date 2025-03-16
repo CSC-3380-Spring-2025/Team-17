@@ -20,6 +20,7 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "expo": "~52.0.35",
+    "expo-audio": "~0.3.5",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.6",
     "expo-font": "~13.0.4",
