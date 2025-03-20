@@ -34,6 +34,16 @@ export default function TabLayout() {
         }}
     >
         <Tabs.Screen
+        name="Splash"
+        options={{
+            title: 'Splash',
+            tabBarIcon: ({ color, focused }) => (
+                <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color = {color} size = {24} />
+
+            ),
+        }}
+    />
+        <Tabs.Screen
         name="home"
         options={{
             title: 'Home',
