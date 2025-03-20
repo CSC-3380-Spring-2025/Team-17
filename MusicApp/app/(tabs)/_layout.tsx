@@ -9,14 +9,15 @@ export default function TabLayout() {
             tabBarActiveTintColor: '#ffd33d',
             headerStyle: {
                 backgroundColor: '#333232',
-                height: 60,
+                height: 120,
             },
             headerBackground: () => (
                 <View style={{
                     backgroundColor: '#333232', 
                     borderBottomLeftRadius: 20,
                     borderBottomRightRadius: 20,
-                    flex: 1
+                    flex: 1,
+                    height: 180,
                 }} />
             ),
             headerShadowVisible: false,
@@ -77,7 +78,7 @@ export default function TabLayout() {
     <Tabs.Screen
         name="Recording"
         options={{
-            title: 'RecorderTest',
+            title: 'Recorder',
             tabBarIcon: ({ color, focused }) => (
                 <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color = {color} size = {24} />
 

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { View, StyleSheet, Button, FlatList, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList, Text, Button } from 'react-native';
 import { Audio } from 'expo-av';
-//3test
+
 export default function App() {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const [recordings, setRecordings] = useState([]); // Array to store all recorded sounds
+  const [recordings, setRecordings] = useState([]);
 
   async function startRecording() {
     try {
@@ -38,12 +38,11 @@ export default function App() {
     });
     const uri = recording.getURI();
 
-    // Adds the new recording to the recordings array
     setRecordings((prevRecordings) => [
       ...prevRecordings,
       {
         uri: uri,
-        name: `Recording ${prevRecordings.length + 1}`, // Assign a name to the recording
+        name: `Recording ${prevRecordings.length + 1}`,
       },
     ]);
     console.log('Recording stopped and stored at', uri);
@@ -55,21 +54,17 @@ export default function App() {
     await sound.playAsync();
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.didJustFinish) {
-        sound.unloadAsync(); // Unloads the sound after it finishes playing
+        sound.unloadAsync();
       }
     });
   }
 
   return (
     <View style={styles.container}>
-      <Button
-        title={recording ? 'Stop Recording' : 'Start Recording'}
-        onPress={recording ? stopRecording : startRecording}
-      />
-
       <FlatList
         data={recordings}
         keyExtractor={(item, index) => index.toString()}
+        inverted={true}
         renderItem={({ item }) => (
           <View style={styles.recordingItem}>
             <Text style={styles.recordingName}>{item.name}</Text>
@@ -77,6 +72,14 @@ export default function App() {
           </View>
         )}
       />
+      <View style={styles.recordButtonContainer}>
+        <View style={styles.recordButtonOuter}>
+          <TouchableOpacity
+            style={[styles.recordButton, recording && styles.recordingActive]}
+            onPress={recording ? stopRecording : startRecording}
+          />
+        </View>
+      </View>
     </View>
   );
 }
@@ -84,9 +87,33 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between', // Moves button to bottom
+    backgroundColor: '#1E1E1E',
+    padding: 0,
+  },
+  recordButtonContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  recordButtonOuter: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    borderWidth: 3,
+    borderColor: 'white',
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 10,
+    alignItems: 'center',
+  },
+  recordButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'red',
+  },
+  recordingActive: {
+    width: 45, // 75% of original size
+    height: 45,
+    borderRadius: 10, // Rounded corners instead of a circle
   },
   recordingItem: {
     flexDirection: 'row',
@@ -94,9 +121,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: 'white',
   },
   recordingName: {
+    color: 'white',
     fontSize: 16,
   },
 });
