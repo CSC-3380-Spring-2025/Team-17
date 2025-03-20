@@ -1,16 +1,12 @@
 import '@testing-library/jest-native/extend-expect';
 
 jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native');
     return{
-        useNavigation: () => ({
-            navigate: jest.fn(),
+        ...actualNav,
+        userNavigation: () => ({
+            navigate: jest.fn(), 
             dispatch: jest.fn(),
-            setOption: jest.fn(),
-        }),
-        useRoute: () => ({
-            params: {
-                id: '123',
-            },
         }),
     };
 });
