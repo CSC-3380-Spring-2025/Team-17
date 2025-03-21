@@ -6,20 +6,28 @@ import { auth, authenticateUser } from '../firebaseConfig';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [message, setMessage] = useState<string | null>(null);
+  
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const user = await authenticateUser(email, password);
-      if (user) {
+      if ('error' in user) {
+        setMessage(user.error);
+      }else{
         await updateProfile(user, { displayName });
+        const name = user.displayName||"";
         console.log("User registered successfully");
-      } else {
-        console.error("User registration failed");
+        setMessage(`Registration successful! Welcome, ${name}!`);
       }
     } catch (error) {
-      console.error("Error registering user:", error);
+      
+        console.error("Unknown error caught");
+        setMessage("An unknown error occurred.");
+    
     }
-  };
+    };
+
 
   return (
     <form onSubmit={handleRegister}>
@@ -45,6 +53,7 @@ import { auth, authenticateUser } from '../firebaseConfig';
         required
       />
       <button type="submit">Register</button>
+      {message && <p>{message}</p>}
     </form>
   );
 };

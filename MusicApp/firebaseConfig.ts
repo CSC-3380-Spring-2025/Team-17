@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
-import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
+import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 // import {...} from 'firebase/database';
 // import {...} from 'firebase/firestore';
 // import {...} from 'firebase/functions';
@@ -21,11 +21,28 @@ const firebaseConfig = {
   measurementId: "G-F1KY58966Z"
 };
 
-// Define a function to handle user authentication
+//function to handle user authentication
 export async function authenticateUser(email: string, password: string) {
   try {
     // Create a new user account
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Return the user object
+    return user;
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: 'An unknown error occurred.' };
+    }
+  }
+}
+//function to handle user login
+export async function loginUser(email: string, password: string) {
+  try {
+    // Get the user object
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
     // Return the user object
@@ -36,7 +53,6 @@ export async function authenticateUser(email: string, password: string) {
     return null;
   }
 }
-
 
 
 // Initialize Firebase
