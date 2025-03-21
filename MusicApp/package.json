@@ -12,7 +12,9 @@
     "lint": "expo lint"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "setupFiles": ["<rootDir>/test-setup.ts"],
+    "setupFilesAfterEnv": ["<rootDir>/test-setup.ts"]
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
@@ -48,6 +50,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",

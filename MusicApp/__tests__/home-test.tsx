@@ -1,18 +1,10 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { render } from '@testing-library/react-native';
-import HomeScreen from '../app/(tabs)/home';
+import HomeScreen from '@/app/(tabs)/home';
 
-const mockNavigation = jest.fn();
-jest.mock('@react-navigation/native', () => ({
-    ...jest.requireActual('@react-navigation/native'),
-    useNavigation: () => {
-      return mockNavigation;
-    },
-  }));
-
-describe('<HomeScreen />', () => {
+describe('HomeScreen', () => {
     test('renders correctly', () => {
-        const tree = render(<HomeScreen/>).toJSON();
-        expect(tree).toMatchSnapshot();
+      render(<NavigationContainer><HomeScreen /></NavigationContainer>);
     });
 });

@@ -8,7 +8,7 @@ const PlaceholderImage = require('@/assets/images/dog.jpg');
 export default function HomeScreen() {
   return (
     <>
-      <Stack.Screen
+      <Stack.Screen 
         options={{
           headerTitle: () => (
             <View style={styles.titleContainer}>
