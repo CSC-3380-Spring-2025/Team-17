@@ -13,6 +13,7 @@
   },
   "jest": {
     "preset": "jest-expo",
+    "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json", "node"],
     "setupFiles": ["<rootDir>/test-setup.ts"],
     "setupFilesAfterEnv": ["<rootDir>/test-setup.ts"]
   },
