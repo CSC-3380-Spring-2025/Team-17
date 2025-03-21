@@ -87,7 +87,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between', // Moves button to bottom
+    justifyContent: 'space-between',
     backgroundColor: '#1E1E1E',
     padding: 0,
   },
@@ -111,9 +111,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
   },
   recordingActive: {
-    width: 45, // 75% of original size
+    width: 45,
     height: 45,
-    borderRadius: 10, // Rounded corners instead of a circle
+    borderRadius: 10,
   },
   recordingItem: {
     flexDirection: 'row',
