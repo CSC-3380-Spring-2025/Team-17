@@ -1,8 +1,18 @@
 import React from 'react';
-import {Text, ScrollView, StyleSheet, View, Image} from 'react-native';
+import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
+import { useAudioPlayer } from 'expo-audio';
 
 export default function Meter(){
+    const sd = useAudioPlayer(require('@/assets/sounds/simple_duple.mp3'));
+    const st = useAudioPlayer(require('@/assets/sounds/simple_triple.mp3'));
+    const sq = useAudioPlayer(require('@/assets/sounds/simple_quadruple.mp3'));
+    const cd = useAudioPlayer(require('@/assets/sounds/compound_duple.mp3'));
+    const ct = useAudioPlayer(require('@/assets/sounds/compound_triple.mp3'));
+    const cq = useAudioPlayer(require('@/assets/sounds/compound_quadruple.mp3'));
+    const b1 = useAudioPlayer(require('@/assets/sounds/beams1.mp3'));
+    const b2 = useAudioPlayer(require('@/assets/sounds/beams2.mp3'));
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -60,16 +70,28 @@ export default function Meter(){
                 in every measure, and the quarter note gets the beat. 
             </Text>
             <Image source={require('@/assets/images/simple_duple.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => sd.play()} />
+                <Button color='red' title="Pause piano" onPress={() => sd.pause()} />
+            </View>
             <Text style={styles.text}>
                 Try counting the rhythm below. This example is in simple triple meter. The time signature 3/4 means that there are 3 beats
                 in every measure, and the quarter note gets the beat. 
             </Text>
             <Image source={require('@/assets/images/simple_triple.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => st.play()} />
+                <Button color='red' title="Pause piano" onPress={() => st.pause()} />
+            </View>
             <Text style={styles.text}>
                 Try counting the rhythm below. This example is in simple quadruple meter. The time signature 4/4 means that there are 4 beats
                 in every measure, and the quarter note gets the beat. 
             </Text>
             <Image source={require('@/assets/images/simple_quadruple.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => sq.play()} />
+                <Button color='red' title="Pause piano" onPress={() => sq.pause()} />
+            </View>
             <Text style={styles.text}>
                 In simple meters with other beat units, like the half note, eighth note, or sixteenth note, the same counting pattern 
                 is used to count beats and subdivisions. The only difference is they correspond to different note values. But the rhythms
@@ -84,6 +106,10 @@ export default function Meter(){
                 beamed notes, the stem direction of both notes is determined by the note farthest from the middle line of the staff. 
             </Text>
             <Image source={require('@/assets/images/beams.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => b1.play()} />
+                <Button color='red' title="Pause piano" onPress={() => b1.pause()} />
+            </View>
             <Text style={styles.header}>
                 Compound Meter
             </Text>
@@ -102,7 +128,7 @@ export default function Meter(){
                 Since the beat is divided into three in compound meter, the top number in the time signature is always a multiple of three.
                 Dividing this number by three yields the number of beats in the measure. The numbers 6, 9, & 12 correspond to duple, triple, 
                 and quadruple meter respectively. The bottom number is usually 4 (meaning the quarter note gets the division), 8 (meaning the 
-                eighth note gets the division), or 16, (meaning the sixteenth note gets the division).
+                eighth note gets the division), or 16 (meaning the sixteenth note gets the division).
             </Text>
             <Text style={styles.header}>
                 Counting Compound Meter
@@ -123,16 +149,28 @@ export default function Meter(){
                 in every measure, and the dotted quarter note gets the beat while the eighth note gets the division. 
             </Text>
             <Image source={require('@/assets/images/compound_duple.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => cd.play()} />
+                <Button color='red' title="Pause piano" onPress={() => cd.pause()} />
+            </View>
             <Text style={styles.text}>
                 Try counting the rhythm below. This example is in compound triple meter. The time signature 9/8 means that there are 3 beats
                 in every measure, and the dotted quarter note gets the beat while the eighth note gets the division. 
             </Text>
             <Image source={require('@/assets/images/compound_triple.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => ct.play()} />
+                <Button color='red' title="Pause piano" onPress={() => ct.pause()} />
+            </View>
             <Text style={styles.text}>
                 Try counting the rhythm below. This example is in compound quadruple meter. The time signature 12/8 means that there are 4 beats
                 in every measure, and the dotted quarter note gets the beat while the eighth note gets the division. 
             </Text>
             <Image source={require('@/assets/images/compound_quadruple.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => cq.play()} />
+                <Button color='red' title="Pause piano" onPress={() => cq.pause()} />
+            </View>
             <Text style={styles.text}>
                 In compound meters with other beat units, like the dotted half note or dotted eighth note the same counting pattern 
                 is used to count beats and subdivisions. The only difference is they correspond to different note values. But the rhythms
@@ -144,6 +182,10 @@ export default function Meter(){
                 direction are the same as in simple meter. 
             </Text>
             <Image source={require('@/assets/images/beams2.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play piano" onPress={() => b2.play()} />
+                <Button color='red' title="Pause piano" onPress={() => b2.pause()} />
+            </View>
             <View style={styles.links}>
                 <Link href='./4rhythm' style={styles.edgelinks}>
                     Previous: Rhythm
@@ -188,8 +230,8 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         textAlign: 'left',
     },
-    notes: {
-        alignItems: 'flex-start'
+    buttons: {
+        flexDirection: 'row'
     },
     links: {
         flexDirection: 'row',
