@@ -1,7 +1,9 @@
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { StyleSheet, View, Pressable, Text, TextStyle } from 'react-native';
 
 type Props = {
   label: string;
+  onPress?: () => void;
+  textStyle?: TextStyle; // Allow the textStyle prop
 };
 
 export default function Button({ label }: Props) {
