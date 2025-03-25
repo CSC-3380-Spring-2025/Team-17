@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { updateProfile } from "firebase/auth";
 import { auth, authenticateUser } from '../firebaseConfig';
+import { Text, StyleSheet } from 'react-native';
 
   const Register: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -31,6 +32,8 @@ import { auth, authenticateUser } from '../firebaseConfig';
 
   return (
     <form onSubmit={handleRegister}>
+      <Text style={styles.text}>Name</Text>
+      <br></br>
       <input
         type="text"
         value={displayName}
@@ -38,6 +41,11 @@ import { auth, authenticateUser } from '../firebaseConfig';
         placeholder="Display Name"
         required
       />
+      <br></br>
+      <br></br>
+      <br></br>
+      <Text style={styles.text}>Email</Text>
+      <br></br>
       <input
         type="email"
         value={email}
@@ -45,6 +53,11 @@ import { auth, authenticateUser } from '../firebaseConfig';
         placeholder="Email"
         required
       />
+      <br></br>
+      <br></br>
+      <br></br>
+      <Text style={styles.text}>Password</Text>
+      <br></br>
       <input
         type="password"
         value={password}
@@ -52,10 +65,20 @@ import { auth, authenticateUser } from '../firebaseConfig';
         placeholder="Password"
         required
       />
+      <br></br>
+      <br></br>
+      <br></br>
       <button type="submit">Register</button>
-      {message && <p>{message}</p>}
     </form>
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    color: "#ddddd",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+})
 
 export default Register;
