@@ -1,6 +1,7 @@
 import ProgressBar from "@/components/ProgressBar";
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Link, Stack } from 'expo-router';
 
 type ChallengeProps = {
   title: string;
@@ -11,7 +12,9 @@ type ChallengeProps = {
 const ChallengeBox = ({ title, progress, goal }: ChallengeProps) => {
   return (
     <View style={styles.challengeItem}>
-      <Text style={styles.title}>{title}</Text>
+      <Link href="/lessons/0contents" style={styles.title}>
+                  {title}
+                </Link>
       <Text style={styles.progressText}>
         {progress}/{goal}
       </Text>
