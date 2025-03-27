@@ -5,6 +5,10 @@ import { useAudioPlayer } from 'expo-audio';
 
 export default function Scales(){
     const cmajor = useAudioPlayer(require('@/assets/sounds/cmajor.mp3'));
+    const natminor = useAudioPlayer(require('@/assets/sounds/natural_minor.mp3'));
+    const harminor = useAudioPlayer(require('@/assets/sounds/harmonic_minor.mp3'));
+    const melminor = useAudioPlayer(require('@/assets/sounds/melodic_minor.mp3'));
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -20,7 +24,8 @@ export default function Scales(){
             </Text>
             <Text style={styles.text}>
                 A <b>major scale</b> is an ordered collection of whole steps (W) & half steps (H) in the following pattern: W, W, H, W, W, W, H.
-                This pattern of whole steps and half steps is always the same in every major scale. 
+                This pattern of whole steps and half steps is always the same in every major scale. Music written with major scales is often
+                characterized as sounding happy or light. 
             </Text>
             <Image source={require('@/assets/images/major_scale.png')} />
             <View style={styles.buttons}>
@@ -119,6 +124,82 @@ export default function Scales(){
             <Text style={styles.header}>
                 Minor Scales
             </Text>
+            <Text style={styles.text}>
+                There are three types of minor scales: natural, harmonic, and melodic minor. The one thing all minor scales have in common 
+                is that the third note of a minor scale is a half step lower than the third note of a major scale with the same tonic note.
+                Music written with minor scales is often characterized as sounding sad or dark. 
+            </Text>
+            <Text style={styles.text}>
+                A <b>natural minor</b> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern: 
+                W, H, W, W, H, W, W. This pattern is the same ascending and descending. Compared to a major scale starting on the same 
+                tonic note, the scale degrees 3, 6, & 7 are all lowered by a half step in the natural minor scale. The lowered 7 is 
+                especially important because it no longer resolves to the tonic like the leading tone in the major scale. Thus, 
+                scale degree 7 is called the subtonic in natural minor. 
+            </Text>
+            <Image source={require('@/assets/images/natural_minor.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play Natural Minor" onPress={() => natminor.play()} />
+                <Button color='red' title="Pause Natural Minor" onPress={() => natminor.pause()} />
+            </View>
+            <Text style={styles.text}>
+                A <b>harmonic minor</b> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern: 
+                W, H, W, W, H, 3H, H. This pattern is the same ascending and descending. The 3H interval indicates 3 half steps, or a 
+                whole step & a half step. This raises scale degree 7 and allows it to become a leading tone that resolves to the tonic 
+                just like in minor. The lowered scale degrees 3 & 6 remain the same as in natural minor. The raised 7 is good for harmony
+                since it resolves to the tonic again, but it is not good for melody because of the awkward interval of 3 half steps. 
+            </Text>
+            <Image source={require('@/assets/images/harmonic_minor.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play Harmonic Minor" onPress={() => harminor.play()} />
+                <Button color='red' title="Pause Harmonic Minor" onPress={() => harminor.pause()} />
+            </View>
+            <Text style={styles.text}>
+                A <b>melodic minor</b> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern: 
+                W, H, W, W, W, W, H. This pattern only appears in an ascending melodic minor scale. When descending, the pattern reverts 
+                back to the natural minor scale. Ascending melodic minor raises scale degrees 6 & 7, which not only allows for 7 to resolve 
+                to the tonic as a leading tone, but the raised 6 also preserves consonant melodic intervals. Scale degrees 6 & 7 are lowered 
+                again when descending down the melodic minor scale.  
+            </Text>
+            <Image source={require('@/assets/images/melodic_minor.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play Melodic Minor" onPress={() => melminor.play()} />
+                <Button color='red' title="Pause Melodic Minor" onPress={() => melminor.pause()} />
+            </View>
+            <Text style={styles.text}>
+                The solfege syllables of minor scales differ slightly from the solfege syllables of major scales because of the lowered
+                scale degrees of 3, 6, & 7. In natural minor, the syllable for lowered 3 is <i>me</i> (pronounced "may"), the syllable 
+                for lowered 6 is <i>le</i> (pronounced "lay"), and the syllable for lowered 7 is <i>te</i> (pronounced "tay"). In 
+                harmonic minor, scale degree 7 is raised, so its solfege syllable becomes <i>ti</i>, just like in a major scale. In 
+                melodic minor, both scale degrees 6 & 7 are raised, so their solfege syllables become <i>la</i> & <i>ti</i>, respectively.
+            </Text>
+            <Image source={require('@/assets/images/minor_solfege.png')} />
+            <Text style={styles.header}>
+                Parallel & Relative Relationships
+            </Text>
+            <Text style={styles.text}>
+                When comparing major & minor keys, there are two important relationships to remember. The <b>parallel relationship</b> 
+                is when a major key and a minor key share the same tonic note. For example, C major & C minor are parallel keys. C major
+                is the parallel major of C minor, and C minor is the parallel minor of C major. The <b>relative relationship</b> is when
+                a major key and a minor key share the same key signature. For example, C major does not have any sharps or flats in its
+                key signature, and neither does A minor. C major is the relative major of A minor, and A minor is the relative minor of 
+                C major. The tonic of a minor key is always located three half steps below the tonic of its relative major key. Starting 
+                on C, you would count B, Bb, A to find that A minor is the relative minor of C major. Likewise, to find the relative 
+                major of a minor key, count three half steps up.
+            </Text>  
+            <Text style={styles.header}>
+                The Circle of Fifths
+            </Text>
+            <Text style={styles.text}>
+                The <b>Circle of Fifths</b> is a convenient visual that lays out all of the major and minor keys in a simple and easily 
+                digestible manner. All of the major and minor keys are placed on a circle in order of the number of accidentals in their
+                key signatures. It is called the Circle of Fifths because each key is a fifth away from the keys on either side of it.
+                At the top of the circle, there is the key of C major/A minor, which has no sharps or flats in its key signature. Going 
+                clockwise, each subsequent key signature adds one more sharp to the key signature. Going counterclockwise, each subsequent 
+                key signature adds one more flat to the key signature. The bottom three key signatures are enharmonically equivalent. For 
+                example, the keys of F# major & Gb major have different key signatures (6 sharps & 6 flats), but they sound the same because 
+                F# & Gb are enharmonically equivalent.
+            </Text>
+            <Image source={require('@/assets/images/circle_fifths.png')} />
             <View style={styles.links}>
                 <Link href='./5meter' style={styles.edgelinks}>
                     Previous: Meter
