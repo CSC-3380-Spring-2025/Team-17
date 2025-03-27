@@ -37,6 +37,8 @@ export default function TabLayout() {
         name="Splash"
         options={{
             title: 'Splash',
+            headerShown: false,
+            tabBarStyle: {display: 'none'},
             tabBarIcon: ({ color, focused }) => (
                 <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color = {color} size = {24} />
 

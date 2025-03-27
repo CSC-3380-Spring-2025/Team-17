@@ -3,30 +3,33 @@ import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import { Svg, Polygon } from 'react-native-svg';
 import Button from '@/components/Button';
 import ImageViewer from '@/components/ImageViewer';
+import { useNavigation } from 'expo-router';
+import { useEffect } from 'react';
+
+
 
 const { width, height } = Dimensions.get('window');
 
 export default function Splash() {
+    const navigation = useNavigation();
+    useEffect(() => {
+        navigation.setOptions({ headerShown: false });
+    }, [navigation]);
+
     return (
         <View style={styles.container}>
             <View style={styles.imageWrapper}>
                 <ImageViewer
-                    imgSource={require('@/assets/images/adobestock.jpeg')}
+                    imgSource={require('@/assets/images/adobestock.jpg')}
                     style={styles.image}
                 />
-                <Svg
-                    height={height * 0.5}
-                    width={width}
-                    style={styles.slantedOverlay}
-                >
-                    {/* White border */}
+                <Svg height={height * 0.5} width={width} style={styles.slantedOverlay}>
                     <Polygon
-                        points={`0,${height * 0.4 - 5} ${width},${height * 0.3 - 5} ${width},${height * 0.5} 0,${height * 0.6}`}
+                        points={`0,${height * 0.45 - 2} ${width},${height * 0.35 - 2} ${width},${height * 0.5} 0,${height * 0.6}`}
                         fill="white"
                     />
-                    {/* Slanted background overlay */}
                     <Polygon
-                        points={`0,${height * 0.4} ${width},${height * 0.3} ${width},${height * 0.5} 0,${height * 0.6}`}
+                        points={`0,${height * 0.45} ${width},${height * 0.35} ${width},${height * 0.5} 0,${height * 0.6}`}
                         fill="#333232"
                     />
                 </Svg>
@@ -55,12 +58,16 @@ const styles = StyleSheet.create({
         width: '100%',
         height: height * 0.5,
         overflow: 'hidden',
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
     },
 
     image: {
         width: '100%',
         height: '100%',
         resizeMode: 'cover',
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
     },
 
     slantedOverlay: {

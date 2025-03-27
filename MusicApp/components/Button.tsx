@@ -3,7 +3,7 @@ import { StyleSheet, View, Pressable, Text, TextStyle } from 'react-native';
 type Props = {
   label: string;
   onPress?: () => void;
-  textStyle?: TextStyle; // Allow the textStyle prop
+  textStyle?: TextStyle;
 };
 
 export default function Button({ label }: Props) {

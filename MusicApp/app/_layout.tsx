@@ -5,6 +5,7 @@ export default function RootLayout() {
     <Stack initialRouteName="index">
       <Stack.Screen name="index" />
       <Stack.Screen name="(tabs)" options={{ headerShown:false }} />
+      <Stack.Screen name="(tabs)/Splash" options={{ headerShown: false }} />
     </Stack>
   );
 }
