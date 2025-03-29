@@ -13,9 +13,20 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json", "node"],
-    "setupFiles": ["<rootDir>/test-setup.ts"],
-    "setupFilesAfterEnv": ["<rootDir>/test-setup.ts"]
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json",
+      "node"
+    ],
+    "setupFiles": [
+      "<rootDir>/test-setup.ts"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test-setup.ts"
+    ]
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
