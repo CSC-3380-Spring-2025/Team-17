@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 // import {...} from 'firebase/database';
 // import {...} from 'firebase/firestore';
 // import {...} from 'firebase/functions';
@@ -39,11 +40,44 @@ export async function authenticateUser(email: string, password: string) {
   }
 }
 
+export const storeLoginDate = async(userId: string)=> {
+  const userRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userRef);
 
+  if (userDoc.exists()){
+    await updateDoc(userRef,{
+      loginDates: arrayUnion(new Date().toISOString().split('T')[0])
+    });
+  }else{
+    await setDoc(userRef, {
+      loginDates: [new Date().toISOString().split('T')[0]]
+    });
+  }
+};
+
+export const checkConsecutiveDays=(loginDates: string[])=>{
+  let consecutiveDays = 1;
+
+  for (let i=1; i<loginDates.length; i++){
+    const prevDate= new Date(loginDates[i-1]);
+    const currDate= new Date(loginDates[i]);
+
+    if(
+      currDate.getFullYear()==prevDate.getFullYear()&&
+      currDate.getMonth() == prevDate.getMonth() &&
+      currDate.getDate() == prevDate.getDate() + 1
+    ){
+      consecutiveDays++;
+    }else{
+      consecutiveDays=1;
+    }
+  }
+  return consecutiveDays;
+};
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
 export const auth = getAuth(app);
-
+export const db = getFirestore(app);
 //export const db = getFirestore(app);
 //export const storage = getStorage(app);
