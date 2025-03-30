@@ -38,21 +38,6 @@ export async function authenticateUser(email: string, password: string) {
     }
   }
 }
-//function to handle user login
-export async function loginUser(email: string, password: string) {
-  try {
-    // Get the user object
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-
-    // Return the user object
-    return user;
-  } catch (error) {
-    // Handle authentication errors
-    console.error(error);
-    return null;
-  }
-}
 
 
 // Initialize Firebase

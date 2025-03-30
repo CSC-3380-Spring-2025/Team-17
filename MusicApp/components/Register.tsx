@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { updateProfile } from "firebase/auth";
+import { updateProfile, sendEmailVerification } from "firebase/auth";
 import { auth, authenticateUser } from '../firebaseConfig';
 import { Text, StyleSheet } from 'react-native';
 
@@ -7,24 +7,27 @@ import { Text, StyleSheet } from 'react-native';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [message, setMessage] = useState<string | null>(null);
+
   
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const user = await authenticateUser(email, password);
       if ('error' in user) {
-        setMessage(user.error);
+        alert(user.error);
       }else{
         await updateProfile(user, { displayName });
+        await sendEmailVerification(user);
         const name = user.displayName||"";
         console.log("User registered successfully");
-        setMessage(`Registration successful! Welcome, ${name}!`);
+        const successMessage=`Registration successful! A verification email has been sent to ${email}. ${name}, please verify your email before logging in.`;
+        alert(successMessage);
       }
     } catch (error) {
       
         console.error("Unknown error caught");
-        setMessage("An unknown error occurred.");
+        const errorMessage="An unknown error occurred.";
+        alert(errorMessage);
     
     }
     };
