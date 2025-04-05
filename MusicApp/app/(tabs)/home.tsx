@@ -31,7 +31,10 @@ export default function HomeScreen() {
           <ImageViewer imgSource={PlaceholderImage} />
         </View>
         <View style={styles.streakContainer}>
-          <Text style={styles.streak}>🔥: 0</Text>
+        <Link href="/challenges" style={styles.streak}>
+        🔥: 0
+          </Link>
+          
         </View>
         <View style={styles.gemContainer}>
           <Text style={styles.gem}>💎: 0</Text>
