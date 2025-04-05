@@ -62,11 +62,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Button
-        title={recording ? 'Stop Recording' : 'Start Recording'}
-        onPress={recording ? stopRecording : startRecording}
-      />
-
+      
       <FlatList
         data={recordings}
         keyExtractor={(item, index) => index.toString()}
@@ -77,6 +73,13 @@ export default function App() {
           </View>
         )}
       />
+      
+      <View style={styles.buttonContainer}>
+      <Button
+        title={recording ? '◼' : '⚪'}
+        onPress={recording ? stopRecording : startRecording}
+      />
+      </View>
     </View>
   );
 }
@@ -88,6 +91,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecf0f1',
     padding: 10,
   },
+  buttonContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 35,
+    left: 250,
+    backgroundColor: "#2196f3",
+    
+    justifyContent: "center",
+    
+  },
+  
   recordingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -1,25 +1,42 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from '../firebaseConfig';
+import { updateProfile, sendEmailVerification } from "firebase/auth";
+import { auth, authenticateUser } from '../firebaseConfig';
+import { Text, StyleSheet } from 'react-native';
 
-const Register: React.FC = () => {
+  const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
 
+  
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName });
-      console.log("User registered successfully");
+      const user = await authenticateUser(email, password);
+      if ('error' in user) {
+        alert(user.error);
+      }else{
+        await updateProfile(user, { displayName });
+        await sendEmailVerification(user);
+        const name = user.displayName||"";
+        console.log("User registered successfully");
+        const successMessage=`Registration successful! A verification email has been sent to ${email}. ${name}, please verify your email before logging in.`;
+        alert(successMessage);
+      }
     } catch (error) {
-      console.error("Error registering user:", error);
+      
+        console.error("Unknown error caught");
+        const errorMessage="An unknown error occurred.";
+        alert(errorMessage);
+    
     }
-  };
+    };
+
 
   return (
     <form onSubmit={handleRegister}>
+      <Text style={styles.text}>Name</Text>
+      <br></br>
       <input
         type="text"
         value={displayName}
@@ -27,6 +44,11 @@ const Register: React.FC = () => {
         placeholder="Display Name"
         required
       />
+      <br></br>
+      <br></br>
+      <br></br>
+      <Text style={styles.text}>Email</Text>
+      <br></br>
       <input
         type="email"
         value={email}
@@ -34,6 +56,11 @@ const Register: React.FC = () => {
         placeholder="Email"
         required
       />
+      <br></br>
+      <br></br>
+      <br></br>
+      <Text style={styles.text}>Password</Text>
+      <br></br>
       <input
         type="password"
         value={password}
@@ -41,9 +68,20 @@ const Register: React.FC = () => {
         placeholder="Password"
         required
       />
+      <br></br>
+      <br></br>
+      <br></br>
       <button type="submit">Register</button>
     </form>
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    color: "#ddddd",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+})
 
 export default Register;
