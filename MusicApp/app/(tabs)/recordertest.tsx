@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, Button, FlatList, Text } from 'react-native';
+import { View, StyleSheet, Button, FlatList, Text, TouchableOpacity, Pressable } from 'react-native';
 import { Audio } from 'expo-av';
 //3test
 export default function App() {
@@ -69,16 +69,20 @@ export default function App() {
         renderItem={({ item }) => (
           <View style={styles.recordingItem}>
             <Text style={styles.recordingName}>{item.name}</Text>
-            <Button title="Play" onPress={() => playSound(item.uri)} />
+            <Pressable style={styles.playButton} onPress={() => playSound(item.uri)}>
+           <Text style={styles.playText}> Play  </Text>
+            </Pressable>
           </View>
         )}
       />
       
-      <View style={styles.buttonContainer}>
-      <Button
-        title={recording ? '◼' : '⚪'}
+      <View>
+      <TouchableOpacity
+      style={styles.buttonContainer}
         onPress={recording ? stopRecording : startRecording}
-      />
+        >
+        <Text style={styles.recordingText}>{recording ? '◼' : '⬤'}</Text>
+      </TouchableOpacity>
       </View>
     </View>
   );
@@ -88,29 +92,49 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#4f5252',
     padding: 10,
   },
   buttonContainer: {
     width: 100,
     height: 100,
-    borderRadius: 35,
-    left: 250,
-    backgroundColor: "#2196f3",
-    
+    borderRadius: 45,
+    left: 160,
+    backgroundColor: "#333636",
+    alignItems: "center",
     justifyContent: "center",
     
   },
-  
+  recordingText: {
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 75,
+    color: 'red',
+    bottom: 5,
+  },
+  playButton: {
+    
+    backgroundColor: 'red',
+    
+  },
+  playText: {
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 20,
+    color: 'white',
+   
+  },
   recordingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
+    backgroundColor: '#292b2b',
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#4f5252',
   },
   recordingName: {
+    color: 'white',
     fontSize: 16,
   },
 });

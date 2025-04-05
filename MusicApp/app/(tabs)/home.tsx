@@ -8,7 +8,7 @@ const PlaceholderImage = require('@/assets/images/dog.jpg');
 export default function HomeScreen() {
   return (
     <>
-      <Stack.Screen
+      <Stack.Screen 
         options={{
           headerTitle: () => (
             <View style={styles.titleContainer}>
@@ -36,7 +36,17 @@ export default function HomeScreen() {
        <View style={styles.imageContainer}>
           <ImageViewer imgSource={PlaceholderImage} />
         </View>
-        
+
+        <View style={styles.streakContainer}>
+        <Link href="/challenges" style={styles.streak}>
+        🔥: 0
+          </Link>
+          
+        </View>
+        <View style={styles.gemContainer}>
+          <Text style={styles.gem}>💎: 0</Text>
+        </View>
+
         <View style={styles.lessonContainer}>
           <Link href="/lessons/1intro" style={styles.text}>
             Lesson 1
