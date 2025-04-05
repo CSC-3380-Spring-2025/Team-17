@@ -14,9 +14,15 @@ export default function HomeScreen() {
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Home</Text>
               <View style={styles.account}>
-                <Link href="/account" style={styles.text}>
+                <Link href="/account" style={styles.accountText}>
                   oVo
                 </Link>
+                <View style={styles.streakContainer}>
+          <Text style={styles.streak}>🔥: 0</Text>
+        </View>
+        <View style={styles.gemContainer}>
+          <Text style={styles.gem}>💎: 0</Text>
+        </View>
               </View>
             </View>
           ),
@@ -27,9 +33,10 @@ export default function HomeScreen() {
         <Link href='../lessons/0contents'>
           Lessons
         </Link>
-        <View style={styles.imageContainer}>
+       <View style={styles.imageContainer}>
           <ImageViewer imgSource={PlaceholderImage} />
         </View>
+
         <View style={styles.streakContainer}>
         <Link href="/challenges" style={styles.streak}>
         🔥: 0
@@ -39,22 +46,29 @@ export default function HomeScreen() {
         <View style={styles.gemContainer}>
           <Text style={styles.gem}>💎: 0</Text>
         </View>
+
         <View style={styles.lessonContainer}>
           <Link href="/lessons/1intro" style={styles.text}>
             Lesson 1
           </Link>
         </View>
         <View style={styles.draft1Container}>
-          <Button label="Draft #1" />
+        <Link href="/recordertest" style={styles.text}>
+            Draft #1
+          </Link>
         </View>
         <View style={styles.draft2Container}>
-          <Button label="Draft #2" />
+        <Link href="/recordertest" style={styles.text}>
+            Draft #2
+          </Link>
         </View>
         <View style={styles.draft3Container}>
-          <Button label="Draft #3" />
+        <Link href="/recordertest" style={styles.text}>
+            Draft #3
+          </Link>
         </View>
         <View style={styles.moreContainer}>
-          <Link href="/recorder" style={styles.seeText}>
+          <Link href="/recordertest" style={styles.seeText}>
             See More
           </Link>
         </View>
@@ -69,12 +83,12 @@ const styles = StyleSheet.create({
     top: 30,
   },
   streakContainer: {
-    bottom: 70,
-    right: 170,
+    bottom:10,
+    right: 300,
   },
   gemContainer: {
-    bottom: 70,
-    right: 170,
+    bottom:10,
+    right: 300,
   },
   account: {
     width: 45,
@@ -84,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     left: 170,
-    bottom: 30,
+    bottom: 50,
   },
   title: {
     fontSize: 30,
@@ -110,51 +124,51 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   lessonContainer: {
-    width: 250,
-    height: 70,
-    top: 20,
+    width: 350,
+    height: 100,
+    bottom: 300,
     borderRadius: 25,
-    backgroundColor: "#000",
+    backgroundColor: "#484848",
     alignItems: "center",
     justifyContent: "center",
   },
   draft1Container: {
-    width: 250,
-    height: 70,
+    width: 350,
+    height: 100,
     borderRadius: 25,
-    backgroundColor: '#1b479e',
+    backgroundColor: '#484848',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#000000',
-    top: 40,
+    bottom: 250,
   },
   draft2Container: {
-    width: 250,
-    height: 70,
+    width: 350,
+    height: 100,
     borderRadius: 25,
-    backgroundColor: '#1b479e',
+    backgroundColor: '#484848',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#000000',
-    top: 60,
+    bottom: 200,
   },
   draft3Container: {
-    width: 250,
-    height: 70,
+    width: 350,
+    height: 100,
     borderRadius: 25,
-    backgroundColor: '#1b479e',
+    backgroundColor: '#484848',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#000000',
-    top: 80,
+    bottom: 150,
   },
   moreContainer: {
     width: 175,
     height: 50,
-    top: 100,
+    bottom: 100,
     borderRadius: 15,
     backgroundColor: "#000",
     alignItems: "center",
@@ -162,8 +176,14 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  accountText: {
+    color: "#fff",
     fontSize: 24,
     fontWeight: "bold",
+    top:15,
   },
   seeText: {
     color: "#fff",
