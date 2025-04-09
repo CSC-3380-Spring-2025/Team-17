@@ -9,7 +9,7 @@ export default function TabLayout() {
             tabBarActiveTintColor: '#ffd33d',
             headerStyle: {
                 backgroundColor: '#333232',
-                height: 60,
+                height: 75,
             },
             headerBackground: () => (
                 <View style={{
