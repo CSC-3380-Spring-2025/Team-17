@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Register from '../../components/Register';
+import Register from '../components/Register';
 import Login from '@/components/Login';
 import streak from '@/components/streak'
 import { Text, View, StyleSheet, Pressable } from 'react-native';
