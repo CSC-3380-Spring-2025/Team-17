@@ -7,6 +7,67 @@ export default function Notation(){
     const slurPlayer = useAudioPlayer(require('@/assets/sounds/a-slur.mp3'));
     const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
     const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
+
+    const correct_dynamic = () => {
+        let correct : any = document.getElementById('true');
+        let incorrect : any = document.getElementById('false');
+        let p : any = document.getElementById('correct1');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const incorrect_dynamic = () => {
+        let correct : any = document.getElementById('true');
+        let incorrect : any = document.getElementById('false');
+        let p : any = document.getElementById('wrong1');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct_tempo = () => {
+        let grave : any = document.getElementById('grave');
+        let andante : any = document.getElementById('andante');
+        let allegro : any = document.getElementById('allegro');
+        let presto : any = document.getElementById('presto');
+        let p : any = document.getElementById('correct2');
+
+        presto.style.color = 'green';
+        presto.disabled = true;
+        grave.style.color = 'red';
+        grave.disabled = true;
+        andante.style.color = 'red';
+        andante.disabled = true;
+        allegro.style.color = 'red';
+        allegro.disabled = true;
+        p.hidden = false;
+    }
+
+    const incorrect_tempo = () => {
+        let grave : any = document.getElementById('grave');
+        let andante : any = document.getElementById('andante');
+        let allegro : any = document.getElementById('allegro');
+        let presto : any = document.getElementById('presto');
+        let p : any = document.getElementById('wrong2');
+
+        presto.style.color = 'green';
+        presto.disabled = true
+        grave.style.color = 'red';
+        grave.disabled = true;
+        andante.style.color = 'red';
+        andante.disabled = true;
+        allegro.style.color = 'red';
+        allegro.disabled = true;
+        p.hidden = false;
+    }
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -117,6 +178,30 @@ export default function Notation(){
                 <Button color='green' title="Play accent" onPress={() => accentPlayer.play()} />
                 <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
             </View>
+            <Text style={styles.header}>
+                Pop Quiz
+            </Text>
+            <Text style={styles.text}>
+                1. True or False: <i>forte</i> means to play softly & <i>piano</i> means to play loudly.
+            </Text>
+            <form id='dynamics'>
+                <button id='false' onClick={incorrect_dynamic}>True</button>
+                <button id='true' onClick={correct_dynamic}>False</button>
+                <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! <i>forte</i> means to play loudly & <i>piano </i> 
+                means to play softly.</p>
+            </form>
+            <Text style={styles.text}>
+                2. Which of the following is the fastest tempo?
+            </Text>
+            <form id='tempo'>
+                <button id='grave' onClick={incorrect_tempo}>Grave</button>
+                <button id='andante' onClick={incorrect_tempo}>Andante</button>
+                <button id='allegro' onClick={incorrect_tempo}>Allegro</button>
+                <button id='presto' onClick={correct_tempo}>Presto</button>
+                <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong2' color='red' style={{textAlign: 'center'}}hidden>Wrong! Presto is the fastest tempo listed here.</p>
+            </form>
             <View style={styles.links}>
                 <Link href='./1intro' style={styles.edgelinks}>
                     Previous: Introduction
