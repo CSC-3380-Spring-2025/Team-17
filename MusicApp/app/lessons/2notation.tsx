@@ -185,8 +185,8 @@ export default function Notation(){
                 1. True or False: <i>forte</i> means to play softly & <i>piano</i> means to play loudly.
             </Text>
             <form id='dynamics'>
-                <button id='false' onClick={incorrect_dynamic}>True</button>
-                <button id='true' onClick={correct_dynamic}>False</button>
+                <button id='false' style={{fontSize: '24px'}} onClick={incorrect_dynamic}>True</button>
+                <button id='true' style={{fontSize: '24px'}} onClick={correct_dynamic}>False</button>
                 <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
                 <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! <i>forte</i> means to play loudly & <i>piano </i> 
                 means to play softly.</p>
@@ -195,10 +195,10 @@ export default function Notation(){
                 2. Which of the following is the fastest tempo?
             </Text>
             <form id='tempo'>
-                <button id='grave' onClick={incorrect_tempo}>Grave</button>
-                <button id='andante' onClick={incorrect_tempo}>Andante</button>
-                <button id='allegro' onClick={incorrect_tempo}>Allegro</button>
-                <button id='presto' onClick={correct_tempo}>Presto</button>
+                <button id='grave' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Grave</button>
+                <button id='andante' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Andante</button>
+                <button id='allegro' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Allegro</button>
+                <button id='presto' style={{fontSize: '24px'}} onClick={correct_tempo}>Presto</button>
                 <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
                 <p id='wrong2' color='red' style={{textAlign: 'center'}}hidden>Wrong! Presto is the fastest tempo listed here.</p>
             </form>
