@@ -7,7 +7,6 @@ const PlaceholderImage = require('@/assets/images/dog.jpg');
 //be ahead
 
 export default function HomeScreen() {
-  const [streak, setStreak]=useState(0);
   return (
     <>
       <Stack.Screen 
@@ -40,7 +39,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.streakContainer}>
-        <Streak label="Streak" streak={streak} />
+        <Streak/>
           
         </View>
         <View style={styles.gemContainer}>
