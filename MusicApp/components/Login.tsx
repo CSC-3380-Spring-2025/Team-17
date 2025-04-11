@@ -4,14 +4,12 @@ import {getDoc, doc} from "firebase/firestore"
 import { auth, db, storeLoginDate, checkConsecutiveDays } from '../firebaseConfig';
 import { Text, StyleSheet } from 'react-native';
 import {useAuth} from "@/app/context/AuthContext"
-type LoginProps = {
-  streak: number;
-  setStreak: (streak: number) => void;
-}
-const Login: React.FC<LoginProps> = ({streak, setStreak}) => {
+
+const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {login}= useAuth();
+  
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,11 +21,10 @@ const Login: React.FC<LoginProps> = ({streak, setStreak}) => {
           await storeLoginDate(user.uid);
           const userDoc = await getDoc(doc(db, "users", user.uid));
           const loginDates = userDoc.data()?.loginDates || [];
-          const consecutiveDays = checkConsecutiveDays(loginDates);
+          const consecutiveDays = checkConsecutiveDays(loginDates, user.uid);
           const name = user.displayName||"";
           login({name:user.displayName ||""});
           if(consecutiveDays>1){
-            setStreak(consecutiveDays)
             alert(`Login Successful! Great job ${name}! You've logged in for ${consecutiveDays} consecutive days!`);
           }else{
             console.log("Login successful");
