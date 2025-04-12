@@ -1,8 +1,13 @@
 import React from 'react';
-import {Text, ScrollView, StyleSheet, Image} from 'react-native';
+import {Text, ScrollView, StyleSheet, Image, View, Button} from 'react-native';
 import {Link} from 'expo-router';
+import { useAudioPlayer } from 'expo-audio';
 
 export default function Intervals(){
+    const intervals = useAudioPlayer(require('@/assets/sounds/intervals.mp3'));
+    const sizes = useAudioPlayer(require('@/assets/sounds/sizes.mp3'));
+    const augmented = useAudioPlayer(require('@/assets/sounds/augmented.mp3'));
+    const diminished = useAudioPlayer(require('@/assets/sounds/diminished.mp3'));
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -15,6 +20,10 @@ export default function Intervals(){
                 measure show a melodic interval between C & E while the second measure show a harmonic interval between the same pitches.
             </Text>
             <Image source={require('@/assets/images/intervals.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play intervals" onPress={() => intervals.play()} />
+                <Button color='red' title="Pause intevals" onPress={() => intervals.pause()} />
+            </View>
             <Text style={styles.header}>
                 Size & Quality
             </Text>
@@ -26,6 +35,10 @@ export default function Intervals(){
                 generic. That means no matter what accidentals are applied to the notes of an interval, the size is always the same. 
             </Text>
             <Image source={require('@/assets/images/sizes.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play sizes" onPress={() => sizes.play()} />
+                <Button color='red' title="Pause sizes" onPress={() => sizes.pause()} />
+            </View>
             <Text style={styles.text}>
                 A quality makes an interval more specific when combined with size. Quality measures the distance between two notes more 
                 specifically, and when combined with an interval's size, it describes the aural sound of the interval. There are five 
@@ -67,7 +80,7 @@ export default function Intervals(){
                 Augmented & Diminished Intervals
             </Text>
             <Text style={styles.text}>
-                Augmented intervals are a half-step larger than perfect or major intervals. An augmented interval can be created 
+                <b>Augmented intervals</b> are a half-step larger than perfect or major intervals. An augmented interval can be created 
                 by taking a perfect or major interval and raising the top note by one half-step, or by lowering the bottom note by one 
                 half-step. In the example below, the first measure shows a perfect 5th between F & C, which is then altered by raising 
                 C by a half-step to C#, thus creating an augmented 5th. The second measure shows the same perfect 5th between F & C, 
@@ -77,8 +90,12 @@ export default function Intervals(){
                 augmented 5th. 
             </Text>
             <Image source={require('@/assets/images/augmented.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play augmented" onPress={() => augmented.play()} />
+                <Button color='red' title="Pause augmented" onPress={() => augmented.pause()} />
+            </View>
             <Text style={styles.text}>
-                Diminished intervals are a half-step smaller than perfect or minor intervals. A diminished interval can be created by 
+                <b>Diminished intervals</b> are a half-step smaller than perfect or minor intervals. A diminished interval can be created by 
                 taking a perfect or minor interval and lowering the top note by one half-step, or by raising the bottom note by one 
                 half-step. In the example below, the first measure shows a perfect 5th between D & A, which is then altered by lowering 
                 A by a half-step to Ab, thus creating a diminished 5th. The second measure shows the same perfect 5th between D & A, but 
@@ -87,6 +104,10 @@ export default function Intervals(){
                 the same minor 6th between E & C, but this time E is raised by a half-step to E#, thus creating a diminished 6th. 
             </Text>
             <Image source={require('@/assets/images/diminished.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play diminished" onPress={() => diminished.play()} />
+                <Button color='red' title="Pause diminished" onPress={() => diminished.pause()} />
+            </View>
             <Text style={styles.header}>
                 Consonance & Dissonance
             </Text>
@@ -146,15 +167,17 @@ export default function Intervals(){
                 the interval between Ebb & Ab is an augmented 4th. 
             </Text>
             <Image source={require('@/assets/images/hard_interval.png')} />
-            <Link href='./7modes' style={styles.edgelinks}>
-                Previous: Modes
-            </Link>
-            <Link href='/(tabs)/home' style={styles.homelink}>
-                MusicApp
-            </Link>
-            <Link href='./9melody' style={styles.edgelinks}>
-                Next: Melody
-            </Link>
+            <View style={styles.links}>
+                <Link href='./7modes' style={styles.edgelinks}>
+                    Previous: Modes
+                </Link>
+                <Link href='/(tabs)/home' style={styles.homelink}>
+                    MusicApp
+                </Link>
+                <Link href='./9melody' style={styles.edgelinks}>
+                    Next: Melody
+                </Link>
+            </View>
         </ScrollView>
     );
 }
