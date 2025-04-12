@@ -12,6 +12,222 @@ export default function Modes(){
     const phrygian = useAudioPlayer(require('@/assets/sounds/phrygian.mp3'));
     const locrian = useAudioPlayer(require('@/assets/sounds/locrian.mp3'));
 
+    const correct1 = () => {
+        let ionian : any = document.getElementById('ionian1');
+        let lydian : any = document.getElementById('lydian1');
+        let mixolydian : any = document.getElementById('mixolydian1');
+        let aeolian : any = document.getElementById('aeolian1');
+        let p : any = document.getElementById('correct1');
+
+        ionian.style.color = 'green';
+        ionian.disabled = true;
+        lydian.style.color = 'red';
+        lydian.disabled = true;
+        mixolydian.style.color = 'red';
+        mixolydian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong1 = () => {
+        let ionian : any = document.getElementById('ionian1');
+        let lydian : any = document.getElementById('lydian1');
+        let mixolydian : any = document.getElementById('mixolydian1');
+        let aeolian : any = document.getElementById('aeolian1');
+        let p : any = document.getElementById('wrong1');
+
+        ionian.style.color = 'green';
+        ionian.disabled = true;
+        lydian.style.color = 'red';
+        lydian.disabled = true;
+        mixolydian.style.color = 'red';
+        mixolydian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct2 = () => {
+        let ionian : any = document.getElementById('ionian2');
+        let lydian : any = document.getElementById('lydian2');
+        let mixolydian : any = document.getElementById('mixolydian2');
+        let aeolian : any = document.getElementById('aeolian2');
+        let p : any = document.getElementById('correct2');
+
+        ionian.style.color = 'green';
+        ionian.disabled = true;
+        lydian.style.color = 'red';
+        lydian.disabled = true;
+        mixolydian.style.color = 'red';
+        mixolydian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong2 = () =>  {
+        let ionian : any = document.getElementById('ionian2');
+        let lydian : any = document.getElementById('lydian2');
+        let mixolydian : any = document.getElementById('mixolydian2');
+        let aeolian : any = document.getElementById('aeolian2');
+        let p : any = document.getElementById('wrong2');
+
+        ionian.style.color = 'green';
+        ionian.disabled = true;
+        lydian.style.color = 'red';
+        lydian.disabled = true;
+        mixolydian.style.color = 'red';
+        mixolydian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct3 = () => {
+        let ionian : any = document.getElementById('ionian3');
+        let lydian : any = document.getElementById('lydian3');
+        let mixolydian : any = document.getElementById('mixolydian3');
+        let locrian : any = document.getElementById('locrian3');
+        let p : any = document.getElementById('correct3');
+
+        ionian.style.color = 'red';
+        ionian.disabled = true;
+        lydian.style.color = 'green';
+        lydian.disabled = true;
+        mixolydian.style.color = 'red';
+        mixolydian.disabled = true;
+        locrian.style.color = 'red';
+        locrian.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong3 = () => {
+        let ionian : any = document.getElementById('ionian3');
+        let lydian : any = document.getElementById('lydian3');
+        let mixolydian : any = document.getElementById('mixolydian3');
+        let locrian : any = document.getElementById('locrian3');
+        let p : any = document.getElementById('wrong3');
+
+        ionian.style.color = 'red';
+        ionian.disabled = true;
+        lydian.style.color = 'green';
+        lydian.disabled = true;
+        mixolydian.style.color = 'red';
+        mixolydian.disabled = true;
+        locrian.style.color = 'red';
+        locrian.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct4 = () => {
+        let dorian : any = document.getElementById('dorian4');
+        let aeolian : any = document.getElementById('aeolian4');
+        let phrygian : any = document.getElementById('phrygian4');
+        let locrian : any = document.getElementById('locrian4');
+        let p : any = document.getElementById('correct4');
+
+        dorian.style.color = 'red';
+        dorian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        phrygian.style.color = 'green';
+        phrygian.disabled = true;
+        locrian.style.color = 'red';
+        locrian.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong4 = () => {
+        let dorian : any = document.getElementById('dorian4');
+        let aeolian : any = document.getElementById('aeolian4');
+        let phrygian : any = document.getElementById('phrygian4');
+        let locrian : any = document.getElementById('locrian4');
+        let p : any = document.getElementById('wrong4');
+
+        dorian.style.color = 'red';
+        dorian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        phrygian.style.color = 'green';
+        phrygian.disabled = true;
+        locrian.style.color = 'red';
+        locrian.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct5 = () => {
+        let ionian : any = document.getElementById('ionian5');
+        let lydian : any = document.getElementById('lydian5');
+        let mixolydian : any = document.getElementById('mixolydian5');
+        let dorian : any = document.getElementById('dorian5');
+        let p : any = document.getElementById('correct5');
+
+        ionian.style.color = 'red';
+        ionian.disabled = true;
+        lydian.style.color = 'red';
+        lydian.disabled = true;
+        mixolydian.style.color = 'green';
+        mixolydian.disabled = true;
+        dorian.style.color = 'red';
+        dorian.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong5 = () => {
+        let ionian : any = document.getElementById('ionian5');
+        let lydian : any = document.getElementById('lydian5');
+        let mixolydian : any = document.getElementById('mixolydian5');
+        let dorian : any = document.getElementById('dorian5');
+        let p : any = document.getElementById('wrong5');
+
+        ionian.style.color = 'red';
+        ionian.disabled = true;
+        lydian.style.color = 'red';
+        lydian.disabled = true;
+        mixolydian.style.color = 'green';
+        mixolydian.disabled = true;
+        dorian.style.color = 'red';
+        dorian.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct6 = () => {
+        let dorian : any = document.getElementById('dorian6');
+        let aeolian : any = document.getElementById('aeolian6');
+        let phrygian : any = document.getElementById('phrygian6');
+        let locrian : any = document.getElementById('locrian6');
+        let p : any = document.getElementById('correct6');
+
+        dorian.style.color = 'red';
+        dorian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        phrygian.style.color = 'red';
+        phrygian.disabled = true;
+        locrian.style.color = 'green';
+        locrian.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong6 = () => {
+        let dorian : any = document.getElementById('dorian6');
+        let aeolian : any = document.getElementById('aeolian6');
+        let phrygian : any = document.getElementById('phrygian6');
+        let locrian : any = document.getElementById('locrian6');
+        let p : any = document.getElementById('wrong6');
+
+        dorian.style.color = 'red';
+        dorian.disabled = true;
+        aeolian.style.color = 'red';
+        aeolian.disabled = true;
+        phrygian.style.color = 'red';
+        phrygian.disabled = true;
+        locrian.style.color = 'green';
+        locrian.disabled = true;
+        p.hidden = false;
+    }
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -105,6 +321,76 @@ export default function Modes(){
                 <Button color='green' title="Play Locrian" onPress={() => locrian.play()} />
                 <Button color='red' title="Pause Locrian" onPress={() => locrian.pause()} />
             </View>
+            <Text style={styles.header}>
+                Pop Quiz
+            </Text>
+            <Text style={styles.text}>
+                1. Which of the following modes is just like the major scale?
+            </Text>
+            <form>
+                <button id='lydian1' style={{fontSize: '24px'}} onClick={wrong1}>Lydian</button>
+                <button id='ionian1' style={{fontSize: '24px'}} onClick={correct1}>Ionian</button>
+                <button id='mixolydian1' style={{fontSize: '24px'}} onClick={wrong1}>Mixolydian</button>
+                <button id='aeolian1' style={{fontSize: '24px'}} onClick={wrong1}>Aeolian</button>
+                <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! The Ionian mode is the same as a major scale.</p>
+            </form>
+            <Text style={styles.text}>
+                2. Which of the following modes is just like the minor scale?
+            </Text>
+            <form>
+                <button id='lydian2' style={{fontSize: '24px'}} onClick={wrong2}>Lydian</button>
+                <button id='ionian2' style={{fontSize: '24px'}} onClick={wrong2}>Ionian</button>
+                <button id='mixolydian2' style={{fontSize: '24px'}} onClick={wrong2}>Mixolydian</button>
+                <button id='aeolian2' style={{fontSize: '24px'}} onClick={correct2}>Aeolian</button>
+                <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong2' color='red' style={{textAlign: 'center'}} hidden>Wrong! The Aeolian mode is the same as a minor scale.</p>
+            </form>
+            <Text style={styles.text}>
+                3. Which of the following modes is just like a major scale with a raised 4?
+            </Text>
+            <form>
+                <button id='lydian3' style={{fontSize: '24px'}} onClick={correct3}>Lydian</button>
+                <button id='ionian3' style={{fontSize: '24px'}} onClick={wrong3}>Ionian</button>
+                <button id='mixolydian3' style={{fontSize: '24px'}} onClick={wrong3}>Mixolydian</button>
+                <button id='locrian3' style={{fontSize: '24px'}} onClick={wrong3}>Locrian</button>
+                <p id='correct3' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong3' color='red' style={{textAlign: 'center'}} hidden>Wrong! The Lydian mode is a major scale with a raised 4.</p>
+            </form>
+            <Text style={styles.text}>
+                4. Which of the following modes is just like a minor scale with a lowered 2?
+            </Text>
+            <form>
+                <button id='dorian4' style={{fontSize: '24px'}} onClick={wrong4}>Dorian</button>
+                <button id='aeolian4' style={{fontSize: '24px'}} onClick={wrong4}>Aeolian</button>
+                <button id='phrygian4' style={{fontSize: '24px'}} onClick={correct4}>Phrygian</button>
+                <button id='locrian4' style={{fontSize: '24px'}} onClick={wrong4}>Locrian</button>
+                <p id='correct4' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong4' color='red' style={{textAlign: 'center'}} hidden>Wrong! The Phrygian mode is a minor scale with a lowered 2.</p>
+            </form>
+            <Text style={styles.text}>
+                5. Which of the following modes is just like a major scale with a lowered 7?
+            </Text>
+            <form>
+                <button id='lydian5' style={{fontSize: '24px'}} onClick={wrong5}>Lydian</button>
+                <button id='ionian5' style={{fontSize: '24px'}} onClick={wrong5}>Ionian</button>
+                <button id='mixolydian5' style={{fontSize: '24px'}} onClick={correct5}>Mixolydian</button>
+                <button id='dorian5' style={{fontSize: '24px'}} onClick={wrong5}>Dorian</button>
+                <p id='correct5' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong5' color='red' style={{textAlign: 'center'}} hidden>Wrong! The Mixolydian mode is a major scale with a lowered 7.</p>
+            </form>
+            <Text style={styles.text}>
+                6. Which of the following modes is just like a minor scale with a lowered 2 & a lowered 5?
+            </Text>
+            <form>
+                <button id='dorian6' style={{fontSize: '24px'}} onClick={wrong6}>Dorian</button>
+                <button id='aeolian6' style={{fontSize: '24px'}} onClick={wrong6}>Aeolian</button>
+                <button id='phrygian6' style={{fontSize: '24px'}} onClick={wrong6}>Phrygian</button>
+                <button id='locrian6' style={{fontSize: '24px'}} onClick={correct6}>Locrian</button>
+                <p id='correct6' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong6' color='red' style={{textAlign: 'center'}} hidden>Wrong! The Locrian mode is a minor scale with a lowered 
+                    2 & a lowered 5.</p>
+            </form>
             <View style={styles.links}>
                 <Link href='./6scales' style={styles.edgelinks}>
                     Previous: Scales

@@ -184,7 +184,7 @@ export default function Notation(){
             <Text style={styles.text}>
                 1. True or False: <i>forte</i> means to play softly & <i>piano</i> means to play loudly.
             </Text>
-            <form id='dynamics'>
+            <form>
                 <button id='false' style={{fontSize: '24px'}} onClick={incorrect_dynamic}>True</button>
                 <button id='true' style={{fontSize: '24px'}} onClick={correct_dynamic}>False</button>
                 <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
@@ -194,7 +194,7 @@ export default function Notation(){
             <Text style={styles.text}>
                 2. Which of the following is the fastest tempo?
             </Text>
-            <form id='tempo'>
+            <form>
                 <button id='grave' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Grave</button>
                 <button id='andante' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Andante</button>
                 <button id='allegro' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Allegro</button>
