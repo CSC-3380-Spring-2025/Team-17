@@ -22,7 +22,7 @@ export default function HomeScreen() {
           <Text style={styles.streak}>🔥: 0</Text>
         </View>
         <View style={styles.gemContainer}>
-          <Text style={styles.gem}>💎: 0</Text>
+          <Link href="/challenges" style={styles.gem}>💎: 0</Link>
         </View>
               </View>
             </View>
