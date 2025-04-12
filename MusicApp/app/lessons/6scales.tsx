@@ -9,6 +9,198 @@ export default function Scales(){
     const harminor = useAudioPlayer(require('@/assets/sounds/harmonic_minor.mp3'));
     const melminor = useAudioPlayer(require('@/assets/sounds/melodic_minor.mp3'));
 
+    const correct1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('correct1');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('wrong1');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('correct2');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('wrong2');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct3 = () => {
+        let f : any = document.getElementById('f3');
+        let e : any = document.getElementById('e3');
+        let b : any = document.getElementById('b3');
+        let g : any = document.getElementById('g3');
+        let p : any = document.getElementById('correct3');
+
+        f.style.color = 'red';
+        f.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        g.style.color = 'red';
+        g.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong3 = () => {
+        let f : any = document.getElementById('f3');
+        let e : any = document.getElementById('e3');
+        let b : any = document.getElementById('b3');
+        let g : any = document.getElementById('g3');
+        let p : any = document.getElementById('wrong3');
+
+        f.style.color = 'red';
+        f.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        g.style.color = 'red';
+        g.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct4 = () => {
+        let g : any = document.getElementById('g4');
+        let b : any = document.getElementById('b4');
+        let e : any = document.getElementById('e4');
+        let f : any = document.getElementById('f4');
+        let p : any = document.getElementById('correct4');
+
+        g.style.color = 'red';
+        g.disabled = true;
+        b.style.color = 'red';
+        b.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        f.style.color = 'green';
+        f.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong4 = () => {
+        let g : any = document.getElementById('g4');
+        let b : any = document.getElementById('b4');
+        let e : any = document.getElementById('e4');
+        let f : any = document.getElementById('f4');
+        let p : any = document.getElementById('wrong4');
+
+        g.style.color = 'red';
+        g.disabled = true;
+        b.style.color = 'red';
+        b.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        f.style.color = 'green';
+        f.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct5 = () => {
+        let a : any = document.getElementById('a5');
+        let e : any = document.getElementById('e5');
+        let b : any = document.getElementById('b5');
+        let d : any = document.getElementById('d5');
+        let p : any = document.getElementById('correct5');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong5 = () => {
+        let a : any = document.getElementById('a5');
+        let e : any = document.getElementById('e5');
+        let b : any = document.getElementById('b5');
+        let d : any = document.getElementById('d5');
+        let p : any = document.getElementById('wrong5');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+    
+    const correct6 = () => {
+        let a : any = document.getElementById('a6');
+        let g : any = document.getElementById('g6');
+        let e : any = document.getElementById('e6');
+        let d : any = document.getElementById('d6');
+        let p : any = document.getElementById('correct6');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        g.style.color = 'green';
+        g.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong6 = () => {
+        let a : any = document.getElementById('a6');
+        let g : any = document.getElementById('g6');
+        let e : any = document.getElementById('e6');
+        let d : any = document.getElementById('d6');
+        let p : any = document.getElementById('wrong6');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        g.style.color = 'green';
+        g.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -200,6 +392,73 @@ export default function Scales(){
                 F# & Gb are enharmonically equivalent.
             </Text>
             <Image source={require('@/assets/images/circle_fifths.png')} />
+            <Text style={styles.header}>
+                Pop Quiz
+            </Text>
+            <Text style={styles.text}>
+                1. True or False: The natural minor scale features a raised 7. 
+            </Text>
+            <form>
+                <button id='true1' style={{fontSize: '24px'}} onClick={wrong1}>True</button>
+                <button id='false1' style={{fontSize: '24px'}} onClick={correct1}>False</button>
+                <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! The raised 7 appears in harmonic minor.</p>
+            </form>
+            <Text style={styles.text}>
+                2. True or False: The melodic minor scale features a raised 6 & 7.
+            </Text>
+            <form>
+                <button id='true2' style={{fontSize: '24px'}} onClick={correct2}>True</button>
+                <button id='false2' style={{fontSize: '24px'}} onClick={wrong2}>False</button>
+                <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong2' color='red' style={{textAlign: 'center'}} hidden>Wrong! Melodic minor does feature a raised 6 & 7.</p>
+            </form>
+            <Text style={styles.text}>
+                3. What major scale has the following key signature?
+            </Text>
+            <Image source={require('@/assets/images/bmajor.png')} />
+            <form>
+                <button id='f3' style={{fontSize: '24px'}} onClick={wrong3}>F major</button>
+                <button id='e3' style={{fontSize: '24px'}} onClick={wrong3}>E major</button>
+                <button id='b3' style={{fontSize: '24px'}} onClick={correct3}>B major</button>
+                <button id='g3' style={{fontSize: '24px'}} onClick={wrong3}>G major</button>
+                <p id='correct3' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong3' color='red' style={{textAlign: 'center'}} hidden>Wrong! This is the key signature of B major.</p>
+            </form>
+            <Text style={styles.text}>
+                4. What minor scale has the following key signature?
+            </Text>
+            <Image source={require('@/assets/images/fminor.png')} />
+            <form>
+                <button id='g4' style={{fontSize: '24px'}} onClick={wrong4}>G minor</button>
+                <button id='b4' style={{fontSize: '24px'}} onClick={wrong4}>Bb minor</button>
+                <button id='e4' style={{fontSize: '24px'}} onClick={wrong4}>Eb minor</button>
+                <button id='f4' style={{fontSize: '24px'}} onClick={correct4}>F minor</button>
+                <p id='correct4' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong4' color='red' style={{textAlign: 'center'}} hidden>Wrong! This is the key signature of F minor.</p>
+            </form>
+            <Text style={styles.text}>
+                5. What is the relative minor of D major?
+            </Text>
+            <form>
+                <button id='a5' style={{fontSize: '24px'}} onClick={wrong5}>A minor</button>
+                <button id='e5' style={{fontSize: '24px'}} onClick={wrong5}>E minor</button>
+                <button id='b5' style={{fontSize: '24px'}} onClick={correct5}>B minor</button>
+                <button id='d5' style={{fontSize: '24px'}} onClick={wrong5}>D minor</button>
+                <p id='correct5' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong5' color='red' style={{textAlign: 'center'}} hidden>Wrong! B minor is the relative minor of D major.</p>
+            </form>
+            <Text style={styles.text}>
+                6. What is the relative major of Eb minor?
+            </Text>
+            <form>
+                <button id='a6' style={{fontSize: '24px'}} onClick={wrong6}>Ab major</button>
+                <button id='g6' style={{fontSize: '24px'}} onClick={correct6}>Gb major</button>
+                <button id='e6' style={{fontSize: '24px'}} onClick={wrong6}>Eb major</button>
+                <button id='d6' style={{fontSize: '24px'}} onClick={wrong6}>Db major</button>
+                <p id='correct6' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong6' color='red' style={{textAlign: 'center'}} hidden>Wrong! Gb major is the relative minor of Eb minor.</p>
+            </form>
             <View style={styles.links}>
                 <Link href='./5meter' style={styles.edgelinks}>
                     Previous: Meter
