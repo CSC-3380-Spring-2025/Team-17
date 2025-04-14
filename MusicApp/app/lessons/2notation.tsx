@@ -1,5 +1,5 @@
-import React from 'react';
-import {ScrollView, View, Text, StyleSheet, Image, Button} from 'react-native';
+import React, { useState } from 'react';
+import {ScrollView, View, Text, StyleSheet, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
@@ -8,65 +8,12 @@ export default function Notation(){
     const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
     const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
 
-    const correct_dynamic = () => {
-        let correct : any = document.getElementById('true');
-        let incorrect : any = document.getElementById('false');
-        let p : any = document.getElementById('correct1');
-
-        correct.style.color = 'green';
-        correct.disabled = true;
-        incorrect.style.color = 'red';
-        incorrect.disabled = true;
-        p.hidden = false;
-    }
-
-    const incorrect_dynamic = () => {
-        let correct : any = document.getElementById('true');
-        let incorrect : any = document.getElementById('false');
-        let p : any = document.getElementById('wrong1');
-
-        correct.style.color = 'green';
-        correct.disabled = true;
-        incorrect.style.color = 'red';
-        incorrect.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct_tempo = () => {
-        let grave : any = document.getElementById('grave');
-        let andante : any = document.getElementById('andante');
-        let allegro : any = document.getElementById('allegro');
-        let presto : any = document.getElementById('presto');
-        let p : any = document.getElementById('correct2');
-
-        presto.style.color = 'green';
-        presto.disabled = true;
-        grave.style.color = 'red';
-        grave.disabled = true;
-        andante.style.color = 'red';
-        andante.disabled = true;
-        allegro.style.color = 'red';
-        allegro.disabled = true;
-        p.hidden = false;
-    }
-
-    const incorrect_tempo = () => {
-        let grave : any = document.getElementById('grave');
-        let andante : any = document.getElementById('andante');
-        let allegro : any = document.getElementById('allegro');
-        let presto : any = document.getElementById('presto');
-        let p : any = document.getElementById('wrong2');
-
-        presto.style.color = 'green';
-        presto.disabled = true
-        grave.style.color = 'red';
-        grave.disabled = true;
-        andante.style.color = 'red';
-        andante.disabled = true;
-        allegro.style.color = 'red';
-        allegro.disabled = true;
-        p.hidden = false;
-    }
+    const [quiz1Answer, setQ1Answer] = useState(null);
+    const [quiz2Answer, setQ2Answer] = useState(null);
+    const [quiz3Answer, setQ3Answer] = useState(null);
+    const answer1 = "Pitch and Rhythm";
+    const answer2 = "False";
+    const answer3 = "Mezzo Forte";
 
     return(
         <ScrollView contentContainerStyle={styles.container}>
@@ -178,30 +125,101 @@ export default function Notation(){
                 <Button color='green' title="Play accent" onPress={() => accentPlayer.play()} />
                 <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
             </View>
-            <Text style={styles.header}>
-                Pop Quiz
-            </Text>
-            <Text style={styles.text}>
-                1. True or False: <i>forte</i> means to play softly & <i>piano</i> means to play loudly.
-            </Text>
-            <form>
-                <button id='false' style={{fontSize: '24px'}} onClick={incorrect_dynamic}>True</button>
-                <button id='true' style={{fontSize: '24px'}} onClick={correct_dynamic}>False</button>
-                <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
-                <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! <i>forte</i> means to play loudly & <i>piano </i> 
-                means to play softly.</p>
-            </form>
-            <Text style={styles.text}>
-                2. Which of the following is the fastest tempo?
-            </Text>
-            <form>
-                <button id='grave' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Grave</button>
-                <button id='andante' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Andante</button>
-                <button id='allegro' style={{fontSize: '24px'}} onClick={incorrect_tempo}>Allegro</button>
-                <button id='presto' style={{fontSize: '24px'}} onClick={correct_tempo}>Presto</button>
-                <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
-                <p id='wrong2' color='red' style={{textAlign: 'center'}}hidden>Wrong! Presto is the fastest tempo listed here.</p>
-            </form>
+
+            <div>
+                <Text style = {styles.quizTitle}>Quiz</Text>
+                <br></br>
+            <view style = {styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        A musical note represents what?
+                    </Text>
+                    {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) =>{
+                        const selected = quiz1Answer === option;
+                        const correct = option === answer1;
+                        const buttonStyle = selected
+                        ? correct
+                            ? styles.correctAnswer
+                            :styles.incorrectAnswer
+                        :styles.quizButton;
+
+                        return(
+                            <Pressable
+                                key={index}
+                                style={buttonStyle}
+                                onPress={() => setQ1Answer(option)}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz1Answer && (
+                        <Text style={styles.result}>
+                            {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </view>
+                <br></br>
+                <view style = {styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        If a note is in a space, it can go beyond the lines.
+                    </Text>
+                    {["True", "False"].map((option, index) =>{
+                        const selected = quiz2Answer === option;
+                        const correct = option === answer2;
+                        const buttonStyle = selected
+                        ? correct
+                            ? styles.correctAnswer
+                            :styles.incorrectAnswer
+                        :styles.quizButton;
+
+                        return(
+                            <Pressable
+                                key={index}
+                                style={buttonStyle}
+                                onPress={() => setQ2Answer(option)}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz2Answer && (
+                        <Text style={styles.result}>
+                            {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </view>
+                <br></br>
+                <view style = {styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        What term means <b>moderately loud</b>?
+                    </Text>
+                    {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) =>{
+                        const selected = quiz3Answer === option;
+                        const correct = option === answer3;
+                        const buttonStyle = selected
+                        ? correct
+                            ? styles.correctAnswer
+                            :styles.incorrectAnswer
+                        :styles.quizButton;
+
+                        return(
+                            <Pressable
+                                key={index}
+                                style={buttonStyle}
+                                onPress={() => setQ3Answer(option)}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz3Answer && (
+                        <Text style={styles.result}>
+                            {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </view>
+            </div>
+
             <View style={styles.links}>
                 <Link href='./1intro' style={styles.edgelinks}>
                     Previous: Introduction
@@ -262,5 +280,59 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
-    }
+    },
+    quizContainer: {
+        height: 100,
+        width: 200,
+        
+        alignItems: 'center',
+        padding:7,
+    },
+    quizTitle: {
+        color: 'black',
+        fontSize: 50,
+        fontFamily: 'TIMES_NEW_ROMAN',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+        paddingBottom: 20
+    },
+    quizText: {
+        color: '#840606',
+        fontSize: 20,
+        alignSelf:'center',
+    },
+    quizButton: {
+        height: 45,
+        width:150,
+        backgroundColor: 'gray',
+        alignItems: 'center',
+        padding: 5,
+    },
+    quizButtonText: {
+        color: 'white',
+        fontSize: 15,
+        alignSelf:'center',
+    },
+    correctAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'green',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      incorrectAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      result: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+      }
 })

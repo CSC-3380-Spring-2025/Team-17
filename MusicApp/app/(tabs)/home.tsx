@@ -1,7 +1,8 @@
 import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Link, Stack } from 'expo-router';
 import ImageViewer from '@/components/ImageViewer';
-import Button from "@/components/Button";
+import Streak from'../../components/streak';
+import React, {useState} from 'react';
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 //be ahead
 
@@ -21,7 +22,7 @@ export default function HomeScreen() {
           <Text style={styles.streak}>🔥: 0</Text>
         </View>
         <View style={styles.gemContainer}>
-          <Text style={styles.gem}>💎: 0</Text>
+          <Link href="/challenges" style={styles.gem}>💎: 0</Link>
         </View>
               </View>
             </View>
@@ -38,9 +39,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.streakContainer}>
-        <Link href="/challenges" style={styles.streak}>
-        🔥: 0
-          </Link>
+        <Streak/>
           
         </View>
         <View style={styles.gemContainer}>

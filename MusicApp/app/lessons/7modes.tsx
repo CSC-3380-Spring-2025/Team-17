@@ -402,6 +402,7 @@ export default function Modes(){
                     Next: Intervals
                 </Link>
             </View>
+            
         </ScrollView>
     );
 }
