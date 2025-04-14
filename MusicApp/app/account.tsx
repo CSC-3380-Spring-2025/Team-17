@@ -1,9 +1,10 @@
-import React from 'react';
-import Register from '../../components/Register';
+import React, {useState} from 'react';
+import Register from '../components/Register';
 import Login from '@/components/Login';
 import { Text, View, StyleSheet, Pressable } from 'react-native';
 
 const App = () => {
+  const [streak, setStreak]= useState(0);
   return (
     <div>
       <View style={styles.container}>
@@ -13,7 +14,7 @@ const App = () => {
       </View>
       <View style={styles.Acontainer}>
       <Register />
-      <Login />
+      <Login/>
       </View>
     </div>
   );

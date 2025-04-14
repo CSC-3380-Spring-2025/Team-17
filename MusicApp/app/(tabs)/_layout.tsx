@@ -57,11 +57,7 @@ export default function TabLayout() {
     <Tabs.Screen
         name="challenges"
         options={{
-            title: 'Challenges',
-            tabBarIcon: ({ color, focused }) => (
-                <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color = {color} size = {24} />
-
-            ),
+            href:null
         }}
     />
     <Tabs.Screen

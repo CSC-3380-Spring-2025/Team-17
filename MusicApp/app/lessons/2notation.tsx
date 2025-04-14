@@ -1,5 +1,5 @@
-import React from 'react';
-import {ScrollView, View, Text, StyleSheet, Image, Button} from 'react-native';
+import React, { useState } from 'react';
+import {ScrollView, View, Text, StyleSheet, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
@@ -7,6 +7,14 @@ export default function Notation(){
     const slurPlayer = useAudioPlayer(require('@/assets/sounds/a-slur.mp3'));
     const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
     const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
+
+    const [quiz1Answer, setQ1Answer] = useState(null);
+    const [quiz2Answer, setQ2Answer] = useState(null);
+    const [quiz3Answer, setQ3Answer] = useState(null);
+    const answer1 = "Pitch and Rhythm";
+    const answer2 = "False";
+    const answer3 = "Mezzo Forte";
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -117,6 +125,101 @@ export default function Notation(){
                 <Button color='green' title="Play accent" onPress={() => accentPlayer.play()} />
                 <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
             </View>
+
+            <div>
+                <Text style = {styles.quizTitle}>Quiz</Text>
+                <br></br>
+            <view style = {styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        A musical note represents what?
+                    </Text>
+                    {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) =>{
+                        const selected = quiz1Answer === option;
+                        const correct = option === answer1;
+                        const buttonStyle = selected
+                        ? correct
+                            ? styles.correctAnswer
+                            :styles.incorrectAnswer
+                        :styles.quizButton;
+
+                        return(
+                            <Pressable
+                                key={index}
+                                style={buttonStyle}
+                                onPress={() => setQ1Answer(option)}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz1Answer && (
+                        <Text style={styles.result}>
+                            {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </view>
+                <br></br>
+                <view style = {styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        If a note is in a space, it can go beyond the lines.
+                    </Text>
+                    {["True", "False"].map((option, index) =>{
+                        const selected = quiz2Answer === option;
+                        const correct = option === answer2;
+                        const buttonStyle = selected
+                        ? correct
+                            ? styles.correctAnswer
+                            :styles.incorrectAnswer
+                        :styles.quizButton;
+
+                        return(
+                            <Pressable
+                                key={index}
+                                style={buttonStyle}
+                                onPress={() => setQ2Answer(option)}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz2Answer && (
+                        <Text style={styles.result}>
+                            {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </view>
+                <br></br>
+                <view style = {styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        What term means <b>moderately loud</b>?
+                    </Text>
+                    {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) =>{
+                        const selected = quiz3Answer === option;
+                        const correct = option === answer3;
+                        const buttonStyle = selected
+                        ? correct
+                            ? styles.correctAnswer
+                            :styles.incorrectAnswer
+                        :styles.quizButton;
+
+                        return(
+                            <Pressable
+                                key={index}
+                                style={buttonStyle}
+                                onPress={() => setQ3Answer(option)}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz3Answer && (
+                        <Text style={styles.result}>
+                            {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </view>
+            </div>
+
             <View style={styles.links}>
                 <Link href='./1intro' style={styles.edgelinks}>
                     Previous: Introduction
@@ -177,5 +280,59 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
-    }
+    },
+    quizContainer: {
+        height: 100,
+        width: 200,
+        
+        alignItems: 'center',
+        padding:7,
+    },
+    quizTitle: {
+        color: 'black',
+        fontSize: 50,
+        fontFamily: 'TIMES_NEW_ROMAN',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+        paddingBottom: 20
+    },
+    quizText: {
+        color: '#840606',
+        fontSize: 20,
+        alignSelf:'center',
+    },
+    quizButton: {
+        height: 45,
+        width:150,
+        backgroundColor: 'gray',
+        alignItems: 'center',
+        padding: 5,
+    },
+    quizButtonText: {
+        color: 'white',
+        fontSize: 15,
+        alignSelf:'center',
+    },
+    correctAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'green',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      incorrectAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      result: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+      }
 })

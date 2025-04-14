@@ -55,7 +55,7 @@ export const storeLoginDate = async(userId: string)=> {
   }
 };
 
-export const checkConsecutiveDays=(loginDates: string[])=>{
+export const checkConsecutiveDays=(loginDates: string[], userId: string)=>{
   let consecutiveDays = 1;
 
   for (let i=1; i<loginDates.length; i++){
@@ -71,9 +71,20 @@ export const checkConsecutiveDays=(loginDates: string[])=>{
     }else{
       consecutiveDays=1;
     }
-  }
+  } 
+  updateStreak(userId, consecutiveDays)
   return consecutiveDays;
+ 
 };
+
+export const updateStreak = async(userId: string, confirmedConsecDays: number)=> {
+  const userRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userRef);
+  await updateDoc(userRef,{
+    streak: confirmedConsecDays
+  });
+};
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);

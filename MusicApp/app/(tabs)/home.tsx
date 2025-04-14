@@ -1,6 +1,12 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
 import { Link, Stack } from 'expo-router';
 
+import ImageViewer from '@/components/ImageViewer';
+import Streak from'../../components/streak';
+import React, {useState} from 'react';
+const PlaceholderImage = require('@/assets/images/dog.jpg');
+
+
 export default function HomeScreen() {
   return (
     <>
@@ -26,12 +32,21 @@ export default function HomeScreen() {
                     resizeMode="contain"
                   />
                 </Link>
+
+                <View style={styles.streakContainer}>
+          <Text style={styles.streak}>🔥: 0</Text>
+        </View>
+        <View style={styles.gemContainer}>
+          <Link href="/challenges" style={styles.gem}>💎: 0</Link>
+        </View>
+
               </View>
             </View>
           ),
           headerTitleAlign: "center",
         }}
       />
+
       <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
         <View style={styles.lessonBox}>
           <View style={styles.lessonTextContainer}>
@@ -46,6 +61,7 @@ export default function HomeScreen() {
               resizeMode="cover"
             />
           </View>
+
         </View>
         <View style={styles.recordingBox}>
           <Text style={styles.recordingTitle}>Song Draft 2</Text>
