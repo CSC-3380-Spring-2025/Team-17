@@ -7,12 +7,14 @@ export default function Notation(){
     const slurPlayer = useAudioPlayer(require('@/assets/sounds/a-slur.mp3'));
     const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
     const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
+
     const [quiz1Answer, setQ1Answer] = useState(null);
     const [quiz2Answer, setQ2Answer] = useState(null);
     const [quiz3Answer, setQ3Answer] = useState(null);
     const answer1 = "Pitch and Rhythm";
     const answer2 = "False";
     const answer3 = "Mezzo Forte";
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>
@@ -123,6 +125,7 @@ export default function Notation(){
                 <Button color='green' title="Play accent" onPress={() => accentPlayer.play()} />
                 <Button color='red' title="Pause accent" onPress={() => accentPlayer.pause()} />
             </View>
+
             <div>
                 <Text style = {styles.quizTitle}>Quiz</Text>
                 <br></br>
@@ -216,6 +219,7 @@ export default function Notation(){
                     )}
                 </view>
             </div>
+
             <View style={styles.links}>
                 <Link href='./1intro' style={styles.edgelinks}>
                     Previous: Introduction

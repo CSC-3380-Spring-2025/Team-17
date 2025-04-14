@@ -12,6 +12,128 @@ export default function Meter(){
     const cq = useAudioPlayer(require('@/assets/sounds/compound_quadruple.mp3'));
     const b1 = useAudioPlayer(require('@/assets/sounds/beams1.mp3'));
     const b2 = useAudioPlayer(require('@/assets/sounds/beams2.mp3'));
+    const e1 = useAudioPlayer(require('@/assets/sounds/example1.mp3'));
+    const e2 = useAudioPlayer(require('@/assets/sounds/example2.mp3'));
+
+    const correct1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('correct1');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('wrong1');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('correct2');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('wrong2');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct3 = () => {
+        let twotwo : any = document.getElementById('22');
+        let threefour : any = document.getElementById('34');
+        let fourfour : any = document.getElementById('44');
+        let sixeight : any = document.getElementById('68');
+        let p : any = document.getElementById('correct3');
+
+        twotwo.style.color = 'red';
+        twotwo.disabled = true;
+        threefour.style.color = 'red';
+        threefour.disabled = true;
+        fourfour.style.color = 'green';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong3 = () => {
+        let twotwo : any = document.getElementById('22');
+        let threefour : any = document.getElementById('34');
+        let fourfour : any = document.getElementById('44');
+        let sixeight : any = document.getElementById('68');
+        let p : any = document.getElementById('wrong3');
+
+        twotwo.style.color = 'red';
+        twotwo.disabled = true;
+        threefour.style.color = 'red';
+        threefour.disabled = true;
+        fourfour.style.color = 'green';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct4 = () => {
+        let fourfour : any = document.getElementById('4/4');
+        let sixeight : any = document.getElementById('6/8');
+        let nineeight : any = document.getElementById('9/8');
+        let twelveeight : any = document.getElementById('12/8');
+        let p : any = document.getElementById('correct4');
+
+        fourfour.style.color = 'red';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        nineeight.style.color = 'green';
+        nineeight.disabled = true;
+        twelveeight.style.color = 'red';
+        twelveeight.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong4 = () => {
+        let fourfour : any = document.getElementById('4/4');
+        let sixeight : any = document.getElementById('6/8');
+        let nineeight : any = document.getElementById('9/8');
+        let twelveeight : any = document.getElementById('12/8');
+        let p : any = document.getElementById('wrong4');
+
+        fourfour.style.color = 'red';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        nineeight.style.color = 'green';
+        nineeight.disabled = true;
+        twelveeight.style.color = 'red';
+        twelveeight.disabled = true;
+        p.hidden = false;
+    }
 
     return(
         <ScrollView contentContainerStyle={styles.container}>
@@ -186,6 +308,60 @@ export default function Meter(){
                 <Button color='green' title="Play piano" onPress={() => b2.play()} />
                 <Button color='red' title="Pause piano" onPress={() => b2.pause()} />
             </View>
+            <Text style={styles.header}>
+                Pop Quiz
+            </Text>
+            <Text style={styles.text}>
+                1. True or False: Simple meter is divided into two beats while compound meter is divided into three beats.
+            </Text>
+            <form>
+                <button id='true1' style={{fontSize: '24px'}} onClick={correct1}>True</button>
+                <button id='false1' style={{fontSize: '24px'}} onClick={wrong1}>False</button>
+                <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! Simple meter divides in two & compound meter 
+                divides in three.</p>
+            </form>
+            <Text style={styles.text}>
+                2. True or False: The beat is always represented by dotted notes in simple meter.
+            </Text>
+            <form>
+                <button id='true2' style={{fontSize: '24px'}} onClick={wrong2}>True</button>
+                <button id='false2' style={{fontSize: '24px'}} onClick={correct2}>False</button>
+                <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong2' color='red' style={{textAlign: 'center'}} hidden>Wrong! Dotted notes represent the beat in compound meter.</p>
+            </form>
+            <Text style={styles.text}>
+                3. What is the time signature of the music below?
+            </Text>
+            <Image source={require('@/assets/images/example1.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play example" onPress={() => e1.play()} />
+                <Button color='red' title="Pause example" onPress={() => e1.pause()} />
+            </View>
+            <form>
+                <button id='22' style={{fontSize: '24px'}} onClick={wrong3}>2/2</button>
+                <button id='34' style={{fontSize: '24px'}} onClick={wrong3}>3/4</button>
+                <button id='44' style={{fontSize: '24px'}} onClick={correct3}>4/4</button>
+                <button id='68' style={{fontSize: '24px'}} onClick={wrong3}>6/8</button>
+                <p id='correct3' color='green' style={{textAlign: 'center'}} >Correct!</p>
+                <p id='wrong3' color='red' style={{textAlign: 'center'}} >Wrong! The time signature for this music is 4/4.</p>
+            </form>
+            <Text style={styles.text}>
+                4. What is the time signature of the music below?
+            </Text>
+            <Image source={require('@/assets/images/example2.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play example" onPress={() => e2.play()} />
+                <Button color='red' title="Pause example" onPress={() => e2.pause()} />
+            </View>
+            <form>
+                <button id='4/4' style={{fontSize: '24px'}} onClick={wrong4}>4/4</button>
+                <button id='6/8' style={{fontSize: '24px'}} onClick={wrong4}>6/8</button>
+                <button id='9/8' style={{fontSize: '24px'}} onClick={correct4}>9/8</button>
+                <button id='12/8' style={{fontSize: '24px'}} onClick={wrong4}>12/8</button>
+                <p id='correct4' color='green' style={{textAlign: 'center'}} >Correct!</p>
+                <p id='wrong4' color='red' style={{textAlign: 'center'}} >Wrong! The time signature for this music is 9/8.</p>
+            </form>
             <View style={styles.links}>
                 <Link href='./4rhythm' style={styles.edgelinks}>
                     Previous: Rhythm
