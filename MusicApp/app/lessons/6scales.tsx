@@ -9,6 +9,198 @@ export default function Scales(){
     const harminor = useAudioPlayer(require('@/assets/sounds/harmonic_minor.mp3'));
     const melminor = useAudioPlayer(require('@/assets/sounds/melodic_minor.mp3'));
 
+    const correct1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('correct1');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('wrong1');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('correct2');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('wrong2');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct3 = () => {
+        let f : any = document.getElementById('f3');
+        let e : any = document.getElementById('e3');
+        let b : any = document.getElementById('b3');
+        let g : any = document.getElementById('g3');
+        let p : any = document.getElementById('correct3');
+
+        f.style.color = 'red';
+        f.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        g.style.color = 'red';
+        g.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong3 = () => {
+        let f : any = document.getElementById('f3');
+        let e : any = document.getElementById('e3');
+        let b : any = document.getElementById('b3');
+        let g : any = document.getElementById('g3');
+        let p : any = document.getElementById('wrong3');
+
+        f.style.color = 'red';
+        f.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        g.style.color = 'red';
+        g.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct4 = () => {
+        let g : any = document.getElementById('g4');
+        let b : any = document.getElementById('b4');
+        let e : any = document.getElementById('e4');
+        let f : any = document.getElementById('f4');
+        let p : any = document.getElementById('correct4');
+
+        g.style.color = 'red';
+        g.disabled = true;
+        b.style.color = 'red';
+        b.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        f.style.color = 'green';
+        f.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong4 = () => {
+        let g : any = document.getElementById('g4');
+        let b : any = document.getElementById('b4');
+        let e : any = document.getElementById('e4');
+        let f : any = document.getElementById('f4');
+        let p : any = document.getElementById('wrong4');
+
+        g.style.color = 'red';
+        g.disabled = true;
+        b.style.color = 'red';
+        b.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        f.style.color = 'green';
+        f.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct5 = () => {
+        let a : any = document.getElementById('a5');
+        let e : any = document.getElementById('e5');
+        let b : any = document.getElementById('b5');
+        let d : any = document.getElementById('d5');
+        let p : any = document.getElementById('correct5');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong5 = () => {
+        let a : any = document.getElementById('a5');
+        let e : any = document.getElementById('e5');
+        let b : any = document.getElementById('b5');
+        let d : any = document.getElementById('d5');
+        let p : any = document.getElementById('wrong5');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        b.style.color = 'green';
+        b.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+    
+    const correct6 = () => {
+        let a : any = document.getElementById('a6');
+        let g : any = document.getElementById('g6');
+        let e : any = document.getElementById('e6');
+        let d : any = document.getElementById('d6');
+        let p : any = document.getElementById('correct6');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        g.style.color = 'green';
+        g.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong6 = () => {
+        let a : any = document.getElementById('a6');
+        let g : any = document.getElementById('g6');
+        let e : any = document.getElementById('e6');
+        let d : any = document.getElementById('d6');
+        let p : any = document.getElementById('wrong6');
+
+        a.style.color = 'red';
+        a.disabled = true;
+        g.style.color = 'green';
+        g.disabled = true;
+        e.style.color = 'red';
+        e.disabled = true;
+        d.style.color = 'red';
+        d.disabled = true;
+        p.hidden = false;
+    }
+
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
@@ -18,6 +210,7 @@ export default function Scales(){
                 <Text style={styles.title}>
                     Major & Minor Scales
                 </Text>
+
                 
                 <View style={styles.card}>
                     <Text style={styles.text}>
@@ -54,7 +247,164 @@ export default function Scales(){
                         />
                     </View>
                 </View>                
-                <View style={styles.linksContainer}>
+                
+
+                <Text style={styles.text}>
+                    3. The second-to-last flat is Gb. Therefore, this is the key signature of Gb major. 
+                </Text>
+            </View>
+            <Text style={styles.text}>
+                There are two key signatures that need to be memorized as they have no easy tricks. C major has absolutely nothing in 
+                its key signature (no sharps or flats). F major has one flat in its key signature. 
+            </Text>
+            <Image source={require('@/assets/images/c_f.png')} />
+            <Text style={styles.header}>
+                Minor Scales
+            </Text>
+            <Text style={styles.text}>
+                There are three types of minor scales: natural, harmonic, and melodic minor. The one thing all minor scales have in common 
+                is that the third note of a minor scale is a half step lower than the third note of a major scale with the same tonic note.
+                Music written with minor scales is often characterized as sounding sad or dark. 
+            </Text>
+            <Text style={styles.text}>
+                A <b>natural minor</b> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern: 
+                W, H, W, W, H, W, W. This pattern is the same ascending and descending. Compared to a major scale starting on the same 
+                tonic note, the scale degrees 3, 6, & 7 are all lowered by a half step in the natural minor scale. The lowered 7 is 
+                especially important because it no longer resolves to the tonic like the leading tone in the major scale. Thus, 
+                scale degree 7 is called the subtonic in natural minor. 
+            </Text>
+            <Image source={require('@/assets/images/natural_minor.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play Natural Minor" onPress={() => natminor.play()} />
+                <Button color='red' title="Pause Natural Minor" onPress={() => natminor.pause()} />
+            </View>
+            <Text style={styles.text}>
+                A <b>harmonic minor</b> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern: 
+                W, H, W, W, H, 3H, H. This pattern is the same ascending and descending. The 3H interval indicates 3 half steps, or a 
+                whole step & a half step. This raises scale degree 7 and allows it to become a leading tone that resolves to the tonic 
+                just like in minor. The lowered scale degrees 3 & 6 remain the same as in natural minor. The raised 7 is good for harmony
+                since it resolves to the tonic again, but it is not good for melody because of the awkward interval of 3 half steps. 
+            </Text>
+            <Image source={require('@/assets/images/harmonic_minor.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play Harmonic Minor" onPress={() => harminor.play()} />
+                <Button color='red' title="Pause Harmonic Minor" onPress={() => harminor.pause()} />
+            </View>
+            <Text style={styles.text}>
+                A <b>melodic minor</b> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern: 
+                W, H, W, W, W, W, H. This pattern only appears in an ascending melodic minor scale. When descending, the pattern reverts 
+                back to the natural minor scale. Ascending melodic minor raises scale degrees 6 & 7, which not only allows for 7 to resolve 
+                to the tonic as a leading tone, but the raised 6 also preserves consonant melodic intervals. Scale degrees 6 & 7 are lowered 
+                again when descending down the melodic minor scale.  
+            </Text>
+            <Image source={require('@/assets/images/melodic_minor.png')} />
+            <View style={styles.buttons}>
+                <Button color='green' title="Play Melodic Minor" onPress={() => melminor.play()} />
+                <Button color='red' title="Pause Melodic Minor" onPress={() => melminor.pause()} />
+            </View>
+            <Text style={styles.text}>
+                The solfege syllables of minor scales differ slightly from the solfege syllables of major scales because of the lowered
+                scale degrees of 3, 6, & 7. In natural minor, the syllable for lowered 3 is <i>me</i> (pronounced "may"), the syllable 
+                for lowered 6 is <i>le</i> (pronounced "lay"), and the syllable for lowered 7 is <i>te</i> (pronounced "tay"). In 
+                harmonic minor, scale degree 7 is raised, so its solfege syllable becomes <i>ti</i>, just like in a major scale. In 
+                melodic minor, both scale degrees 6 & 7 are raised, so their solfege syllables become <i>la</i> & <i>ti</i>, respectively.
+            </Text>
+            <Image source={require('@/assets/images/minor_solfege.png')} />
+            <Text style={styles.header}>
+                Parallel & Relative Relationships
+            </Text>
+            <Text style={styles.text}>
+                When comparing major & minor keys, there are two important relationships to remember. The <b>parallel relationship</b> 
+                is when a major key and a minor key share the same tonic note. For example, C major & C minor are parallel keys. C major
+                is the parallel major of C minor, and C minor is the parallel minor of C major. The <b>relative relationship</b> is when
+                a major key and a minor key share the same key signature. For example, C major does not have any sharps or flats in its
+                key signature, and neither does A minor. C major is the relative major of A minor, and A minor is the relative minor of 
+                C major. The tonic of a minor key is always located three half steps below the tonic of its relative major key. Starting 
+                on C, you would count B, Bb, A to find that A minor is the relative minor of C major. Likewise, to find the relative 
+                major of a minor key, count three half steps up.
+            </Text>  
+            <Text style={styles.header}>
+                The Circle of Fifths
+            </Text>
+            <Text style={styles.text}>
+                The <b>Circle of Fifths</b> is a convenient visual that lays out all of the major and minor keys in a simple and easily 
+                digestible manner. All of the major and minor keys are placed on a circle in order of the number of accidentals in their
+                key signatures. It is called the Circle of Fifths because each key is a fifth away from the keys on either side of it.
+                At the top of the circle, there is the key of C major/A minor, which has no sharps or flats in its key signature. Going 
+                clockwise, each subsequent key signature adds one more sharp to the key signature. Going counterclockwise, each subsequent 
+                key signature adds one more flat to the key signature. The bottom three key signatures are enharmonically equivalent. For 
+                example, the keys of F# major & Gb major have different key signatures (6 sharps & 6 flats), but they sound the same because 
+                F# & Gb are enharmonically equivalent.
+            </Text>
+            <Image source={require('@/assets/images/circle_fifths.png')} />
+            <Text style={styles.header}>
+                Pop Quiz
+            </Text>
+            <Text style={styles.text}>
+                1. True or False: The natural minor scale features a raised 7. 
+            </Text>
+            <form>
+                <button id='true1' style={{fontSize: '24px'}} onClick={wrong1}>True</button>
+                <button id='false1' style={{fontSize: '24px'}} onClick={correct1}>False</button>
+                <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! The raised 7 appears in harmonic minor.</p>
+            </form>
+            <Text style={styles.text}>
+                2. True or False: The melodic minor scale features a raised 6 & 7.
+            </Text>
+            <form>
+                <button id='true2' style={{fontSize: '24px'}} onClick={correct2}>True</button>
+                <button id='false2' style={{fontSize: '24px'}} onClick={wrong2}>False</button>
+                <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong2' color='red' style={{textAlign: 'center'}} hidden>Wrong! Melodic minor does feature a raised 6 & 7.</p>
+            </form>
+            <Text style={styles.text}>
+                3. What major scale has the following key signature?
+            </Text>
+            <Image source={require('@/assets/images/bmajor.png')} />
+            <form>
+                <button id='f3' style={{fontSize: '24px'}} onClick={wrong3}>F major</button>
+                <button id='e3' style={{fontSize: '24px'}} onClick={wrong3}>E major</button>
+                <button id='b3' style={{fontSize: '24px'}} onClick={correct3}>B major</button>
+                <button id='g3' style={{fontSize: '24px'}} onClick={wrong3}>G major</button>
+                <p id='correct3' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong3' color='red' style={{textAlign: 'center'}} hidden>Wrong! This is the key signature of B major.</p>
+            </form>
+            <Text style={styles.text}>
+                4. What minor scale has the following key signature?
+            </Text>
+            <Image source={require('@/assets/images/fminor.png')} />
+            <form>
+                <button id='g4' style={{fontSize: '24px'}} onClick={wrong4}>G minor</button>
+                <button id='b4' style={{fontSize: '24px'}} onClick={wrong4}>Bb minor</button>
+                <button id='e4' style={{fontSize: '24px'}} onClick={wrong4}>Eb minor</button>
+                <button id='f4' style={{fontSize: '24px'}} onClick={correct4}>F minor</button>
+                <p id='correct4' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong4' color='red' style={{textAlign: 'center'}} hidden>Wrong! This is the key signature of F minor.</p>
+            </form>
+            <Text style={styles.text}>
+                5. What is the relative minor of D major?
+            </Text>
+            <form>
+                <button id='a5' style={{fontSize: '24px'}} onClick={wrong5}>A minor</button>
+                <button id='e5' style={{fontSize: '24px'}} onClick={wrong5}>E minor</button>
+                <button id='b5' style={{fontSize: '24px'}} onClick={correct5}>B minor</button>
+                <button id='d5' style={{fontSize: '24px'}} onClick={wrong5}>D minor</button>
+                <p id='correct5' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong5' color='red' style={{textAlign: 'center'}} hidden>Wrong! B minor is the relative minor of D major.</p>
+            </form>
+            <Text style={styles.text}>
+                6. What is the relative major of Eb minor?
+            </Text>
+            <form>
+                <button id='a6' style={{fontSize: '24px'}} onClick={wrong6}>Ab major</button>
+                <button id='g6' style={{fontSize: '24px'}} onClick={correct6}>Gb major</button>
+                <button id='e6' style={{fontSize: '24px'}} onClick={wrong6}>Eb major</button>
+                <button id='d6' style={{fontSize: '24px'}} onClick={wrong6}>Db major</button>
+                <p id='correct6' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong6' color='red' style={{textAlign: 'center'}} hidden>Wrong! Gb major is the relative minor of Eb minor.</p>
+            </form>
+            <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./5meter' style={styles.secondaryLink}>
                             ← Previous: Meter
@@ -71,6 +421,7 @@ export default function Scales(){
                         </Link>
                     </View>
                 </View>
+
             </View>
         </ScrollView>
     );

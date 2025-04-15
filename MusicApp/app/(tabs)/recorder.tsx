@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import FileUploader from '@/components/fileUploader';
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
   PermissionsAndroid,
   FlatList,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import TrackPlayer, {
   State as TrackPlayerState,
@@ -18,6 +20,7 @@ import TrackPlayer, {
   Event,
 } from 'react-native-track-player';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import { useAudioContext } from './AudioContext';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
@@ -25,15 +28,21 @@ interface AudioTrack extends Track {
   sourceType: SoundSource;
   recording?: boolean;
 }
-
+interface uploadedDocument{
+  name: string;
+  mimeType: string;
+  size: number;
+  uri: string;
+}
 const LiveMixingPage: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [showRecordingsModal, setShowRecordingsModal] = useState(false);
   const [tracks, setTracks] = useState<AudioTrack[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer()).current;
   const playbackState = usePlaybackState();
-
+  const { recordings } = useAudioContext();
 
   useEffect(() => {
     const setupPlayer = async () => {
@@ -66,7 +75,6 @@ const LiveMixingPage: React.FC = () => {
     checkIsPlaying();
   }, [playbackState]);
 
-
   const requestMicrophonePermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -86,7 +94,7 @@ const LiveMixingPage: React.FC = () => {
         return false;
       }
     }
-    return true; 
+    return true;
   };
 
   const startRecording = async () => {
@@ -98,14 +106,13 @@ const LiveMixingPage: React.FC = () => {
 
     try {
       const path = Platform.select({
-        ios: undefined, 
+        ios: undefined,
         android: `${sdcardDir}/sound_${Date.now()}.mp3`,
       });
 
       const uri = await audioRecorderPlayer.startRecorder(path);
       setIsRecording(true);
 
-      
       const newTrack: AudioTrack = {
         id: `recording_${Date.now()}`,
         url: uri,
@@ -125,7 +132,6 @@ const LiveMixingPage: React.FC = () => {
     try {
       const result = await audioRecorderPlayer.stopRecorder();
       setIsRecording(false);
-
 
       setTracks(prev =>
         prev.map(track =>
@@ -156,9 +162,7 @@ const LiveMixingPage: React.FC = () => {
     if (isPlaying) {
       await TrackPlayer.pause();
     } else {
-
       const playableTracks = tracks.filter(t => !t.recording);
-      
       if (playableTracks.length > 0) {
         await TrackPlayer.reset();
         await TrackPlayer.add(playableTracks);
@@ -174,26 +178,37 @@ const LiveMixingPage: React.FC = () => {
     }
   };
 
+  const deleteTrack = async (trackId: string) => {
+    try {
+      const currentTracks = await TrackPlayer.getQueue();
+      const trackIndex = currentTracks.findIndex(t => t.id === trackId);
+      if (trackIndex !== -1) {
+        await TrackPlayer.remove(trackIndex);
+      }
+      setTracks(prev => prev.filter(track => track.id !== trackId));
+    } catch (error) {
+      console.error('Failed to delete track:', error);
+    }
+  };
+
   const addTrack = (sourceType: SoundSource) => {
     setModalVisible(false);
     
+    if (sourceType === 'voice') {
+      if (recordings.length === 0) {
+        Alert.alert('No Recordings', 'Please create recordings in the Recorder tab first.');
+        return;
+      }
+      setShowRecordingsModal(true);
+      return;
+    }
 
-    
     let newTrack: AudioTrack;
     switch (sourceType) {
-      case 'voice':
-        newTrack = {
-          id: `voice_${Date.now()}`,
-          url: '', 
-          title: 'Voice Track',
-          artist: '',
-          sourceType: 'voice',
-        };
-        break;
       case 'virtual-instrument':
         newTrack = {
           id: `instrument_${Date.now()}`,
-          url: '', 
+          url: '',
           title: 'Virtual Instrument',
           artist: '',
           sourceType: 'virtual-instrument',
@@ -203,7 +218,7 @@ const LiveMixingPage: React.FC = () => {
       default:
         newTrack = {
           id: `file_${Date.now()}`,
-          url: '', 
+          url: '',
           title: 'Imported Sound',
           artist: '',
           sourceType: 'local-file',
@@ -213,11 +228,28 @@ const LiveMixingPage: React.FC = () => {
     setTracks(prev => [...prev, newTrack]);
   };
 
+  const handleFileUpload = (document: uploadedDocument)=>{
+    const newTrack:AudioTrack={
+      id:`file_${Date.now()}`,
+      url: document.uri,
+      title: document.name,
+      artist: '',
+      sourceType: 'local-file',
+    };
+    setTracks(prev=>[...prev, newTrack]);
+  };
   const renderTrackItem = ({ item }: { item: AudioTrack }) => (
     <View style={styles.trackItem}>
-      <Text style={styles.trackTitle}>{item.title}</Text>
-      <Text style={styles.trackType}>{item.sourceType}</Text>
-      {item.recording && <Text style={styles.recordingLabel}>Recording...</Text>}
+      <View style={styles.trackInfo}>
+        <Text style={styles.trackTitle}>{item.title}</Text>
+        <Text style={styles.trackType}>{item.sourceType}</Text>
+        {item.recording && <Text style={styles.recordingLabel}>Recording...</Text>}
+      </View>
+      <TouchableOpacity 
+        style={styles.deleteButton}
+        onPress={() => deleteTrack(item.id)}>
+        <Text style={styles.deleteButtonText}>×</Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -263,6 +295,7 @@ const LiveMixingPage: React.FC = () => {
         </TouchableOpacity>
       </View>
 
+      {/* Original Add Track Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -283,16 +316,53 @@ const LiveMixingPage: React.FC = () => {
               onPress={() => addTrack('virtual-instrument')}>
               <Text style={styles.modalOptionText}>Virtual Instrument</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={styles.modalOption}
-              onPress={() => addTrack('local-file')}>
-              <Text style={styles.modalOptionText}>Import from Local Files</Text>
-            </TouchableOpacity>
-            
+            <FileUploader onFileUpload={handleFileUpload}
+            setModalVisible={setModalVisible}/>
+
             <TouchableOpacity
               style={styles.modalClose}
               onPress={() => setModalVisible(false)}>
+              <Text style={styles.modalCloseText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* New Recordings Selection Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showRecordingsModal}
+        onRequestClose={() => setShowRecordingsModal(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select Recording</Text>
+            
+            <FlatList
+              data={recordings}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.modalOption}
+                  onPress={() => {
+                    const newTrack: AudioTrack = {
+                      id: `voice_${Date.now()}`,
+                      url: item.uri,
+                      title: item.name,
+                      artist: '',
+                      sourceType: 'voice',
+                    };
+                    setTracks(prev => [...prev, newTrack]);
+                    setShowRecordingsModal(false);
+                  }}>
+                  <Text style={styles.modalOptionText}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            
+            <TouchableOpacity
+              style={styles.modalClose}
+              onPress={() => setShowRecordingsModal(false)}>
               <Text style={styles.modalCloseText}>Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -330,7 +400,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   trackList: {
-    paddingBottom: 80, 
+    paddingBottom: 80,
   },
   trackItem: {
     backgroundColor: 'white',
@@ -343,6 +413,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1,
     elevation: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  trackInfo: {
+    flex: 1,
   },
   trackTitle: {
     fontSize: 16,
@@ -358,6 +434,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     fontStyle: 'italic',
+  },
+  deleteButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#ff4444',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    lineHeight: 20,
   },
   controls: {
     position: 'absolute',
@@ -397,6 +488,7 @@ const styles = StyleSheet.create({
     width: '80%',
     borderRadius: 8,
     padding: 16,
+    maxHeight: '60%',
   },
   modalTitle: {
     fontSize: 20,
