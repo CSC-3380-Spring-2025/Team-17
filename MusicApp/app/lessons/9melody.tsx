@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, ScrollView, StyleSheet, View} from 'react-native';
+import {Text, ScrollView, StyleSheet, View, Image} from 'react-native';
 import {Link} from 'expo-router';
 
 export default function Melody(){
@@ -34,6 +34,15 @@ export default function Melody(){
                 Usually, a melody will consist mostly of stepwise motion and occasional leaps of a 3rd or more, which often serve as 
                 the most memorable parts of a melody. 
             </Text>
+            <Text style={styles.header}>
+                Melodic Structure
+            </Text>
+            <Text style={styles.text}>
+                A melody is structured in phrases. A <b>melodic phrase</b> encompasses a complete musical statement, similar to a 
+                sentence or a clause in spoken language. A melodic phrase usually defines itself by resting, holding, or coming to 
+                some point of rhythmic or tonal resolution. Short phrases can be grouped together to form a longer phrase.
+            </Text>
+            <Image source={require('@/assets/images/phrases.png')} />
             <View style={styles.links}>
                 <Link href='./8intervals' style={styles.edgelinks}>
                     Previous: Intervals
