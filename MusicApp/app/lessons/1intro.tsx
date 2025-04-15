@@ -1,56 +1,152 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Link} from 'expo-router';
 
 export default function Intro() {
     return(
-        <View style={styles.container}>
-            <Text style={styles.title}>
-                Introduction
-            </Text>
-            <Text style={styles.text}>
-                Hello there, and welcome to the Music Theory Lessons! Are you trying to write an original song
-                but have no idea where to start? Well, you have come to the right place! In these lessons, you will 
-                learn everything you need to know about writing original melodies, building strong harmonies, and 
-                creating your own music. These lessons will allow you to dive deep into topics like music notation, 
-                pitch & rhythm, scales & modes, chords & progressions, textures & structures. At the end of it all, 
-                you will be well-educated in music theory and will be able to create your own music and share it with 
-                the world. Well, what are you waiting for? Let's get started! Click the link below to navigate to your 
-                first lesson.
-            </Text>
-            <Link href='./2notation' style={styles.link}>
-                Next: Music Notation
-            </Link>
-            <Link href='../(tabs)/home' style={styles.link}>
-                MusicApp
-            </Link>
-        </View>
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Introduction
+                </Text>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        Hello there, and welcome to the Music Theory Lessons! Are you trying to write an original song
+                        but have no idea where to start? Well, you have come to the right place! 
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        In these lessons, you will learn everything you need to know about writing original melodies, 
+                        building strong harmonies, and creating your own music. These lessons will allow you to dive 
+                        deep into topics like music notation, pitch & rhythm, scales & modes, chords & progressions, 
+                        textures & structures.
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        At the end of it all, you will be well-educated in music theory and will be able to create 
+                        your own music and share it with the world. Well, what are you waiting for? Let's get started!
+                    </Text>
+                </View>
+                
+                <View style={styles.ctaContainer}>
+                    <Text style={styles.ctaText}>Click below to begin your journey</Text>
+                </View>
+                
+                <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./2notation' style={styles.link}>
+                            Next: Music Notation →
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                </View>
+            </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
-        backgroundColor: 'white',
-        alignItems: 'center'
+        flex: 1,
+        backgroundColor: '#f0f0f0', 
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        paddingBottom: 40,
+        paddingTop: 20,
     },
     title: {
-        color: 'black',
-        fontSize: 80,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        color: '#5543A5',
+        fontSize: 32, 
+        fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
+        marginVertical: 24,
+        textAlign: 'center',
+        letterSpacing: 0.5,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 16, 
+        padding: 24,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#5543A5',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        borderWidth: 1, 
+        borderColor: 'rgba(85, 67, 165, 0.1)',
+        elevation: 2,
     },
     text: {
-        color: 'black',
-        fontSize: 24,
-        fontFamily: 'ARIAL',
-        padding: 10
+        color: '#333',
+        fontSize: 16,
+        lineHeight: 26,
+        textAlign: 'left',
+        letterSpacing: 0.2,
+    },
+    ctaContainer: {
+        marginVertical: 24,
+        padding: 16,
+        backgroundColor: 'rgba(164, 157, 196, 0.2)', 
+        borderRadius: 12,
+        width: '100%',
+        borderWidth: 1,
+        borderColor: 'rgba(85, 67, 165, 0.1)',
+    },
+    ctaText: {
+        color: '#5543A5',
+        fontSize: 16,
+        fontWeight: '600',
+        textAlign: 'center',
+        letterSpacing: 0.3,
+    },
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 16,
+        gap: 12,
+    },
+    linkWrapper: {
+        width: '100%',
+        borderRadius: 12,
+        overflow: 'hidden',
     },
     link: {
-        color: 'purple',
-        fontSize: 30,
-        padding: 20
-    }
-})
+        color: 'white',
+        fontSize: 18,
+        padding: 18,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 12,
+        fontWeight: '600',
+        letterSpacing: 0.3,
+        overflow: 'hidden',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 16,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1.5,
+        borderColor: '#5543A5',
+        borderRadius: 12,
+        fontWeight: '600',
+    },
+});

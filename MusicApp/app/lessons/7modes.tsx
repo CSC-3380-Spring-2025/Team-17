@@ -229,27 +229,65 @@ export default function Modes(){
     }
 
     return(
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>
-                Modes
-            </Text>
-            <Text style={styles.text}>
-                <b>Modes</b> are an extension of scales. They are ordered collections of whole steps and half steps that can be described
-                within a continuum of <b>modal brightness</b>: brighter modes sound more like a major scale while darker modes sound more 
-                like a minor scale. 
-            </Text>
-            <Image source={require('@/assets/images/mode_range.png')} />
-            <Text style={styles.text}>
-                The brightest mode is the <b>lydian mode</b>. In this mode, the ascending pattern of whole steps and half steps is 
-                W, W, W, H, W, W, H. You can think of this mode as a major scale with a raised 4 (<i>fi</i>). You can also find this mode if you 
-                play all the white keys on a piano keyboard starting from F. 
-            </Text>
-            <Image source={require('@/assets/images/f_lydian.png')} />
-            <Image source={require('@/assets/images/lydian.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play Lydian" onPress={() => lydian.play()} />
-                <Button color='red' title="Pause Lydian" onPress={() => lydian.pause()} />
-            </View>
+
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Modes
+                </Text>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Modes</Text> are an extension of scales. They are ordered collections of whole steps and half steps that can be described
+                        within a continuum of <Text style={styles.bold}>modal brightness</Text>: brighter modes sound more like a major scale while darker modes sound more 
+                        like a minor scale. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/mode_range.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Lydian Mode
+                    </Text>
+                    <Text style={styles.text}>
+                        The brightest mode is the <Text style={styles.bold}>lydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is 
+                        W, W, W, H, W, W, H. You can think of this mode as a major scale with a raised 4 (<i>fi</i>). You can also find this mode if you 
+                        play all the white keys on a piano keyboard starting from F. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/f_lydian.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Image 
+                        source={require('@/assets/images/lydian.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play Lydian" 
+                            onPress={() => lydian.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause Lydian" 
+                            onPress={() => lydian.pause()} 
+                        />
+                    </View>
+                </View>                
+               
+
+       
+
             <Text style={styles.text}>
                 The next bright mode is the <b>ionian mode</b>. In this mode, the ascending pattern of whole steps and half steps is 
                 the exact same as in the major scale: W, W, H, W, W, W, H. You can find this mode if you play all the white keys on a 
@@ -391,16 +429,24 @@ export default function Modes(){
                 <p id='wrong6' color='red' style={{textAlign: 'center'}} hidden>Wrong! The Locrian mode is a minor scale with a lowered 
                     2 & a lowered 5.</p>
             </form>
-            <View style={styles.links}>
-                <Link href='./6scales' style={styles.edgelinks}>
-                    Previous: Scales
-                </Link>
-                <Link href='../(tabs)/home' style={styles.homelink}>
-                    MusicApp
-                </Link>
-                <Link href='./8intervals' style={styles.edgelinks}>
-                    Next: Intervals
-                </Link>
+             <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./6scales' style={styles.secondaryLink}>
+                            ← Previous: Scales
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./8intervals' style={styles.link}>
+                            Next: Intervals →
+                        </Link>
+                    </View>
+                </View>
+
             </View>
             
         </ScrollView>
@@ -408,49 +454,102 @@ export default function Modes(){
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
-        backgroundColor: 'white',
-        alignItems: 'center'
+        flex: 1,
+        backgroundColor: '#D2D2D2',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom: 40,
     },
     title: {
-        color: 'black',
-        fontSize: 80,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        color: '#5543A5',
+        fontSize: 36,
+        fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
+        marginVertical: 30,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.1)',
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 3,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 20,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderColor: 'black',
+        borderWidth: 2,
+        elevation: 3,
     },
     text: {
-        color: 'black',
-        fontSize: 20,
-        fontFamily: 'ARIAL',
-        padding: 10
+        color: '#333',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'left',
+        marginBottom: 10,
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: '#5543A5',
     },
     header: {
-        color: 'black',
-        fontSize: 36,
-        fontFamily: 'ARIAL',
+        color: '#5543A5',
+        fontSize: 24,
         fontWeight: 'bold',
-        padding: 40,
-        paddingTop: 60,
+        marginBottom: 15,
         textAlign: 'left',
     },
-    buttons: {
-        flexDirection: 'row'
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
     },
-    links: {
+    buttonContainer: {
         flexDirection: 'row',
-        padding: 40,
-        gap: 500
+        justifyContent: 'center',
+        gap: 10,
+        marginTop: 10,
     },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 12,
     },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    }
-})
+    linkWrapper: {
+        width: '100%',
+        marginBottom: 15,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    link: {
+        color: 'white',
+        fontSize: 18,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+});

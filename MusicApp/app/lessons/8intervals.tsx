@@ -1,5 +1,7 @@
 import React from 'react';
+
 import {Text, ScrollView, StyleSheet, Image, View, Button} from 'react-native';
+
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
@@ -9,7 +11,24 @@ export default function Intervals(){
     const augmented = useAudioPlayer(require('@/assets/sounds/augmented.mp3'));
     const diminished = useAudioPlayer(require('@/assets/sounds/diminished.mp3'));
     return(
-        <ScrollView contentContainerStyle={styles.container}>
+
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Intervals
+                </Text>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        Content about intervals will go here...
+                    </Text>
+                </View>
+                
+              
+        
             <Text style={styles.title}>
                 Intervals
             </Text>
@@ -167,26 +186,65 @@ export default function Intervals(){
                 the interval between Ebb & Ab is an augmented 4th. 
             </Text>
             <Image source={require('@/assets/images/hard_interval.png')} />
-            <View style={styles.links}>
-                <Link href='./7modes' style={styles.edgelinks}>
-                    Previous: Modes
-                </Link>
-                <Link href='/(tabs)/home' style={styles.homelink}>
-                    MusicApp
-                </Link>
-                <Link href='./9melody' style={styles.edgelinks}>
-                    Next: Melody
-                </Link>
+            <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./7modes' style={styles.secondaryLink}>
+                            ← Previous: Modes
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./9melody' style={styles.link}>
+                            Next: Melody →
+                        </Link>
+                    </View>
+                </View>
+
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
+        flex: 1,
+        backgroundColor: '#D2D2D2',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom: 40,
+    },
+    title: {
+        color: '#5543A5',
+        fontSize: 36,
+        fontFamily: 'Inter_700Bold',
+        fontWeight: 'bold',
+        marginVertical: 30,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.1)',
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 3,
+    },
+    card: {
         backgroundColor: 'white',
-        alignItems: 'center'
+        borderRadius: 12,
+        padding: 20,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderColor: 'black',
+        borderWidth: 2,
+        elevation: 3,
     },
     title: {
         color: 'black',
@@ -197,11 +255,46 @@ const styles = StyleSheet.create({
         paddingBottom: 20
     },
     text: {
-        color: 'black',
-        fontSize: 20,
-        fontFamily: 'ARIAL',
-        padding: 10
+
+        color: '#333',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'left',
     },
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 12,
+    },
+    linkWrapper: {
+        width: '100%',
+        marginBottom: 15,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    link: {
+        color: 'white',
+        fontSize: 18,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+
+       
     header: {
         color: 'black',
         fontSize: 36,
@@ -228,4 +321,5 @@ const styles = StyleSheet.create({
         fontSize: 30,
         alignSelf: 'center'
     }
-})
+});
+

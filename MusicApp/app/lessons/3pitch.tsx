@@ -23,64 +23,132 @@ export default function Pitch(){
         const answer3 = "False";
 
     return(
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>
-                Pitch
-            </Text>
-            <Text style={styles.text}>
-                In music, a pitch is a distinct tone with an individual frequency. Western music is built around 7 tones named after 
-                the first seven letters of the alphabet: A, B, C, D, E, F, G. These pitches are repeated in a loop after G.
-            </Text>
-            <Text style={styles.header}>
-                Clefs
-            </Text>
-            <Text style={styles.text}>
-                To notate pitches on a staff, there must be a way to assign them to the different lines and spaces of the staff. This 
-                is the purpose of clefs. A <b>clef</b> is a symbol at the beginning of a staff that indicates the layout of the pitches
-                on the lines and spaces. Different clefs make reading different ranges easier. 
-            </Text>
-            <Text style={styles.text}>
-                <b>Treble Clef: </b> The treble clef is one of the most widely used clefs in Western music. It is typically used 
-                for higher-range voices and instruments, such as flute, violin, trumpet, or soprano voice. Because this clef is curled
-                around the G line (second line from the bottom) and looks like the letter G, it is also called the G clef. The lines in 
-                the treble clef are used to notate the pitches E, G, B, D, F. This pattern can be remembered with the mnemonic device 
-                "Every Good Boy Does Fine". 
-            </Text>
-            <Image source={require('@/assets/images/egbdf.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play flute" onPress={() => flute1.play()} />
-                <Button color='red' title="Pause flute" onPress={() => flute1.pause()} />
-            </View>
-            <Text style={styles.text}>
-                The spaces in the treble clef are used to notate the pitches F, A, C, E. This pattern can be remembered by the fact 
-                that they spell the word "face". 
-            </Text>
-            <Image source={require('@/assets/images/face.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play flute" onPress={() => flute2.play()} />
-                <Button color='red' title="Pause flute" onPress={() => flute2.pause()} />
-            </View>
-            <Text style={styles.text}>
-                <b>Bass Clef: </b> The bass clef is the other most widely used clefs in Western music. It is typically used for 
-                lower-range voices and instruments, such as bassoon, cello, trombone, or bass voice. Because this clef curls around the 
-                F line (second line from the top) and has two lines surrounding the F line and looks like the letter F, it is also 
-                called the F clef. The lines in the bass clef are used to notate the pitches G, B, D, F, A. This pattern can be 
-                remembered by the mnemonic device "Good Bikes Don't Fall Apart".
-            </Text>
-            <Image source={require('@/assets/images/gbdfa.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play trombone" onPress={() => trombone1.play()} />
-                <Button color='red' title="Pause trombone" onPress={() => trombone1.pause()} />
-            </View>
-            <Text style={styles.text}>
-                The spaces in the bass clef are used to notate the pitches A, C, E, G. This pattern can be remembered by the 
-                mnemonic device "All Cows Eat Grass". 
-            </Text>
-            <Image source={require('@/assets/images/aceg.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play trombone" onPress={() => trombone2.play()} />
-                <Button color='red' title="Pause trombone" onPress={() => trombone2.pause()} />
-            </View>
+
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Pitch
+                </Text>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        In music, a pitch is a distinct tone with an individual frequency. Western music is built around 7 tones named after 
+                        the first seven letters of the alphabet: A, B, C, D, E, F, G. These pitches are repeated in a loop after G.
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Clefs
+                    </Text>
+                    <Text style={styles.text}>
+                        To notate pitches on a staff, there must be a way to assign them to the different lines and spaces of the staff. This 
+                        is the purpose of clefs. A <Text style={styles.bold}>clef</Text> is a symbol at the beginning of a staff that indicates the layout of the pitches
+                        on the lines and spaces. Different clefs make reading different ranges easier. 
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Treble Clef: </Text> The treble clef is one of the most widely used clefs in Western music. It is typically used 
+                        for higher-range voices and instruments, such as flute, violin, trumpet, or soprano voice. Because this clef is curled
+                        around the G line (second line from the bottom) and looks like the letter G, it is also called the G clef. The lines in 
+                        the treble clef are used to notate the pitches E, G, B, D, F. This pattern can be remembered with the mnemonic device 
+                        "Every Good Boy Does Fine". 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/egbdf.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play flute" 
+                            onPress={() => flute1.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause flute" 
+                            onPress={() => flute1.pause()} 
+                        />
+                    </View>
+                    <Text style={styles.text}>
+                        The spaces in the treble clef are used to notate the pitches F, A, C, E. This pattern can be remembered by the fact 
+                        that they spell the word "face". 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/face.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play flute" 
+                            onPress={() => flute2.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause flute" 
+                            onPress={() => flute2.pause()} 
+                        />
+                    </View>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Bass Clef: </Text> The bass clef is the other most widely used clefs in Western music. It is typically used for 
+                        lower-range voices and instruments, such as bassoon, cello, trombone, or bass voice. Because this clef curls around the 
+                        F line (second line from the top) and has two lines surrounding the F line and looks like the letter F, it is also 
+                        called the F clef. The lines in the bass clef are used to notate the pitches G, B, D, F, A. This pattern can be 
+                        remembered by the mnemonic device "Good Bikes Don't Fall Apart".
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/gbdfa.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play trombone" 
+                            onPress={() => trombone1.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause trombone" 
+                            onPress={() => trombone1.pause()} 
+                        />
+                    </View>
+                    <Text style={styles.text}>
+                        The spaces in the bass clef are used to notate the pitches A, C, E, G. This pattern can be remembered by the 
+                        mnemonic device "All Cows Eat Grass". 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/aceg.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play trombone" 
+                            onPress={() => trombone2.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause trombone" 
+                            onPress={() => trombone2.pause()} 
+                        />
+                    </View>
+                </View>                
+                
+
+        
             <Text style={styles.text}>
                 <b>Alto Clef: </b> The alto clef is a less widely used clef in Western music. It is typically used for the viola, which is a 
                 middle-range instrument. Because this clef is centered around the C line (the middle line), it is also called the 
@@ -284,62 +352,136 @@ export default function Pitch(){
                                 )}
                             </view>
                         </div>
-                        <View style={styles.links}>
-                <Link href='./2notation' style={styles.edgelinks}>
-                    Previous: Music Notation
-                </Link>
-                <Link href='../(tabs)/home' style={styles.homelink}>
-                    MusicApp
-                </Link>
-                <Link href='./4rhythm' style={styles.edgelinks}>
-                    Next: Rhythm
-                </Link>
+                        <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./2notation' style={styles.secondaryLink}>
+                            ← Previous: Music Notation
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./4rhythm' style={styles.link}>
+                            Next: Rhythm →
+                        </Link>
+                    </View>
+                </View>
+
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
-        backgroundColor: 'white',
-        alignItems: 'center'
+        flex: 1,
+        backgroundColor: '#D2D2D2',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom: 40,
     },
     title: {
-        color: 'black',
-        fontSize: 80,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        color: '#5543A5',
+        fontSize: 36,
+        fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
+        marginVertical: 30,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.1)',
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 3,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 20,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderColor: 'black',
+        borderWidth: 2,
+        elevation: 3,
     },
     text: {
-        color: 'black',
-        fontSize: 20,
-        fontFamily: 'ARIAL',
-        padding: 10
+        color: '#333',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'left',
+        marginBottom: 10,
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: '#5543A5',
     },
     header: {
-        color: 'black',
-        fontSize: 36,
-        fontFamily: 'ARIAL',
+        color: '#5543A5',
+        fontSize: 24,
         fontWeight: 'bold',
-        padding: 40,
-        paddingTop: 60,
+        marginBottom: 15,
         textAlign: 'left',
     },
-    buttons: {
-        flexDirection: 'row'
+    subHeader: {
+        color: '#5543A5',
+        fontSize: 18,
+        fontWeight: '600',
+        marginTop: 15,
+        marginBottom: 10,
     },
-    links: {
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
+    },
+    buttonContainer: {
         flexDirection: 'row',
-        padding: 40,
-        gap: 500
+        justifyContent: 'center',
+        gap: 10,
+        marginTop: 10,
     },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 12,
     },
+    linkWrapper: {
+        width: '100%',
+        marginBottom: 15,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    link: {
+        color: 'white',
+        fontSize: 18,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+
     homelink: {
         color: 'purple',
         fontSize: 30,
@@ -400,3 +542,4 @@ const styles = StyleSheet.create({
         color: 'black',
       }
 })
+

@@ -136,33 +136,49 @@ export default function Meter(){
     }
 
     return(
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>
-                Meter
-            </Text>
-            <Text style={styles.text}>
-                Rhythm is a major component in music, and it is defined by the beat in a song or composition. A <b>beat</b> is 
-                a recurring pulse in music to which one can tap or clap along. A <b>meter</b> is a recurring pattern of beats in a song
-                or composition. The rhythmic values of notes and rests discussed in the previous lesson are arranged by musicians 
-                to create different meters in their music. 
-            </Text>
-            <Text style={styles.header}>
-                Simple Meter
-            </Text>
-            <Text style={styles.text}>
-                <b>Simple Meter</b> is a meter in which the beat can be divided into two and then further subdivided in half. This can 
-                be thought of as dividing the beat into two smaller beats or tapping the beat twice as fast. 
-            </Text>
-            <Text style={styles.text}>
-                Different numbers of beats group into different meters. <b>Duple meters</b> are meters that contain groups of two beats.
-                <b>Triple meters</b> are meters that contain groups of three beats. <b>Quadruple meters</b> are meters that contain 
-                groups of four beats. 
-            </Text>
-            <Text style={styles.text}>
-                In Western musical notation, beat groupings are indicated by barlines, which divide music into measures. Each measure
-                equivalent to one beat grouping.
-            </Text>
-            <Image source={require('@/assets/images/bars.png')} />
+
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Meter
+                </Text>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        Rhythm is a major component in music, and it is defined by the beat in a song or composition. A <Text style={styles.bold}>beat</Text> is 
+                        a recurring pulse in music to which one can tap or clap along. A <Text style={styles.bold}>meter</Text> is a recurring pattern of beats in a song
+                        or composition. The rhythmic values of notes and rests discussed in the previous lesson are arranged by musicians 
+                        to create different meters in their music. 
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Simple Meter
+                    </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Simple Meter</Text> is a meter in which the beat can be divided into two and then further subdivided in half. This can 
+                        be thought of as dividing the beat into two smaller beats or tapping the beat twice as fast. 
+                    </Text>
+                    <Text style={styles.text}>
+                        Different numbers of beats group into different meters. <Text style={styles.bold}>Duple meters</Text> are meters that contain groups of two beats.
+                        <Text style={styles.bold}>Triple meters</Text> are meters that contain groups of three beats. <Text style={styles.bold}>Quadruple meters</Text> are meters that contain 
+                        groups of four beats. 
+                    </Text>
+                    <Text style={styles.text}>
+                        In Western musical notation, beat groupings are indicated by barlines, which divide music into measures. Each measure
+                        equivalent to one beat grouping.
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/bars.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+
+
             <Text style={styles.text}> 
                 <b>Time signatures</b> look like fractions and are placed at the beginning of music to indicate two things to the 
                 musician: The top number indicates the number of beats in every measure. In simple meter, the top number is always 
@@ -362,65 +378,127 @@ export default function Meter(){
                 <p id='correct4' color='green' style={{textAlign: 'center'}} >Correct!</p>
                 <p id='wrong4' color='red' style={{textAlign: 'center'}} >Wrong! The time signature for this music is 9/8.</p>
             </form>
-            <View style={styles.links}>
-                <Link href='./4rhythm' style={styles.edgelinks}>
-                    Previous: Rhythm
-                </Link>
-                <Link href='../(tabs)/home' style={styles.homelink}>
-                    MusicApp
-                </Link>
-                <Link href='./6scales' style={styles.edgelinks}>
-                    Next: Scales
-                </Link>
+             </View>                
+                <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./4rhythm' style={styles.secondaryLink}>
+                            ← Previous: Rhythm
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./6scales' style={styles.link}>
+                            Next: Scales →
+                        </Link>
+                    </View>
+                </View>
+
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
-        backgroundColor: 'white',
-        alignItems: 'center'
+        flex: 1,
+        backgroundColor: '#D2D2D2',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom: 40,
     },
     title: {
-        color: 'black',
-        fontSize: 80,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        color: '#5543A5',
+        fontSize: 36,
+        fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
+        marginVertical: 30,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.1)',
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 3,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 20,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderColor: 'black',
+        borderWidth: 2,
+        elevation: 3,
     },
     text: {
-        color: 'black',
-        fontSize: 20,
-        fontFamily: 'ARIAL',
-        padding: 10
+        color: '#333',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'left',
+        marginBottom: 10,
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: '#5543A5',
     },
     header: {
-        color: 'black',
-        fontSize: 36,
-        fontFamily: 'ARIAL',
+        color: '#5543A5',
+        fontSize: 24,
         fontWeight: 'bold',
-        padding: 40,
-        paddingTop: 60,
+        marginBottom: 15,
         textAlign: 'left',
     },
-    buttons: {
-        flexDirection: 'row'
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
     },
-    links: {
+    buttonContainer: {
         flexDirection: 'row',
-        padding: 40,
-        gap: 500
+        justifyContent: 'center',
+        gap: 10,
+        marginTop: 10,
     },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 12,
     },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    }
-})
+    linkWrapper: {
+        width: '100%',
+        marginBottom: 15,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    link: {
+        color: 'white',
+        fontSize: 18,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+});

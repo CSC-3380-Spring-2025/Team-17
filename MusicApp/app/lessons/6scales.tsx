@@ -202,108 +202,53 @@ export default function Scales(){
     }
 
     return(
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>
-                Major & Minor Scales
-            </Text>
-            <Text style={styles.text}>
-                A <b>scale</b> is an ordered collection of notes centered around a tonic note. A scale starts on a tonic note and 
-                proceeds upwards in a pattern of whole steps and half steps until it reaches the tonic note again. Scales are always 
-                named after their tonic note.
-            </Text>
-            <Text style={styles.header}>
-                Major Scales
-            </Text>
-            <Text style={styles.text}>
-                A <b>major scale</b> is an ordered collection of whole steps (W) & half steps (H) in the following pattern: W, W, H, W, W, W, H.
-                This pattern of whole steps and half steps is always the same in every major scale. Music written with major scales is often
-                characterized as sounding happy or light. 
-            </Text>
-            <Image source={require('@/assets/images/major_scale.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play C Major" onPress={() => cmajor.play()} />
-                <Button color='red' title="Pause C Major" onPress={() => cmajor.pause()} />
-            </View>
-            <Text style={styles.header}>
-                Scale Degrees
-            </Text>
-            <Text style={styles.text}>
-                Musicians can name the notes of major scales in a few different ways. The first method is <b>scale degrees</b>, which are 
-                numbers starting at 1 for the first note of the scale, and the numbers ascend until the last note of the scale, which 
-                is also 1 (or 8). Another method of naming notes is <b>solfege</b>, which is a system of syllables that is mostly used 
-                by singers. The syllables <i>do, re, mi, fa, so, la</i> & <i>ti</i> correspond to the scale degrees 1, 2, 3, 4, 5, 6, & 7.
-                The last note is <i>do</i> again because it is a repetition of the first note. Solfege is often practiced in two distinct
-                form. <b>Movable <i>do</i></b> is the more common form of solfege, where the pitch of <i>do</i> changes depending on what
-                the first note of the scale is. <b>Fixed <i>do</i></b> is the less common form of solfege, where <i>do</i> always 
-                corresponds with the pitch of C, and the other syllables likewise correspond to specific pitches. The final method 
-                of naming notes is with <b>scale degree names</b>. Every scale degree has a specific name: tonic, supertonic, mediant, 
-                subdominant, dominant, submediant, leading tone, and then tonic again.
-            </Text>
-            <Image source={require('@/assets/images/scale_degrees.png')} />
-            <Text style={styles.text}>
-                The word <b>dominant</b> is inherited from medieval music theory and refers to the importance of the fifth above the 
-                tonic in Western music. The word <b>mediant</b> means 'middle', and refers to the fact that the mediant is in the middle
-                of the tonic and dominant pitches. The Latin prefix <i>super</i> means 'above', so that means the supertonic is one step 
-                above the tonic. The Latin prefix <i>sub</i> means 'below', so the subdominant, submediant, and subtonic are the inverted
-                versions of the dominant, mediant, and supertonic as they are located below the tonic. The subtonic refers to the note 
-                below the tonic, but in major scales, it is called the leading tone because it is one half step away from the tonic. 
-                This gives the leading tone a tendency to resolve to the tonic note; thus, it leads to the tonic.
-            </Text>
-            <Image source={require('@/assets/images/degree_names.png')} />
-            <Text style={styles.header}>
-                Key Signatures
-            </Text>
-            <Text style={styles.text}>
-                A <b>key signature</b> is a group of sharps or flats that appears at the beginning of a composition (after a clef but 
-                before a time signature) and indicates to the musician what scale the music is in. Key signatures collect the accidentals
-                in a scale and place them at the beginning of the music to make it easier to track which notes have accidentals applied 
-                to them. No matter what octave the notes are in, the accidentals will always be applied to them. 
-            </Text>
-            <Image source={require('@/assets/images/key_signature.png')} />
-            <Text style={styles.text}>
-                Sharp key signatures & flat key signatures always have a specific order in which sharps or flats are added, regardless
-                of the clef. The order of sharps is F, C, G, D, A, E, B. This can be remembered by the mnemonic "Fat Cats Go Down Alleys
-                to Eat Birds". The sharps form a zig-zag pattern, alternating in going up & down. In the treble, bass, and alto clefs, 
-                the pattern breaks after D# & then resumes. In the tenor clef, there is no break in the pattern, but F# & G# appear in 
-                the lower octave instead of the upper octave.
-            </Text>
-            <Image source={require('@/assets/images/sharps.png')} />
-            <Text style={styles.text}>
-                The order of flats is the opposite of the order of sharps: B, E, A, D, G, C, F. This makes the order of flats & sharps
-                palindromes. The order of flats can be remembered with the mnemonic "Birds Eat And Dive Going Crazy Far". The flats 
-                always make a perfect zig-zag pattern without breaks in all clefs.
-            </Text>
-            <Image source={require('@/assets/images/flats.png')} />
-            <Text style={styles.text}>
-                There are a few easy tricks to remember which key signature belongs to which major scale. In sharp key signatures, 
-                the last sharp is a half step below the tonic. It represents the leading tone, and based on that information, one can
-                easily deduce the tonic note of the scale by simply moving a half step up from the last sharp.  
-            </Text>
-            <Image source={require('@/assets/images/sharp_examples.png')} />
-            <View style={styles.examples}>
-                <Text style={styles.text}>
-                    1. The last sharp (in this case the only sharp) is F#, which is a half step below the note G. Therefore, this is the
-                    key signature of G major. 
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Major & Minor Scales
                 </Text>
-                <Text style={styles.text}>
-                    2. The last sharp is G#, which is a half step below the note A. Therefore, this is the key signature of A major. 
-                </Text>
-                <Text style={styles.text}>
-                    3. The last sharp is E#, which is a half step below the note F#. Therefore, this is the key signature of F# major. 
-                </Text>
-            </View>
-            <Text style={styles.text}>
-                In flat key signatures, the second-to-last flat is the tonic note. One can immediately deduce the major scale just by 
-                identifying the second-to-last flat.
-            </Text>
-            <Image source={require('@/assets/images/flat_examples.png')} />
-            <View style={styles.examples}>
-                <Text style={styles.text}>
-                    1. The second-to-last flat is Bb. Therefore, this is the key signature of Bb major.  
-                </Text>
-                <Text style={styles.text}>
-                    2. The second-to-last flat is Ab. Therefore, this is the key signature of Ab major. 
-                </Text>
+
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        A <Text style={styles.bold}>scale</Text> is an ordered collection of notes centered around a tonic note. A scale starts on a tonic note and 
+                        proceeds upwards in a pattern of whole steps and half steps until it reaches the tonic note again. Scales are always 
+                        named after their tonic note.
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Major Scales
+                    </Text>
+                    <Text style={styles.text}>
+                        A <Text style={styles.bold}>major scale</Text> is an ordered collection of whole steps (W) & half steps (H) in the following pattern: W, W, H, W, W, W, H.
+                        This pattern of whole steps and half steps is always the same in every major scale. Music written with major scales is often
+                        characterized as sounding happy or light. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/major_scale.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play C Major" 
+                            onPress={() => cmajor.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause C Major" 
+                            onPress={() => cmajor.pause()} 
+                        />
+                    </View>
+                </View>                
+                
+
                 <Text style={styles.text}>
                     3. The second-to-last flat is Gb. Therefore, this is the key signature of Gb major. 
                 </Text>
@@ -459,68 +404,126 @@ export default function Scales(){
                 <p id='correct6' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
                 <p id='wrong6' color='red' style={{textAlign: 'center'}} hidden>Wrong! Gb major is the relative minor of Eb minor.</p>
             </form>
-            <View style={styles.links}>
-                <Link href='./5meter' style={styles.edgelinks}>
-                    Previous: Meter
-                </Link>
-                <Link href='../(tabs)/home' style={styles.homelink}>
-                    MusicApp
-                </Link>
-                <Link href='./7modes' style={styles.edgelinks}>
-                    Next: Modes
-                </Link>
+            <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./5meter' style={styles.secondaryLink}>
+                            ← Previous: Meter
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./7modes' style={styles.link}>
+                            Next: Modes →
+                        </Link>
+                    </View>
+                </View>
+
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
-        backgroundColor: 'white',
-        alignItems: 'center'
+        flex: 1,
+        backgroundColor: '#D2D2D2',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom: 40,
     },
     title: {
-        color: 'black',
-        fontSize: 80,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        color: '#5543A5',
+        fontSize: 36,
+        fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
+        marginVertical: 30,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.1)',
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 3,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 20,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderColor: 'black',
+        borderWidth: 2,
+        elevation: 3,
     },
     text: {
-        color: 'black',
-        fontSize: 20,
-        fontFamily: 'ARIAL',
-        padding: 10
+        color: '#333',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'left',
+        marginBottom: 10,
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: '#5543A5',
     },
     header: {
-        color: 'black',
-        fontSize: 36,
-        fontFamily: 'ARIAL',
+        color: '#5543A5',
+        fontSize: 24,
         fontWeight: 'bold',
-        padding: 40,
-        paddingTop: 60,
+        marginBottom: 15,
         textAlign: 'left',
     },
-    buttons: {
-        flexDirection: 'row'
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
     },
-    examples: {
-        alignItems: 'flex-start'
-    },
-    links: {
+    buttonContainer: {
         flexDirection: 'row',
-        padding: 40,
-        gap: 500
+        justifyContent: 'center',
+        gap: 10,
+        marginTop: 10,
     },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 12,
     },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    }
-})
+    linkWrapper: {
+        width: '100%',
+        marginBottom: 15,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    link: {
+        color: 'white',
+        fontSize: 18,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+});
