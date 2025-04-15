@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import FileUploader from '@/components/fileUploader';
 import {
   View,
   Text,
@@ -27,7 +28,12 @@ interface AudioTrack extends Track {
   sourceType: SoundSource;
   recording?: boolean;
 }
-
+interface uploadedDocument{
+  name: string;
+  mimeType: string;
+  size: number;
+  uri: string;
+}
 const LiveMixingPage: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [showRecordingsModal, setShowRecordingsModal] = useState(false);
@@ -222,6 +228,16 @@ const LiveMixingPage: React.FC = () => {
     setTracks(prev => [...prev, newTrack]);
   };
 
+  const handleFileUpload = (document: uploadedDocument)=>{
+    const newTrack:AudioTrack={
+      id:`file_${Date.now()}`,
+      url: document.uri,
+      title: document.name,
+      artist: '',
+      sourceType: 'local-file',
+    };
+    setTracks(prev=>[...prev, newTrack]);
+  };
   const renderTrackItem = ({ item }: { item: AudioTrack }) => (
     <View style={styles.trackItem}>
       <View style={styles.trackInfo}>
@@ -300,13 +316,9 @@ const LiveMixingPage: React.FC = () => {
               onPress={() => addTrack('virtual-instrument')}>
               <Text style={styles.modalOptionText}>Virtual Instrument</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={styles.modalOption}
-              onPress={() => addTrack('local-file')}>
-              <Text style={styles.modalOptionText}>Import from Local Files</Text>
-            </TouchableOpacity>
-            
+            <FileUploader onFileUpload={handleFileUpload}
+            setModalVisible={setModalVisible}/>
+
             <TouchableOpacity
               style={styles.modalClose}
               onPress={() => setModalVisible(false)}>

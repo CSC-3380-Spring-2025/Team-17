@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
+import React, { useState } from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
@@ -14,6 +14,13 @@ export default function Pitch(){
     const cello2 = useAudioPlayer(require('@/assets/sounds/cello2.mp3'));
     const piano1 = useAudioPlayer(require('@/assets/sounds/piano1.mp3'));
     const piano2 = useAudioPlayer(require('@/assets/sounds/piano2.mp3'));
+
+    const [quiz1Answer, setQ1Answer] = useState(null);
+        const [quiz2Answer, setQ2Answer] = useState(null);
+        const [quiz3Answer, setQ3Answer] = useState(null);
+        const answer1 = "G,A,B,C,D,E,F,G,A";
+        const answer2 = "Raises the Note by a 1/2 Step";
+        const answer3 = "False";
 
     return(
         <ScrollView contentContainerStyle={styles.container}>
@@ -183,7 +190,101 @@ export default function Pitch(){
                 but they have the same sound. C# & Db are enharmonically equivalent, so playing either of those notes will result in the 
                 same pitch. D is enharmonically equivalent with Cx & Ebb, so playing D, Cx, or Ebb will result in the same pitch. 
             </Text>
-            <View style={styles.links}>
+            
+            <div>
+                            <Text style = {styles.quizTitle}>Quiz</Text>
+                            <br></br>
+                        <view style = {styles.quizContainer}>
+                                <Text style={styles.quizText}>
+                                    In what order are pitches notated with a Bass Clef
+                                </Text>
+                                {["F,G,A,B,C,D,E,F,G", "E,F,G,A,B,C,D,E,F", "D,E,F,G,A,B,C,D,E", "G,A,B,C,D,E,F,G,A"].map((option, index) =>{
+                                    const selected = quiz1Answer === option;
+                                    const correct = option === answer1;
+                                    const buttonStyle = selected
+                                    ? correct
+                                        ? styles.correctAnswer
+                                        :styles.incorrectAnswer
+                                    :styles.quizButton;
+            
+                                    return(
+                                        <Pressable
+                                            key={index}
+                                            style={buttonStyle}
+                                            onPress={() => setQ1Answer(option)}
+                                        >
+                                            <Text style={styles.quizButtonText}>{option}</Text>
+                                        </Pressable>
+                                    );
+                                })}
+                                {quiz1Answer && (
+                                    <Text style={styles.result}>
+                                        {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                    </Text>
+                                )}
+                            </view>
+                            <br></br>
+                            <view style = {styles.quizContainer}>
+                                <Text style={styles.quizText}>
+                                    What does a <b>Sharp</b> do to a note?
+                                </Text>
+                                {["Raises the Note by a 1/2 Step", "Raises the note by a Whole Step", "Lowers the note by a 1/2 Step", "Lowers the note by a Whole Step"].map((option, index) =>{
+                                    const selected = quiz2Answer === option;
+                                    const correct = option === answer2;
+                                    const buttonStyle = selected
+                                    ? correct
+                                        ? styles.correctAnswer
+                                        :styles.incorrectAnswer
+                                    :styles.quizButton;
+            
+                                    return(
+                                        <Pressable
+                                            key={index}
+                                            style={buttonStyle}
+                                            onPress={() => setQ2Answer(option)}
+                                        >
+                                            <Text style={styles.quizButtonText}>{option}</Text>
+                                        </Pressable>
+                                    );
+                                })}
+                                {quiz2Answer && (
+                                    <Text style={styles.result}>
+                                        {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                    </Text>
+                                )}
+                            </view>
+                            <br></br>
+                            <view style = {styles.quizContainer}>
+                                <Text style={styles.quizText}>
+                                    An <b>Enharmonic Equivalence</b> can also occur when two notes have the same name but different sounds.
+                                </Text>
+                                {["True", "False"].map((option, index) =>{
+                                    const selected = quiz3Answer === option;
+                                    const correct = option === answer3;
+                                    const buttonStyle = selected
+                                    ? correct
+                                        ? styles.correctAnswer
+                                        :styles.incorrectAnswer
+                                    :styles.quizButton;
+            
+                                    return(
+                                        <Pressable
+                                            key={index}
+                                            style={buttonStyle}
+                                            onPress={() => setQ3Answer(option)}
+                                        >
+                                            <Text style={styles.quizButtonText}>{option}</Text>
+                                        </Pressable>
+                                    );
+                                })}
+                                {quiz3Answer && (
+                                    <Text style={styles.result}>
+                                        {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                    </Text>
+                                )}
+                            </view>
+                        </div>
+                        <View style={styles.links}>
                 <Link href='./2notation' style={styles.edgelinks}>
                     Previous: Music Notation
                 </Link>
@@ -243,5 +344,59 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
-    }
+    },
+    quizContainer: {
+        height: 100,
+        width: 200,
+        
+        alignItems: 'center',
+        padding:7,
+    },
+    quizTitle: {
+        color: 'black',
+        fontSize: 50,
+        fontFamily: 'TIMES_NEW_ROMAN',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+        paddingBottom: 20
+    },
+    quizText: {
+        color: '#840606',
+        fontSize: 20,
+        alignSelf:'center',
+    },
+    quizButton: {
+        height: 45,
+        width:150,
+        backgroundColor: 'gray',
+        alignItems: 'center',
+        padding: 5,
+    },
+    quizButtonText: {
+        color: 'white',
+        fontSize: 15,
+        alignSelf:'center',
+    },
+    correctAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'green',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      incorrectAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      result: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+      }
 })

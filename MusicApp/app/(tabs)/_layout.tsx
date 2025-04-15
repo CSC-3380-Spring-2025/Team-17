@@ -11,7 +11,7 @@ export default function TabLayout() {
                     tabBarActiveTintColor: '#ffd33d',
                     headerStyle: {
                         backgroundColor: '#333232',
-                        height: 60,
+                        height: 75,
                     },
                     headerBackground: () => (
                         <View style={{
@@ -48,26 +48,15 @@ export default function TabLayout() {
                     options={{
                         title: 'Mixing',
                         tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? 'musical-notes' : 'musical-notes-outline'} color={color} size={24} />
+                            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
                         ),
                     }}
                 />
-                <Tabs.Screen
-                    name="Recording"
-                    options={{
-                        title: 'Recorder',
-                        tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? 'mic' : 'mic-outline'} color={color} size={24} />
-                        ),
-                    }}
-                />
+                
                 <Tabs.Screen
                     name="challenges"
                     options={{
-                        title: 'Challenges',
-                        tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? 'trophy' : 'trophy-outline'} color={color} size={24} />
-                        ),
+                        href: null
                     }}
                 />
                 <Tabs.Screen
@@ -75,7 +64,7 @@ export default function TabLayout() {
                     options={{
                         title: 'Lessons',
                         tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? 'school' : 'school-outline'} color={color} size={24} />
+                            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
                         ),
                     }}
                 />
@@ -84,11 +73,22 @@ export default function TabLayout() {
                     options={{
                         title: 'Account',
                         tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={24} />
+                            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
                         ),
                     }}
                 />
+                <Tabs.Screen
+                    name="Recording"
+                    options={{
+                        title: 'RecorderTest',
+                        tabBarIcon: ({ color, focused }) => (
+                            <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color = {color} size = {24} />
+
+                        ),
+                    }}
+            />
             </Tabs>
         </AudioProvider>
+
     );
 }
