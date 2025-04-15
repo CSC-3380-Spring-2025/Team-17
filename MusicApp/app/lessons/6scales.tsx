@@ -422,7 +422,7 @@ export default function Scales(){
                     </View>
                 </View>
 
-            </View>
+            
         </ScrollView>
     );
 }
