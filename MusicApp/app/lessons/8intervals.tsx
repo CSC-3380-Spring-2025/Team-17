@@ -246,16 +246,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         elevation: 3,
     },
-    title: {
-        color: 'black',
-        fontSize: 80,
-        fontFamily: 'TIMES_NEW_ROMAN',
-        fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
-    },
     text: {
-
         color: '#333',
         fontSize: 16,
         lineHeight: 24,
@@ -293,8 +284,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
-       
     header: {
         color: 'black',
         fontSize: 36,

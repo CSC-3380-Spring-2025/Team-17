@@ -494,6 +494,9 @@ const styles = StyleSheet.create({
         gap: 10,
         marginTop: 10,
     },
+    buttons: {
+        flexDirection: 'row'
+    },
     linksContainer: {
         width: '100%',
         alignItems: 'center',
