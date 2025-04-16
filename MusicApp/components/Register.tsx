@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { updateProfile, sendEmailVerification } from "firebase/auth";
 import { auth, authenticateUser } from '../firebaseConfig';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 
   const Register: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ import { Text, StyleSheet } from 'react-native';
         await sendEmailVerification(user);
         const name = user.displayName||"";
         console.log("User registered successfully");
-        const successMessage=`Registration successful! A verification email has been sent to ${email}. ${name}, please verify your email before logging in.`;
+        const successMessage=`Registration successful! A verification email has been sent to ${email}. ${name}, please verify your email and then return to the login page.`;
         alert(successMessage);
       }
     } catch (error) {
@@ -71,12 +71,21 @@ import { Text, StyleSheet } from 'react-native';
       <br></br>
       <br></br>
       <br></br>
-      <button type="submit">Register</button>
+      <View style={styles.container}>
+        <button type="submit">Register</button>
+      </View>
     </form>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    top: 0,
+    
+    justifyContent: 'center',
+    alignItems: 'center',
+},
   text: {
     color: "#ddddd",
     fontSize: 16,
