@@ -15,13 +15,10 @@ export default function HomeScreen() {
           headerTitle: () => (
             <View style={styles.headerContainer}>
               <View style={styles.headerRow}>
-                <Link href="/lessons" style={styles.imageButton}>
-                  <Image
-                    source={require('@/assets/images/flame.png')}
-                    style={styles.buttonImage}
-                    resizeMode="contain"
-                  />
-                </Link>
+              
+        <Streak/>
+          
+       
                 <View style={styles.titleContainer}>
                   <Text style={styles.headerTitle}>Home</Text>
                 </View>
@@ -32,13 +29,6 @@ export default function HomeScreen() {
                     resizeMode="contain"
                   />
                 </Link>
-
-                <View style={styles.streakContainer}>
-          <Text style={styles.streak}>🔥: 0</Text>
-        </View>
-        <View style={styles.gemContainer}>
-          <Link href="/challenges" style={styles.gem}>💎: 0</Link>
-        </View>
 
               </View>
             </View>
