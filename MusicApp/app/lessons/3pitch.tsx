@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
+import React, { useState } from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
@@ -15,65 +15,140 @@ export default function Pitch(){
     const piano1 = useAudioPlayer(require('@/assets/sounds/piano1.mp3'));
     const piano2 = useAudioPlayer(require('@/assets/sounds/piano2.mp3'));
 
+    const [quiz1Answer, setQ1Answer] = useState(null);
+        const [quiz2Answer, setQ2Answer] = useState(null);
+        const [quiz3Answer, setQ3Answer] = useState(null);
+        const answer1 = "G,A,B,C,D,E,F,G,A";
+        const answer2 = "Raises the Note by a 1/2 Step";
+        const answer3 = "False";
+
     return(
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>
-                Pitch
-            </Text>
-            <Text style={styles.text}>
-                In music, a pitch is a distinct tone with an individual frequency. Western music is built around 7 tones named after 
-                the first seven letters of the alphabet: A, B, C, D, E, F, G. These pitches are repeated in a loop after G.
-            </Text>
-            <Text style={styles.header}>
-                Clefs
-            </Text>
-            <Text style={styles.text}>
-                To notate pitches on a staff, there must be a way to assign them to the different lines and spaces of the staff. This 
-                is the purpose of clefs. A <b>clef</b> is a symbol at the beginning of a staff that indicates the layout of the pitches
-                on the lines and spaces. Different clefs make reading different ranges easier. 
-            </Text>
-            <Text style={styles.text}>
-                <b>Treble Clef: </b> The treble clef is one of the most widely used clefs in Western music. It is typically used 
-                for higher-range voices and instruments, such as flute, violin, trumpet, or soprano voice. Because this clef is curled
-                around the G line (second line from the bottom) and looks like the letter G, it is also called the G clef. The lines in 
-                the treble clef are used to notate the pitches E, G, B, D, F. This pattern can be remembered with the mnemonic device 
-                "Every Good Boy Does Fine". 
-            </Text>
-            <Image source={require('@/assets/images/egbdf.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play flute" onPress={() => flute1.play()} />
-                <Button color='red' title="Pause flute" onPress={() => flute1.pause()} />
-            </View>
-            <Text style={styles.text}>
-                The spaces in the treble clef are used to notate the pitches F, A, C, E. This pattern can be remembered by the fact 
-                that they spell the word "face". 
-            </Text>
-            <Image source={require('@/assets/images/face.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play flute" onPress={() => flute2.play()} />
-                <Button color='red' title="Pause flute" onPress={() => flute2.pause()} />
-            </View>
-            <Text style={styles.text}>
-                <b>Bass Clef: </b> The bass clef is the other most widely used clefs in Western music. It is typically used for 
-                lower-range voices and instruments, such as bassoon, cello, trombone, or bass voice. Because this clef curls around the 
-                F line (second line from the top) and has two lines surrounding the F line and looks like the letter F, it is also 
-                called the F clef. The lines in the bass clef are used to notate the pitches G, B, D, F, A. This pattern can be 
-                remembered by the mnemonic device "Good Bikes Don't Fall Apart".
-            </Text>
-            <Image source={require('@/assets/images/gbdfa.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play trombone" onPress={() => trombone1.play()} />
-                <Button color='red' title="Pause trombone" onPress={() => trombone1.pause()} />
-            </View>
-            <Text style={styles.text}>
-                The spaces in the bass clef are used to notate the pitches A, C, E, G. This pattern can be remembered by the 
-                mnemonic device "All Cows Eat Grass". 
-            </Text>
-            <Image source={require('@/assets/images/aceg.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play trombone" onPress={() => trombone2.play()} />
-                <Button color='red' title="Pause trombone" onPress={() => trombone2.pause()} />
-            </View>
+
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Pitch
+                </Text>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        In music, a pitch is a distinct tone with an individual frequency. Western music is built around 7 tones named after 
+                        the first seven letters of the alphabet: A, B, C, D, E, F, G. These pitches are repeated in a loop after G.
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Clefs
+                    </Text>
+                    <Text style={styles.text}>
+                        To notate pitches on a staff, there must be a way to assign them to the different lines and spaces of the staff. This 
+                        is the purpose of clefs. A <Text style={styles.bold}>clef</Text> is a symbol at the beginning of a staff that indicates the layout of the pitches
+                        on the lines and spaces. Different clefs make reading different ranges easier. 
+                    </Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Treble Clef: </Text> The treble clef is one of the most widely used clefs in Western music. It is typically used 
+                        for higher-range voices and instruments, such as flute, violin, trumpet, or soprano voice. Because this clef is curled
+                        around the G line (second line from the bottom) and looks like the letter G, it is also called the G clef. The lines in 
+                        the treble clef are used to notate the pitches E, G, B, D, F. This pattern can be remembered with the mnemonic device 
+                        "Every Good Boy Does Fine". 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/egbdf.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play flute" 
+                            onPress={() => flute1.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause flute" 
+                            onPress={() => flute1.pause()} 
+                        />
+                    </View>
+                    <Text style={styles.text}>
+                        The spaces in the treble clef are used to notate the pitches F, A, C, E. This pattern can be remembered by the fact 
+                        that they spell the word "face". 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/face.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play flute" 
+                            onPress={() => flute2.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause flute" 
+                            onPress={() => flute2.pause()} 
+                        />
+                    </View>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Bass Clef: </Text> The bass clef is the other most widely used clefs in Western music. It is typically used for 
+                        lower-range voices and instruments, such as bassoon, cello, trombone, or bass voice. Because this clef curls around the 
+                        F line (second line from the top) and has two lines surrounding the F line and looks like the letter F, it is also 
+                        called the F clef. The lines in the bass clef are used to notate the pitches G, B, D, F, A. This pattern can be 
+                        remembered by the mnemonic device "Good Bikes Don't Fall Apart".
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/gbdfa.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play trombone" 
+                            onPress={() => trombone1.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause trombone" 
+                            onPress={() => trombone1.pause()} 
+                        />
+                    </View>
+                    <Text style={styles.text}>
+                        The spaces in the bass clef are used to notate the pitches A, C, E, G. This pattern can be remembered by the 
+                        mnemonic device "All Cows Eat Grass". 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/aceg.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50' 
+                            title="Play trombone" 
+                            onPress={() => trombone2.play()} 
+                        />
+                        <Button 
+                            color='#F44336' 
+                            title="Pause trombone" 
+                            onPress={() => trombone2.pause()} 
+                        />
+                    </View>
+                </View>                
+                
+
+        
             <Text style={styles.text}>
                 <b>Alto Clef: </b> The alto clef is a less widely used clef in Western music. It is typically used for the viola, which is a 
                 middle-range instrument. Because this clef is centered around the C line (the middle line), it is also called the 
@@ -183,65 +258,291 @@ export default function Pitch(){
                 but they have the same sound. C# & Db are enharmonically equivalent, so playing either of those notes will result in the 
                 same pitch. D is enharmonically equivalent with Cx & Ebb, so playing D, Cx, or Ebb will result in the same pitch. 
             </Text>
-            <View style={styles.links}>
-                <Link href='./2notation' style={styles.edgelinks}>
-                    Previous: Music Notation
-                </Link>
-                <Link href='../(tabs)/home' style={styles.homelink}>
-                    MusicApp
-                </Link>
-                <Link href='./4rhythm' style={styles.edgelinks}>
-                    Next: Rhythm
-                </Link>
+            
+            <div>
+                            <Text style = {styles.quizTitle}>Quiz</Text>
+                            <br></br>
+                        <view style = {styles.quizContainer}>
+                                <Text style={styles.quizText}>
+                                    In what order are pitches notated with a Bass Clef
+                                </Text>
+                                {["F,G,A,B,C,D,E,F,G", "E,F,G,A,B,C,D,E,F", "D,E,F,G,A,B,C,D,E", "G,A,B,C,D,E,F,G,A"].map((option, index) =>{
+                                    const selected = quiz1Answer === option;
+                                    const correct = option === answer1;
+                                    const buttonStyle = selected
+                                    ? correct
+                                        ? styles.correctAnswer
+                                        :styles.incorrectAnswer
+                                    :styles.quizButton;
+            
+                                    return(
+                                        <Pressable
+                                            key={index}
+                                            style={buttonStyle}
+                                            onPress={() => setQ1Answer(option)}
+                                        >
+                                            <Text style={styles.quizButtonText}>{option}</Text>
+                                        </Pressable>
+                                    );
+                                })}
+                                {quiz1Answer && (
+                                    <Text style={styles.result}>
+                                        {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                    </Text>
+                                )}
+                            </view>
+                            <br></br>
+                            <view style = {styles.quizContainer}>
+                                <Text style={styles.quizText}>
+                                    What does a <b>Sharp</b> do to a note?
+                                </Text>
+                                {["Raises the Note by a 1/2 Step", "Raises the note by a Whole Step", "Lowers the note by a 1/2 Step", "Lowers the note by a Whole Step"].map((option, index) =>{
+                                    const selected = quiz2Answer === option;
+                                    const correct = option === answer2;
+                                    const buttonStyle = selected
+                                    ? correct
+                                        ? styles.correctAnswer
+                                        :styles.incorrectAnswer
+                                    :styles.quizButton;
+            
+                                    return(
+                                        <Pressable
+                                            key={index}
+                                            style={buttonStyle}
+                                            onPress={() => setQ2Answer(option)}
+                                        >
+                                            <Text style={styles.quizButtonText}>{option}</Text>
+                                        </Pressable>
+                                    );
+                                })}
+                                {quiz2Answer && (
+                                    <Text style={styles.result}>
+                                        {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                    </Text>
+                                )}
+                            </view>
+                            <br></br>
+                            <view style = {styles.quizContainer}>
+                                <Text style={styles.quizText}>
+                                    An <b>Enharmonic Equivalence</b> can also occur when two notes have the same name but different sounds.
+                                </Text>
+                                {["True", "False"].map((option, index) =>{
+                                    const selected = quiz3Answer === option;
+                                    const correct = option === answer3;
+                                    const buttonStyle = selected
+                                    ? correct
+                                        ? styles.correctAnswer
+                                        :styles.incorrectAnswer
+                                    :styles.quizButton;
+            
+                                    return(
+                                        <Pressable
+                                            key={index}
+                                            style={buttonStyle}
+                                            onPress={() => setQ3Answer(option)}
+                                        >
+                                            <Text style={styles.quizButtonText}>{option}</Text>
+                                        </Pressable>
+                                    );
+                                })}
+                                {quiz3Answer && (
+                                    <Text style={styles.result}>
+                                        {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                    </Text>
+                                )}
+                            </view>
+                        </div>
+                        <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./2notation' style={styles.secondaryLink}>
+                            ← Previous: Music Notation
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./4rhythm' style={styles.link}>
+                            Next: Rhythm →
+                        </Link>
+                    </View>
+                </View>
+
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
-        backgroundColor: 'white',
-        alignItems: 'center'
+        flex: 1,
+        backgroundColor: '#D2D2D2',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom: 40,
     },
     title: {
+        color: '#5543A5',
+        fontSize: 36,
+        fontFamily: 'Inter_700Bold',
+        fontWeight: 'bold',
+        marginVertical: 30,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.1)',
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 3,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 20,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderColor: 'black',
+        borderWidth: 2,
+        elevation: 3,
+    },
+    text: {
+        color: '#333',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'left',
+        marginBottom: 10,
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: '#5543A5',
+    },
+    header: {
+        color: '#5543A5',
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        textAlign: 'left',
+    },
+    subHeader: {
+        color: '#5543A5',
+        fontSize: 18,
+        fontWeight: '600',
+        marginTop: 15,
+        marginBottom: 10,
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 10,
+        marginTop: 10,
+    },
+    buttons: {
+        flexDirection: 'row'
+    },
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 12,
+    },
+    linkWrapper: {
+        width: '100%',
+        marginBottom: 15,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    link: {
+        color: 'white',
+        fontSize: 18,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+
+    homelink: {
+        color: 'purple',
+        fontSize: 30,
+        alignSelf: 'center'
+    },
+    quizContainer: {
+        height: 100,
+        width: 200,
+        
+        alignItems: 'center',
+        padding:7,
+    },
+    quizTitle: {
         color: 'black',
-        fontSize: 80,
+        fontSize: 50,
         fontFamily: 'TIMES_NEW_ROMAN',
         fontWeight: 'bold',
         textDecorationLine: 'underline',
         paddingBottom: 20
     },
-    text: {
-        color: 'black',
+    quizText: {
+        color: '#840606',
         fontSize: 20,
-        fontFamily: 'ARIAL',
-        padding: 10
+        alignSelf:'center',
     },
-    header: {
-        color: 'black',
-        fontSize: 36,
-        fontFamily: 'ARIAL',
+    quizButton: {
+        height: 45,
+        width:150,
+        backgroundColor: 'gray',
+        alignItems: 'center',
+        padding: 5,
+    },
+    quizButtonText: {
+        color: 'white',
+        fontSize: 15,
+        alignSelf:'center',
+    },
+    correctAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'green',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      incorrectAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      result: {
+        marginTop: 10,
+        fontSize: 16,
         fontWeight: 'bold',
-        padding: 40,
-        paddingTop: 60,
-        textAlign: 'left',
-    },
-    buttons: {
-        flexDirection: 'row'
-    },
-    links: {
-        flexDirection: 'row',
-        padding: 40,
-        gap: 500
-    },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
-    },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    }
+        color: 'black',
+      }
 })
+

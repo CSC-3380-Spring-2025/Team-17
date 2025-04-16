@@ -1,193 +1,248 @@
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
 import { Link, Stack } from 'expo-router';
+
 import ImageViewer from '@/components/ImageViewer';
 import Streak from'../../components/streak';
 import React, {useState} from 'react';
 const PlaceholderImage = require('@/assets/images/dog.jpg');
-//be ahead
+
 
 export default function HomeScreen() {
-  const [streak, setStreak]=useState(0);
   return (
     <>
-      <Stack.Screen 
+      <Stack.Screen
         options={{
           headerTitle: () => (
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>Home</Text>
-              <View style={styles.account}>
-                <Link href="/account" style={styles.accountText}>
-                  oVo
+            <View style={styles.headerContainer}>
+              <View style={styles.headerRow}>
+                <Link href="/lessons" style={styles.imageButton}>
+                  <Image
+                    source={require('@/assets/images/flame.png')}
+                    style={styles.buttonImage}
+                    resizeMode="contain"
+                  />
                 </Link>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.headerTitle}>Home</Text>
+                </View>
+                <Link href="/lessons" style={styles.imageButton}>
+                  <Image
+                    source={require('@/assets/images/coin.png')}
+                    style={styles.buttonImage}
+                    resizeMode="contain"
+                  />
+                </Link>
+
                 <View style={styles.streakContainer}>
           <Text style={styles.streak}>🔥: 0</Text>
         </View>
         <View style={styles.gemContainer}>
-          <Text style={styles.gem}>💎: 0</Text>
+          <Link href="/challenges" style={styles.gem}>💎: 0</Link>
         </View>
+
               </View>
             </View>
           ),
           headerTitleAlign: "center",
         }}
       />
-      <View style={styles.container}>
-        <Link href='../lessons/0contents'>
-          Lessons
-        </Link>
-       <View style={styles.imageContainer}>
-          <ImageViewer imgSource={PlaceholderImage} />
-        </View>
 
-        <View style={styles.streakContainer}>
-        <Streak label="Streak" streak={streak} />
-          
-        </View>
-        <View style={styles.gemContainer}>
-          <Text style={styles.gem}>💎: 0</Text>
-        </View>
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.lessonBox}>
+          <View style={styles.lessonTextContainer}>
+            <Text style={styles.sectionTitle}>Lesson 2</Text>
+            <Text style={styles.sectionSubtitle}>C Major Pentatonic</Text>
+          </View>
+          <View style={styles.dividerLine} />
+          <View style={styles.lessonImageContainer}>
+            <Image
+              source={require('@/assets/lessonPics/intro.jpeg')}
+              style={styles.lessonImage}
+              resizeMode="cover"
+            />
+          </View>
 
-        <View style={styles.lessonContainer}>
-          <Link href="/lessons/1intro" style={styles.text}>
-            Lesson 1
-          </Link>
         </View>
-        <View style={styles.draft1Container}>
-        <Link href="/recordertest" style={styles.text}>
-            Draft #1
-          </Link>
+        <View style={styles.recordingBox}>
+          <Text style={styles.recordingTitle}>Song Draft 2</Text>
+          <View style={styles.recordingDetails}>
+            <Text style={styles.recordingDate}>Oct 26, 2024</Text>
+            <Text style={styles.recordingDuration}>03:27</Text>
+          </View>
         </View>
-        <View style={styles.draft2Container}>
-        <Link href="/recordertest" style={styles.text}>
-            Draft #2
-          </Link>
+        <View style={styles.recordingBox}>
+          <Text style={styles.recordingTitle}>Voice Test</Text>
+          <View style={styles.recordingDetails}>
+            <Text style={styles.recordingDate}>Aug 17, 2024</Text>
+            <Text style={styles.recordingDuration}>00:50</Text>
+          </View>
         </View>
-        <View style={styles.draft3Container}>
-        <Link href="/recordertest" style={styles.text}>
-            Draft #3
-          </Link>
+        <View style={styles.recordingBox}>
+          <Text style={styles.recordingTitle}>Song Draft</Text>
+          <View style={styles.recordingDetails}>
+            <Text style={styles.recordingDate}>Jul 4, 2024</Text>
+            <Text style={styles.recordingDuration}>02:12</Text>
+          </View>
         </View>
-        <View style={styles.moreContainer}>
-          <Link href="/recordertest" style={styles.seeText}>
-            See More
-          </Link>
-        </View>
-      </View>
+        <Pressable style={styles.createButton}>
+          <Text style={styles.createButtonText}>Create New Track</Text>
+        </Pressable>
+      </ScrollView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  headerContainer: {
+
     alignItems: "center",
-    top: 30,
-  },
-  streakContainer: {
-    bottom:10,
-    right: 300,
-  },
-  gemContainer: {
-    bottom:10,
-    right: 300,
-  },
-  account: {
-    width: 45,
-    height: 45,
-    borderRadius: 35,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-    left: 170,
-    bottom: 50,
-  },
-  title: {
-    fontSize: 30,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  streak: {
-    fontSize: 14,
-    color: "#fff",
-    right: 10,
-  },
-  gem: {
-    fontSize: 14,
-    color: "#fff",
-    right: 10,
+    paddingTop: 30,
   },
   container: {
     flex: 1,
     backgroundColor: '#D2D2D2',
-    alignItems: 'center',
   },
-  imageContainer: {
-    flex: 1,
+  scrollContent: {
+    padding: 15,
+    paddingBottom: 30,
   },
-  lessonContainer: {
-    width: 350,
-    height: 100,
-    bottom: 300,
-    borderRadius: 25,
-    backgroundColor: "#484848",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  draft1Container: {
-    width: 350,
-    height: 100,
-    borderRadius: 25,
+  lessonBox: {
     backgroundColor: '#484848',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#000000',
-    bottom: 250,
-  },
-  draft2Container: {
-    width: 350,
+    borderRadius: 10,
+    marginBottom: 15,
+    flexDirection: 'row',
     height: 100,
-    borderRadius: 25,
-    backgroundColor: '#484848',
-    justifyContent: 'center',
-    alignItems: 'center',
+    overflow: 'hidden',
+    borderColor: '#fff',
     borderWidth: 2,
-    borderColor: '#000000',
-    bottom: 200,
   },
-  draft3Container: {
-    width: 350,
-    height: 100,
-    borderRadius: 25,
+  recordingBox: {
     backgroundColor: '#484848',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 15,
+    borderColor: '#fff',
     borderWidth: 2,
-    borderColor: '#000000',
-    bottom: 150,
   },
-  moreContainer: {
-    width: 175,
-    height: 50,
-    bottom: 100,
-    borderRadius: 15,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    color: "#fff",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-  accountText: {
-    color: "#fff",
+  sectionTitle: {
     fontSize: 24,
-    fontWeight: "bold",
-    top:15,
+    fontWeight: 'bold',
+    color: '#fff',
   },
-  seeText: {
+  sectionSubtitle: {
+    fontSize: 16,
+    color: '#D2D2D2',
+    marginTop: 5,
+  },
+  recordingTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  recordingDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  recordingDate: {
+    fontSize: 14,
+    color: '#D2D2D2',
+  },
+  recordingDuration: {
+    fontSize: 14,
+    color: '#D2D2D2',
+  },
+  createButton: {
+    backgroundColor: '#000',
+    borderRadius: 25,
+    padding: 15,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  createButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  lessonTextContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    paddingLeft: 15,
+  },
+  lessonImageContainer: {
+    flex: 1.4,
+    height: '100%',
+  },
+  lessonImage: {
+    height: '100%',
+    width: '100%',
+    borderTopRightRadius: 9,
+    borderBottomRightRadius: 9,
+  },
+  dividerLine: {
+    width: 2,
+    height: '100%',
+    backgroundColor: '#fff',
+    alignSelf: 'center',
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    width: '100%',
+  },
+  titleCenter: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonSpacer: {
+    width: 30,
+    alignItems: 'flex-start',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  titleContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circleButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textDecorationLine: 'none',
+    opacity: 1,
+  },
+  buttonText: {
+    color: '#484848',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  headerTitle: {
+    fontSize: 28,
     color: "#fff",
-    fontSize: 15,
     fontWeight: "bold",
+    marginBottom: 8,
+  },
+  imageButton: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textDecorationLine: 'none',
+  },
+  buttonImage: {
+    width: '100%',
+    height: '100%',
   },
 });

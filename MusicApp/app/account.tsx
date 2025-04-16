@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Register from '../components/Register';
 import Login from '@/components/Login';
-import streak from '@/components/streak'
 import { Text, View, StyleSheet, Pressable } from 'react-native';
 
 const App = () => {
@@ -15,7 +14,7 @@ const App = () => {
       </View>
       <View style={styles.Acontainer}>
       <Register />
-      <Login streak={streak} setStreak={setStreak} />
+      <Login/>
       </View>
     </div>
   );

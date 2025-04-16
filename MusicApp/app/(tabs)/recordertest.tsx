@@ -1,11 +1,13 @@
+// recordertest.tsx
 import { useState } from 'react';
 import { View, StyleSheet, Button, FlatList, Text, TouchableOpacity, Pressable } from 'react-native';
 import { Audio } from 'expo-av';
-//3test
+import { useAudioContext } from './AudioContext';
+
 export default function App() {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const [recordings, setRecordings] = useState([]); // Array to store all recorded sounds
+  const { recordings, addRecording } = useAudioContext();
 
   async function startRecording() {
     try {
@@ -38,14 +40,11 @@ export default function App() {
     });
     const uri = recording.getURI();
 
-    // Adds the new recording to the recordings array
-    setRecordings((prevRecordings) => [
-      ...prevRecordings,
-      {
-        uri: uri,
-        name: `Recording ${prevRecordings.length + 1}`, // Assign a name to the recording
-      },
-    ]);
+    // Add the new recording to the context
+    addRecording({
+      uri: uri,
+      name: `Recording ${recordings.length + 1}`,
+    });
     console.log('Recording stopped and stored at', uri);
   }
 
@@ -55,14 +54,13 @@ export default function App() {
     await sound.playAsync();
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.didJustFinish) {
-        sound.unloadAsync(); // Unloads the sound after it finishes playing
+        sound.unloadAsync();
       }
     });
   }
 
   return (
     <View style={styles.container}>
-      
       <FlatList
         data={recordings}
         keyExtractor={(item, index) => index.toString()}
@@ -70,23 +68,25 @@ export default function App() {
           <View style={styles.recordingItem}>
             <Text style={styles.recordingName}>{item.name}</Text>
             <Pressable style={styles.playButton} onPress={() => playSound(item.uri)}>
-           <Text style={styles.playText}> Play  </Text>
+              <Text style={styles.playText}> Play </Text>
             </Pressable>
           </View>
         )}
       />
       
       <View>
-      <TouchableOpacity
-      style={styles.buttonContainer}
-        onPress={recording ? stopRecording : startRecording}
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={recording ? stopRecording : startRecording}
         >
-        <Text style={styles.recordingText}>{recording ? '◼' : '⬤'}</Text>
-      </TouchableOpacity>
+          <Text style={styles.recordingText}>{recording ? '◼' : '⬤'}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
+
+// ... keep the existing styles ...
 
 const styles = StyleSheet.create({
   container: {

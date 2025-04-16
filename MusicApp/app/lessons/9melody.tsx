@@ -1,5 +1,7 @@
 import React from 'react';
+
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
+
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
@@ -10,11 +12,17 @@ export default function Melody(){
     const phrases = useAudioPlayer(require('@/assets/sounds/phrases.mp3'));
 
     return(
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>
-                Melody
-            </Text>
-            <Text style={styles.text}>
+
+        <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    Melody
+                </Text>
+                
+                <Text style={styles.text}>
                 With the knowledge of pitch, rhythm, meter, scales, & intervals, it is now possible to create original melodies. A 
                 <b>melody</b> is a sequence of singular notes organized in a rhythmic manner, forming the main tune of a song or
                 composition. Ideally, a good melody should be catchy, singable, and easy to remember.
@@ -76,26 +84,66 @@ export default function Melody(){
                 Popular tunes like "Twinkle, Twinkle, Little Star" & "Happy Birthday" are ingrained into our minds because their combination
                 of simplicity & repetition makes them easy to recall and sing along with.
             </Text> 
-            <View style={styles.links}>
-                <Link href='./8intervals' style={styles.edgelinks}>
-                    Previous: Intervals
-                </Link>
-                <Link href='/(tabs)/home' style={styles.homelink}>
-                    MusicApp
-                </Link>
-                <Link href='./10chords' style={styles.edgelinks}>
-                    Next: Chords
-                </Link>
+                
+                <View style={styles.linksContainer}>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./8intervals' style={styles.secondaryLink}>
+                            ← Previous: Intervals
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                            ← Back to Home
+                        </Link>
+                    </View>
+                    <View style={styles.linkWrapper}>
+                        <Link href='./10chords' style={styles.link}>
+                            Next: Chords →
+                        </Link>
+                    </View>
+                </View>
+
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        backgroundColor: '#f8f9fa',
+    },
     container: {
-        flex: 1, 
+        flex: 1,
+        backgroundColor: '#D2D2D2',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingBottom: 40,
+    },
+    title: {
+        color: '#5543A5',
+        fontSize: 36,
+        fontFamily: 'Inter_700Bold',
+        fontWeight: 'bold',
+        marginVertical: 30,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.1)',
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 3,
+    },
+    card: {
         backgroundColor: 'white',
-        alignItems: 'center'
+        borderRadius: 12,
+        padding: 20,
+        marginBottom: 20,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderColor: 'black',
+        borderWidth: 2,
+        elevation: 3,
     },
     title: {
         color: 'black',
@@ -106,10 +154,11 @@ const styles = StyleSheet.create({
         paddingBottom: 20
     },
     text: {
-        color: 'black',
-        fontSize: 20,
-        fontFamily: 'ARIAL',
-        padding: 10
+
+       color: '#333',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'left',
     },
     header: {
         color: 'black',
@@ -139,5 +188,41 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
-    }
-})
+    },
+
+
+       
+    linksContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 12,
+    },
+    linkWrapper: {
+        width: '100%',
+        marginBottom: 15,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    link: {
+        color: 'white',
+        fontSize: 18,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    secondaryLink: {
+        color: '#5543A5',
+        fontSize: 16,
+        padding: 15,
+        textAlign: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#5543A5',
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+});
+
