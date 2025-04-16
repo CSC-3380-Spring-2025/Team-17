@@ -145,14 +145,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         elevation: 3,
     },
-    title: {
-        color: 'black',
-        fontSize: 80,
-        fontFamily: 'TIMES_NEW_ROMAN',
-        fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
-    },
+
     text: {
 
        color: '#333',
