@@ -85,6 +85,13 @@ export const updateStreak = async(userId: string, confirmedConsecDays: number)=>
   });
 };
 
+export const updateCoins = async(userId: string, coins: number)=> {
+  const userRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userRef);
+  await updateDoc(userRef,{
+    coins: coins
+  });
+};
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
