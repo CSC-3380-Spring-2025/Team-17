@@ -57,10 +57,9 @@ const Streak: React.FC=() =>{
 
 const styles = StyleSheet.create({
   streakContainer: {
-    flexDirection:'row',
+    flexDirection: 'row',
     alignItems: 'center',
-    bottom:10,
-    right: 100,
+    padding: 10,
   },
   imageButton: {
     width: 30,
@@ -74,9 +73,15 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   streak: {
-    fontSize: 14,
-    color: "#fff",
-    marginLeft: 5
+    fontSize: 18, // Increased font size
+    color: "#f0f8ff", // Ensure high contrast color
+    marginLeft: 10, // Increased margin
+    padding: 5, // Added padding
+    
+    width: 50, // Explicit width
+    height: 30, // Explicit height
+    textAlign: 'center', // Center text
   }
 });
+
 export default Streak;
