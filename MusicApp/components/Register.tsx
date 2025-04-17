@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { updateProfile, sendEmailVerification } from "firebase/auth";
 import { auth, authenticateUser } from '../firebaseConfig';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View, TextInput, Button } from 'react-native';
 
   const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
-
   
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleEmailInputChange = (input: React.SetStateAction<string>)=>{
+      setEmail(input)
+    }
+  
+    const handlePasswordInputChange = (input: React.SetStateAction<string>)=>{
+      setPassword(input)
+    }
+    const handleDisplayNameInputChange = (input: React.SetStateAction<string>)=>{
+      setDisplayName(input)
+    }
+  const handleRegister = async () => {
+   
     try {
       const user = await authenticateUser(email, password);
       if ('error' in user) {
@@ -32,56 +41,56 @@ import { Text, StyleSheet } from 'react-native';
     }
     };
 
-
-  return (
-    <form onSubmit={handleRegister}>
-      <Text style={styles.text}>Name</Text>
-      <br></br>
-      <input
-        type="text"
-        value={displayName}
-        onChange={(e) => setDisplayName(e.target.value)}
+return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Registration</Text>
+      <TextInput
+        style={styles.input}
         placeholder="Display Name"
-        required
+        value={displayName}
+        onChangeText={handleDisplayNameInputChange}
       />
-      <br></br>
-      <br></br>
-      <br></br>
-      <Text style={styles.text}>Email</Text>
-      <br></br>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+      
+      <TextInput
+        style={styles.input}
         placeholder="Email"
-        required
+        placeholderTextColor="#000"
+        value={email}
+        onChangeText={handleEmailInputChange}
       />
-      <br></br>
-      <br></br>
-      <br></br>
-      <Text style={styles.text}>Password</Text>
-      <br></br>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+      <TextInput
+        style={styles.input}
         placeholder="Password"
-        required
+        placeholderTextColor="#000"
+        value={password}
+        onChangeText={handlePasswordInputChange}
+        secureTextEntry
       />
-      <br></br>
-      <br></br>
-      <br></br>
-      <button type="submit">Register</button>
-    </form>
+      <Button title="Register" onPress={handleRegister} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    color: "#ddddd",
-    fontSize: 16,
-    fontWeight: "bold",
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
-})
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+});
 
 export default Register;
+
+  

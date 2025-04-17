@@ -2,17 +2,24 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword} from "firebase/auth";
 import {getDoc, doc} from "firebase/firestore"
 import { auth, db, storeLoginDate, checkConsecutiveDays } from '../firebaseConfig';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, TextInput, View, Button } from 'react-native';
 import {useAuth} from "@/app/context/AuthContext"
 
-const Login: React.FC = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {login}= useAuth();
   
+  const handleEmailInputChange = (input: React.SetStateAction<string>)=>{
+    setEmail(input)
+  }
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePasswordInputChange = (input: React.SetStateAction<string>)=>{
+    setPassword(input)
+  }
+
+  const handleLogin = async() => {
+    
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -51,44 +58,48 @@ const Login: React.FC = () => {
   };
 
 
-  return (
-    <form onSubmit={handleLogin}>
-      <Text style={styles.text}>Email</Text>
-      <br></br>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-      />
-      <br></br>
-      <br></br>
-      <br></br>
-      <Text style={styles.text}>Password</Text>
-      <br></br>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-      />
-      <br></br>
-      <br></br>
-      <br></br>
-      <button type="submit">Login</button>
-    </form>
-  );
-};
-
-const styles = StyleSheet.create({
-  text: {
-    color: "#ddddd",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-})
-
-
-export default Login;
+ return (
+     <View style={styles.container}>
+       <Text style={styles.title}>Login</Text>
+       <TextInput
+         style={styles.input}
+         placeholder="Email"
+         value={email}
+         placeholderTextColor="#000"
+         onChangeText={handleEmailInputChange}
+       />
+       <TextInput
+         style={styles.input}
+         placeholder="Password"
+         value={password}
+         placeholderTextColor="#000"
+         onChangeText={handlePasswordInputChange}
+         secureTextEntry
+       />
+       <Button title="Login" onPress={handleLogin} />
+     </View>
+   );
+ };
+ 
+ const styles = StyleSheet.create({
+   container: {
+     flex: 1,
+     justifyContent: 'center',
+     paddingHorizontal: 20,
+   },
+   title: {
+     fontSize: 24,
+     marginBottom: 20,
+     textAlign: 'center',
+   },
+   input: {
+     height: 40,
+     borderColor: 'gray',
+     borderWidth: 1,
+     marginBottom: 20,
+     paddingHorizontal: 10,
+   },
+ });
+ 
+ export default Login;
+ 
