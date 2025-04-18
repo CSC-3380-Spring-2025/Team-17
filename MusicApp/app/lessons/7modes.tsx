@@ -285,8 +285,11 @@ export default function Modes(){
                 </View>                
                
                 <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Ionian Mode
+                    </Text>
                     <Text style={styles.text}>
-                        The next bright mode is the <b>ionian mode</b>. In this mode, the ascending pattern of whole steps and half steps is 
+                        The next bright mode is the <Text style={styles.bold}>ionian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is 
                         the exact same as in the major scale: W, W, H, W, W, W, H. You can find this mode if you play all the white keys on a 
                         piano keyboard starting from C. 
                     </Text>
@@ -315,8 +318,11 @@ export default function Modes(){
                 </View>
 
                 <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Mixolydian Mode
+                    </Text>
                     <Text style={styles.text}>
-                        The next bright mode is the <b>mixolydian mode</b>. In this mode, the ascending pattern of whole steps and half steps is 
+                        The next bright mode is the <Text style={styles.bold}>mixolydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is 
                         W, W, H, W, W, H, W. You can think of this mode as a major scale with a lowered 7 (<i>te</i>). You can also find this mode
                         if you play all the white keys on a piano keyboard starting from G.
                     </Text>
@@ -353,8 +359,11 @@ export default function Modes(){
                 </View>
 
                 <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Dorian Mode
+                    </Text>
                     <Text style={styles.text}>
-                        The first dark mode is the <b>dorian mode</b>. In this mode, the ascending pattern of whole steps and half steps is 
+                        The first dark mode is the <Text style={styles.bold}>dorian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is 
                         W, H, W, W, W, H, W. You can think of this mode as a minor scale with a raised 6 (<i>la</i>). You can also find this mode if 
                         you play all the white keys on a piano keyboard starting from D.
                     </Text>
@@ -383,8 +392,11 @@ export default function Modes(){
                 </View>
 
                 <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Aeolian Mode
+                    </Text>
                     <Text style={styles.text}>
-                        The next dark mode is the <b>aeolian mode</b>. In this mode, the ascending pattern of whole steps and half steps is the 
+                        The next dark mode is the <Text style={styles.bold}>aeolian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is the 
                         exact same as in the minor scale: W, H, W, W, H, W, W. You can also find this mode if you play all the white keys on a 
                         piano keyboard starting from A.
                     </Text>
@@ -413,8 +425,11 @@ export default function Modes(){
                 </View>
 
                 <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Phrygian Mode
+                    </Text>
                     <Text style={styles.text}>
-                        The next dark mode is the <b>phrygian mode</b>. In this mode, the ascending pattern of whole steps and half steps is 
+                        The next dark mode is the <Text style={styles.bold}>phrygian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is 
                         H, W, W, W, H, W, W. You can think of this mode as a minor scale with a lowered 2 (<i>ra</i>). You can also find this mode 
                         if you play all the white keys on a piano keyboard starting from E.
                     </Text>
@@ -443,8 +458,11 @@ export default function Modes(){
                 </View>
 
                 <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Locrian Mode
+                    </Text>
                     <Text style={styles.text}>
-                        The darkest mode is the <b>locrian mode</b>. In this mode, the ascending pattern of whole steps and half steps is 
+                        The darkest mode is the <Text style={styles.bold}>locrian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is 
                         H, W, W, H, W, W, W. You can think of this mode as a minor scale with a lowered 2 (<i>ra</i>) & a lowered 5 (<i>se</i>). 
                         You can also find this mode if you play all the white keys on a piano keyboard starting from B.
                     </Text>
