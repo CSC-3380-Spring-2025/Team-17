@@ -74,6 +74,13 @@ export default function HomeScreen() {
             <Text style={styles.recordingDuration}>02:12</Text>
           </View>
         </View>
+        <View style={styles.recordingBox}>
+          <Text style={styles.recordingTitle}>Song Final</Text>
+          <View style={styles.recordingDetails}>
+            <Text style={styles.recordingDate}>Apr 18, 2025</Text>
+            <Text style={styles.recordingDuration}>01:36</Text>
+          </View>
+        </View>
         <Pressable style={styles.createButton}>
           <Text style={styles.createButtonText}>Create New Track</Text>
         </Pressable>
