@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import {ScrollView, View, Text, StyleSheet, Image, Button, Pressable} from 'react-native';
-import {Link} from 'expo-router';
+import { ScrollView, View, Text, StyleSheet, Image, Button, Pressable } from 'react-native';
+import { Link } from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
-export default function Notation(){
+export default function Notation() {
     const slurPlayer = useAudioPlayer(require('@/assets/sounds/a-slur.mp3'));
     const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
     const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
-  const [quiz1Answer, setQ1Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState(null);
     const [quiz2Answer, setQ2Answer] = useState(null);
     const [quiz3Answer, setQ3Answer] = useState(null);
     const answer1 = "Pitch and Rhythm";
     const answer2 = "False";
     const answer3 = "Mezzo Forte";
+    const resetQuiz1 = () => setQ1Answer(null);
+    const resetQuiz2 = () => setQ2Answer(null);
+    const resetQuiz3 = () => setQ3Answer(null);
 
-    
-    return(
-        <ScrollView 
+
+    return (
+        <ScrollView
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
         >
@@ -24,281 +27,339 @@ export default function Notation(){
                 <Text style={styles.title}>
                     Music Notation
                 </Text>
-                
+
                 <View style={styles.card}>
                     <Text style={styles.text}>
                         Music is an auditory art form that can be represented visually with notation.
                     </Text>
                 </View>
-                
+
                 <View style={styles.card}>
-                    <Text style={styles.text}> 
+                    <Text style={styles.text}>
                         A musical note indicates both pitch and rhythm. The pitch of the note is determined
                         based on its location on a staff. A <Text style={styles.bold}>staff</Text> is a series of five horizontal lines like
                         the one seen below.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/staff.png')} 
+                    <Image
+                        source={require('@/assets/images/staff.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                 </View>
-                
+
                 <View style={styles.card}>
                     <Text style={styles.text}>
-                        Notes with a higher pitch are written higher on the staff than notes with a lower pitch. 
-                        Essentially, higher notes are placed above lower ones. 
+                        Notes with a higher pitch are written higher on the staff than notes with a lower pitch.
+                        Essentially, higher notes are placed above lower ones.
                     </Text>
                 </View>
-                
+
                 <View style={styles.card}>
                     <Text style={styles.header}>
                         Music Notes
                     </Text>
                     <Text style={styles.text}>
-                        A note is shaped like an oval and can be filled in or left empty depending on its rhythmic value. 
+                        A note is shaped like an oval and can be filled in or left empty depending on its rhythmic value.
                         The size of a note should be such that if it is located on a line, it should occupy half of each space
-                        above and below the line. If it is located on a space, it should occupy the whole area of the space between 
-                        the lines, but not go beyond the lines. Notes also have stems that can point up or down depending on its location 
+                        above and below the line. If it is located on a space, it should occupy the whole area of the space between
+                        the lines, but not go beyond the lines. Notes also have stems that can point up or down depending on its location
                         on the staff.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/notes.png')} 
+                    <Image
+                        source={require('@/assets/images/notes.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                 </View>
-                
+
                 <View style={styles.card}>
                     <Text style={styles.header}>
                         Ledger Lines
                     </Text>
                     <Text style={styles.text}>
                         If notes are too high or too low to be written on a staff, one can use <Text style={styles.bold}>ledger lines</Text> to extend the staff
-                        and write higher & lower notes. 
+                        and write higher & lower notes.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/ledger.png')} 
+                    <Image
+                        source={require('@/assets/images/ledger.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                 </View>
-                
+
                 <View style={styles.card}>
                     <Text style={styles.header}>
                         Dynamics
                     </Text>
                     <Text style={styles.text}>
-                        One important aspect of music notation is dynamics. <Text style={styles.bold}>Dynamics</Text> indicate the loudness or volume of 
+                        One important aspect of music notation is dynamics. <Text style={styles.bold}>Dynamics</Text> indicate the loudness or volume of
                         certain notes. Since Western music theory originated in Italy, musicians use italicized Italian words to denote
-                        dynamics. They are usually written above or below the staff. 
+                        dynamics. They are usually written above or below the staff.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/dynamics.png')} 
+                    <Image
+                        source={require('@/assets/images/dynamics.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                 </View>
-                
+
                 <View style={styles.card}>
                     <Text style={styles.header}>
                         Tempo
                     </Text>
                     <Text style={styles.text}>
-                        Another important aspect of notation is tempo. <Text style={styles.bold}>Tempo</Text> is the speed of the composition and determines 
-                        how fast or how slow the notes are played. Tempo is usually marked specifically, with metronome markings or 
+                        Another important aspect of notation is tempo. <Text style={styles.bold}>Tempo</Text> is the speed of the composition and determines
+                        how fast or how slow the notes are played. Tempo is usually marked specifically, with metronome markings or
                         unspecifically, with textual indications.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/tempo.png')} 
+                    <Image
+                        source={require('@/assets/images/tempo.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                 </View>
-                
+
                 <View style={styles.card}>
                     <Text style={styles.header}>
                         Articulation
                     </Text>
                     <Text style={styles.text}>
-                        One more important aspect of notation is articulation. <Text style={styles.bold}>Articulation</Text> is the connection or separation between 
+                        One more important aspect of notation is articulation. <Text style={styles.bold}>Articulation</Text> is the connection or separation between
                         notes and the accent level at the beginning of the note (the attack).
                     </Text>
-                    
+
                     <Text style={styles.subHeader}>
                         Legato
                     </Text>
                     <Text style={styles.text}>
-                        Play or sing notes smoothly and connected. This articulation is indicated by a curved slur over the 
-                        notes. 
+                        Play or sing notes smoothly and connected. This articulation is indicated by a curved slur over the
+                        notes.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/slur.png')} 
+                    <Image
+                        source={require('@/assets/images/slur.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button 
-                            title="Play Slur" 
-                            onPress={() => slurPlayer.play()} 
+                        <Button
+                            title="Play Slur"
+                            onPress={() => slurPlayer.play()}
                             color="#4CAF50"
                         />
-                        <Button 
-                            title="Pause" 
-                            onPress={() => slurPlayer.pause()} 
+                        <Button
+                            title="Pause"
+                            onPress={() => slurPlayer.pause()}
                             color="#F44336"
                         />
                     </View>
-                    
+
                     <Text style={styles.subHeader}>
                         Staccato
                     </Text>
                     <Text style={styles.text}>
-                        Play or sing notes separately, leaving space in between. This articulation is indicated by 
-                        placing dots above or below each of the notes.  
+                        Play or sing notes separately, leaving space in between. This articulation is indicated by
+                        placing dots above or below each of the notes.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/stacatto.png')} 
+                    <Image
+                        source={require('@/assets/images/stacatto.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button 
-                            title="Play Staccato" 
-                            onPress={() => staccatoPlayer.play()} 
+                        <Button
+                            title="Play Staccato"
+                            onPress={() => staccatoPlayer.play()}
                             color="#4CAF50"
                         />
-                        <Button 
-                            title="Pause" 
-                            onPress={() => staccatoPlayer.pause()} 
+                        <Button
+                            title="Pause"
+                            onPress={() => staccatoPlayer.pause()}
                             color="#F44336"
                         />
                     </View>
-                    
+
                     <Text style={styles.subHeader}>
                         Accent
                     </Text>
                     <Text style={styles.text}>
-                        Play or sing a note with extra emphasis. This articulation is indicated by a sideways V over the 
-                        notes. 
+                        Play or sing a note with extra emphasis. This articulation is indicated by a sideways V over the
+                        notes.
                     </Text>
-                    <Image 
-                        source={require('@/assets/images/accent.png')} 
+                    <Image
+                        source={require('@/assets/images/accent.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button 
-                            title="Play Accent" 
-                            onPress={() => accentPlayer.play()} 
+                        <Button
+                            title="Play Accent"
+                            onPress={() => accentPlayer.play()}
                             color="#4CAF50"
                         />
-                        <Button 
-                            title="Pause" 
-                            onPress={() => accentPlayer.pause()} 
+                        <Button
+                            title="Pause"
+                            onPress={() => accentPlayer.pause()}
                             color="#F44336"
                         />
                     </View>
                 </View>
-                
-               
 
 
-            <div>
-                <Text style = {styles.quizTitle}>Quiz</Text>
-                <br></br>
-            <view style = {styles.quizContainer}>
-                    <Text style={styles.quizText}>
-                        A musical note represents what?
-                    </Text>
-                    {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) =>{
-                        const selected = quiz1Answer === option;
-                        const correct = option === answer1;
-                        const buttonStyle = selected
-                        ? correct
-                            ? styles.correctAnswer
-                            :styles.incorrectAnswer
-                        :styles.quizButton;
 
-                        return(
-                            <Pressable
-                                key={index}
-                                style={buttonStyle}
-                                onPress={() => setQ1Answer(option)}
-                            >
-                                <Text style={styles.quizButtonText}>{option}</Text>
-                            </Pressable>
-                        );
-                    })}
-                    {quiz1Answer && (
-                        <Text style={styles.result}>
-                            {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+
+                <div>
+                    <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
+                    
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            A musical note represents what?
                         </Text>
-                    )}
-                </view>
-                <br></br>
-                <view style = {styles.quizContainer}>
-                    <Text style={styles.quizText}>
-                        If a note is in a space, it can go beyond the lines.
-                    </Text>
-                    {["True", "False"].map((option, index) =>{
-                        const selected = quiz2Answer === option;
-                        const correct = option === answer2;
-                        const buttonStyle = selected
-                        ? correct
-                            ? styles.correctAnswer
-                            :styles.incorrectAnswer
-                        :styles.quizButton;
+                        {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) => {
+                            const selected = quiz1Answer === option;
+                            let buttonStyle = styles.quizButton;
+                                
+                            if(quiz1Answer !== null){
+                                if(option === answer1){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz1Answer) setQ1Answer(option); // only once
+                                    }}
+                                >
+                                  
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz1Answer && (
+                            <Text style={styles.result}>
+                                {quiz1Answer === answer1 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz1Answer && quiz1Answer !== answer1 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer1}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz1}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
 
-                        return(
-                            <Pressable
-                                key={index}
-                                style={buttonStyle}
-                                onPress={() => setQ2Answer(option)}
-                            >
-                                <Text style={styles.quizButtonText}>{option}</Text>
-                            </Pressable>
-                        );
-                    })}
-                    {quiz2Answer && (
-                        <Text style={styles.result}>
-                            {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            If a note is in a space, it can go beyond the lines.
                         </Text>
-                    )}
-                </view>
-                <br></br>
-                <view style = {styles.quizContainer}>
-                    <Text style={styles.quizText}>
-                        What term means <b>moderately loud</b>?
-                    </Text>
-                    {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) =>{
-                        const selected = quiz3Answer === option;
-                        const correct = option === answer3;
-                        const buttonStyle = selected
-                        ? correct
-                            ? styles.correctAnswer
-                            :styles.incorrectAnswer
-                        :styles.quizButton;
+                        {["True", "False"].map((option, index) => {
+                            const selected = quiz2Answer === option;
+                            let buttonStyle = styles.quizButton;
+                            
+                            if(quiz2Answer !== null){
+                                if(option === answer2){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
 
-                        return(
-                            <Pressable
-                                key={index}
-                                style={buttonStyle}
-                                onPress={() => setQ3Answer(option)}
-                            >
-                                <Text style={styles.quizButtonText}>{option}</Text>
-                            </Pressable>
-                        );
-                    })}
-                    {quiz3Answer && (
-                        <Text style={styles.result}>
-                            {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz2Answer) setQ2Answer(option); // only once
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz2Answer && (
+                            <Text style={styles.result}>
+                                {quiz2Answer === answer2 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz2Answer && quiz2Answer !== answer2 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer2}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz2}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
+
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            What term means <b>moderately loud</b>?
                         </Text>
-                    )}
-                </view>
-            </div>
+                        {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) => {
+                            const selected = quiz3Answer === option;
+                            let buttonStyle = styles.quizButton;
+                            
+                            if(quiz3Answer !== null){
+                                if(option === answer3){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
 
-             <View style={styles.linksContainer}>
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz3Answer) setQ3Answer(option); // only once
+                                    }}
+                                >
+                                   
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz3Answer && (
+                            <Text style={styles.result}>
+                                {quiz3Answer === answer3 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz3Answer && quiz3Answer !== answer3 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer3}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz3}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
+                </div>
+
+                <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./1intro' style={styles.secondaryLink}>
                             ← Previous: Introduction
@@ -321,7 +382,7 @@ export default function Notation(){
     );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         backgroundColor: '#f8f9fa',
@@ -341,7 +402,7 @@ const styles = StyleSheet.create({
         marginVertical: 30,
         textAlign: 'center',
         textShadowColor: 'rgba(0,0,0,0.1)',
-        textShadowOffset: {width: 1, height: 1},
+        textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 3,
     },
     card: {
@@ -436,9 +497,9 @@ const styles = StyleSheet.create({
     quizContainer: {
         height: 100,
         width: 200,
-        
+
         alignItems: 'center',
-        padding:7,
+        padding: 7,
     },
     quizTitle: {
         color: 'black',
@@ -451,11 +512,11 @@ const styles = StyleSheet.create({
     quizText: {
         color: '#840606',
         fontSize: 20,
-        alignSelf:'center',
+        alignSelf: 'center',
     },
     quizButton: {
         height: 45,
-        width:150,
+        width: 150,
         backgroundColor: 'gray',
         alignItems: 'center',
         padding: 5,
@@ -463,7 +524,7 @@ const styles = StyleSheet.create({
     quizButtonText: {
         color: 'white',
         fontSize: 15,
-        alignSelf:'center',
+        alignSelf: 'center',
     },
     correctAnswer: {
         height: 45,
@@ -472,20 +533,32 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 5,
-      },
-      incorrectAnswer: {
+    },
+    incorrectAnswer: {
         height: 45,
         width: 150,
         backgroundColor: 'red',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 5,
-      },
-      result: {
+    },
+    result: {
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
-      }
+    },
+    resetButton: {
+        marginTop: 10,
+        backgroundColor: '#5543A5',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    resetButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+    },
 })
 

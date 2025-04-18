@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions, ImageBackground, ScrollView } from "react-native";
 import { Link } from 'expo-router';
 
-export default function lessonsScreen() {
+export default function LessonsScreen() {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.buttonsContainer}>
