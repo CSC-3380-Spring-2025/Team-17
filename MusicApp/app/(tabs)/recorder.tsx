@@ -9,12 +9,10 @@ import {
   FlatList,
   SafeAreaView,
   Alert,
-  ActivityIndicator, 
   StyleSheet
 } from 'react-native';
 import { Audio } from 'expo-av';
 import { useAudioContext } from './AudioContext';
-import * as FileSystem from 'expo-file-system';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
@@ -24,7 +22,6 @@ interface AudioTrack {
   title: string;
   artist: string;
   sourceType: SoundSource;
-  recording?: boolean;
 }
 
 const LiveMixingPage: React.FC = () => {
@@ -32,22 +29,34 @@ const LiveMixingPage: React.FC = () => {
   const [showRecordingsModal, setShowRecordingsModal] = useState(false);
   const [tracks, setTracks] = useState<AudioTrack[]>([]);
   const [isRecording, setIsRecording] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlayingAll, setIsPlayingAll] = useState(false);
+  const [isLooping, setIsLooping] = useState(false); // New state for looping
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [soundObjects, setSoundObjects] = useState<Audio.Sound[]>([]);
   const { recordings } = useAudioContext();
 
   useEffect(() => {
     return () => {
-      // Cleanup on unmount
-      if (sound) {
-        sound.unloadAsync();
-      }
+      // Clean up all sound objects
+      soundObjects.forEach(sound => {
+        sound.unloadAsync().catch(error => console.warn('Failed to unload sound', error));
+      });
       if (recording) {
-        recording.stopAndUnloadAsync();
+        recording.stopAndUnloadAsync().catch(error => console.warn('Failed to stop recording', error));
       }
     };
-  }, [sound, recording]);
+  }, [soundObjects, recording]);
+
+  // Handle looping when tracks finish
+  useEffect(() => {
+    soundObjects.forEach(sound => {
+      sound.setOnPlaybackStatusUpdate(status => {
+        if (status.didJustFinish && isLooping) {
+          sound.replayAsync(); // Replay when finished if looping is enabled
+        }
+      });
+    });
+  }, [soundObjects, isLooping]);
 
   const startRecording = async () => {
     try {
@@ -112,28 +121,65 @@ const LiveMixingPage: React.FC = () => {
     }
   };
 
-  const playTrack = async (uri: string) => {
+  const playAllTracks = async () => {
+    if (isPlayingAll) {
+      await stopAllPlayback();
+      setIsPlayingAll(false);
+      setIsLooping(false); // Disable looping when stopping
+      return;
+    }
+
+    setIsPlayingAll(true);
+    
     try {
-      if (sound) {
-        await sound.unloadAsync();
+      // First stop any currently playing sounds
+      await stopAllPlayback();
+      
+      // Create and play all sounds simultaneously with looping
+      const newSoundObjects: Audio.Sound[] = [];
+      
+      for (const track of tracks) {
+        if (track.url) {
+          const { sound } = await Audio.Sound.createAsync(
+            { uri: track.url },
+            { 
+              shouldPlay: true,
+              isLooping: isLooping // Set initial looping state
+            }
+          );
+          newSoundObjects.push(sound);
+          await sound.playAsync();
+        }
       }
-
-      const { sound: newSound } = await Audio.Sound.createAsync(
-        { uri },
-        { shouldPlay: true }
-      );
-      setSound(newSound);
-
-      await newSound.playAsync();
+      
+      setSoundObjects(newSoundObjects);
     } catch (error) {
-      console.error('Failed to play sound', error);
+      console.error('Failed to play all tracks', error);
+      setIsPlayingAll(false);
     }
   };
 
-  const stopPlayback = async () => {
-    if (sound) {
-      await sound.stopAsync();
-      setIsPlaying(false);
+  const toggleLooping = () => {
+    const newLoopingState = !isLooping;
+    setIsLooping(newLoopingState);
+    
+    // Update looping for all active sounds
+    soundObjects.forEach(sound => {
+      sound.setIsLoopingAsync(newLoopingState);
+    });
+
+    if (newLoopingState && !isPlayingAll) {
+      // If enabling loop but not playing, start playback
+      playAllTracks();
+    }
+  };
+
+  const stopAllPlayback = async () => {
+    try {
+      await Promise.all(soundObjects.map(sound => sound.stopAsync()));
+      setSoundObjects([]);
+    } catch (error) {
+      console.error('Failed to stop playback', error);
     }
   };
 
@@ -142,15 +188,6 @@ const LiveMixingPage: React.FC = () => {
       stopRecording();
     } else {
       startRecording();
-    }
-  };
-
-  const togglePlayback = async (uri: string) => {
-    if (isPlaying) {
-      await stopPlayback();
-    } else {
-      await playTrack(uri);
-      setIsPlaying(true);
     }
   };
 
@@ -202,13 +239,6 @@ const LiveMixingPage: React.FC = () => {
         <Text style={styles.trackType}>{item.sourceType}</Text>
       </View>
       <TouchableOpacity 
-        style={styles.playButton}
-        onPress={() => togglePlayback(item.url)}>
-        <Text style={styles.playButtonText}>
-          {isPlaying ? '⏸' : '⏵'}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity 
         style={styles.deleteButton}
         onPress={() => deleteTrack(item.id)}>
         <Text style={styles.deleteButtonText}>×</Text>
@@ -240,6 +270,22 @@ const LiveMixingPage: React.FC = () => {
           onPress={toggleRecording}>
           <Text style={styles.controlButtonText}>
             {isRecording ? '⏹' : '⏺'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.controlButton, styles.playAllButton]}
+          onPress={playAllTracks}>
+          <Text style={styles.controlButtonText}>
+            {isPlayingAll ? '⏹' : '▶️'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.controlButton, isLooping ? styles.loopButtonActive : styles.loopButton]}
+          onPress={toggleLooping}>
+          <Text style={styles.controlButtonText}>
+            {isLooping ? '🔁' : '↻'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -317,18 +363,10 @@ const LiveMixingPage: React.FC = () => {
   );
 };
 
-
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   header: {
     flexDirection: 'row',
@@ -382,12 +420,6 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
   },
-  recordingLabel: {
-    color: 'red',
-    fontSize: 12,
-    marginTop: 4,
-    fontStyle: 'italic',
-  },
   deleteButton: {
     width: 30,
     height: 30,
@@ -395,7 +427,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff4444',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 10,
   },
   deleteButtonText: {
     color: 'white',
@@ -409,22 +440,32 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'white',
     paddingVertical: 16,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
   },
   controlButton: {
-    backgroundColor: '#6200ee',
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 10,
   },
   recordButton: {
     backgroundColor: 'red',
+  },
+  playAllButton: {
+    backgroundColor: '#4CAF50',
+  },
+  loopButton: {
+    backgroundColor: '#6200ee',
+  },
+  loopButtonActive: {
+    backgroundColor: '#FF9800',
   },
   controlButtonText: {
     color: 'white',
