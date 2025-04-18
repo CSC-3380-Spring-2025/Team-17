@@ -144,7 +144,7 @@ export default function Notation(){
                             color="#4CAF50"
                         />
                         <Button 
-                            title="Pause" 
+                            title="Pause Slur" 
                             onPress={() => slurPlayer.pause()} 
                             color="#F44336"
                         />
@@ -169,7 +169,7 @@ export default function Notation(){
                             color="#4CAF50"
                         />
                         <Button 
-                            title="Pause" 
+                            title="Pause Staccato" 
                             onPress={() => staccatoPlayer.pause()} 
                             color="#F44336"
                         />
@@ -194,7 +194,7 @@ export default function Notation(){
                             color="#4CAF50"
                         />
                         <Button 
-                            title="Pause" 
+                            title="Pause Accent" 
                             onPress={() => accentPlayer.pause()} 
                             color="#F44336"
                         />
