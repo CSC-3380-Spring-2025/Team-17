@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection } from "firebase/firestore";
 // import {...} from 'firebase/database';
 // import {...} from 'firebase/firestore';
 // import {...} from 'firebase/functions';
@@ -84,6 +84,29 @@ export const updateStreak = async(userId: string, confirmedConsecDays: number)=>
     streak: confirmedConsecDays
   });
 };
+
+export const addCoins = async (userId: string, coins: number) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      const currentCoins = userDoc.data()?.coins || 0;
+      const newCoinBalance = currentCoins + coins;
+      await updateDoc(userRef, {
+        coins: newCoinBalance
+      });
+      console.log(`Coins updated successfully. New balance: ${newCoinBalance}`);
+    } else {
+      const newCoinRef=doc(collection(db, "users"), userId);
+      await setDoc(newCoinRef, {coins})
+      console.error("User document does not exist");
+    }
+  } catch (error) {
+    console.error("Error updating coins:", error);
+  }
+};
+
 
 export const updateCoins = async(userId: string, coins: number)=> {
   const userRef = doc(db, "users", userId);

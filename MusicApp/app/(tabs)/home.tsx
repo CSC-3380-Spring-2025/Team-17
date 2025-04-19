@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
-import { Link, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import Coins from '../../components/coins'
 import ImageViewer from '@/components/ImageViewer';
 import Streak from'../../components/streak';
