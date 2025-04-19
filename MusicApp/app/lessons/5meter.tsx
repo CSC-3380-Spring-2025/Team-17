@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
+import React from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
 
@@ -14,20 +14,127 @@ export default function Meter(){
     const b2 = useAudioPlayer(require('@/assets/sounds/beams2.mp3'));
     const e1 = useAudioPlayer(require('@/assets/sounds/example1.mp3'));
     const e2 = useAudioPlayer(require('@/assets/sounds/example2.mp3'));
-        const [quiz1Answer, setQ1Answer] = useState(null);
-        const [quiz2Answer, setQ2Answer] = useState(null);
-        const [quiz3Answer, setQ3Answer] = useState(null);
-        const [quiz4Answer, setQ4Answer] = useState(null);
-        const answer1 = "True";
-        const answer2 = "False";
-        const answer3 = "4/4";
-        const answer4 = "9/8";
-        const resetQuiz1 = () => setQ1Answer(null);
-        const resetQuiz2 = () => setQ2Answer(null);
-        const resetQuiz3 = () => setQ3Answer(null);
-        const resetQuiz4 = () => setQ4Answer(null);
 
-    
+    const correct1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('correct1');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong1 = () => {
+        let correct : any = document.getElementById('true1');
+        let incorrect : any = document.getElementById('false1');
+        let p : any = document.getElementById('wrong1');
+
+        correct.style.color = 'green';
+        correct.disabled = true;
+        incorrect.style.color = 'red';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('correct2');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong2 = () => {
+        let correct : any = document.getElementById('true2');
+        let incorrect : any = document.getElementById('false2');
+        let p : any = document.getElementById('wrong2');
+
+        correct.style.color = 'red';
+        correct.disabled = true;
+        incorrect.style.color = 'green';
+        incorrect.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct3 = () => {
+        let twotwo : any = document.getElementById('22');
+        let threefour : any = document.getElementById('34');
+        let fourfour : any = document.getElementById('44');
+        let sixeight : any = document.getElementById('68');
+        let p : any = document.getElementById('correct3');
+
+        twotwo.style.color = 'red';
+        twotwo.disabled = true;
+        threefour.style.color = 'red';
+        threefour.disabled = true;
+        fourfour.style.color = 'green';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong3 = () => {
+        let twotwo : any = document.getElementById('22');
+        let threefour : any = document.getElementById('34');
+        let fourfour : any = document.getElementById('44');
+        let sixeight : any = document.getElementById('68');
+        let p : any = document.getElementById('wrong3');
+
+        twotwo.style.color = 'red';
+        twotwo.disabled = true;
+        threefour.style.color = 'red';
+        threefour.disabled = true;
+        fourfour.style.color = 'green';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        p.hidden = false;
+    }
+
+    const correct4 = () => {
+        let fourfour : any = document.getElementById('4/4');
+        let sixeight : any = document.getElementById('6/8');
+        let nineeight : any = document.getElementById('9/8');
+        let twelveeight : any = document.getElementById('12/8');
+        let p : any = document.getElementById('correct4');
+
+        fourfour.style.color = 'red';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        nineeight.style.color = 'green';
+        nineeight.disabled = true;
+        twelveeight.style.color = 'red';
+        twelveeight.disabled = true;
+        p.hidden = false;
+    }
+
+    const wrong4 = () => {
+        let fourfour : any = document.getElementById('4/4');
+        let sixeight : any = document.getElementById('6/8');
+        let nineeight : any = document.getElementById('9/8');
+        let twelveeight : any = document.getElementById('12/8');
+        let p : any = document.getElementById('wrong4');
+
+        fourfour.style.color = 'red';
+        fourfour.disabled = true;
+        sixeight.style.color = 'red';
+        sixeight.disabled = true;
+        nineeight.style.color = 'green';
+        nineeight.disabled = true;
+        twelveeight.style.color = 'red';
+        twelveeight.disabled = true;
+        p.hidden = false;
+    }
+
     return(
 
         <ScrollView 
@@ -217,216 +324,60 @@ export default function Meter(){
                 <Button color='green' title="Play piano" onPress={() => b2.play()} />
                 <Button color='red' title="Pause piano" onPress={() => b2.pause()} />
             </View>
-                            <div>
-                                <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
-            
-                                <view style={styles.quizContainer}>
-                                    <Text style={styles.quizText}>
-                                        1. Simple meter is divided into two beats while compound meter is divided into three beats.
-                                    </Text>
-                                    {["True", "False"].map((option, index) => {
-                                        const selected = quiz1Answer === option;
-                                        let buttonStyle = styles.quizButton;
-            
-                                        if (quiz1Answer !== null) {
-                                            if (option === answer1) {
-                                                buttonStyle = styles.correctAnswer;
-                                            }
-                                            else if (selected) {
-                                                buttonStyle = styles.incorrectAnswer;
-                                            }
-                                        }
-            
-                                        return (
-                                            <Pressable
-                                                key={index}
-                                                style={buttonStyle}
-                                                onPress={() => {
-                                                    if (!quiz1Answer) setQ1Answer(option); // only once
-                                                }}
-                                            >
-                                                <Text style={styles.quizButtonText}>{option}</Text>
-                                            </Pressable>
-                                        );
-                                    })}
-                                    {quiz1Answer && (
-                                        <Text style={styles.result}>
-                                            {quiz1Answer === answer1 ? "Correct!" : "Wrong"}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    {quiz1Answer && quiz1Answer !== answer1 && (
-                                        <Text style={styles.result}>
-                                            Correct Answer: {answer1}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    <Pressable
-                                        style={styles.resetButton}
-                                        onPress={resetQuiz1}
-                                    >
-                                        <Text style={styles.resetButtonText}>Reset</Text>
-                                    </Pressable>
-                                </view>
-            
-                                <view style={styles.quizContainer}>
-                                    <Text style={styles.quizText}>
-                                    The beat is always represented by dotted notes in simple meter.
-                                    </Text>
-                                    {["True", "False"].map((option, index) => {
-                                        const selected = quiz2Answer === option;
-                                        let buttonStyle = styles.quizButton;
-            
-                                        if (quiz2Answer !== null) {
-                                            if (option === answer2) {
-                                                buttonStyle = styles.correctAnswer;
-                                            }
-                                            else if (selected) {
-                                                buttonStyle = styles.incorrectAnswer;
-                                            }
-                                        }
-            
-                                        return (
-                                            <Pressable
-                                                key={index}
-                                                style={buttonStyle}
-                                                onPress={() => {
-                                                    if (!quiz2Answer) setQ2Answer(option); // only once
-                                                }}
-                                            >
-                                                <Text style={styles.quizButtonText}>{option}</Text>
-                                            </Pressable>
-                                        );
-                                    })}
-                                    {quiz2Answer && (
-                                        <Text style={styles.result}>
-                                            {quiz2Answer === answer2 ? "Correct!" : "Wrong"}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    {quiz2Answer && quiz2Answer !== answer2 && (
-                                        <Text style={styles.result}>
-                                            Correct Answer: {answer2}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    <Pressable
-                                        style={styles.resetButton}
-                                        onPress={resetQuiz2}
-                                    >
-                                        <Text style={styles.resetButtonText}>Reset</Text>
-                                    </Pressable>
-                                </view>
-            
-                                <view style={styles.quizContainer}>
-                                    <Text style={styles.quizText}>
-                                    3. What is the time signature of the music below?
-                                    </Text>
-                                    <Image source={require('@/assets/images/example1.png')} />
+            <Text style={styles.header}>
+                Pop Quiz
+            </Text>
+            <Text style={styles.text}>
+                1. True or False: Simple meter is divided into two beats while compound meter is divided into three beats.
+            </Text>
+            <form>
+                <button id='true1' style={{fontSize: '24px'}} onClick={correct1}>True</button>
+                <button id='false1' style={{fontSize: '24px'}} onClick={wrong1}>False</button>
+                <p id='correct1' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong1' color='red' style={{textAlign: 'center'}} hidden>Wrong! Simple meter divides in two & compound meter 
+                divides in three.</p>
+            </form>
+            <Text style={styles.text}>
+                2. True or False: The beat is always represented by dotted notes in simple meter.
+            </Text>
+            <form>
+                <button id='true2' style={{fontSize: '24px'}} onClick={wrong2}>True</button>
+                <button id='false2' style={{fontSize: '24px'}} onClick={correct2}>False</button>
+                <p id='correct2' color='green' style={{textAlign: 'center'}} hidden>Correct!</p>
+                <p id='wrong2' color='red' style={{textAlign: 'center'}} hidden>Wrong! Dotted notes represent the beat in compound meter.</p>
+            </form>
+            <Text style={styles.text}>
+                3. What is the time signature of the music below?
+            </Text>
+            <Image source={require('@/assets/images/example1.png')} />
             <View style={styles.buttons}>
                 <Button color='green' title="Play example" onPress={() => e1.play()} />
                 <Button color='red' title="Pause example" onPress={() => e1.pause()} />
             </View>
-                                    {["2/2", "3/4", "4/4", "6/8"].map((option, index) => {
-                                        const selected = quiz3Answer === option;
-                                        let buttonStyle = styles.quizButton;
-            
-                                        if (quiz3Answer !== null) {
-                                            if (option === answer3) {
-                                                buttonStyle = styles.correctAnswer;
-                                            }
-                                            else if (selected) {
-                                                buttonStyle = styles.incorrectAnswer;
-                                            }
-                                        }
-            
-                                        return (
-                                            <Pressable
-                                                key={index}
-                                                style={buttonStyle}
-                                                onPress={() => {
-                                                    if (!quiz3Answer) setQ3Answer(option); // only once
-                                                }}
-                                            >
-                                                <Text style={styles.quizButtonText}>{option}</Text>
-                                            </Pressable>
-                                        );
-                                    })}
-                                    {quiz3Answer && (
-                                        <Text style={styles.result}>
-                                            {quiz3Answer === answer3 ? "Correct!" : "Wrong"}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    {quiz3Answer && quiz3Answer !== answer3 && (
-                                        <Text style={styles.result}>
-                                            Correct Answer: {answer3}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    <Pressable
-                                        style={styles.resetButton}
-                                        onPress={resetQuiz3}
-                                    >
-                                        <Text style={styles.resetButtonText}>Reset</Text>
-                                    </Pressable>
-                                </view>
-            
-                                <view style={styles.quizContainer}>
-                                    <Text style={styles.quizText}>
-                                    4. What is the time signature of the music below?
-                                    </Text>
-                                    <Image source={require('@/assets/images/example2.png')} />
+            <form>
+                <button id='22' style={{fontSize: '24px'}} onClick={wrong3}>2/2</button>
+                <button id='34' style={{fontSize: '24px'}} onClick={wrong3}>3/4</button>
+                <button id='44' style={{fontSize: '24px'}} onClick={correct3}>4/4</button>
+                <button id='68' style={{fontSize: '24px'}} onClick={wrong3}>6/8</button>
+                <p id='correct3' color='green' style={{textAlign: 'center'}} >Correct!</p>
+                <p id='wrong3' color='red' style={{textAlign: 'center'}} >Wrong! The time signature for this music is 4/4.</p>
+            </form>
+            <Text style={styles.text}>
+                4. What is the time signature of the music below?
+            </Text>
+            <Image source={require('@/assets/images/example2.png')} />
             <View style={styles.buttons}>
                 <Button color='green' title="Play example" onPress={() => e2.play()} />
                 <Button color='red' title="Pause example" onPress={() => e2.pause()} />
             </View>
-                                    {["4/4", "6/8", "9/8", "12/8"].map((option, index) => {
-                                        const selected = quiz4Answer === option;
-                                        let buttonStyle = styles.quizButton;
-            
-                                        if (quiz4Answer !== null) {
-                                            if (option === answer4) {
-                                                buttonStyle = styles.correctAnswer;
-                                            }
-                                            else if (selected) {
-                                                buttonStyle = styles.incorrectAnswer;
-                                            }
-                                        }
-            
-                                        return (
-                                            <Pressable
-                                                key={index}
-                                                style={buttonStyle}
-                                                onPress={() => {
-                                                    if (!quiz4Answer) setQ4Answer(option); // only once
-                                                }}
-                                            >
-                                                <Text style={styles.quizButtonText}>{option}</Text>
-                                            </Pressable>
-                                        );
-                                    })}
-                                    {quiz4Answer && (
-                                        <Text style={styles.result}>
-                                            {quiz4Answer === answer4 ? "Correct!" : "Wrong"}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    {quiz4Answer && quiz4Answer !== answer4 && (
-                                        <Text style={styles.result}>
-                                            Correct Answer: {answer4}
-                                            {"\n"}
-                                        </Text>
-                                    )}
-                                    <Pressable
-                                        style={styles.resetButton}
-                                        onPress={resetQuiz4}
-                                    >
-                                        <Text style={styles.resetButtonText}>Reset</Text>
-                                    </Pressable>
-                                </view>
-                            </div>
-           
+            <form>
+                <button id='4/4' style={{fontSize: '24px'}} onClick={wrong4}>4/4</button>
+                <button id='6/8' style={{fontSize: '24px'}} onClick={wrong4}>6/8</button>
+                <button id='9/8' style={{fontSize: '24px'}} onClick={correct4}>9/8</button>
+                <button id='12/8' style={{fontSize: '24px'}} onClick={wrong4}>12/8</button>
+                <p id='correct4' color='green' style={{textAlign: 'center'}} >Correct!</p>
+                <p id='wrong4' color='red' style={{textAlign: 'center'}} >Wrong! The time signature for this music is 9/8.</p>
+            </form>
              </View>                
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
@@ -551,72 +502,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#5543A5',
         borderRadius: 8,
-        fontWeight: '600',
-    },
-    quizContainer: {
-        height: 100,
-        width: 200,
-
-        alignItems: 'center',
-        padding: 7,
-    },
-    quizTitle: {
-        color: 'black',
-        fontSize: 50,
-        fontFamily: 'TIMES_NEW_ROMAN',
-        fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
-    },
-    quizText: {
-        color: '#840606',
-        fontSize: 20,
-        alignSelf: 'center',
-    },
-    quizButton: {
-        height: 45,
-        width: 150,
-        backgroundColor: 'gray',
-        alignItems: 'center',
-        padding: 5,
-    },
-    quizButtonText: {
-        color: 'white',
-        fontSize: 15,
-        alignSelf: 'center',
-    },
-    correctAnswer: {
-        height: 45,
-        width: 150,
-        backgroundColor: 'green',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
-    },
-    incorrectAnswer: {
-        height: 45,
-        width: 150,
-        backgroundColor: 'red',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
-    },
-    result: {
-        marginTop: 10,
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'black',
-    },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
         fontWeight: '600',
     },
 });
