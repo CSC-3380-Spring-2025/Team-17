@@ -443,8 +443,8 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
-    }
-});
+    },
+
 
     quizContainer: {
         height: 100,
