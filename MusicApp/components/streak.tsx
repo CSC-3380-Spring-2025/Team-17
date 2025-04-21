@@ -42,7 +42,8 @@ const Streak: React.FC=() =>{
   }, [userId]);
   
   return (
-    <View style={styles.streakContainer}>
+    
+      <View style={styles.headerRow}>
     <Link href="/lessons" style={styles.imageButton}>
                       <Image
                         source={require('@/assets/images/flame.png')}
@@ -52,10 +53,22 @@ const Streak: React.FC=() =>{
                     </Link>
                     <Text style={styles.streak}>:{streak}</Text>
                     </View>
+                    
   );
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+
+    alignItems: "center",
+    paddingTop: 30,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
   streakContainer: {
     flexDirection: 'row',
     alignItems: 'center',

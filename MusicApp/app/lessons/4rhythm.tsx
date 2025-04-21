@@ -43,9 +43,6 @@ export default function Rhythm(){
                         style={styles.image}
                         resizeMode="contain"
                     />
-                </View>
-                
-                <View style={styles.card}>
                     <Text style={styles.text}>
                         <Text style={styles.bold}>Whole Note: </Text> This note has a thick, unfilled oval shape and no stem. This is the longest note value used in 
                         Western music. 
@@ -72,41 +69,57 @@ export default function Rhythm(){
                     </Text>
                 </View>                
                 
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Rest Values
+                    </Text>
+                    <Text style={styles.text}>
+                        Rests refer to the durations of silence in music. Each hierarchical note value has a corresponding rest value. Just like
+                        note values, each rest value can be divided in half, creating two rests that last half as long as the first rest.
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/rest_values.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                </View> 
 
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Dots & Ties
+                    </Text>
+                    <Text style={styles.text}>
+                        Dots and ties allow the durations of notes and rests to be extended. A dot is written immediately after a note or rest
+                        and increases its value by half. For example, a half note is equivalent in duration to two quarter notes. Therefore,
+                        a dotted half note is equivalent in duration to three quarter notes. Similarly, a quarter note is equivalent in duration
+                        to two eighth notes. Therefore, a dotted quarter note is equivalent in duration to three eighth notes. Multiple dots
+                        can be added to a duration with each subsequent dot adding half the duration of the previous one. For example, a
+                        double-dotted quarter note is equivalent in duration to a quarter note, an eighth note, and a sixteenth note added
+                        together. Essentially, a double-dotted note is 1 3/4 the duration of the original note.
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/dots.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        A tie is a curved line that connects two notes of the same pitch. They are never used with rests. Tied notes are
+                        not re-articulated. Ties simply combine the durations of multiple notes. In the image below, when the half and quarter
+                        notes are played or sung, the quarter note should not be articulated. The first note should be held for the duration
+                        of three quarter notes instead of two.
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/tie.png')} 
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        The tie does seem to look like a slur. The difference between the two is that slurs connect notes of different pitches
+                        and indicate to the musician that they must be played legato, while ties connect only notes of the same pitch to create
+                        a note with a longer duration.
+                    </Text>
+                </View>
 
-            <Text style={styles.header}>
-                Rest Values
-            </Text>
-            <Text style={styles.text}>
-                Rests refer to the durations of silence in music. Each hierarchical note value has a corresponding rest value. Just like
-                note values, each rest value can be divided in half, creating two rests that last half as long as the first rest.
-            </Text>
-            <Image source={require('@/assets/images/rest_values.png')} />
-            <Text style={styles.header}>
-                Dots & Ties
-            </Text>
-            <Text style={styles.text}>
-                Dots and ties allow the durations of notes and rests to be extended. A dot is written immediately after a note or rest
-                and increases its value by half. For example, a half note is equivalent in duration to two quarter notes. Therefore,
-                a dotted half note is equivalent in duration to three quarter notes. Similarly, a quarter note is equivalent in duration
-                to two eighth notes. Therefore, a dotted quarter note is equivalent in duration to three eighth notes. Multiple dots
-                can be added to a duration with each subsequent dot adding half the duration of the previous one. For example, a
-                double-dotted quarter note is equivalent in duration to a quarter note, an eighth note, and a sixteenth note added
-                together. Essentially, a double-dotted note is 1 3/4 the duration of the original note.
-            </Text>
-            <Image source={require('@/assets/images/dots.png')} />
-            <Text style={styles.text}>
-                A tie is a curved line that connects two notes of the same pitch. They are never used with rests. Tied notes are
-                not re-articulated. Ties simply combine the durations of multiple notes. In the image below, when the half and quarter
-                notes are played or sung, the quarter note should not be articulated. The first note should be held for the duration
-                of three quarter notes instead of two.
-            </Text>
-            <Image source={require('@/assets/images/tie.png')} />
-            <Text style={styles.text}>
-                The tie does seem to look like a slur. The difference between the two is that slurs connect notes of different pitches
-                and indicate to the musician that they must be played legato, while ties connect only notes of the same pitch to create
-                a note with a longer duration.
-            </Text>
             <div>
                 <Text style={styles.quizTitle}>Quiz</Text>
                 <br></br>
