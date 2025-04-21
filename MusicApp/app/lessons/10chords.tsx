@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, ScrollView, StyleSheet, View} from 'react-native';
+import {Text, ScrollView, StyleSheet, View, Image} from 'react-native';
 import {Link} from 'expo-router';
 
 export default function Chords(){
@@ -15,8 +15,29 @@ export default function Chords(){
                 
                 <View style={styles.card}>
                     <Text style={styles.text}>
-                        Content about chords will go here...
+                        In music, it is often not enough to just have a melody. Songs and compositions often accompany a melody with 
+                        some form of harmony. <Text style={styles.bold}>Harmony</Text> is the vertical structure of a piece, which 
+                        consists of multiple notes being played at the same time. Harmony is based on <Text style={styles.bold}>chords</Text>,
+                        which are combinations of three or more notes that sound simultaneously. The most common chords are 
+                        <Text style={styles.bold}>triads</Text>, which are chords made of three notes that are stacked in thirds. A 
+                        triad can always be stacked so that its notes are either on all lines or all spaces. When a triad is stacked 
+                        in its most compact form, it looks like a snowperson. Just as a snowperson consists of a bottom, middle, & head, 
+                        a triad consists of bottom, middle, & upper notes. 
                     </Text>
+                    <Image source={require('@/assets/images/triads.png')} 
+                            style={styles.image}
+                            resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        When a triad is stacked in thirds like a snowperson, this is referred to as root position. The lowest note of 
+                        the triad is called the root. The middle note of the triad is called the third (a generic third above the root). 
+                        The top note of the triad is called the fifth (a generic fifth above the root).
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/triad.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
                 </View>
                 
                 <View style={styles.linksContainer}>
@@ -83,6 +104,22 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         textAlign: 'left',
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: '#5543A5',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 10,
+        marginTop: 10,
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
     },
     linksContainer: {
         width: '100%',

@@ -652,9 +652,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5543A5',
     },
-    buttons: {
-        flexDirection: 'row'
-    },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
