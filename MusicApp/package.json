@@ -33,7 +33,7 @@
     "@expo/vector-icons": "^14.0.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
-    "expo": "~52.0.42",
+    "expo": "~52.0.46",
     "expo-audio": "~0.3.5",
     "expo-av": "~15.0.2",
     "expo-blur": "~14.0.3",
@@ -47,7 +47,7 @@
     "expo-image": "~2.0.6",
     "expo-linking": "~7.0.5",
     "expo-router": "~4.0.20",
-    "expo-splash-screen": "~0.29.22",
+    "expo-splash-screen": "~0.29.24",
     "expo-status-bar": "~2.0.1",
     "expo-symbols": "~0.2.2",
     "expo-system-ui": "~4.0.9",
@@ -64,7 +64,11 @@
     "react-native-track-player": "^4.1.1",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "shaka-player": "^4.14.4"
+
+    "shaka-player": "^4.14.4",
+    "expo-document-picker": "~13.0.3",
+    "react-native-svg": "15.8.0"
+
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
