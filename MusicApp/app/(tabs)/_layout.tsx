@@ -2,14 +2,21 @@ import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View, Dimensions, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AudioProvider } from './AudioContext';
+
 import { Svg, Path } from 'react-native-svg';
 import { usePathname } from 'expo-router';
+
+import Streak from '@/components/streak';
+import Coins from '@/components/coins';
+import { ChallengesProvider } from '../context/ChallengesContext';
+
 
 const FloatingMiddleButton = () => {
     const pathname = usePathname();
     const isRecordingPage = pathname.includes('recorder') || pathname.includes('Recording');
   
     return (
+
       <TouchableOpacity style={[styles.fab, isRecordingPage && styles.recordingFab]}>
         {!isRecordingPage && <Text style={styles.plus}>+</Text>}
       </TouchableOpacity>
@@ -43,6 +50,7 @@ const TabBarBackground = () => {
 
   export default function TabLayout() {
     return (
+      <ChallengesProvider>
       <AudioProvider>
         <>
           <Tabs
@@ -153,6 +161,8 @@ const TabBarBackground = () => {
           <FloatingMiddleButton />
         </>
       </AudioProvider>
+        </ChallengesProvider>
+
     );
   }
 
