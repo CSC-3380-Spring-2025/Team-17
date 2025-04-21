@@ -1,152 +1,185 @@
-import React, { useState, useRef, useEffect } from 'react';
-import FileUploader from '@/components/fileUploader';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   Modal,
-  StyleSheet,
   Platform,
   PermissionsAndroid,
   FlatList,
   SafeAreaView,
   Alert,
+  StyleSheet
 } from 'react-native';
-import TrackPlayer, {
-  State as TrackPlayerState,
-  Track,
-  usePlaybackState,
-  useTrackPlayerEvents,
-  Event,
-} from 'react-native-track-player';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import { Audio } from 'expo-av';
 import { useAudioContext } from './AudioContext';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
-interface AudioTrack extends Track {
+interface AudioTrack {
+  id: string;
+  url: string;
+  title: string;
+  artist: string;
   sourceType: SoundSource;
-  recording?: boolean;
 }
-interface uploadedDocument{
-  name: string;
-  mimeType: string;
-  size: number;
-  uri: string;
-}
+
 const LiveMixingPage: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [showRecordingsModal, setShowRecordingsModal] = useState(false);
   const [tracks, setTracks] = useState<AudioTrack[]>([]);
   const [isRecording, setIsRecording] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRecorderPlayer = useRef(new AudioRecorderPlayer()).current;
-  const playbackState = usePlaybackState();
+  const [isPlayingAll, setIsPlayingAll] = useState(false);
+  const [isLooping, setIsLooping] = useState(false); // New state for looping
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  const [soundObjects, setSoundObjects] = useState<Audio.Sound[]>([]);
   const { recordings } = useAudioContext();
 
   useEffect(() => {
-    const setupPlayer = async () => {
-      await TrackPlayer.setupPlayer();
-      TrackPlayer.updateOptions({
-        capabilities: [
-          TrackPlayer.CAPABILITY_PLAY,
-          TrackPlayer.CAPABILITY_PAUSE,
-          TrackPlayer.CAPABILITY_STOP,
-        ],
-        compactCapabilities: [
-          TrackPlayer.CAPABILITY_PLAY,
-          TrackPlayer.CAPABILITY_PAUSE,
-        ],
-      });
-    };
-
-    setupPlayer();
     return () => {
-      TrackPlayer.destroy();
+      // Clean up all sound objects
+      soundObjects.forEach(sound => {
+        sound.unloadAsync().catch(error => console.warn('Failed to unload sound', error));
+      });
+      if (recording) {
+        recording.stopAndUnloadAsync().catch(error => console.warn('Failed to stop recording', error));
+      }
     };
-  }, []);
+  }, [soundObjects, recording]);
 
+  // Handle looping when tracks finish
   useEffect(() => {
-    const checkIsPlaying = async () => {
-      const state = await TrackPlayer.getState();
-      setIsPlaying(state === TrackPlayerState.Playing);
-    };
+    soundObjects.forEach(sound => {
+      sound.setOnPlaybackStatusUpdate(status => {
+        if (status.didJustFinish && isLooping) {
+          sound.replayAsync(); // Replay when finished if looping is enabled
+        }
+      });
+    });
+  }, [soundObjects, isLooping]);
 
-    checkIsPlaying();
-  }, [playbackState]);
-
-  const requestMicrophonePermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
+  const startRecording = async () => {
+    try {
+      if (Platform.OS === 'android') {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
           {
             title: 'Microphone Permission',
-            message: 'This app needs access to your microphone to record audio.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
+            message: 'App needs access to your microphone',
             buttonPositive: 'OK',
           }
         );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.error('Permission error:', err);
-        return false;
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert('Permission denied', 'Cannot record without microphone access');
+          return;
+        }
       }
-    }
-    return true;
-  };
 
-  const startRecording = async () => {
-    const hasPermission = await requestMicrophonePermission();
-    if (!hasPermission) {
-      console.log('Microphone permission denied');
-      return;
-    }
-
-    try {
-      const path = Platform.select({
-        ios: undefined,
-        android: `${sdcardDir}/sound_${Date.now()}.mp3`,
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
       });
 
-      const uri = await audioRecorderPlayer.startRecorder(path);
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      setRecording(recording);
       setIsRecording(true);
-
-      const newTrack: AudioTrack = {
-        id: `recording_${Date.now()}`,
-        url: uri,
-        title: 'Recording in progress',
-        artist: '',
-        sourceType: 'voice',
-        recording: true,
-      };
-
-      setTracks(prev => [...prev, newTrack]);
     } catch (error) {
-      console.error('Recording failed:', error);
+      console.error('Failed to start recording', error);
+      Alert.alert('Recording Error', 'Failed to start recording');
     }
   };
 
   const stopRecording = async () => {
+    if (!recording) return;
+    
     try {
-      const result = await audioRecorderPlayer.stopRecorder();
       setIsRecording(false);
+      await recording.stopAndUnloadAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      });
 
-      setTracks(prev =>
-        prev.map(track =>
-          track.recording
-            ? {
-                ...track,
-                url: result,
-                title: `Recording ${new Date().toLocaleTimeString()}`,
-                recording: false,
-              }
-            : track
-        )
-      );
+      const uri = recording.getURI();
+      if (!uri) {
+        throw new Error('Recording URI is null');
+      }
+
+      const newTrack: AudioTrack = {
+        id: `recording_${Date.now()}`,
+        url: uri,
+        title: `Recording ${new Date().toLocaleTimeString()}`,
+        artist: '',
+        sourceType: 'voice',
+      };
+
+      setTracks(prev => [...prev, newTrack]);
+      setRecording(null);
     } catch (error) {
-      console.error('Failed to stop recording:', error);
+      console.error('Failed to stop recording', error);
+    }
+  };
+
+  const playAllTracks = async () => {
+    if (isPlayingAll) {
+      await stopAllPlayback();
+      setIsPlayingAll(false);
+      setIsLooping(false); // Disable looping when stopping
+      return;
+    }
+
+    setIsPlayingAll(true);
+    
+    try {
+      // First stop any currently playing sounds
+      await stopAllPlayback();
+      
+      // Create and play all sounds simultaneously with looping
+      const newSoundObjects: Audio.Sound[] = [];
+      
+      for (const track of tracks) {
+        if (track.url) {
+          const { sound } = await Audio.Sound.createAsync(
+            { uri: track.url },
+            { 
+              shouldPlay: true,
+              isLooping: isLooping // Set initial looping state
+            }
+          );
+          newSoundObjects.push(sound);
+          await sound.playAsync();
+        }
+      }
+      
+      setSoundObjects(newSoundObjects);
+    } catch (error) {
+      console.error('Failed to play all tracks', error);
+      setIsPlayingAll(false);
+    }
+  };
+
+  const toggleLooping = () => {
+    const newLoopingState = !isLooping;
+    setIsLooping(newLoopingState);
+    
+    // Update looping for all active sounds
+    soundObjects.forEach(sound => {
+      sound.setIsLoopingAsync(newLoopingState);
+    });
+
+    if (newLoopingState && !isPlayingAll) {
+      // If enabling loop but not playing, start playback
+      playAllTracks();
+    }
+  };
+
+  const stopAllPlayback = async () => {
+    try {
+      await Promise.all(soundObjects.map(sound => sound.stopAsync()));
+      setSoundObjects([]);
+    } catch (error) {
+      console.error('Failed to stop playback', error);
     }
   };
 
@@ -158,37 +191,8 @@ const LiveMixingPage: React.FC = () => {
     }
   };
 
-  const playAllTracks = async () => {
-    if (isPlaying) {
-      await TrackPlayer.pause();
-    } else {
-      const playableTracks = tracks.filter(t => !t.recording);
-      if (playableTracks.length > 0) {
-        await TrackPlayer.reset();
-        await TrackPlayer.add(playableTracks);
-        await TrackPlayer.play();
-      }
-    }
-  };
-
-  const rewindAllTracks = async () => {
-    await TrackPlayer.seekTo(0);
-    if (isPlaying) {
-      await TrackPlayer.play();
-    }
-  };
-
-  const deleteTrack = async (trackId: string) => {
-    try {
-      const currentTracks = await TrackPlayer.getQueue();
-      const trackIndex = currentTracks.findIndex(t => t.id === trackId);
-      if (trackIndex !== -1) {
-        await TrackPlayer.remove(trackIndex);
-      }
-      setTracks(prev => prev.filter(track => track.id !== trackId));
-    } catch (error) {
-      console.error('Failed to delete track:', error);
-    }
+  const deleteTrack = (trackId: string) => {
+    setTracks(prev => prev.filter(track => track.id !== trackId));
   };
 
   const addTrack = (sourceType: SoundSource) => {
@@ -228,22 +232,11 @@ const LiveMixingPage: React.FC = () => {
     setTracks(prev => [...prev, newTrack]);
   };
 
-  const handleFileUpload = (document: uploadedDocument)=>{
-    const newTrack:AudioTrack={
-      id:`file_${Date.now()}`,
-      url: document.uri,
-      title: document.name,
-      artist: '',
-      sourceType: 'local-file',
-    };
-    setTracks(prev=>[...prev, newTrack]);
-  };
   const renderTrackItem = ({ item }: { item: AudioTrack }) => (
     <View style={styles.trackItem}>
       <View style={styles.trackInfo}>
         <Text style={styles.trackTitle}>{item.title}</Text>
         <Text style={styles.trackType}>{item.sourceType}</Text>
-        {item.recording && <Text style={styles.recordingLabel}>Recording...</Text>}
       </View>
       <TouchableOpacity 
         style={styles.deleteButton}
@@ -273,12 +266,6 @@ const LiveMixingPage: React.FC = () => {
 
       <View style={styles.controls}>
         <TouchableOpacity
-          style={styles.controlButton}
-          onPress={rewindAllTracks}>
-          <Text style={styles.controlButtonText}>⏮</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           style={[styles.controlButton, styles.recordButton]}
           onPress={toggleRecording}>
           <Text style={styles.controlButtonText}>
@@ -287,15 +274,22 @@ const LiveMixingPage: React.FC = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.controlButton}
+          style={[styles.controlButton, styles.playAllButton]}
           onPress={playAllTracks}>
           <Text style={styles.controlButtonText}>
-            {isPlaying ? '⏸' : '⏵'}
+            {isPlayingAll ? '⏹' : '▶️'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.controlButton, isLooping ? styles.loopButtonActive : styles.loopButton]}
+          onPress={toggleLooping}>
+          <Text style={styles.controlButtonText}>
+            {isLooping ? '🔁' : '↻'}
           </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Original Add Track Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -316,9 +310,7 @@ const LiveMixingPage: React.FC = () => {
               onPress={() => addTrack('virtual-instrument')}>
               <Text style={styles.modalOptionText}>Virtual Instrument</Text>
             </TouchableOpacity>
-            <FileUploader onFileUpload={handleFileUpload}
-            setModalVisible={setModalVisible}/>
-
+            
             <TouchableOpacity
               style={styles.modalClose}
               onPress={() => setModalVisible(false)}>
@@ -328,7 +320,6 @@ const LiveMixingPage: React.FC = () => {
         </View>
       </Modal>
 
-      {/* New Recordings Selection Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -429,12 +420,6 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
   },
-  recordingLabel: {
-    color: 'red',
-    fontSize: 12,
-    marginTop: 4,
-    fontStyle: 'italic',
-  },
   deleteButton: {
     width: 30,
     height: 30,
@@ -442,7 +427,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff4444',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 10,
   },
   deleteButtonText: {
     color: 'white',
@@ -456,22 +440,32 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'white',
     paddingVertical: 16,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
   },
   controlButton: {
-    backgroundColor: '#6200ee',
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 10,
   },
   recordButton: {
     backgroundColor: 'red',
+  },
+  playAllButton: {
+    backgroundColor: '#4CAF50',
+  },
+  loopButton: {
+    backgroundColor: '#6200ee',
+  },
+  loopButtonActive: {
+    backgroundColor: '#FF9800',
   },
   controlButtonText: {
     color: 'white',
