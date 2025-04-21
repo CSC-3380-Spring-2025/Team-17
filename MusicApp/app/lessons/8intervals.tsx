@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import {Text, ScrollView, StyleSheet, Image, View, Button} from 'react-native';
+import {Text, ScrollView, StyleSheet, Image, View, Button, Pressable} from 'react-native';
 
 import {Link} from 'expo-router';
 import { useAudioPlayer } from 'expo-audio';
@@ -10,6 +10,22 @@ export default function Intervals(){
     const sizes = useAudioPlayer(require('@/assets/sounds/sizes.mp3'));
     const augmented = useAudioPlayer(require('@/assets/sounds/augmented.mp3'));
     const diminished = useAudioPlayer(require('@/assets/sounds/diminished.mp3'));
+    const [quiz1Answer, setQ1Answer] = useState(null);
+        const [quiz2Answer, setQ2Answer] = useState(null);
+        const [quiz3Answer, setQ3Answer] = useState(null);
+        const [quiz4Answer, setQ4Answer] = useState(null);
+        const [quiz5Answer, setQ5Answer] = useState(null);
+        const answer1 = "Simultaneously";
+        const answer2 = "Flat";
+        const answer3 = "9";
+        const answer4 = "False";
+        const answer5 = "True";
+        const resetQuiz1 = () => setQ1Answer(null);
+        const resetQuiz2 = () => setQ2Answer(null);
+        const resetQuiz3 = () => setQ3Answer(null);
+        const resetQuiz4 = () => setQ4Answer(null);
+        const resetQuiz5 = () => setQ5Answer(null);
+    
     return(
 
         <ScrollView 
@@ -46,6 +62,7 @@ export default function Intervals(){
                         />
                     </View>
                 </View>
+
             
                 <View style={styles.card}>
                     <Text style={styles.header}>
@@ -273,7 +290,260 @@ export default function Intervals(){
                     />
                 </View>
 
-                <View style={styles.linksContainer}>
+                
+
+            <div>
+                    <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
+                    
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            1. An Interval is <b>harmonic</b> when sung or played
+                        </Text>
+                        {["Separately", "Simultaneously", "One after the Other", "Twice"].map((option, index) => {
+                            const selected = quiz1Answer === option;
+                            let buttonStyle = styles.quizButton;
+                                
+                            if(quiz1Answer !== null){
+                                if(option === answer1){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz1Answer) setQ1Answer(option); // only once
+                                    }}
+                                >
+                                  
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz1Answer && (
+                            <Text style={styles.result}>
+                                {quiz1Answer === answer1 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz1Answer && quiz1Answer !== answer1 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer1}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz1}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
+
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            2. Which one of these is <b>NOT</b> a quality of intervals?
+                        </Text>
+                        {["Augmented", "Major", "Perfect", "Flat", "Diminished"].map((option, index) => {
+                            const selected = quiz2Answer === option;
+                            let buttonStyle = styles.quizButton;
+                            
+                            if(quiz2Answer !== null){
+                                if(option === answer2){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz2Answer) setQ2Answer(option); // only once
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz2Answer && (
+                            <Text style={styles.result}>
+                                {quiz2Answer === answer2 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz2Answer && quiz2Answer !== answer2 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer2}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz2}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
+
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            The sizes of Inverted Pairs always add up to what?
+                        </Text>
+                        {["3", "6", "7", "9"].map((option, index) => {
+                            const selected = quiz3Answer === option;
+                            let buttonStyle = styles.quizButton;
+                            
+                            if(quiz3Answer !== null){
+                                if(option === answer3){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz3Answer) setQ3Answer(option); // only once
+                                    }}
+                                >
+                                   
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz3Answer && (
+                            <Text style={styles.result}>
+                                {quiz3Answer === answer3 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz3Answer && quiz3Answer !== answer3 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer3}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz3}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            4. Dissonant Intervals are more stable
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                            const selected = quiz4Answer === option;
+                            let buttonStyle = styles.quizButton;
+                            
+                            if(quiz4Answer !== null){
+                                if(option === answer4){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz4Answer) setQ4Answer(option); // only once
+                                    }}
+                                >
+                                   
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz4Answer && (
+                            <Text style={styles.result}>
+                                {quiz4Answer === answer4 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz4Answer && quiz4Answer !== answer4 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer4}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz4}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
+                    <view style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            5. Any interval <b>larger</b> than an octave is a Compound Interval
+                        </Text>
+                        {["3", "6", "7", "9"].map((option, index) => {
+                            const selected = quiz5Answer === option;
+                            let buttonStyle = styles.quizButton;
+                            
+                            if(quiz5Answer !== null){
+                                if(option === answer5){
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                                else if(selected){
+                                    buttonStyle = styles.incorrectAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    onPress={() => {
+                                        if (!quiz5Answer) setQ5Answer(option); // only once
+                                    }}
+                                >
+                                   
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz5Answer && (
+                            <Text style={styles.result}>
+                                {quiz5Answer === answer5 ? "Correct!" : "Wrong"}
+                                {"\n"}
+                            </Text>
+                        )}
+                        {quiz5Answer && quiz5Answer !== answer5 && (
+                            <Text style={styles.result}>
+                                Correct Answer: {answer5}
+                                {"\n"}
+                            </Text>
+                        )}
+                        <Pressable
+                            style={styles.resetButton}
+                            onPress={resetQuiz5}
+                        >
+                            <Text style={styles.resetButtonText}>Reset</Text>
+                        </Pressable>
+                    </view>
+                </div>
+
+            <View style={styles.linksContainer}>
+
                     <View style={styles.linkWrapper}>
                         <Link href='./7modes' style={styles.secondaryLink}>
                             ← Previous: Modes
@@ -410,6 +680,72 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
-    }
+    },
+    quizContainer: {
+        height: 100,
+        width: 200,
+        
+        alignItems: 'center',
+        padding:7,
+    },
+    quizTitle: {
+        color: 'black',
+        fontSize: 50,
+        fontFamily: 'TIMES_NEW_ROMAN',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+        paddingBottom: 20
+    },
+    quizText: {
+        color: '#840606',
+        fontSize: 20,
+        alignSelf:'center',
+    },
+    quizButton: {
+        height: 45,
+        width:150,
+        backgroundColor: 'gray',
+        alignItems: 'center',
+        padding: 5,
+    },
+    quizButtonText: {
+        color: 'white',
+        fontSize: 15,
+        alignSelf:'center',
+    },
+    correctAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'green',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      incorrectAnswer: {
+        height: 45,
+        width: 150,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+      },
+      result: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+      },
+      resetButton: {
+        marginTop: 10,
+        backgroundColor: '#5543A5',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    resetButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+    },
 });
 

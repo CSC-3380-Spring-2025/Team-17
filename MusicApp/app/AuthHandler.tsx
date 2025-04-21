@@ -17,7 +17,7 @@ export default function AuthHandler() {
   if (mounted) {
    // Ensure navigation only after mounted
    if (!user) {
-    router.replace("/account") // Redirect to login if unauthenticated
+    router.replace("/loginPage") // Redirect to login if unauthenticated
    } else {
     router.replace("/(tabs)/home") // Redirect to main tabs if authenticated
    }

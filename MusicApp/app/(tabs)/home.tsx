@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
-import { Link, Stack } from 'expo-router';
-
+import { Stack } from 'expo-router';
+import Coins from '../../components/coins'
 import ImageViewer from '@/components/ImageViewer';
 import Streak from'../../components/streak';
 import React, {useState} from 'react';
@@ -12,36 +12,23 @@ export default function HomeScreen() {
     <>
       <Stack.Screen
         options={{
+          
           headerTitle: () => (
             <View style={styles.headerContainer}>
               <View style={styles.headerRow}>
-                <Link href="/lessons" style={styles.imageButton}>
-                  <Image
-                    source={require('@/assets/images/flame.png')}
-                    style={styles.buttonImage}
-                    resizeMode="contain"
-                  />
-                </Link>
-                <View style={styles.titleContainer}>
+       
+                <View>
                   <Text style={styles.headerTitle}>Home</Text>
                 </View>
-                <Link href="/lessons" style={styles.imageButton}>
-                  <Image
-                    source={require('@/assets/images/coin.png')}
-                    style={styles.buttonImage}
-                    resizeMode="contain"
-                  />
-                </Link>
-
-                <View style={styles.streakContainer}>
-          <Text style={styles.streak}>🔥: 0</Text>
-        </View>
-        <View style={styles.gemContainer}>
-          <Link href="/challenges" style={styles.gem}>💎: 0</Link>
-        </View>
-
+                
               </View>
             </View>
+          ),
+          headerLeft: () => (
+           <Streak/>
+          ),
+          headerRight: () => (
+            <Coins/>
           ),
           headerTitleAlign: "center",
         }}
@@ -203,7 +190,6 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     width: '100%',
   },
   titleContainer: {

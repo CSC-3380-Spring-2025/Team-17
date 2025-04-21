@@ -486,6 +486,18 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
-      }
+    },
+    resetButton: {
+        marginTop: 10,
+        backgroundColor: '#5543A5',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    resetButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+    },
 })
 

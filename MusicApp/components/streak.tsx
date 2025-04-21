@@ -1,4 +1,4 @@
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { StyleSheet, View, Pressable, Text, Image } from 'react-native';
 import { Link, Stack } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
@@ -42,23 +42,59 @@ const Streak: React.FC=() =>{
   }, [userId]);
   
   return (
-    <View style={styles.streakContainer}>
-        <Link href="/challenges" style={styles.streak}>
-            🔥: {streak}
-        </Link>
-    </View>
+    
+      <View style={styles.headerRow}>
+    <Link href="/lessons" style={styles.imageButton}>
+                      <Image
+                        source={require('@/assets/images/flame.png')}
+                        style={styles.buttonImage}
+                        resizeMode="contain"
+                      />
+                    </Link>
+                    <Text style={styles.streak}>:{streak}</Text>
+                    </View>
+                    
   );
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+
+    alignItems: "center",
+    paddingTop: 30,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
   streakContainer: {
-    bottom:10,
-    right: 300,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  imageButton: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textDecorationLine: 'none',
+  },
+  buttonImage: {
+    width: '100%',
+    height: '100%',
   },
   streak: {
-    fontSize: 14,
-    color: "#fff",
-    right: 10,
+    fontSize: 18, // Increased font size
+    color: "#f0f8ff", // Ensure high contrast color
+    marginLeft: 10, // Increased margin
+    padding: 5, // Added padding
+    
+    width: 50, // Explicit width
+    height: 30, // Explicit height
+    textAlign: 'center', // Center text
   }
 });
+
 export default Streak;
