@@ -2,9 +2,13 @@ import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 import { AudioProvider } from './AudioContext';
+import Streak from '@/components/streak';
+import Coins from '@/components/coins';
+import { ChallengesProvider } from '../context/ChallengesContext';
 
 export default function TabLayout() {
     return (
+        <ChallengesProvider>
         <AudioProvider>
             <Tabs initialRouteName="home"
                 screenOptions={{
@@ -56,6 +60,12 @@ export default function TabLayout() {
                 <Tabs.Screen
                     name="challenges"
                     options={{
+                        headerLeft: () => (
+                            <Streak/>
+                           ),
+                           headerRight: () => (
+                             <Coins/>
+                           ),
                         href: null
                     }}
                 />
@@ -89,6 +99,6 @@ export default function TabLayout() {
             />
             </Tabs>
         </AudioProvider>
-
+</ChallengesProvider>
     );
 }
