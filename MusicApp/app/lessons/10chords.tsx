@@ -1,8 +1,16 @@
 import React from 'react';
-import {Text, ScrollView, StyleSheet, View, Image} from 'react-native';
+import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
+import { useAudioPlayer } from 'expo-audio';
 
 export default function Chords(){
+    const triads = useAudioPlayer(require('@/assets/sounds/triads.mp3'));
+    const qualities = useAudioPlayer(require('@/assets/sounds/qualities.mp3'));
+    const symbols = useAudioPlayer(require('@/assets/sounds/chord_symbols.mp3'));
+    const major = useAudioPlayer(require('@/assets/sounds/major_triads.mp3'));
+    const minor = useAudioPlayer(require('@/assets/sounds/minor_triads.mp3'));
+    const big = useAudioPlayer(require('@/assets/sounds/big_triads.mp3'));
+
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
@@ -19,7 +27,7 @@ export default function Chords(){
                         some form of harmony. <Text style={styles.bold}>Harmony</Text> is the vertical structure of a piece, which 
                         consists of multiple notes being played at the same time. Harmony is based on <Text style={styles.bold}>chords</Text>,
                         which are combinations of three or more notes that sound simultaneously. The most common chords are 
-                        <Text style={styles.bold}>triads</Text>, which are chords made of three notes that are stacked in thirds. A 
+                        <Text style={styles.bold}> triads</Text>, which are chords made of three notes that are stacked in thirds. A 
                         triad can always be stacked so that its notes are either on all lines or all spaces. When a triad is stacked 
                         in its most compact form, it looks like a snowperson. Just as a snowperson consists of a bottom, middle, & head, 
                         a triad consists of bottom, middle, & upper notes. 
@@ -28,6 +36,18 @@ export default function Chords(){
                             style={styles.image}
                             resizeMode="contain"
                     />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50'
+                            title="Play triads"
+                            onPress={() => triads.play()}
+                        />
+                        <Button 
+                            color='#F44336'
+                            title="Pause triads"
+                            onPress={() => triads.pause()}
+                        />
+                    </View>
                     <Text style={styles.text}>
                         When a triad is stacked in thirds like a snowperson, this is referred to as root position. The lowest note of 
                         the triad is called the root. The middle note of the triad is called the third (a generic third above the root). 
@@ -46,9 +66,9 @@ export default function Chords(){
                     </Text>
                     <Text style={styles.text}>
                         There are four qualities of triads: Major, Minor, Diminished, & Augmented. These qualities are 
-                        determined by the intervals from the root to the third & from the root to the fifth. <Text style={styles.bold}>Major</Text> 
+                        determined by the intervals from the root to the third & from the root to the fifth. <Text style={styles.bold}>Major </Text> 
                         & <Text style={styles.bold}>minor</Text> triads have perfect fifths and are named for the quality of their third. 
-                        A <Text style={styles.bold}>diminished</Text> triad has a minor third and a diminished fifth. An <Text style={styles.bold}>augmented</Text> 
+                        A <Text style={styles.bold}>diminished</Text> triad has a minor third and a diminished fifth. An <Text style={styles.bold}>augmented </Text> 
                         triad has a major triad and an augmented fifth. Major triads tend to sound happy. Minor triads tend to sound sad. 
                         Diminished triads tend to sound scary. Augmented triads tend to sound mystical. 
                     </Text>
@@ -56,7 +76,19 @@ export default function Chords(){
                         source={require('@/assets/images/triad_qualities.png')}
                         style={styles.image}
                         resizeMode="contain" 
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50'
+                            title="Play triads"
+                            onPress={() => qualities.play()}
                         />
+                        <Button 
+                            color='#F44336'
+                            title="Pause triads"
+                            onPress={() => qualities.pause()}
+                        />
+                    </View>
                 </View>
 
                 <View style={styles.card}>
@@ -77,6 +109,18 @@ export default function Chords(){
                         style={styles.image}
                         resizeMode="contain"
                     />    
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50'
+                            title="Play triads"
+                            onPress={() => symbols.play()}
+                        />
+                        <Button 
+                            color='#F44336'
+                            title="Pause triads"
+                            onPress={() => symbols.pause()}
+                        />
+                    </View>
                 </View>
 
                 <View style={styles.card}>
@@ -93,6 +137,18 @@ export default function Chords(){
                         style={styles.image}
                         resizeMode="contain"
                     />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50'
+                            title="Play triads"
+                            onPress={() => major.play()}
+                        />
+                        <Button 
+                            color='#F44336'
+                            title="Pause triads"
+                            onPress={() => major.pause()}
+                        />
+                    </View>
                     <Text style={styles.text}>
                         In a minor scale, the qualities of triads can be complicated by the existence of multiple minor scales. The 
                         triads built on scale degrees 5 & 7 can be created with or without a raised leading tone. Triads built on 
@@ -105,6 +161,18 @@ export default function Chords(){
                         style={styles.image}
                         resizeMode="contain"
                     />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50'
+                            title="Play triads"
+                            onPress={() => minor.play()}
+                        />
+                        <Button 
+                            color='#F44336'
+                            title="Pause triads"
+                            onPress={() => minor.pause()}
+                        />
+                    </View>
                 </View>
 
                 <View style={styles.card}>
@@ -175,7 +243,7 @@ export default function Chords(){
                         is a D major triad. 
                     </Text>
                     <Image 
-                        source={require('@/assets/images/C#_triad.png')}
+                        source={require('@/assets/images/Cs_triad.png')}
                         style={styles.image}
                         resizeMode="contain"
                     />
@@ -202,6 +270,18 @@ export default function Chords(){
                         style={styles.image}
                         resizeMode="contain"
                     />
+                    <View style={styles.buttonContainer}>
+                        <Button 
+                            color='#4CAF50'
+                            title="Play triads"
+                            onPress={() => big.play()}
+                        />
+                        <Button 
+                            color='#F44336'
+                            title="Pause triads"
+                            onPress={() => big.pause()}
+                        />
+                    </View>
                 </View>
 
                 <View style={styles.card}>
@@ -209,7 +289,7 @@ export default function Chords(){
                         Triad Inversion & Figured Bass
                     </Text>
                     <Text style={styles.text}>
-                    Musicians often prioritize the lowest note in a harmony, which is called the bass.An <Text style={styles.bold}>inversion</Text> 
+                    Musicians often prioritize the lowest note in a harmony, which is called the bass.An <Text style={styles.bold}>inversion </Text> 
                     is a change in the bass note of a harmony. When a triad is stacked in such a way that the bass note is the root of the triad, then 
                     the triad is in root position. If the triad is stacked in such a way that the bass note is the third of the triad, then the triad is 
                     in 1st inversion. If the triad is stacked in such a way that the bass note is the fifth of the triad, then the triad is in 2nd inversion.
@@ -246,6 +326,30 @@ export default function Chords(){
                         No figure appears at all for root position. It is simply assumed that the triad will be in its default position.
                         1st inversion triads are abbreviated with the number "6" while 2nd inversion triads keep their full figures to 
                         distinguish them from 1st inversion triads. 
+                    </Text>
+                    <Text style={styles.text}>
+                        Triads are identified by their root, quality, & inversion. First, identify the root. Next, identify the quality.
+                        Then, identify the inversion. Last, write the appropriate figured bass, if applicable. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/D_1st.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Putting the chord into root position reveals that the root of the triad is D. The quality of the triad is minor. 
+                        The third of the triad is in the bass, so the triad is in 1st inversion. Using figured bass, this triad would be 
+                        identified as Dm6. Using chord symbols, this triad would be identified as Dm/F.
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/A_2nd.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Putting the chord into root position reveals that the root of the triad is A. The quality of the triad is major.
+                        The fifth of the triad is in the bass, so the triad is in 2nd inversion. Using figured bass, this triad would be 
+                        identified as A 6/4. Using chord symbols, this triad would be identified as A/E.
                     </Text>
                 </View>
 
