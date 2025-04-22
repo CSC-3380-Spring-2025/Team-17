@@ -104,6 +104,9 @@ const TabBarBackground = () => {
                 tabBarIcon: ({ color, focused }) => (
                   <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
                 ),
+                tabBarItemStyle: {
+                  marginRight: 20
+              }
               }}
             />
             <Tabs.Screen
@@ -118,18 +121,6 @@ const TabBarBackground = () => {
                 title: 'Lessons',
                 tabBarIcon: ({ color, focused }) => (
                   <Ionicons name={focused ? 'school' : 'school-outline'} color={color} size={24} />
-                ),
-                tabBarItemStyle: {
-                    marginRight: 20
-                }
-              }}
-            />
-            <Tabs.Screen
-              name="lessons2"
-              options={{
-                title: 'Lessons2',
-                tabBarIcon: ({ color, focused }) => (
-                  <Ionicons name={focused ? 'mic' : 'mic-outline'} color={color} size={24} />
                 ),
                 tabBarItemStyle: {
                     marginLeft: 20
