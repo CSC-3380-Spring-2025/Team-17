@@ -70,7 +70,7 @@ export default function Chords(){
                         which is indicated using abbreviations. A major triad is indicated with no abbreviation at all. A minor triad 
                         is indicated by a lowercase "m". A diminished triad is indicated by a superscript circle (o). An augmented 
                         triad is indicated by a plus sign (+). If a triad's lowest note is any other note besides the root, then a slash
-                        is added, followed by a capital letter denoting the pitch in the bass (lowest voice).
+                        is added, followed by a capital letter denoting the pitch in the lowest voice.
                     </Text>         
                     <Image 
                         source={require('@/assets/images/chord_symbols.png')}
@@ -202,6 +202,51 @@ export default function Chords(){
                         style={styles.image}
                         resizeMode="contain"
                     />
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Triad Inversion & Figured Bass
+                    </Text>
+                    <Text style={styles.text}>
+                    Musicians often prioritize the lowest note in a harmony, which is called the bass.An <Text style={styles.bold}>inversion</Text> 
+                    is a change in the bass note of a harmony. When a triad is stacked in such a way that the bass note is the root of the triad, then 
+                    the triad is in root position. If the triad is stacked in such a way that the bass note is the third of the triad, then the triad is 
+                    in 1st inversion. If the triad is stacked in such a way that the bass note is the fifth of the triad, then the triad is in 2nd inversion.
+                    It is important to note that the bass note and the root of the triad are NOT the same thing. The root of a triad always remains the same, 
+                    no matter what inversion it is in. The bass note will change depending on the triad's inversion. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/inversions.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Musicians can use chord symbols to indicate inversions with a slash, as discussed earlier. However, musicians 
+                        also use figured bass to indicate inversion. <Text style={styles.bold}>Figured bass</Text> uses numbers to indicate
+                        invervals above the bass note (NOT the root). These numbers are then interpreted as chords by musicians.  
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/figured_bass.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        A root-position triad has a fifth & a third above the bass. A 1st inversion triad has a sixth & a third above the 
+                        bass. A 2nd inversion triad has a sixth & a fourth above the bass. The larger numbers always appear above smaller 
+                        numbers. However, there are abbreviations for figured bass that were meant to save time and resources in writing 
+                        music. These abbreviations are more commonly used today in notating figured bass.  
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/abbreviations.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        No figure appears at all for root position. It is simply assumed that the triad will be in its default position.
+                        1st inversion triads are abbreviated with the number "6" while 2nd inversion triads keep their full figures to 
+                        distinguish them from 1st inversion triads. 
+                    </Text>
                 </View>
 
                 <View style={styles.linksContainer}>
