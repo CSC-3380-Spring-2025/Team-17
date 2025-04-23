@@ -3,9 +3,11 @@ import { View, Text, TextInput, StyleSheet, Pressable, Image } from 'react-nativ
 import Login from '../components/Login';
 import Register from '../components/Register';
 import { Link, Stack } from 'expo-router';
+import { ChallengesProvider } from './context/ChallengesContext';
 
 const account = () => {
   return (
+    <ChallengesProvider>
     <>
       
       <View style={styles.container}>
@@ -16,6 +18,7 @@ const account = () => {
       </View>
       
     </>
+    </ChallengesProvider>
   );
 };
 
