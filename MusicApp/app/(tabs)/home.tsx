@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
-import { Stack } from 'expo-router';
+import { Stack, useNavigation } from 'expo-router';
 import Coins from '../../components/coins'
 import ImageViewer from '@/components/ImageViewer';
 import Streak from'../../components/streak';
@@ -8,6 +8,7 @@ const PlaceholderImage = require('@/assets/images/dog.jpg');
 
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   return (
     <>
       <Stack.Screen
@@ -78,7 +79,9 @@ export default function HomeScreen() {
             <Text style={styles.recordingDuration}>01:36</Text>
           </View>
         </View>
-        <Pressable style={styles.createButton}>
+        <Pressable 
+        style={styles.createButton}
+        onPress={() => navigation.navigate('recorder')}>
           <Text style={styles.createButtonText}>Create New Track</Text>
         </Pressable>
       </ScrollView>
