@@ -101,9 +101,10 @@ export default function Progressions(){
                     </Text>
                     <Text style={styles.text}>
                         The <Text style={styles.bold}>tonic chord</Text> is the chord built on the tonic note, which is the first note of a scale, and it is represented by I in 
-                        major keys and i in minor keys. The tonic chord represents stability and serves as a point of resolution in most musical works. 
+                        major keys and i in minor keys. For example, in the key of C major, the tonic chord would be the C major chord. Likewise, in the key of C minor, 
+                        the tonic chord would be the C minor chord. The tonic chord represents stability and serves as the center of a key and a point of resolution in most musical works. 
                         Music will often begin and end on the tonic chord I. The tonic chord will either appear in root position or 1st inversion as I6. 
-                        It will rarely appear in 2nd inversion as I6/4 because of the dissonant 4th.
+                        It will rarely appear in 2nd inversion as I 6/4 because of the dissonant 4th.
                     </Text>  
                 </View>
 
@@ -111,17 +112,54 @@ export default function Progressions(){
                     <Text style={styles.header}>
                         V & viio: Dominant Chords
                     </Text>
+                    <Text style={styles.text}>
+                        The <Text style={styles.bold}>dominant chord</Text> is the chord build on the dominant note, which is the fifth note of a scale, and it is represented by V in 
+                        major keys. In minor keys, the leading tone is raised, so the dominant chord is represented by V. For example, in the key of C major, the dominant chord would be 
+                        the G major chord. Likewise, in the key of C minor, the dominant chord would also be the G major chord instead of G minor because of the raised leading tone. The 
+                        dominant chord represents instability and always seeks to resolve to the tonic for stability. This is why the leading tone is raised in minor. A raised leading tone 
+                        in a major V chord allows for better resolution to i than the subtonic in a minor v chord. A V chord can appear in root position or 1st inversion as V6, which always 
+                        resolves to root-position I since the leading tone is in the bass.  
+                    </Text>
+                    <Text style={styles.text}>
+                        Additionally, the viio chord can also serve a dominant function and resolve to the tonic. However, it is a much weaker dominant chord than the V chord and is not 
+                        commonly used. It must always be in 1st inversion because in root position, the diminished 5th creates a dissonance. In minor keys, VII is built on the subtonic major 
+                        chord. Because it does not have a raised leading tone, it does not have a dominant function. It is often used to change key from minor to the relative major. It can also 
+                        lead directly to the dominant V6 chord. 
+                    </Text>
                 </View>
 
                 <View style={styles.card}>
                     <Text style={styles.header}>
                         IV & ii: Subdominant Chords
                     </Text>
+                    <Text style={styles.text}>
+                        The <Text style={styles.text}>subdominant chord</Text> is the chord built upon the subdominant note, which is the fourth note of a scale, and it is represented by IV in 
+                        major keys and iv in minor keys. For example in the key of C major, the subdominant chord would be the F major chord. Likewise in the key of C minor, the subdominant chord 
+                        would be the F minor chord. The subdominant chord has a tendency to move to the dominant chord and usually leads to the V chord. However, the subdominant chord can also be 
+                        used to embellish the tonic. Instead of moving to V, the IV chord can lead to I or I6 to prolong the tonic. The IV chord usually appears in root position, but it can also be
+                        used in 1st inversion as IV6, which moves to the V chord in root position. 
+                    </Text>
+                    <Text style={styles.text}>
+                        Additionally, the ii chord can also serve a subdominant function and lead to the dominant. Usually, the ii chord appears in 1st inversion as ii6 so that scale degree 4 will be 
+                        in the bass, thus giving it a strong subdominant function. However, a root position ii chord can also serve this purpose in major keys. In minor keys, a root position iio chord is 
+                        diminished, thus creating a dissonance. Therefore, the root position iio chord should never be used in minor. Only a 1st inversion iio6 chord can be used for subdominant function in minor.
+                    </Text>
                 </View>
 
                 <View style={styles.card}>
                     <Text style={styles.header}>
-                        VI & III: Other Chords
+                        vi & iii: Other Chords
+                    </Text>
+                    <Text style={styles.text}>
+                        The vi chord & the iii chord do not have any real functions. They mainly act as intermediaries between functions and can briefly adopt certain functions in a particular context.
+                        The vi chord can lead from the tonic to the subdominant with a pattern of descending 3rds in the bass. It can also lead to other subdominant chords like ii & IV6. Plus, vi can lead 
+                        to I6 before moving to a subdominant harmony, thus embellishing the tonic. It is less common for vi to lead directly to a dominant chord like V or V6. 
+                    </Text>
+                    <Text style={styles.text}>
+                        The iii chord can be used to move between functions. It shares the same bass & also has two tones in common with I6, so it can briefly adopt a tonic function & replace I6. 
+                        By carrying a tonic function, the iii chord can lead to subdominant or dominant harmonies. In a III chord in minor keys, the scale degree 7 is not raised and thus does not need to resolve to the tonic, 
+                        so III is used to harmonic melodies where 7 descends to 6. The iii chord can be used in 1st inversion as iii6 & III6+, both of which have scale degree 5 in the bass & are thus treated 
+                        as a root-position V chord with an embellishing 6th. They carry a dominant function & can substitute for V. 
                     </Text>
                 </View>
 
