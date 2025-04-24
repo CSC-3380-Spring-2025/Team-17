@@ -407,7 +407,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
     header: {
         color: '#5543A5',
         fontSize: 24,
@@ -444,8 +443,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         alignSelf: 'center'
     },
-
-
     quizContainer: {
         height: 100,
         width: 200,
