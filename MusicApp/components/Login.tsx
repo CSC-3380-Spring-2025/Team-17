@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
-import { auth, db, storeLoginDate, checkConsecutiveDays } from '../firebaseConfig';
+import { auth, db, checkConsecutiveDays } from '../firebaseConfig';
 import { Text, StyleSheet, TextInput, View, Pressable } from 'react-native';
 import { useAuth } from "@/app/context/AuthContext";
 import { Link } from 'expo-router';
+import StoreLoginDate from './StoreLoginDate';
+import { useChallenges } from '@/app/context/ChallengesContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
-
+  
   const handleEmailInputChange = (input: React.SetStateAction<string>) => {
     setEmail(input);
   };
@@ -25,12 +27,13 @@ const Login = () => {
       const user = userCredential.user;
       if (user) {
         if (user.emailVerified) {
-          await storeLoginDate(user.uid);
+          await login({ name: user.displayName || "" });
+          await StoreLoginDate(user.uid); // Pass handleTaskCompletion here
           const userDoc = await getDoc(doc(db, "users", user.uid));
           const loginDates = userDoc.data()?.loginDates || [];
           const consecutiveDays = checkConsecutiveDays(loginDates, user.uid);
           const name = user.displayName || "";
-          login({ name: user.displayName || "" });
+         
           if (consecutiveDays > 1) {
             alert(`Login Successful! Great job ${name}! You've logged in for ${consecutiveDays} consecutive days!`);
           } else {
@@ -68,7 +71,6 @@ const Login = () => {
         placeholderTextColor="#000"
         onChangeText={handleEmailInputChange}
         autoCapitalize='none'
-
       />
       <TextInput
         style={styles.input}
@@ -78,14 +80,13 @@ const Login = () => {
         onChangeText={handlePasswordInputChange}
         secureTextEntry
         autoCapitalize='none'
-
       />
       <Pressable style={styles.signInButton} onPress={handleLogin}>
         <Text style={styles.signInText}>Sign In</Text>
       </Pressable>
       <Link href="/registrationPage" style={styles.createLink}>
-  <Text style={styles.createLinkText}>Create New Account</Text>
-</Link>
+        <Text style={styles.createLinkText}>Create New Account</Text>
+      </Link>
     </View>
   );
 };

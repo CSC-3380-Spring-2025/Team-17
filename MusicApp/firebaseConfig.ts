@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, increment } from "firebase/firestore";
 // import {...} from 'firebase/database';
 // import {...} from 'firebase/firestore';
 // import {...} from 'firebase/functions';
@@ -40,20 +40,7 @@ export async function authenticateUser(email: string, password: string) {
   }
 }
 
-export const storeLoginDate = async(userId: string)=> {
-  const userRef = doc(db, "users", userId);
-  const userDoc = await getDoc(userRef);
 
-  if (userDoc.exists()){
-    await updateDoc(userRef,{
-      loginDates: arrayUnion(new Date().toISOString().split('T')[0])
-    });
-  }else{
-    await setDoc(userRef, {
-      loginDates: [new Date().toISOString().split('T')[0]]
-    });
-  }
-};
 
 export const checkConsecutiveDays=(loginDates: string[], userId: string)=>{
   let consecutiveDays = 1;
@@ -85,27 +72,19 @@ export const updateStreak = async(userId: string, confirmedConsecDays: number)=>
   });
 };
 
-export const addCoins = async (userId: string, coins: number) => {
-  try {
-    const userRef = doc(db, "users", userId);
-    const userDoc = await getDoc(userRef);
 
-    if (userDoc.exists()) {
-      const currentCoins = userDoc.data()?.coins || 0;
-      const newCoinBalance = currentCoins + coins;
-      await updateDoc(userRef, {
-        coins: newCoinBalance
-      });
-      console.log(`Coins updated successfully. New balance: ${newCoinBalance}`);
-    } else {
-      const newCoinRef=doc(collection(db, "users"), userId);
-      await setDoc(newCoinRef, {coins})
-      console.error("User document does not exist");
-    }
-  } catch (error) {
-    console.error("Error updating coins:", error);
+
+export const addCoins = async (userId: string, coins: number) => {
+  if (!userId) {
+    throw new Error("User ID is required to add coins.");
   }
+
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, {
+    coins: increment(coins)
+  });
 };
+
 
 
 export const updateCoins = async(userId: string, coins: number)=> {
