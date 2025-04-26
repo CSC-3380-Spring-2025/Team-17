@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
-import { useAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
 
 export default function Pitch(){
-    const flute1 = useAudioPlayer(require('@/assets/sounds/flute1.mp3'));
-    const flute2 = useAudioPlayer(require('@/assets/sounds/flute2.mp3'));
-    const trombone1 = useAudioPlayer(require('@/assets/sounds/trombone1.mp3'));
-    const trombone2 = useAudioPlayer(require('@/assets/sounds/trombone2.mp3'));
-    const viola1 = useAudioPlayer(require('@/assets/sounds/viola1.mp3'));
-    const viola2 = useAudioPlayer(require('@/assets/sounds/viola2.mp3'));
-    const cello1 = useAudioPlayer(require('@/assets/sounds/cello1.mp3'));
-    const cello2 = useAudioPlayer(require('@/assets/sounds/cello2.mp3'));
-    const piano1 = useAudioPlayer(require('@/assets/sounds/piano1.mp3'));
-    const piano2 = useAudioPlayer(require('@/assets/sounds/piano2.mp3'));
+    const flute1 = useRef(new Audio.Sound());
+    const flute2 = useRef(new Audio.Sound());
+    const trombone1 = useRef(new Audio.Sound());
+    const trombone2 = useRef(new Audio.Sound());
+    const viola1 = useRef(new Audio.Sound());
+    const viola2 = useRef(new Audio.Sound());
+    const cello1 = useRef(new Audio.Sound());
+    const cello2 = useRef(new Audio.Sound());
+    const piano1 = useRef(new Audio.Sound());
+    const piano2 = useRef(new Audio.Sound());
 
     const [quiz1Answer, setQ1Answer] = useState(null);
         const [quiz2Answer, setQ2Answer] = useState(null);
@@ -21,6 +21,36 @@ export default function Pitch(){
         const answer1 = "G,A,B,C,D,E,F,G,A";
         const answer2 = "Raises the Note by a 1/2 Step";
         const answer3 = "False";
+
+            useEffect(() => {
+                const loadSounds = async () => {
+                    await flute1.current.loadAsync(require('@/assets/sounds/flute1.mp3'));
+                    await flute2.current.loadAsync(require('@/assets/sounds/flute2.mp3'));
+                    await trombone1.current.loadAsync(require('@/assets/sounds/trombone1.mp3'));
+                    await trombone2.current.loadAsync(require('@/assets/sounds/trombone2.mp3'));
+                    await viola1.current.loadAsync(require('@/assets/sounds/viola1.mp3'));
+                    await viola2.current.loadAsync(require('@/assets/sounds/viola2.mp3'));
+                    await cello1.current.loadAsync(require('@/assets/sounds/cello1.mp3'));
+                    await cello2.current.loadAsync(require('@/assets/sounds/cello2.mp3'));
+                    await piano1.current.loadAsync(require('@/assets/sounds/piano1.mp3'));
+                    await piano2.current.loadAsync(require('@/assets/sounds/piano2.mp3'));
+                };
+        
+                loadSounds();
+        
+                return() => {
+                    flute1.current.unloadAsync();
+                    flute2.current.unloadAsync();
+                    trombone1.current.unloadAsync();
+                    trombone2.current.unloadAsync();
+                    viola1.current.unloadAsync();
+                    viola2.current.unloadAsync();
+                    cello1.current.unloadAsync();
+                    cello2.current.unloadAsync();
+                    piano1.current.unloadAsync();
+                    piano2.current.unloadAsync();
+                };
+            }, []);
 
     return(
         <ScrollView 
@@ -67,12 +97,12 @@ export default function Pitch(){
                         <Button 
                             color='#4CAF50' 
                             title="Play flute" 
-                            onPress={() => flute1.play()} 
+                            onPress={() => flute1.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause flute" 
-                            onPress={() => flute1.pause()} 
+                            onPress={() => flute1.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -88,12 +118,12 @@ export default function Pitch(){
                         <Button 
                             color='#4CAF50' 
                             title="Play flute" 
-                            onPress={() => flute2.play()} 
+                            onPress={() => flute2.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause flute" 
-                            onPress={() => flute2.pause()} 
+                            onPress={() => flute2.current.pauseAsync()} 
                         />
                     </View>
                 </View>
@@ -115,12 +145,12 @@ export default function Pitch(){
                         <Button 
                             color='#4CAF50' 
                             title="Play trombone" 
-                            onPress={() => trombone1.play()} 
+                            onPress={() => trombone1.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause trombone" 
-                            onPress={() => trombone1.pause()} 
+                            onPress={() => trombone1.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -136,12 +166,12 @@ export default function Pitch(){
                         <Button 
                             color='#4CAF50' 
                             title="Play trombone" 
-                            onPress={() => trombone2.play()} 
+                            onPress={() => trombone2.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause trombone" 
-                            onPress={() => trombone2.pause()} 
+                            onPress={() => trombone2.current.pauseAsync()} 
                         />
                     </View>
                 </View>                
@@ -162,12 +192,12 @@ export default function Pitch(){
                         <Button 
                             color='#4CAF50' 
                             title="Play viola" 
-                            onPress={() => viola1.play()} 
+                            onPress={() => viola1.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause viola" 
-                            onPress={() => viola1.pause()} 
+                            onPress={() => viola1.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -183,12 +213,12 @@ export default function Pitch(){
                         <Button 
                             color='#4CAF50' 
                             title="Play viola" 
-                            onPress={() => viola2.play()} 
+                            onPress={() => viola2.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause viola" 
-                            onPress={() => viola2.pause()} />
+                            onPress={() => viola2.current.pauseAsync()} />
                     </View>
                 </View>
 
@@ -209,12 +239,12 @@ export default function Pitch(){
                     <Button 
                         color='#4CAF50' 
                         title="Play cello" 
-                        onPress={() => cello1.play()} 
+                        onPress={() => cello1.current.playAsync()} 
                     />
                     <Button 
                         color='#F44336' 
                         title="Pause cello"  
-                        onPress={() => cello1.pause()} 
+                        onPress={() => cello1.current.pauseAsync()} 
                     />
                 </View>
                 <Text style={styles.text}>
@@ -230,12 +260,12 @@ export default function Pitch(){
                     <Button 
                         color='#4CAF50' 
                         title="Play cello"  
-                        onPress={() => cello2.play()} 
+                        onPress={() => cello2.current.playAsync()} 
                     />
                     <Button 
                         color='#F44336' 
                         title="Pause cello" 
-                        onPress={() => cello2.pause()} />
+                        onPress={() => cello2.current.pauseAsync()} />
                 </View>
             </View>
 
@@ -280,11 +310,11 @@ export default function Pitch(){
                     <Button 
                         color='#4CAF50' 
                         title="Play piano" 
-                        onPress={() => piano1.play()} />
+                        onPress={() => piano1.current.playAsync()} />
                     <Button 
                         color='#F44336' 
                         title="Pause piano" 
-                        onPress={() => piano1.pause()} />
+                        onPress={() => piano1.current.pauseAsync()} />
                 </View>
             </View>
             <View style={styles.card}>
@@ -339,11 +369,11 @@ export default function Pitch(){
                     <Button 
                         color='#4CAF50' 
                         title="Play piano" 
-                        onPress={() => piano2.play()} />
+                        onPress={() => piano2.current.playAsync()} />
                     <Button 
                         color='#F44336' 
                         title="Pause piano" 
-                        onPress={() => piano2.pause()} />
+                        onPress={() => piano2.current.pauseAsync()} />
                 </View>
                 <Text style={styles.text}>
                     Each key on the keyboard has more than one name. <b>Enharmonic equivalence</b> is when two notes have different names, 
