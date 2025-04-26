@@ -312,12 +312,12 @@ export default function Intervals() {
 
 
 
-                <div>
+                <View>
                     <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
 
-                    <view style={styles.quizContainer}>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            1. An Interval is <b>harmonic</b> when sung or played
+                            1. An Interval is  harmonic  when sung or played
                         </Text>
                         {["Separately", "Simultaneously", "One after the Other", "Twice"].map((option, index) => {
                             const selected = quiz1Answer === option;
@@ -362,11 +362,11 @@ export default function Intervals() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
+                    </View>
 
-                    <view style={styles.quizContainer}>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            2. Which one of these is <b>NOT</b> a quality of intervals?
+                            2. Which one of these is  NOT  a quality of intervals?
                         </Text>
                         {["Augmented", "Major", "Perfect", "Flat", "Diminished"].map((option, index) => {
                             const selected = quiz2Answer === option;
@@ -411,9 +411,9 @@ export default function Intervals() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
+                    </View>
 
-                    <view style={styles.quizContainer}>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
                             The sizes of Inverted Pairs always add up to what?
                         </Text>
@@ -461,8 +461,8 @@ export default function Intervals() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
-                    <view style={styles.quizContainer}>
+                    </View>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
                             4. Dissonant Intervals are more stable
                         </Text>
@@ -510,10 +510,10 @@ export default function Intervals() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
-                    <view style={styles.quizContainer}>
+                    </View>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            5. Any interval <b>larger</b> than an octave is a Compound Interval
+                            5. Any interval  larger  than an octave is a Compound Interval
                         </Text>
                         {["3", "6", "7", "9"].map((option, index) => {
                             const selected = quiz5Answer === option;
@@ -559,8 +559,8 @@ export default function Intervals() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
-                </div>
+                    </View>
+                </View>
 
                 <View style={styles.linksContainer}>
 
