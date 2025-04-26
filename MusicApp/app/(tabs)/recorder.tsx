@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FileUploader from '@/components/fileUploader'
 import {
   View,
   Text,
@@ -10,6 +11,7 @@ import {
   SafeAreaView,
   Alert,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';
@@ -30,6 +32,13 @@ interface AudioTrack {
   reverb?: boolean;
   fadeIn?: number;
   fadeOut?: number;
+}
+
+interface uploadedDocument{
+  name: string;
+  mimeType: string;
+  size: number;
+  uri: string;
 }
 
 interface SoundSettingsModalProps {
@@ -158,6 +167,7 @@ const SoundSettingsModal: React.FC<SoundSettingsModalProps> = ({ visible, track,
               <Text style={styles.modalButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
+          
         </View>
       </View>
     </Modal>
@@ -441,6 +451,16 @@ const LiveMixingPage: React.FC = () => {
     setTracks(prev => [...prev, newTrack]);
   };
 
+  const handleFileUpload = (document: uploadedDocument)=>{
+    const newTrack:AudioTrack={
+      id:`file_${Date.now()}`,
+      url: document.uri,
+      title: document.name,
+      artist: '',
+      sourceType: 'local-file',
+    };
+    setTracks(prev=>[...prev, newTrack]);
+  };
   const renderTrackItem = ({ item }: { item: AudioTrack }) => (
     <View style={styles.trackItem}>
       <View style={styles.trackInfo}>
@@ -527,6 +547,7 @@ const LiveMixingPage: React.FC = () => {
         onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <Text style={styles.modalTitle}>Add New Track</Text>
             
             <TouchableOpacity
@@ -537,15 +558,21 @@ const LiveMixingPage: React.FC = () => {
             
             <TouchableOpacity
               style={styles.modalOption}
+
+              
               onPress={() => addTrack('virtual-instrument')}>
               <Text style={styles.modalOptionText}>Virtual Instrument</Text>
             </TouchableOpacity>
             
+            <FileUploader onFileUpload={handleFileUpload}
+             setModalVisible={setModalVisible}/>
+
             <TouchableOpacity
               style={styles.modalClose}
               onPress={() => setModalVisible(false)}>
               <Text style={styles.modalCloseText}>Cancel</Text>
             </TouchableOpacity>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -814,6 +841,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
   },
+  
+scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
 });
 
 export default LiveMixingPage;
