@@ -1,8 +1,55 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Link} from 'expo-router';
-
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 export default function Intro() {
+    const [userId, setUserId]= useState('');
+
+    useEffect(()=>{
+        if (auth.currentUser){
+          setUserId(auth.currentUser.uid);
+        }
+      }, []);
+    
+      useEffect(()=>{
+          const fetchUserData= async()=>{
+            if(userId){
+              console.log('Fetching data for userId:', userId);
+      
+              try{
+                const userDocRef= doc(db, 'users', userId);
+                const userDoc = await getDoc(userDocRef)
+                
+                if (userDoc.exists()) {
+                  console.log('Document data:', userDoc.data());
+                  const userData = userDoc.data();
+                  if(userData.lessonProgress){
+                    if(!userData.lessonProgress.includes(1)){
+                        await updateDoc(userDocRef, {
+                            lessonProgress: arrayUnion(1),
+                        });
+                    }
+                  }else{
+                    await setDoc(userDocRef, {
+                        lessonProgress:[1],
+                    }, {merge: true});
+                  }
+                } else {
+                  await setDoc(userDocRef, {
+                    lessonProgress: [1],
+                  });
+                }
+        
+              }catch(error){
+                console.error('Error fetching user data:', error);
+              }
+            }
+          };
+          fetchUserData();
+        }, [userId]);
+    
+
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
