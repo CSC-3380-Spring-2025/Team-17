@@ -3,9 +3,8 @@ import { Link, Stack } from 'expo-router';
 import Coins from '../../components/coins'
 import Streak from'../../components/streak';
 import React, {useState, useEffect} from 'react';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore';
-import {auth, db} from '../../firebaseConfig';
-import {useChallenges} from '../context/ChallengesContext';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 type LessonLink=
@@ -30,8 +29,7 @@ export default function HomeScreen() {
   const [lessonTitle, setLessonTitle]= useState('');
   const [lessonImage, setLessonImage]= useState(PlaceholderImage);
   const [lessonLink, setLessonLink]= useState<LessonLink>('/lessons/1intro')
-  const {handleTaskCompletion}=useChallenges();    
-  useEffect(()=>{
+      useEffect(()=>{
           if (auth.currentUser){
             setUserId(auth.currentUser.uid);
           }
@@ -137,33 +135,6 @@ useEffect(()=>{
       break;
 }
 }, [lessonNumber]);
-
-useEffect(()=>{
-  const checkAndUpdateLoginDates = async()=>{
-    if(!userId) return;
-    const currentDate = new Date().toISOString().split('T')[0];
-
-    try{
-      const docRef= doc(db, 'users', userId);
-      const docSnap= await getDoc(docRef);
-      if(docSnap.exists()){
-        const data = docSnap.data();
-        const homeAccessDates=data.homeAccessDates||[];
-        if(!homeAccessDates.includes(currentDate)){
-          await updateDoc(docRef, {
-            homeAccessDates: arrayUnion(currentDate)
-          });
-          handleTaskCompletion("Login three days in a row")
-        }
-      }else{
-        console.log("No such document");
-      }
-    }catch(error){
-      console.error("Error fetching document: ", error);
-    }
-  };
-  checkAndUpdateLoginDates();
-}, [userId]);
   return (
     <>
       <Stack.Screen
