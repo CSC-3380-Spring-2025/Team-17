@@ -220,10 +220,10 @@ export default function Notation(){
                
 
 
-            <div>
+            <View>
                 <Text style = {styles.quizTitle}>Quiz</Text>
-                <br></br>
-            <view style = {styles.quizContainer}>
+                 
+            <View style = {styles.quizContainer}>
                     <Text style={styles.quizText}>
                         A musical note represents what?
                     </Text>
@@ -251,9 +251,9 @@ export default function Notation(){
                             {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-                <br></br>
-                <view style = {styles.quizContainer}>
+                </View>
+                 
+                <View style = {styles.quizContainer}>
                     <Text style={styles.quizText}>
                         If a note is in a space, it can go beyond the lines.
                     </Text>
@@ -281,11 +281,11 @@ export default function Notation(){
                             {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-                <br></br>
-                <view style = {styles.quizContainer}>
+                </View>
+                 
+                <View style = {styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        What term means <b>moderately loud</b>?
+                        What term means  moderately loud ?
                     </Text>
                     {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) =>{
                         const selected = quiz3Answer === option;
@@ -311,8 +311,8 @@ export default function Notation(){
                             {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-            </div>
+                </View>
+            </View>
 
              <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>

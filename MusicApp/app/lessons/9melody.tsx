@@ -172,10 +172,10 @@ export default function Melody() {
                 </View>
 
 
-                <div>
+                <View>
                     <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
 
-                    <view style={styles.quizContainer}>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
                             1. Melodies are comprised of singular notes organized rhythmically
                         </Text>
@@ -222,9 +222,9 @@ export default function Melody() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
+                    </View>
 
-                    <view style={styles.quizContainer}>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
                             2. The highest/lowest note in a melody is a/an ______
                         </Text>
@@ -271,9 +271,9 @@ export default function Melody() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
+                    </View>
 
-                    <view style={styles.quizContainer}>
+                    <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
                             3. Short Phrases can be Grouped together to form a loneger Phrase.
                         </Text>
@@ -321,8 +321,8 @@ export default function Melody() {
                         >
                             <Text style={styles.resetButtonText}>Reset</Text>
                         </Pressable>
-                    </view>
-                </div>
+                    </View>
+                </View>
 
 
 
