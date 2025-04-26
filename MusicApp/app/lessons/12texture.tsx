@@ -8,6 +8,10 @@ export default function Texture(){
     const oboe = useAudioPlayer(require('@/assets/sounds/messiaen_oboe.mp3'));
     const seikilos = useAudioPlayer(require('@/assets/sounds/seikilos.mp3'));
     const turkey = useAudioPlayer(require('@/assets/sounds/turkey.mp3'));
+    const handel = useAudioPlayer(require('@/assets/sounds/handel.mp3'));
+    const jazz = useAudioPlayer(require('@/assets/sounds/jazz.mp3'));
+    const canon = useAudioPlayer(require('@/assets/sounds/canon.mp3'));
+    const chakrulo = useAudioPlayer(require('@/assets/sounds/chakrulo.mp3'));
 
     return(
         <ScrollView 
@@ -21,7 +25,7 @@ export default function Texture(){
                 
                 <View style={styles.card}>
                     <Text style={styles.text}>
-                        <Text style={styles.bold}>Musical texture</Text> is the density of & interaction between the different voices in 
+                        <Text style={styles.bold}>Musical texture</Text> is the density of and interaction between the different voices in 
                         a musical work. There are many different types of textures, but the four most common categories are monophony, 
                         heterophony, homophony, & polyphony. 
                     </Text>
@@ -37,8 +41,8 @@ export default function Texture(){
                         simplest & most exposed of all musical textures. 
                     </Text>
                     <Text style={styles.text}>
-                        J. S. Bach's Cello Suite No. 1 in G Major features a solo cello that is the only voice in this work. It carries a melodic line 
-                        all by itself with no accompaniment whatsoever. This is a good example of a monophonic texture. 
+                        Johann Sebastian Bach's Cello Suite No. 1 in G Major features a solo cello that is the only voice in this work. It carries a melodic line 
+                        all by itself with no accompaniment whatsoever. Thus, this is a good example of a monophonic texture. 
                     </Text>
                     <View style={styles.card}>
                         <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
@@ -93,7 +97,7 @@ export default function Texture(){
                         The Song of Seikilos is the oldest song ever recovered in its entirety. It was composed by Seikilos in ancient Greece in 200 BC 
                         in memory of his dead wife. There are two voices: a plucked string instrument and a soprano voice. The two voices play the same   
                         melodic line in unison, but the soprano voice uses certain embellishments to create variation & distinction between the voices. 
-                        This is a good example of a heterophonic texture. 
+                        Thus, this is a good example of a heterophonic texture. 
                     </Text>
                     <View style={styles.card}>
                         <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
@@ -146,6 +150,54 @@ export default function Texture(){
                         while the other voices are used to provide harmonies. Homophony is sometimes divided into two subcategories: homorhythm and 
                         melody & accompaniment. 
                     </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Homorhythm</Text> is a type of homophonic texture in which all voices move in a similar or 
+                        completely unison rhythm. This is mostly seen in choral music, where the melody & harmonies move in block chords. The  
+                        "Hallelujah" chorus from George Frederic Handel's Messiah features homorhythmic sections where all voices are 
+                        moving in the same rhythm. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            "Hallelujah" Chorus from the Messiah - George Frederic Handel
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button 
+                                color='#4CAF50' 
+                                title="Play Homophony" 
+                                onPress={() => handel.play()} 
+                            />
+                            <Button 
+                                color='#F44336' 
+                                title="Pause Homophony" 
+                                onPress={() => handel.pause()} 
+                            /> 
+                        </View>
+                    </View>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Melody & accompaniment</Text> is the most common type of homophony. This texture is characterized 
+                        by a clear melody that is distinct from the other supporting voices, which are called an accompaniment. The melody will often 
+                        have a different rhythm than the accompanying voices. The classic jazz song "Love is Here to Stay" by Louis Armstrong & Ella 
+                        Fitzgerald features a prominent melody sung by both Armstrong & Fitzgerald & accompanied by harmony in the other instruments. 
+                        The melody & accompaniment are never really in rhythmic unison, but the accompanying instruments support the vocal melody by 
+                        filling out the texture harmonically.
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Love is Here to Stay - Louis Armstrong & Ella Fitzgerald
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button 
+                                color='#4CAF50' 
+                                title="Play Homophony" 
+                                onPress={() => jazz.play()} 
+                            />
+                            <Button 
+                                color='#F44336' 
+                                title="Pause Homophony" 
+                                onPress={() => jazz.pause()} 
+                            /> 
+                        </View>
+                    </View>
                 </View>
 
                 <View style={styles.card}>
@@ -156,6 +208,50 @@ export default function Texture(){
                         <Text style={styles.bold}>Polyphony</Text> is a texture characterized by multiple voices having separate melodic lines & 
                         rhythms. Each voice has its own independent melodic line, and the independent voices blend together to create harmonies.  
                     </Text>
+                    <Text style={styles.text}>
+                        Johann Pachelbel's Canon in D utilizes a canon technique, in which different instruments play the melody at different times, 
+                        and as the instruments sound together, the voices overlap & interwine with each other, giving each instrument its own independent melodic line. 
+                        Thus, this is a good example of a polyphonic texture. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Canon in D - Johann Pachelbel
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button 
+                                color='#4CAF50' 
+                                title="Play Polyphony" 
+                                onPress={() => canon.play()} 
+                            />
+                            <Button 
+                                color='#F44336' 
+                                title="Pause Polyphony" 
+                                onPress={() => canon.pause()} 
+                            /> 
+                        </View>
+                    </View>
+                    <Text style={styles.text}>
+                        Chakrulo is a Georgian folk choral song that appeared in the Kakheti region. It consists of two individual vocalists 
+                        singing against the background of a slow chorus. The two vocalists and the chorus are singing independent melodic lines 
+                        at different rhythms. This is another good example of a polyphonic texture. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Chakrulo
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button 
+                                color='#4CAF50' 
+                                title="Play Polyphony" 
+                                onPress={() => chakrulo.play()} 
+                            />
+                            <Button 
+                                color='#F44336' 
+                                title="Pause Polyphony" 
+                                onPress={() => chakrulo.pause()} 
+                            /> 
+                        </View>
+                    </View>
                 </View>
 
                 <View style={styles.linksContainer}>
