@@ -120,10 +120,10 @@ export default function Rhythm(){
                     </Text>
                 </View>
 
-            <div>
+            <View>
                 <Text style={styles.quizTitle}>Quiz</Text>
-                <br></br>
-                <view style={styles.quizContainer}>
+                 
+                <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
                         2 Quarters and 1 Half Note Equals to 1 Whole Note
                     </Text>
@@ -151,11 +151,11 @@ export default function Rhythm(){
                             {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-                <br></br>
-                <view style={styles.quizContainer}>
+                </View>
+                 
+                <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        How many <b>Thirty-Second Notes</b> are in an Eigth Note?
+                        How many  Thirty-Second Notes  are in an Eigth Note?
                     </Text>
                     {["2", "4", "6", "8"].map((option, index) => {
                         const selected = quiz2Answer === option;
@@ -181,11 +181,11 @@ export default function Rhythm(){
                             {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-                <br></br>
-                <view style={styles.quizContainer}>
+                </View>
+                 
+                <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        A <b>Dot</b> increases the duration of a note by what?
+                        A  Dot  increases the duration of a note by what?
                     </Text>
                     {["1/6", "1/4", "1/2", "1"].map((option, index) => {
                         const selected = quiz3Answer === option;
@@ -211,11 +211,11 @@ export default function Rhythm(){
                             {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-                <br></br>
-                <view style={styles.quizContainer}>
+                </View>
+                 
+                <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        A <b>Tie</b> is essentially the same as a <b>Slur</b>
+                        A  Tie  is essentially the same as a  Slur 
                     </Text>
                     {["True", "False"].map((option, index) => {
                         const selected = quiz4Answer === option;
@@ -241,8 +241,8 @@ export default function Rhythm(){
                             {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-            </div>
+                </View>
+            </View>
             <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./3pitch' style={styles.secondaryLink}>

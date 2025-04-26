@@ -178,7 +178,7 @@ export default function Pitch(){
                 
                 <View style={styles.card}>
                     <Text style={styles.text}>
-                        <b>Alto Clef: </b> The alto clef is a less widely used clef in Western music. It is typically used for the viola, which is a 
+                         Alto Clef:   The alto clef is a less widely used clef in Western music. It is typically used for the viola, which is a 
                         middle-range instrument. Because this clef is centered around the C line (the middle line), it is also called the 
                         C clef. The lines in the alto clef are used to notate the pitches F, A, C, E, G. This pattern can be 
                         remembered by the mnemonic device "Fat Alley Cats Eat Garbage".
@@ -224,7 +224,7 @@ export default function Pitch(){
 
             <View style={styles.card}>
                 <Text style={styles.text}>
-                    <b>Tenor Clef: </b> The tenor clef is another less widely used clef in Western music. It is typically used for 
+                     Tenor Clef:   The tenor clef is another less widely used clef in Western music. It is typically used for 
                     lower-range instruments, like the cello, bassoon, and trombone, but their main clef is the bass clef. 
                     This clef looks just like the alto clef and is also called the C clef, but it is centered around the second line 
                     from the top. The lines in the alto clef are used to notate the pitches D, F, A, C, E. This pattern can be 
@@ -287,7 +287,7 @@ export default function Pitch(){
                 <Text style={styles.text}>
                     The image below shows the piano keyboard with the white keys labeled with the different pitches. The same letter 
                     names appear on different keys of the keyboard as the pitch pattern repeats. The distance between two keys or pitches 
-                    of the same name is called an <b>octave</b>.
+                    of the same name is called an  octave .
                 </Text>
                 <Image 
                     source={require('@/assets/images/keyboard.png')} 
@@ -295,10 +295,10 @@ export default function Pitch(){
                     resizeMode="contain"
                 />
                 <Text style={styles.text}>
-                    Music for the piano is written on a grand staff. A <b>grand staff</b> is a combination of the treble and bass clefs. 
+                    Music for the piano is written on a grand staff. A  grand staff  is a combination of the treble and bass clefs. 
                     The treble clef is on top of the bass clef, and both clefs are connected by a brace and a line. Typically, the pianist 
                     plays the notes in the treble clef with the right hand and the notes in the bass clef with the left hand. In between 
-                    the treble and bass clefs, there exists a C note known as <b>middle C</b>, not only because it is in the middle of the 
+                    the treble and bass clefs, there exists a C note known as  middle C , not only because it is in the middle of the 
                     grand staff, but also because it lies in the middle of the piano keyboard. 
                 </Text>
                 <Image 
@@ -322,7 +322,7 @@ export default function Pitch(){
                     Half Steps, Whole Steps, & Accidentals
                 </Text>
                 <Text style={styles.text}>
-                    A <b>half step</b> is considered to be the smallest interval (distance between two notes) in Western music. 
+                    A  half step  is considered to be the smallest interval (distance between two notes) in Western music. 
                     For most of the white keys on the piano keyboard, the black keys to the right and left of a white key will be the 
                     half-steps above and below that note. However, two pairs of white keys do not have black keys between them. The note 
                     pairs E-F & B-C are both half steps. 
@@ -333,7 +333,7 @@ export default function Pitch(){
                     resizeMode="contain"
                 />
                 <Text style={styles.text}>
-                    A <b>whole step</b> is equal to two half steps. Counting two keys to the right or the left of any note on the piano 
+                    A  whole step  is equal to two half steps. Counting two keys to the right or the left of any note on the piano 
                     keyboard will get a whole step above or below that note. Pairs of white keys with a black key between them or pairs of
                     black keys with a white key between them are a whole step apart. 
                 </Text>
@@ -343,9 +343,9 @@ export default function Pitch(){
                     resizeMode="contain"
                 />
                 <Text style={styles.text}>
-                    An <b>accidental</b> changes the pitch of a note. A <b>sharp</b> raises a note by a half step. A <b>flat</b> lowers a note 
-                    by a half step. A <b>double sharp</b>raises a note by a whole step. A <b>double flat</b> lowers a note by a whole step. 
-                    A <b>natural</b> cancels out any previous accidental. Accidentals are always written to the left of a note, regardless of 
+                    An  accidental  changes the pitch of a note. A  sharp  raises a note by a half step. A  flat  lowers a note 
+                    by a half step. A  double sharp raises a note by a whole step. A  double flat  lowers a note by a whole step. 
+                    A  natural  cancels out any previous accidental. Accidentals are always written to the left of a note, regardless of 
                     stem direction, and they are written directly across the line or space on which a note appears. 
                 </Text>
                 <Image 
@@ -376,16 +376,16 @@ export default function Pitch(){
                         onPress={() => piano2.current.pauseAsync()} />
                 </View>
                 <Text style={styles.text}>
-                    Each key on the keyboard has more than one name. <b>Enharmonic equivalence</b> is when two notes have different names, 
+                    Each key on the keyboard has more than one name.  Enharmonic equivalence  is when two notes have different names, 
                     but they have the same sound. C# & Db are enharmonically equivalent, so playing either of those notes will result in the 
                     same pitch. D is enharmonically equivalent with Cx & Ebb, so playing D, Cx, or Ebb will result in the same pitch. 
                 </Text>
             </View>
             
-            <div>
+            <View>
                             <Text style = {styles.quizTitle}>Quiz</Text>
-                            <br></br>
-                        <view style = {styles.quizContainer}>
+                             
+                        <View style = {styles.quizContainer}>
                                 <Text style={styles.quizText}>
                                     In what order are pitches notated with a Bass Clef
                                 </Text>
@@ -413,11 +413,11 @@ export default function Pitch(){
                                         {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
                                     </Text>
                                 )}
-                            </view>
-                            <br></br>
-                            <view style = {styles.quizContainer}>
+                            </View>
+                             
+                            <View style = {styles.quizContainer}>
                                 <Text style={styles.quizText}>
-                                    What does a <b>Sharp</b> do to a note?
+                                    What does a  Sharp  do to a note?
                                 </Text>
                                 {["Raises the Note by a 1/2 Step", "Raises the note by a Whole Step", "Lowers the note by a 1/2 Step", "Lowers the note by a Whole Step"].map((option, index) =>{
                                     const selected = quiz2Answer === option;
@@ -443,11 +443,11 @@ export default function Pitch(){
                                         {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
                                     </Text>
                                 )}
-                            </view>
-                            <br></br>
-                            <view style = {styles.quizContainer}>
+                            </View>
+                             
+                            <View style = {styles.quizContainer}>
                                 <Text style={styles.quizText}>
-                                    An <b>Enharmonic Equivalence</b> can also occur when two notes have the same name but different sounds.
+                                    An  Enharmonic Equivalence  can also occur when two notes have the same name but different sounds.
                                 </Text>
                                 {["True", "False"].map((option, index) =>{
                                     const selected = quiz3Answer === option;
@@ -473,8 +473,8 @@ export default function Pitch(){
                                         {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
                                     </Text>
                                 )}
-                            </view>
-                        </div>
+                            </View>
+                        </View>
                         <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./2notation' style={styles.secondaryLink}>
