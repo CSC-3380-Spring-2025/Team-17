@@ -1,13 +1,17 @@
 // recordertest.tsx
 import { useState } from 'react';
-import { View, StyleSheet, Button, FlatList, Text, TouchableOpacity, Pressable } from 'react-native';
+import { View, StyleSheet, Button, FlatList, Text, TouchableOpacity, Pressable, TextInput } from 'react-native';
 import { Audio } from 'expo-av';
 import { useAudioContext } from './AudioContext';
 
 export default function App() {
-  const [recording, setRecording] = useState();
+  const [recording, setRecording] = useState<Audio.Recording | undefined>(undefined);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const { recordings, addRecording } = useAudioContext();
+  const { recordings, addRecording, updateRecordings } = useAudioContext();
+
+  if (permissionResponse === null){
+    return <Text>Loading...</Text>;
+  }
 
   async function startRecording() {
     try {
@@ -44,6 +48,7 @@ export default function App() {
     addRecording({
       uri: uri,
       name: `Recording ${recordings.length + 1}`,
+      isEditing: false,
     });
     console.log('Recording stopped and stored at', uri);
   }
@@ -59,14 +64,37 @@ export default function App() {
     });
   }
 
+  function toggleEditing(index: number) {
+    const updatedRecordings = [...recordings];
+    updatedRecordings[index].isEditing = !updatedRecordings[index].isEditing;
+    updateRecordings(updatedRecordings);
+  }
+  
+  function updateRecordingName(index: number, newName: string) {
+    const updatedRecordings = [...recordings];
+    updatedRecordings[index].name = newName;
+    updateRecordings(updatedRecordings);
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         data={recordings}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View style={styles.recordingItem}>
-            <Text style={styles.recordingName}>{item.name}</Text>
+    {item.isEditing ? (
+      <TextInput
+        style={styles.recordingNameInput}
+        value={item.name}
+        onChangeText={(text) => updateRecordingName(index, text)}
+        onBlur={() => toggleEditing(index)}
+      />
+    ) : (
+      <Pressable onLongPress={() => toggleEditing(index)}>
+        <Text style={styles.recordingName}>{item.name}</Text>
+      </Pressable>
+    )}
             <Pressable style={styles.playButton} onPress={() => playSound(item.uri)}>
               <Text style={styles.playText}> Play </Text>
             </Pressable>
@@ -136,5 +164,12 @@ const styles = StyleSheet.create({
   recordingName: {
     color: 'white',
     fontSize: 16,
+  },
+  recordingNameInput: {
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 16,
+    padding: 5,
+    width: 150,
   },
 });

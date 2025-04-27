@@ -461,6 +461,14 @@ const LiveMixingPage: React.FC = () => {
       </View>
       
       <View style={styles.trackButtons}>
+      <TouchableOpacity 
+        style={styles.playButton}
+        onPress={() => playTrack(item)}>
+        <Text style={styles.playButtonText}>
+        ▶️
+        </Text>
+      </TouchableOpacity>
+
         <TouchableOpacity 
           style={styles.settingsButton}
           onPress={() => openSettingsModal(item)}>
@@ -475,6 +483,47 @@ const LiveMixingPage: React.FC = () => {
       </View>
     </View>
   );
+
+  const playTrack = async (track: AudioTrack) => {
+    try {
+      const sound = await Audio.Sound.createAsync(
+        { uri: track.url },
+        { shouldPlay: true, volume: track.volume || 1.0, rate: track.rate || 1.0 }
+      );
+  
+      // Update track with 'isPlaying' state
+      setTracks(prev => prev.map(t => 
+        t.id === track.id ? { ...t, isPlaying: true } : t
+      ));
+  
+      // Update sound status when finished
+      sound.setOnPlaybackStatusUpdate(status => {
+        if (status.didJustFinish) {
+          setTracks(prev => prev.map(t => 
+            t.id === track.id ? { ...t, isPlaying: false } : t
+          ));
+        }
+      });
+      
+      // Keep track of the sound for later manipulation
+      setSoundObjects(prev => [...prev, sound]);
+    } catch (error) {
+      console.error('Error playing track:', error);
+    }
+  };
+  
+  const stopTrack = (track: AudioTrack) => {
+    // Find the sound object and stop it
+    const soundObject = soundObjects.find(sound => sound.id === track.id);
+    if (soundObject) {
+      soundObject.stopAsync();
+    }
+  
+    // Update track with 'isPlaying' state
+    setTracks(prev => prev.map(t => 
+      t.id === track.id ? { ...t, isPlaying: false } : t
+    ));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -814,6 +863,17 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
   },
+  playButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 8,
+  },
+  playButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  
 });
 
 export default LiveMixingPage;
