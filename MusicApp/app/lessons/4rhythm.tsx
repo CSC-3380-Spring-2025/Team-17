@@ -361,7 +361,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
     homelink: {
         color: 'purple',
         fontSize: 30,
@@ -421,4 +420,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
     }
-})
+});

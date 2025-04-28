@@ -607,7 +607,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
     homelink: {
         color: 'purple',
         fontSize: 30,
@@ -616,7 +615,6 @@ const styles = StyleSheet.create({
     quizContainer: {
         height: 100,
         width: 200,
-        
         alignItems: 'center',
         padding:7,
     },
@@ -667,5 +665,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
       }
-})
-
+});

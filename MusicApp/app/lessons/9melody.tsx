@@ -464,8 +464,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         alignSelf: 'center'
     },
-
-
     quizContainer: {
         height: 100,
         width: 200,
@@ -533,5 +531,3 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 });
-
-
