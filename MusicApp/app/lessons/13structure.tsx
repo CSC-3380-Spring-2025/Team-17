@@ -42,13 +42,22 @@ export default function Structure(){
                         many different terms depending on the genre & form and are generally referred to by other letters B, C, D, etc. 
                     </Text>
                     <Text style={styles.text}>
-                        <Text style={styles.bold}>Auxiliary sections</Text> are located at the beginning or end of a piece, or between the core sections. They can be divided 
+                        <Text style={styles.bold}>Auxiliary sections</Text> are located at the beginning or end of a phrase or piece, or between the core sections. They can be divided 
                         into two categories: external & connective. External auxiliary sections either introduce a musical work or follow its general conclusion. 
                     </Text>
                     <Text style={styles.text}>
-                        A <Text style={styles.bold}>prefix</Text> is a bit of music that comes before the generic start of a piece and expresses a formal sense of "before the beginning".
+                        A <Text style={styles.bold}>prefix</Text> is some music that comes before the generic start of a phrase or piece and expresses a formal sense of "before the beginning".
                         A prefix can be large or small depending on whether or not it contains a complete phrase. Large prefixes contain at least one phrase while 
                         small phrases do not have complete phrases & are less noticeable as they are often merely accompaniment for a section starting before the melody begins. 
+                    </Text>
+                    <Text style={styles.text}>
+                        A <Text style={styles.bold}>suffix</Text> is some music that comes after the generic end of a phrase or piece and expresses a formal sense of "after the end".
+                        Suffixes can also be large or small depending on whether or not it contains a complete phrase. Small suffixes can be found after the close of any phrase, but their 
+                        effect depends on the cadence they follow. After an authentic cadence, a small suffix creates a sense of stability & closure. After a half cadence, a small suffix 
+                        creates a sense of instability in preparation for the upcoming section. Large suffixes typically appear as a coda at the very end of a piece. 
+                    </Text>
+                    <Text style={styles.text}>
+                        
                     </Text>
                 </View>
                 
