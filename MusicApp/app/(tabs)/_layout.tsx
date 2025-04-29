@@ -139,7 +139,7 @@ const TabBarBackground = () => {
               }}
             />
             <Tabs.Screen
-              name="account"
+              name="accountPage"
               options={{
                 title: 'Account',
                 tabBarIcon: ({ color, focused }) => (
