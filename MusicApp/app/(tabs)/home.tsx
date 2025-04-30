@@ -1,5 +1,9 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
-import { Link, Stack } from 'expo-router';
+
+import { Stack, useNavigation } from 'expo-router';
+
+import { Link, } from 'expo-router';
+
 import Coins from '../../components/coins'
 import Streak from'../../components/streak';
 import React, {useState, useEffect} from 'react';
@@ -24,6 +28,9 @@ type LessonLink=
 
 
 export default function HomeScreen() {
+
+  const navigation = useNavigation();
+
   const [userId, setUserId]= useState('');
   const [lessonNumber, setLessonNumber]= useState(1);
   const [lessonTitle, setLessonTitle]= useState('');
@@ -135,6 +142,7 @@ useEffect(()=>{
       break;
 }
 }, [lessonNumber]);
+
   return (
     <>
       <Stack.Screen
@@ -210,7 +218,9 @@ useEffect(()=>{
             <Text style={styles.recordingDuration}>01:36</Text>
           </View>
         </View>
-        <Pressable style={styles.createButton}>
+        <Pressable 
+        style={styles.createButton}
+        onPress={() => navigation.navigate('recorder')}>
           <Text style={styles.createButtonText}>Create New Track</Text>
         </Pressable>
       </ScrollView>
