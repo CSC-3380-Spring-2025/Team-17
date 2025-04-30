@@ -1,8 +1,27 @@
-import React from 'react';
-import {Text, ScrollView, StyleSheet, View} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
+import { Audio } from 'expo-av';
 
 export default function Structure(){
+    const field = useRef(new Audio.Sound());
+    const melody = useRef(new Audio.Sound());
+
+    useEffect(() => {
+        const loadSounds = async () => {
+            await field.current.loadAsync(require('@/assets/sounds/field.mp3'));
+            await melody.current.loadAsync(require('@/assets/sounds/melody.mp3'));
+        };
+
+        loadSounds();
+
+        return() => {
+            field.current.unloadAsync();
+            melody.current.unloadAsync();
+        };
+
+    }, []);
+
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
@@ -57,7 +76,114 @@ export default function Structure(){
                         creates a sense of instability in preparation for the upcoming section. Large suffixes typically appear as a coda at the very end of a piece. 
                     </Text>
                     <Text style={styles.text}>
-                        
+                        A <Text style={styles.bold}>transition</Text> is a section of music that connects two core sections. Transitions usually lead the music away from the main section 
+                        towards a contrasting section, but it never leads back to the main section (A to B, never B to A). A transition also plays a role in the balance of stability & instability 
+                        in a musical work. A core section will usually contain stable thematic elements, but a transition will typically introduce instability that will be countered by the stability 
+                        of the core section that follows. Like prefixes & suffixes, a transition can be large or small depending on whether it contains a complete phrase. Large transitions contain at 
+                        least one phrase while small transitions do not have a complete phrase and are less noticeable. A <Text style={styles.bold}>retransition</Text> is similar to a transition, but its 
+                        location & function differ in that a retransition follows a contrasting section and leads back to the main section (B to A). In both transitions & retransitions, the music will move 
+                        towards the dominant chord of the key in the upcoming section. This will allow the transition to smoothly resolve to the new section. Sometimes the transition or retransition will end 
+                        on a clear half cadence to signal the beginning of the new section. In other cases, the transition may have an elided ending, consisting of overlapping phrases that function as the 
+                        end of one phrase & the start of the next. 
+                    </Text>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Binary Form
+                    </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Binary form</Text> contains two core sections. The first section is the main section that establishes the thematic musical material, and the second core section 
+                        is the contrasting section that introduces new melodic material. The sections are sometimes called reprises because they are usually repeated. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/binary.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        There are two types of binary form: rounded & simple. 
+                    </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Rounded binary form</Text> consists of two reprises where the beginning of A returns somewhere in the middle of the second reprise. 
+                        It is not necessary for all of A to reappear, just the beginning. The returning material may be exactly the same, but it may also contain some sort of variation, such as 
+                        a change in octave or melodic embellishments. However, the harmony should remain the same as in the first reprise and provide a sense of stability. The second reprise 
+                        will start with the B section, which is typically less stable than the A section, but it can also remain stable while introducing new thematic material into the music. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/rounded_binary.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Robert Schumann's "Melody", from his Album for the Young, is written in rounded binary form. The first reprise consists of a simple melody in C major that ends on a half cadence. 
+                        This leads into the second reprise, which introduces new melodic material that is written in G major & sounds rather unstable. In the middle of the second reprise, the original melody 
+                        returns with some variations and eventually ends in the key of C major.
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Melody - Robert Schumann
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Binary"
+                                onPress={() => melody.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Binary"
+                                onPress={() => melody.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Simple binary form</Text> differs from rounded binary in that there is no substantial return of the opening thematic material in the second reprise. 
+                        Instead, the second reprise will contain a contrasting B section or a slightly varied A section. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/simple_binary.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Evgeny Grinko's "Field" is written in simple binary form. The first reprise contains a melodic idea in A minor that is repeated three times with changing instrumentation. 
+                        In the second reprise, the music remains in A minor and explores new melodic material. It does not return to the thematic material in the first reprise. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Field - Evgeny Grinko
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Binary"
+                                onPress={() => field.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Binary"
+                                onPress={() => field.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Ternary Form
+                    </Text>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Rondo Form
+                    </Text>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Verse & Chorus
                     </Text>
                 </View>
                 
