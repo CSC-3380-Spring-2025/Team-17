@@ -6,7 +6,7 @@ import { Text, View, StyleSheet, Pressable } from 'react-native';
 const App = () => {
   const [streak, setStreak]= useState(0);
   return (
-    <div>
+    <View>
       <View style={styles.container}>
        <Pressable style={styles.circularButton} onPress={() => alert("Change Profile Pic")}>
                         <Text style={styles.circularButtonText}>oVo</Text>
@@ -16,7 +16,7 @@ const App = () => {
       <Register />
       <Login/>
       </View>
-    </div>
+    </View>
   );
 };
 

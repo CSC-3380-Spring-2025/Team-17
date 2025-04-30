@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'expo-router';
 import Streak from '@/components/streak';
 import Coins from '@/components/coins';
 import { ChallengesProvider } from '../context/ChallengesContext';
+import { AuthProvider } from '../context/AuthContext';
 
 
 const FloatingMiddleButton = () => {
@@ -65,9 +66,11 @@ const TabBarBackground = () => {
     );
 };
 
+
 export default function TabLayout() {
     return (
       <ChallengesProvider>
+
       <AudioProvider>
         <>
           <Tabs
@@ -165,7 +168,9 @@ export default function TabLayout() {
           <FloatingMiddleButton />
         </>
       </AudioProvider>
+
       </ChallengesProvider>
+
     );
 }
 

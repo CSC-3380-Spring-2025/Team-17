@@ -1,14 +1,148 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
+
 import { Stack, useNavigation } from 'expo-router';
+
+import { Link, } from 'expo-router';
+
 import Coins from '../../components/coins'
-import ImageViewer from '@/components/ImageViewer';
 import Streak from'../../components/streak';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+
 const PlaceholderImage = require('@/assets/images/dog.jpg');
+type LessonLink=
+  | "/lessons/1intro"
+  | "/lessons/2notation"
+  | "/lessons/3pitch"
+  | "/lessons/4rhythm"
+  | "/lessons/5meter"
+  | "/lessons/6scales"
+  | "/lessons/7modes"
+  | "/lessons/8intervals"
+  | "/lessons/9melody"
+  | "/lessons/10chords"
+  | "/lessons/11progressions"
+  | "/lessons/12texture"
+  | "/lessons/13structure";
 
 
 export default function HomeScreen() {
+
   const navigation = useNavigation();
+
+  const [userId, setUserId]= useState('');
+  const [lessonNumber, setLessonNumber]= useState(1);
+  const [lessonTitle, setLessonTitle]= useState('');
+  const [lessonImage, setLessonImage]= useState(PlaceholderImage);
+  const [lessonLink, setLessonLink]= useState<LessonLink>('/lessons/1intro')
+      useEffect(()=>{
+          if (auth.currentUser){
+            setUserId(auth.currentUser.uid);
+          }
+        }, []);
+        useEffect(()=>{
+  const fetchLessonProgress= async()=>{
+    if (!userId) return;
+    try{
+      const docRef= doc(db, 'users', userId);
+      const docSnap = await getDoc(docRef);
+
+      if(docSnap.exists()){
+        const data = docSnap.data()
+        if(data.lessonProgress && data.lessonProgress.length>0){
+          const highestLesson = Math.max(...data.lessonProgress);
+          setLessonNumber(highestLesson); 
+        }else{
+          setLessonNumber(1);
+        }
+      }else{
+        console.log("No such document");
+        setLessonNumber(1);
+      }
+    }catch(error){
+      console.error("Error fetching document: ", error);
+      setLessonNumber(1);
+    }
+  };
+  fetchLessonProgress();
+}, [userId]);
+
+useEffect(()=>{
+  switch (lessonNumber) {
+    case 1:
+      setLessonTitle("Intro");
+      setLessonImage(require('@/assets/lessonPics/intro.jpeg'));
+      setLessonLink('/lessons/1intro');
+      break;
+    case 2:
+      setLessonTitle("Notation");
+      setLessonImage(require('@/assets/lessonPics/notation.jpg'));
+      setLessonLink('/lessons/2notation');
+      break;
+    case 3:
+      setLessonTitle("Pitch");
+      setLessonImage(require('@/assets/lessonPics/pitch.jpg'));
+      setLessonLink('/lessons/3pitch');
+      break;
+    case 4:
+      setLessonTitle("Rhythm");
+      setLessonImage(require('@/assets/lessonPics/rhythm.jpg'));
+      setLessonLink('/lessons/4rhythm');
+      break;
+    case 5:
+      setLessonTitle("Meter");
+      setLessonImage(require('@/assets/lessonPics/meter.jpg'));
+      setLessonLink('/lessons/5meter');
+      break;
+    case 6:
+      setLessonTitle("Scales");
+      setLessonImage(require('@/assets/lessonPics/scales.jpg'));
+      setLessonLink('/lessons/6scales');
+      break;
+    case 7:
+      setLessonTitle("Modes");
+      setLessonImage(require('@/assets/lessonPics/modes.jpg'));
+      setLessonLink('/lessons/7modes');
+      break;
+    case 8:
+      setLessonTitle("Intervals");
+      setLessonImage(require('@/assets/lessonPics/intervals.jpg'));
+      setLessonLink('/lessons/8intervals');
+      break;
+    case 9:
+      setLessonTitle("Melody");
+      setLessonImage(require('@/assets/lessonPics/melody.jpg'));
+      setLessonLink('/lessons/9melody');
+      break;
+    case 10:
+      setLessonTitle("Chords");
+      setLessonImage(require('@/assets/lessonPics/chords.jpg'));
+      setLessonLink('/lessons/10chords');
+      break;
+    case 11:
+      setLessonTitle("Progressions");
+      setLessonImage(require('@/assets/lessonPics/progressions.jpg'));
+      setLessonLink('/lessons/11progressions');
+      break;
+    case 12:
+      setLessonTitle("Texture");
+      setLessonImage(require('@/assets/lessonPics/texture.jpg'));
+      setLessonLink('/lessons/12texture');
+      break;
+    case 13:
+      setLessonTitle("Structure");
+      setLessonImage(require('@/assets/lessonPics/structure.jpg'));
+      setLessonLink('/lessons/13structure');
+      break;
+    default:
+      setLessonTitle("Intro");
+      setLessonImage(require('@/assets/lessonPics/intro.jpeg'));
+      setLessonLink('/lessons/1intro');
+      break;
+}
+}, [lessonNumber]);
+
   return (
     <>
       <Stack.Screen
@@ -36,21 +170,26 @@ export default function HomeScreen() {
       />
 
       <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.lessonBox}>
+        <Link href={lessonLink} asChild>
+        <Pressable style={styles.lessonBox}>
+        
           <View style={styles.lessonTextContainer}>
-            <Text style={styles.sectionTitle}>Lesson 2</Text>
-            <Text style={styles.sectionSubtitle}>C Major Pentatonic</Text>
+            <Text style={styles.sectionTitle}>Lesson {lessonNumber}</Text>
+            <Text style={styles.sectionSubtitle}>{lessonTitle}</Text>
           </View>
           <View style={styles.dividerLine} />
           <View style={styles.lessonImageContainer}>
             <Image
-              source={require('@/assets/lessonPics/intro.jpeg')}
+              source={lessonImage}
               style={styles.lessonImage}
               resizeMode="cover"
             />
           </View>
+          </Pressable>
+          </Link>
 
-        </View>
+        
+       
         <View style={styles.recordingBox}>
           <Text style={styles.recordingTitle}>Song Draft 2</Text>
           <View style={styles.recordingDetails}>

@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {ScrollView, View, Text, StyleSheet, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
-import { useAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
 
 export default function Notation(){
-    const slurPlayer = useAudioPlayer(require('@/assets/sounds/a-slur.mp3'));
-    const staccatoPlayer = useAudioPlayer(require('@/assets/sounds/c-staccato.mp3'));
-    const accentPlayer = useAudioPlayer(require('@/assets/sounds/d-accent.mp3'));
+    const slurSound = useRef(new Audio.Sound());
+    const staccatoSound = useRef(new Audio.Sound());
+    const accentSound = useRef(new Audio.Sound());
   const [quiz1Answer, setQ1Answer] = useState(null);
     const [quiz2Answer, setQ2Answer] = useState(null);
     const [quiz3Answer, setQ3Answer] = useState(null);
     const answer1 = "Pitch and Rhythm";
     const answer2 = "False";
     const answer3 = "Mezzo Forte";
+
+    useEffect(() => {
+        const loadSounds = async () => {
+            await slurSound.current.loadAsync(require('@/assets/sounds/a-slur.mp3'));
+            await staccatoSound.current.loadAsync(require('@/assets/sounds/c-staccato.mp3'));
+            await accentSound.current.loadAsync(require('@/assets/sounds/d-accent.mp3'));
+        };
+
+        loadSounds();
+
+        return() => {
+            slurSound.current.unloadAsync();
+            staccatoSound.current.unloadAsync();
+            accentSound.current.unloadAsync();
+        };
+    }, []);
 
     
     return(
@@ -140,12 +156,12 @@ export default function Notation(){
                     <View style={styles.buttonContainer}>
                         <Button 
                             title="Play Slur" 
-                            onPress={() => slurPlayer.play()} 
+                            onPress={() => slurSound.current.playAsync()} 
                             color="#4CAF50"
                         />
                         <Button 
                             title="Pause Slur" 
-                            onPress={() => slurPlayer.pause()} 
+                            onPress={() => slurSound.current.pauseAsync()} 
                             color="#F44336"
                         />
                     </View>
@@ -165,12 +181,12 @@ export default function Notation(){
                     <View style={styles.buttonContainer}>
                         <Button 
                             title="Play Staccato" 
-                            onPress={() => staccatoPlayer.play()} 
+                            onPress={() => staccatoSound.current.playAsync()} 
                             color="#4CAF50"
                         />
                         <Button 
                             title="Pause Staccato" 
-                            onPress={() => staccatoPlayer.pause()} 
+                            onPress={() => staccatoSound.current.pauseAsync()} 
                             color="#F44336"
                         />
                     </View>
@@ -190,12 +206,12 @@ export default function Notation(){
                     <View style={styles.buttonContainer}>
                         <Button 
                             title="Play Accent" 
-                            onPress={() => accentPlayer.play()} 
+                            onPress={() => accentSound.current.playAsync()} 
                             color="#4CAF50"
                         />
                         <Button 
                             title="Pause Accent" 
-                            onPress={() => accentPlayer.pause()} 
+                            onPress={() => accentSound.current.pauseAsync()} 
                             color="#F44336"
                         />
                     </View>
@@ -204,10 +220,10 @@ export default function Notation(){
                
 
 
-            <div>
+            <View>
                 <Text style = {styles.quizTitle}>Quiz</Text>
-                <br></br>
-            <view style = {styles.quizContainer}>
+                 
+            <View style = {styles.quizContainer}>
                     <Text style={styles.quizText}>
                         A musical note represents what?
                     </Text>
@@ -235,9 +251,9 @@ export default function Notation(){
                             {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-                <br></br>
-                <view style = {styles.quizContainer}>
+                </View>
+                 
+                <View style = {styles.quizContainer}>
                     <Text style={styles.quizText}>
                         If a note is in a space, it can go beyond the lines.
                     </Text>
@@ -265,11 +281,11 @@ export default function Notation(){
                             {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-                <br></br>
-                <view style = {styles.quizContainer}>
+                </View>
+                 
+                <View style = {styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        What term means <b>moderately loud</b>?
+                        What term means  moderately loud ?
                     </Text>
                     {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) =>{
                         const selected = quiz3Answer === option;
@@ -295,8 +311,8 @@ export default function Notation(){
                             {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
-                </view>
-            </div>
+                </View>
+            </View>
 
              <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>

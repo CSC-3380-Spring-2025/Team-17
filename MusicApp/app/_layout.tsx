@@ -5,6 +5,7 @@ import {ChallengesProvider} from './context/ChallengesContext'
 
 export default function Layout() {
  return (
+        <ChallengesProvider>
  < AuthProvider>
    
         
@@ -13,5 +14,6 @@ export default function Layout() {
         
     
     </AuthProvider>
+    </ChallengesProvider>
  )
 }
