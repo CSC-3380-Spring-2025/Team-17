@@ -263,7 +263,30 @@ const LiveMixingPage: React.FC = () => {
           ]}>
             <Text style={styles.sourceBadgeText}>{item.sourceType.replace('-', ' ')}</Text>
           </View>
-        </View>
+        )}
+      </View>
+      
+      <View style={styles.trackButtons}>
+      <TouchableOpacity 
+        style={styles.playButton}
+        onPress={() => playTrack(item)}>
+        <Text style={styles.playButtonText}>
+        ▶️
+        </Text>
+      </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.settingsButton}
+          onPress={() => openSettingsModal(item)}>
+          <Text style={styles.settingsButtonText}>⚙️</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.deleteButton}
+          onPress={() => deleteTrack(item.id)}>
+          <Text style={styles.deleteButtonText}>×</Text>
+        </TouchableOpacity>
+
       </View>
       <TouchableOpacity 
         style={styles.deleteButton} 
@@ -274,6 +297,47 @@ const LiveMixingPage: React.FC = () => {
       </TouchableOpacity>
     </View>
   );
+
+  const playTrack = async (track: AudioTrack) => {
+    try {
+      const sound = await Audio.Sound.createAsync(
+        { uri: track.url },
+        { shouldPlay: true, volume: track.volume || 1.0, rate: track.rate || 1.0 }
+      );
+  
+      // Update track with 'isPlaying' state
+      setTracks(prev => prev.map(t => 
+        t.id === track.id ? { ...t, isPlaying: true } : t
+      ));
+  
+      // Update sound status when finished
+      sound.setOnPlaybackStatusUpdate(status => {
+        if (status.didJustFinish) {
+          setTracks(prev => prev.map(t => 
+            t.id === track.id ? { ...t, isPlaying: false } : t
+          ));
+        }
+      });
+      
+      // Keep track of the sound for later manipulation
+      setSoundObjects(prev => [...prev, sound]);
+    } catch (error) {
+      console.error('Error playing track:', error);
+    }
+  };
+  
+  const stopTrack = (track: AudioTrack) => {
+    // Find the sound object and stop it
+    const soundObject = soundObjects.find(sound => sound.id === track.id);
+    if (soundObject) {
+      soundObject.stopAsync();
+    }
+  
+    // Update track with 'isPlaying' state
+    setTracks(prev => prev.map(t => 
+      t.id === track.id ? { ...t, isPlaying: false } : t
+    ));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -595,6 +659,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600',
   },
+  playButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 8,
+  },
+  playButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  
 });
 
 export default LiveMixingPage;

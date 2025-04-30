@@ -1,13 +1,22 @@
 import { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, TouchableOpacity, Pressable } from 'react-native';
+
+import { View, StyleSheet, Button, FlatList, Text, TouchableOpacity, Pressable, TextInput } from 'react-native';
+
+
 import { Audio } from 'expo-av';
 import { useAudioContext } from './AudioContext';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function RecorderTest() {
-  const [recording, setRecording] = useState();
+
+export default function App() {
+  const [recording, setRecording] = useState<Audio.Recording | undefined>(undefined);
+
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const { recordings, addRecording } = useAudioContext();
+  const { recordings, addRecording, updateRecordings } = useAudioContext();
+
+  if (permissionResponse === null){
+    return <Text>Loading...</Text>;
+  }
 
   async function startRecording() {
     try {
@@ -43,6 +52,7 @@ export default function RecorderTest() {
     addRecording({
       uri: uri,
       name: `Recording ${recordings.length + 1}`,
+      isEditing: false,
     });
     console.log('Recording stopped and stored at', uri);
   }
@@ -58,26 +68,45 @@ export default function RecorderTest() {
     });
   }
 
+  function toggleEditing(index: number) {
+    const updatedRecordings = [...recordings];
+    updatedRecordings[index].isEditing = !updatedRecordings[index].isEditing;
+    updateRecordings(updatedRecordings);
+  }
+  
+  function updateRecordingName(index: number, newName: string) {
+    const updatedRecordings = [...recordings];
+    updatedRecordings[index].name = newName;
+    updateRecordings(updatedRecordings);
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         data={recordings}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.listContent}
-        renderItem={({ item }) => (
+        renderItem={({ item, index}) => (
           <View style={styles.recordingItem}>
-            <View style={styles.recordingInfo}>
-              <MaterialIcons name="audiotrack" size={20} color="#4243FF" />
-              <Text style={styles.recordingName} numberOfLines={1} ellipsizeMode="tail">
-                {item.name}
-              </Text>
-            </View>
-            <Pressable 
-              style={styles.playButton} 
-              onPress={() => playSound(item.uri)}
-              android_ripple={{ color: 'rgba(255,255,255,0.1)' }}
+            {item.isEditing?(
+              <TextInput
+                style={styles.recordingName}
+                value={item.name}
+                onChangeText={(text)=> updateRecordingName(index, text)}
+                onBlur={()=> toggleEditiong(index)}
+               />
+             ):(
+              <Pressable onLongPress={()=> toggleEditing(index)}>
+                <Text style={styles.recordingName}>{item.name}</Text>
+              </Pressable>
+            )}
+            <Pressable
+              style={styles.playButton}
+              onPress={()=> playSound(item.uri)}
+              android_ripple={{color:'rgba(255, 255, 255, 0.1)'}}
             >
               <MaterialIcons name="play-arrow" size={24} color="white" />
+
             </Pressable>
           </View>
         )}
@@ -201,5 +230,12 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 14,
     marginTop: 8,
+  },
+  recordingNameInput: {
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 16,
+    padding: 5,
+    width: 150,
   },
 });
