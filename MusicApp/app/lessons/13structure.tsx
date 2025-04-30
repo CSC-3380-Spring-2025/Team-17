@@ -11,6 +11,7 @@ export default function Structure(){
     const turkish_march = useRef(new Audio.Sound());
     const fur_elise = useRef(new Audio.Sound());
     const variations = useRef(new Audio.Sound());
+    const wonderful_world = useRef(new Audio.Sound());
 
     useEffect(() => {
         const loadSounds = async () => {
@@ -21,6 +22,7 @@ export default function Structure(){
             await turkish_march.current.loadAsync(require('@/assets/sounds/turkish_march.mp3'));
             await fur_elise.current.loadAsync(require('@/assets/sounds/fur_elise.mp3'));
             await variations.current.loadAsync(require('@/assets/sounds/variations.mp3'));
+            await wonderful_world.current.loadAsync(require('@/assets/sounds/wonderful_world.mp3'));
         };
 
         loadSounds();
@@ -33,6 +35,7 @@ export default function Structure(){
             turkish_march.current.unloadAsync();
             fur_elise.current.unloadAsync();
             variations.current.unloadAsync();
+            wonderful_world.current.unloadAsync();
         };
 
     }, []);
@@ -360,6 +363,49 @@ export default function Structure(){
                     <Text style={styles.header}>
                         Strophic Form
                     </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Strophic form</Text> consists of a main core section called a strophe that is repeated multiple times. It was a common form for folk songs, hymns, and early pop music. 
+                        The strophe establishes a set melody & harmony that is repeated throughout the song with different lyrics each time. This creates a pattern AAA, where the strophe is the only core section in the 
+                        entire song. The strophe can also feature a refrain, which is a recurring lyrical & musical theme that often contains the title lyric of the song and is usually located at the end of the strophe.
+                    </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>32-bar song form</Text> is a particular type of strophic form featuring 32 measures divided into four sections of 8 measures each. The sections are organized in the pattern AABA. 
+                        The song begins and ends with the strophe, which contains the primary theme & title lyrics and is the most memorable part of the song, but there is also a contrasting B section (called a bridge) 
+                        that plays a transitional role where it heightens anticipation for the return of the strophe by constrasting with the strophe & temporarily withholding it. The bridge section must be followed by 
+                        the strophe for its function to be fully satisfied. 
+                    </Text>
+                    <Text style={styles.text}>
+                        Like other forms, strophic form & 32-bar song form can include auxiliary sections. The most common are intros, outros, codas, & interludes. Intros and outros are auxiliary sections at the very beginning 
+                        and end of a song. An <Text style={styles.bold}>intro</Text> is a short, usually instrumental section of music that leads from silence into the strophe by introducing musical material from the strophe and 
+                        building anticipation for the music to come. This is often achieved by layering (introducing instruments on at a time) or by a more generic building of energy. An <Text style={styles.bold}>outro</Text> is a short,
+                        usually instrumental section of music that leads from the strophe into silence by decreasing energy. Recording studios often use a fadeout to achieve this. The outro is created using musical material from the 
+                        last core section that preceded it. Otherwise, the outro uses material from the intro. This allows the intro and outro to create a "bookend" effect by resembling the front & back covers of a book. 
+                        A <Text style={styles.bold}>coda</Text> differs from an outro in that a coda presents new musical material. It is essentially an outro not based on music that was previously heard. An <Text style={styles.bold}>interlude </Text> 
+                        is a short, instrumental section that serves to link and provide contrast between two core sections. 
+                    </Text>
+                    <Text style={styles.text}>
+                        Louis Armstrong's "What a Wonderful World" is written in 32-bar song form (AABA). This song starts with a short intro and is divided into four sections. Each section is separated by a short instrumental interlude. 
+                        The first two sections are strophes that feature the same melody & harmony but with different verses. Each strophe ends with the refrain, "And I think to myself, what a wonderful world!" After the first two strophes, 
+                        there comes a contrasting bridge section that features a new melody on the flute and does not have the refrain. The bridge section leads back into the strophe, which repeats the main theme and refrain one last time 
+                        before leading into a coda with Armstrong singing, "As I think to myself, what a wonderful world . . . Oh, yes!"
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            What a Wonderful World - Louis Armstrong
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Strophe"
+                                onPress={() => wonderful_world.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Strophe"
+                                onPress={() => wonderful_world.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
                 </View>
 
                 <View style={styles.card}>
