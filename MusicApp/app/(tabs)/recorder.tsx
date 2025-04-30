@@ -14,6 +14,7 @@ import {
   Easing
 } from 'react-native';
 import { Audio } from 'expo-av';
+import Slider from '@react-native-community/slider';
 import { useAudioContext } from './AudioContext';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -25,7 +26,148 @@ interface AudioTrack {
   title: string;
   artist: string;
   sourceType: SoundSource;
+  positionMillis?: number;
+  durationMillis?: number;
+  volume?: number;
+  rate?: number;
+  reverb?: boolean;
+  fadeIn?: number;
+  fadeOut?: number;
 }
+
+interface SoundSettingsModalProps {
+  visible: boolean;
+  track: AudioTrack | null;
+  onClose: () => void;
+  onSave: (settings: {
+    volume: number;
+    rate: number;
+    reverb: boolean;
+    fadeIn: number;
+    fadeOut: number;
+  }) => void;
+}
+const SoundSettingsModal: React.FC<SoundSettingsModalProps> = ({ visible, track, onClose, onSave }) => {
+  const [volume, setVolume] = useState(track?.volume || 1.0);
+  const [rate, setRate] = useState(track?.rate || 1.0);
+  const [reverb, setReverb] = useState(track?.reverb || false);
+  const [fadeIn, setFadeIn] = useState(track?.fadeIn || 0);
+  const [fadeOut, setFadeOut] = useState(track?.fadeOut || 0);
+
+  useEffect(() => {
+    if (track) {
+      setVolume(track.volume || 1.0);
+      setRate(track.rate || 1.0);
+      setReverb(track.reverb || false);
+      setFadeIn(track.fadeIn || 0);
+      setFadeOut(track.fadeOut || 0);
+    }
+  }, [track]);
+const handleSave = () => {
+  onSave({
+    volume,
+    rate,
+    reverb,
+    fadeIn,
+    fadeOut
+  });
+  onClose();
+};
+
+return (
+  <Modal
+    animationType="slide"
+    transparent={true}
+    visible={visible}
+    onRequestClose={onClose}>
+    <View style={styles.modalContainer}>
+      <View style={styles.modalContent}>
+        <Text style={styles.modalTitle}>Sound Settings: {track?.title}</Text>
+        
+        <View style={styles.sliderContainer}>
+          <Text>Volume: {volume.toFixed(1)}</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={2}
+            step={0.1}
+            value={volume}
+            onValueChange={setVolume}
+            minimumTrackTintColor="#6200ee"
+            maximumTrackTintColor="#000000"
+          />
+        </View>
+        
+        <View style={styles.sliderContainer}>
+          <Text>Speed: {rate.toFixed(1)}x</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0.5}
+            maximumValue={2}
+            step={0.1}
+            value={rate}
+            onValueChange={setRate}
+            minimumTrackTintColor="#6200ee"
+            maximumTrackTintColor="#000000"
+          />
+        </View>
+        
+        <View style={styles.sliderContainer}>
+          <Text>Fade In: {fadeIn}s</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={5}
+            step={0.5}
+            value={fadeIn}
+            onValueChange={setFadeIn}
+            minimumTrackTintColor="#6200ee"
+            maximumTrackTintColor="#000000"
+          />
+        </View>
+        
+        <View style={styles.sliderContainer}>
+          <Text>Fade Out: {fadeOut}s</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={5}
+            step={0.5}
+            value={fadeOut}
+            onValueChange={setFadeOut}
+            minimumTrackTintColor="#6200ee"
+            maximumTrackTintColor="#000000"
+          />
+        </View>
+        
+        <TouchableOpacity
+          style={[styles.modalOption, reverb ? styles.reverbActive : styles.reverbInactive]}
+          onPress={() => setReverb(!reverb)}>
+          <Text style={styles.modalOptionText}>Reverb: {reverb ? 'ON' : 'OFF'}</Text>
+        </TouchableOpacity>
+        
+        <View style={styles.modalButtons}>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.saveButton]}
+            onPress={handleSave}>
+            <Text style={styles.modalButtonText}>Save</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={[styles.modalButton, styles.cancelButton]}
+            onPress={onClose}>
+            <Text style={styles.modalButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  </Modal>
+);
+};
+
+
+
+  
 
 const LiveMixingPage: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,8 +178,32 @@ const LiveMixingPage: React.FC = () => {
   const [isLooping, setIsLooping] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [soundObjects, setSoundObjects] = useState<Audio.Sound[]>([]);
+  const [selectedTrack, setSelectedTrack] = useState<AudioTrack | null>(null);
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const { recordings } = useAudioContext();
   const pulseAnim = new Animated.Value(1);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (soundObjects.length > 0 && isPlayingAll) {
+        soundObjects.forEach(async (sound, index) => {
+          try {
+            const status = await sound.getStatusAsync();
+            if (status.isLoaded) {
+              setTracks(prev => prev.map((track, i) => 
+                i === index ? { ...track, positionMillis: status.positionMillis, durationMillis: status.durationMillis } : track
+              ));
+            }
+          } catch (error) {
+            console.warn('Failed to get sound status', error);
+          }
+        });
+      }
+    }, 175); 
+
+    return () => clearInterval(interval);
+  }, [soundObjects, isPlayingAll]);
+
 
   useEffect(() => {
     return () => {
@@ -165,8 +331,12 @@ const LiveMixingPage: React.FC = () => {
         if (track.url) {
           const { sound } = await Audio.Sound.createAsync(
             { uri: track.url },
-            { shouldPlay: true, isLooping: isLooping }
+            { shouldPlay: true, isLooping: isLooping, volume: track.volume|| 1.0, rate: track.rate || 1.0 }
           );
+          if (track.fadeIn && track.fadeIn > 0) {
+            await sound.setVolumeAsync(0);
+            sound.setVolumeAsync(track.volume || 1.0, { duration: track.fadeIn * 1000 });
+          }
           newSoundObjects.push(sound);
           await sound.playAsync();
         }
@@ -213,6 +383,33 @@ const LiveMixingPage: React.FC = () => {
     setTracks(prev => prev.filter(track => track.id !== trackId));
   };
 
+  const openSettingsModal = (track: AudioTrack) => {
+    setSelectedTrack(track);
+    setSettingsModalVisible(true);
+  };
+  const saveTrackSettings = (settings: {
+    volume: number;
+    rate: number;
+    reverb: boolean;
+    fadeIn: number;
+    fadeOut: number;
+  }) => {
+    if (!selectedTrack) return;
+    
+    setTracks(prev => prev.map(track => 
+      track.id === selectedTrack.id ? { ...track, ...settings } : track
+    ));
+
+    
+    const soundIndex = tracks.findIndex(t => t.id === selectedTrack.id);
+    if (soundIndex >= 0 && soundIndex < soundObjects.length) {
+      const sound = soundObjects[soundIndex];
+      sound.setVolumeAsync(settings.volume);
+      sound.setRateAsync(settings.rate, true);
+      
+    }
+  };
+
   const addTrack = (sourceType: SoundSource) => {
     setModalVisible(false);
 
@@ -234,6 +431,11 @@ const LiveMixingPage: React.FC = () => {
           title: 'Virtual Instrument',
           artist: '',
           sourceType: 'virtual-instrument',
+          volume: 1.0,
+          rate: 1.0,
+          reverb: false,
+          fadeIn: 0,
+          fadeOut: 0
         };
         break;
       case 'local-file':
@@ -244,6 +446,11 @@ const LiveMixingPage: React.FC = () => {
           title: 'Imported Sound',
           artist: '',
           sourceType: 'local-file',
+          volume: 1.0,
+          rate: 1.0,
+          reverb: false,
+          fadeIn: 0,
+          fadeOut: 0
         };
     }
 
@@ -254,6 +461,8 @@ const LiveMixingPage: React.FC = () => {
     <View style={styles.trackItem}>
       <View style={styles.trackInfo}>
         <Text style={styles.trackTitle} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+        <Text style={styles.trackType}>{item.sourceType}</Text>
+        
         <View style={styles.trackMeta}>
           <View style={[
             styles.sourceBadge, 
@@ -263,7 +472,10 @@ const LiveMixingPage: React.FC = () => {
           ]}>
             <Text style={styles.sourceBadgeText}>{item.sourceType.replace('-', ' ')}</Text>
           </View>
-        )}
+        </View>
+        
+        
+        
       </View>
       
       <View style={styles.trackButtons}>
@@ -282,19 +494,14 @@ const LiveMixingPage: React.FC = () => {
         </TouchableOpacity>
         
         <TouchableOpacity 
-          style={styles.deleteButton}
-          onPress={() => deleteTrack(item.id)}>
-          <Text style={styles.deleteButtonText}>×</Text>
-        </TouchableOpacity>
-
-      </View>
-      <TouchableOpacity 
         style={styles.deleteButton} 
         onPress={() => deleteTrack(item.id)}
         activeOpacity={0.7}
       >
         <MaterialIcons name="delete" size={20} color="white" />
       </TouchableOpacity>
+
+      </View>
     </View>
   );
 
@@ -434,6 +641,11 @@ const LiveMixingPage: React.FC = () => {
                       title: item.name,
                       artist: '',
                       sourceType: 'voice',
+                      volume: 1.0,
+                      rate: 1.0,
+                      reverb: false,
+                      fadeIn: 0,
+                      fadeOut: 0
                     };
                     setTracks(prev => [...prev, newTrack]);
                     setShowRecordingsModal(false);
@@ -449,9 +661,16 @@ const LiveMixingPage: React.FC = () => {
           </View>
         </View>
       </Modal>
+      <SoundSettingsModal
+        visible={settingsModalVisible}
+        track={selectedTrack}
+        onClose={() => setSettingsModalVisible(false)}
+        onSave={saveTrackSettings}
+      />
     </SafeAreaView>
   );
 };
+    
 
 const styles = StyleSheet.create({
   container: {
@@ -492,6 +711,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 40,
   },  
+  sliderContainer: {
+    marginBottom: 16,
+  },
   emptyStateText: {
     color: 'black',
     fontSize: 18,
@@ -508,6 +730,45 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
     paddingHorizontal: 12,
   },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  modalButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 4,
+    marginHorizontal: 8,
+  },
+  saveButton: {
+    backgroundColor: '#6200ee',
+  },
+  cancelButton: {
+    backgroundColor: '#e0e0e0',
+  },
+  modalButtonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  settingsButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  reverbInactive: {
+    backgroundColor: '#f5f5f5',
+  },
+
+  trackType: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
   trackItem: {
     backgroundColor: '#1E1F21',
     padding: 16,
@@ -523,6 +784,18 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+  },
+  settingsButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#6200ee',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  reverbActive: {
+    backgroundColor: '#4CAF50',
   },
   trackInfo: {
     flex: 1,
@@ -565,6 +838,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: '#E53935',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  trackButtons: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
   controls: {

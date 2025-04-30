@@ -93,7 +93,7 @@ export default function App() {
                 style={styles.recordingName}
                 value={item.name}
                 onChangeText={(text)=> updateRecordingName(index, text)}
-                onBlur={()=> toggleEditiong(index)}
+                onBlur={()=> toggleEditing(index)}
                />
              ):(
               <Pressable onLongPress={()=> toggleEditing(index)}>
