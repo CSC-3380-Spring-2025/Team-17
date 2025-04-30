@@ -6,11 +6,15 @@ import { Audio } from 'expo-av';
 export default function Structure(){
     const field = useRef(new Audio.Sound());
     const melody = useRef(new Audio.Sound());
+    const prelude = useRef(new Audio.Sound());
+    const polonaise = useRef(new Audio.Sound());
 
     useEffect(() => {
         const loadSounds = async () => {
             await field.current.loadAsync(require('@/assets/sounds/field.mp3'));
             await melody.current.loadAsync(require('@/assets/sounds/melody.mp3'));
+            await prelude.current.loadAsync(require('@/assets/sounds/prelude.mp3'));
+            await polonaise.current.loadAsync(require('@/assets/sounds/polonaise.mp3'));
         };
 
         loadSounds();
@@ -18,6 +22,8 @@ export default function Structure(){
         return() => {
             field.current.unloadAsync();
             melody.current.unloadAsync();
+            prelude.current.unloadAsync();
+            polonaise.current.unloadAsync();
         };
 
     }, []);
@@ -94,7 +100,8 @@ export default function Structure(){
                     </Text>
                     <Text style={styles.text}>
                         <Text style={styles.bold}>Binary form</Text> contains two core sections. The first section is the main section that establishes the thematic musical material, and the second core section 
-                        is the contrasting section that introduces new melodic material. The sections are sometimes called reprises because they are usually repeated. 
+                        is the contrasting section that introduces new melodic material. The sections are sometimes called reprises because they are usually repeated. There can be auxiliary sections such as prefixes 
+                        & suffixes or a transition between the two sections.
                     </Text>
                     <Image 
                         source={require('@/assets/images/binary.png')}
@@ -173,6 +180,73 @@ export default function Structure(){
                     <Text style={styles.header}>
                         Ternary Form
                     </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Ternary form</Text> contains three core sections in a pattern of ABA. The music starts with an opening section (A), moves to 
+                        a contrasting section (B), and returns to the material from the opening section (A). The B section serves as a contrasting section that deviates from the 
+                        thematic material in the A section that preceded it. There can be variation in key, texture, meter, rhythm, register, melodic ideas, & more. However, the 
+                        length of the B section is expected to be generally proportional to the length of the A section. It can also be stable or unstable. Each section in 
+                        ternary form may immediately repeat. However, A & B do not repeat together, and neither do B & A. Each core section is distinct and independent from the others. 
+                        There can be auxiliary sections such as prefixes & suffixes or a transition between any two core sections. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/ternary.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Sometimes there can be a form within a form. Each section of a form contains multiple phrases, and sometimes those phrases can combine into a complete form within a section. 
+                        A ternary form is considered to be compound if at least one of its sections contains a complete musical form (usually binary). If there are no sections that contain a complete 
+                        musical form, then the ternary form is described as simple. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/compound_ternary.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Sergei Rachmaninoff's "Prelude in C# Minor" is written in simple ternary form. The piece begins with a dramatic small prefix consisting of three chords. The first section introduces a 
+                        thematic melodic idea. The second section deviates from that idea and becomes more rhythmically active & unstable as it approaches the climactic return to the thematic material. The third 
+                        section is a louder & more dramatic restatement of the main theme in the first section. The piece ends with a small suffix consisting of multiple chords.
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Prelude in C# Minor - Sergei Rachmaninoff
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Ternary"
+                                onPress={() => prelude.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Ternary"
+                                onPress={() => prelude.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
+                    <Text style={styles.text}>
+                        Frederic Chopin's "Military Polonaise" is written in compound ternary form. The first section introduces a thematic melodic idea, but then the music moves to another idea briefly before 
+                        restating the main theme. The first section is in rounded binary form. From there, the music proceeds into the second section and changes to the key of D major. The rhythmic and melodic ideas 
+                        of the previous are moved to the left hand while the right hand introduces completely new melodic ideas. Then the music moves into the third section, which is an exact restatement of the first section. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Polonaise in A Minor (Military Polonaise) - Frederic Chopin
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Ternary"
+                                onPress={() => polonaise.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Ternary"
+                                onPress={() => polonaise.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
                 </View>
 
                 <View style={styles.card}>
