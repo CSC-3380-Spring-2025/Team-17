@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import FileUploader from '@/components/fileUploader'
 import {
   View,
@@ -12,10 +12,14 @@ import {
   Alert,
   StyleSheet,
   ScrollView,
+  Button,
+  TextInput,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';
 import { useAudioContext } from './AudioContext';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import * as FileSystem from 'expo-file-system';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
@@ -174,7 +178,7 @@ const SoundSettingsModal: React.FC<SoundSettingsModalProps> = ({ visible, track,
   );
 };
 
-const LiveMixingPage: React.FC = () => {
+const LiveMixingPage = forwardRef((props, ref) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [showRecordingsModal, setShowRecordingsModal] = useState(false);
   const [tracks, setTracks] = useState<AudioTrack[]>([]);
@@ -185,9 +189,62 @@ const LiveMixingPage: React.FC = () => {
   const [soundObjects, setSoundObjects] = useState<Audio.Sound[]>([]);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState<AudioTrack | null>(null);
+  const [songName, setSongName]= useState('');
+  const [songNameModalVisible, setSongNameModalVisible]= useState(false);
   const { recordings } = useAudioContext();
+  const params = useLocalSearchParams();
+  const song=Array.isArray(params.song)? params.song[0]:params.song;
+  
 
- 
+  const saveState = async (name: string) => {
+    const state = {
+      tracks,
+      isRecording,
+      isPlayingAll,
+      isLooping,
+      selectedTrack,
+      settingsModalVisible,
+      modalVisible,
+      showRecordingsModal,
+    };
+    const fileUri = 
+    `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+  };
+
+  const loadState = async (name: string) => {
+    const fileUri=
+    `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
+    const savedState = await FileSystem.readAsStringAsync(fileUri);
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      setTracks(state.tracks);
+      setIsRecording(state.isRecording);
+      setIsPlayingAll(state.isPlayingAll);
+      setIsLooping(state.isLooping);
+      setSelectedTrack(state.selectedTrack);
+      setSettingsModalVisible(state.settingsModalVisible);
+      setModalVisible(state.modalVisible);
+      setShowRecordingsModal(state.showRecordingsModal);
+    }
+  };
+  useEffect(()=>{
+    if(song){
+      loadState(song);
+    }
+  }, [song]);
+  const handleSaveSong=()=>{
+    setSongNameModalVisible(true);
+  };
+  const handleSaveSongName=()=>{
+    if(songName){
+      saveState(songName);
+      Alert.alert(`Song "${songName}" saved successfully!`);
+      setSongNameModalVisible(false);
+    }
+  };
+  
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (soundObjects.length > 0 && isPlayingAll) {
@@ -505,7 +562,12 @@ const LiveMixingPage: React.FC = () => {
           onPress={() => setModalVisible(true)}>
           <Text style={styles.addButtonText}>+ Add Track</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={handleSaveSong}>
+          <Text style={styles.addButtonText}>Save Song</Text>
+        </TouchableOpacity>
+        </View>
 
       <FlatList
         data={tracks}
@@ -621,6 +683,34 @@ const LiveMixingPage: React.FC = () => {
           </View>
         </View>
       </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={songNameModalVisible}
+        onRequestClose={()=>setSongNameModalVisible(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Enter Song Name</Text>
+            <TextInput
+              placeholder="Song Name"
+              value={songName}
+              onChangeText={setSongName}
+              style={{height:40, borderColor:'gray', borderWidth:1, marginBottom:20}}/>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.saveButton]}
+                onPress={handleSaveSongName}>
+                <Text style={styles.modalButtonText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={()=> setSongNameModalVisible(false)}>
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <SoundSettingsModal
         visible={settingsModalVisible}
@@ -630,7 +720,7 @@ const LiveMixingPage: React.FC = () => {
       />
     </SafeAreaView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
