@@ -10,6 +10,7 @@ export default function Structure(){
     const polonaise = useRef(new Audio.Sound());
     const turkish_march = useRef(new Audio.Sound());
     const fur_elise = useRef(new Audio.Sound());
+    const variations = useRef(new Audio.Sound());
 
     useEffect(() => {
         const loadSounds = async () => {
@@ -19,6 +20,7 @@ export default function Structure(){
             await polonaise.current.loadAsync(require('@/assets/sounds/polonaise.mp3'));
             await turkish_march.current.loadAsync(require('@/assets/sounds/turkish_march.mp3'));
             await fur_elise.current.loadAsync(require('@/assets/sounds/fur_elise.mp3'));
+            await variations.current.loadAsync(require('@/assets/sounds/variations.mp3'));
         };
 
         loadSounds();
@@ -30,6 +32,7 @@ export default function Structure(){
             polonaise.current.unloadAsync();
             turkish_march.current.unloadAsync();
             fur_elise.current.unloadAsync();
+            variations.current.unloadAsync();
         };
 
     }, []);
@@ -323,6 +326,34 @@ export default function Structure(){
                     <Text style={styles.header}>
                         Theme & Variations
                     </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Theme & variations form</Text> is a common form where a main musical theme is presented and then repeated several times while undergoing various changes. 
+                        These variations explore different aspects of the original theme while retaining some resemblance to it. The theme is typically a short, recognizable melody that can be a 
+                        short phrase or a longer section. The variations are created by altering the melody, harmony, rhythm, instrumentation, or other musical elements of the theme. Theme & variations form allows 
+                        a musician to explore different facets of a single musical idea and create variety & interest.
+                    </Text>
+                    <Text style={styles.text}>
+                        Probably the most famous example of theme & variations form is Wolfgang Amadeus Mozart's "Twinkle, Twinkle, Little Star". The main theme is the melody that we now recognize as the tune 
+                        "Twinkle, Twinkle, Little Star". After the main theme is established, the music goes through twelve different variations on the theme that change certain elements, such as adding melodic 
+                        embellishments, putting the melody in the left hand, increasing rhythmic activity, building heavy chords, and adding new melodic ideas. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            12 Variations on 'Ah vous dirai-je, Maman' (Twinkle, Twinkle, Little Star) - Wolfgang Amadeus Mozart
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Variations"
+                                onPress={() => variations.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Variations"
+                                onPress={() => variations.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
                 </View>
 
                 <View style={styles.card}>
