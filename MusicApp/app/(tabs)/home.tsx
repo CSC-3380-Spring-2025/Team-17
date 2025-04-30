@@ -1,5 +1,7 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
-import { Link, Stack, useRouter } from 'expo-router';
+
+import { Link, Stack, useRoute, useNavigation } from 'expo-router';
+
 import Coins from '../../components/coins'
 import Streak from'../../components/streak';
 import React, {useState, useEffect, useRef} from 'react';
@@ -26,6 +28,9 @@ type LessonLink=
 
 
 export default function HomeScreen() {
+
+  const navigation = useNavigation();
+
   const [userId, setUserId]= useState('');
   const [lessonNumber, setLessonNumber]= useState(1);
   const [lessonTitle, setLessonTitle]= useState('');
@@ -143,6 +148,7 @@ useEffect(()=>{
 }, [lessonNumber]);
 
 
+
 useEffect(() => {
       const loadSavedSongs = async () => {
         const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory||'');
@@ -161,6 +167,7 @@ useEffect(() => {
 const handleLoadSong=(name:string)=>{
   router.push(`/recorder?song=${name}`);
 };
+
 
   return (
     <>
@@ -223,8 +230,10 @@ const handleLoadSong=(name:string)=>{
 
         ))}
        
+
         
         <Pressable style={styles.createButton}>
+
           <Text style={styles.createButtonText}>Create New Track</Text>
         </Pressable>
       </ScrollView>
