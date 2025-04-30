@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
 
-import { Link, Stack, useRoute, useNavigation } from 'expo-router';
+import { Link, Stack, useRouter, useNavigation } from 'expo-router';
 
 import Coins from '../../components/coins'
 import Streak from'../../components/streak';

@@ -24,7 +24,7 @@ import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';
 import { useAudioContext } from './AudioContext';
 
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import {  useLocalSearchParams } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
 
 import { MaterialIcons } from '@expo/vector-icons';
