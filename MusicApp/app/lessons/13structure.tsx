@@ -8,6 +8,8 @@ export default function Structure(){
     const melody = useRef(new Audio.Sound());
     const prelude = useRef(new Audio.Sound());
     const polonaise = useRef(new Audio.Sound());
+    const turkish_march = useRef(new Audio.Sound());
+    const fur_elise = useRef(new Audio.Sound());
 
     useEffect(() => {
         const loadSounds = async () => {
@@ -15,6 +17,8 @@ export default function Structure(){
             await melody.current.loadAsync(require('@/assets/sounds/melody.mp3'));
             await prelude.current.loadAsync(require('@/assets/sounds/prelude.mp3'));
             await polonaise.current.loadAsync(require('@/assets/sounds/polonaise.mp3'));
+            await turkish_march.current.loadAsync(require('@/assets/sounds/turkish_march.mp3'));
+            await fur_elise.current.loadAsync(require('@/assets/sounds/fur_elise.mp3'));
         };
 
         loadSounds();
@@ -24,6 +28,8 @@ export default function Structure(){
             melody.current.unloadAsync();
             prelude.current.unloadAsync();
             polonaise.current.unloadAsync();
+            turkish_march.current.unloadAsync();
+            fur_elise.current.unloadAsync();
         };
 
     }, []);
@@ -252,6 +258,76 @@ export default function Structure(){
                 <View style={styles.card}>
                     <Text style={styles.header}>
                         Rondo Form
+                    </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Rondo form</Text> features a main A section (also called a refrain) that returns throughout a musical work & is interspersed with contrasting sections 
+                        labeled as B, C, etc. (also called episodes). The refrain material is essentially the same throughout the course of the work, allowing for some embellishment or variation. 
+                        Episodes contrast with the refrain by changing keys and by introducing new thematic material. A given episode can occur multiple times in the work or only once. Refrains are 
+                        constructed as a combination of one or more phrases and could even contain an entire form. They will sound relatively stable and will have a clear ending punctuated with a 
+                        perfect authentic cadence. Episodes can be constructed like that as well, but with contrasting keys and new musical material, or they can include destabilizing features like 
+                        harmonic instability, increased rhythmic activity, or phrase expansion. Episodes may end with a clear cadence, or the ending may be more ambiguous, such as having no cadence at 
+                        all and simply merging into the retransition section. Like other forms, rondo form can have auxiliary sections. The most common are retransitions that build anticipation for the 
+                        return of the refrain. Codas are also quite common, but introductions are not.  
+                    </Text>
+                    <Text style={styles.text}>
+                        Wolfgang Amadeus Mozart's "Turkish March" is written in rondo form. The pattern is rather complicated: ABACDEDCABAC-Coda. The piece starts with a repeated main theme in A major that 
+                        goes into the B section in C major before returning to the main theme in A major. Then the music moves to a C section featuring loud dynamics and fast rhythmic activity. Afterward comes 
+                        a softer D section in F# minor that ends on a half cadence. There is a brief E section afterward that is in A major and sounds relatively unstable and leads back into the D section in 
+                        F# minor which is more developed. Then comes the loud & energetic C section that leads back to the refrain. The A section brings the music back to a stable position, followed by the B 
+                        section in C major and returning to the main theme again. Finally, the C section returns in a more developed form and leads into the coda to end the piece on a high note. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Rondo Alla Turca (Turkish March) - Wolfgang Amadeus Mozart
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Rondo"
+                                onPress={() => turkish_march.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Rondo"
+                                onPress={() => turkish_march.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
+                    <Text style={styles.text}>
+                        Ludwig van Beethoven's "Fur Elise" is written in rondo form with the pattern ABACA. The piece begins with a very famous refrain that is written in A minor. The main theme is repeated 
+                        twice and moves into a brief development section before being restated once again. The refrain is thus written in rounded binary form. From there, the piece moves into the B section, which is 
+                        written in F major & sounds relatively unstable. The piece then transitions back to the refrain, which is restated exactly the same with no variation. From there, the piece moves into the 
+                        C section, which sounds very dark and incredibly unstable due to the use of chromatic harmony (notes outside the main key). The piece then moves through a fast passage that serves as a 
+                        retransition back to the refrain, which is restated one more time before ending on a perfect authentic cadence. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Fur Elise - Ludwig van Beethoven
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Rondo"
+                                onPress={() => fur_elise.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Rondo"
+                                onPress={() => fur_elise.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Theme & Variations
+                    </Text>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.header}>
+                        Strophic Form
                     </Text>
                 </View>
 
