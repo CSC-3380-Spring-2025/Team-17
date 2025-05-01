@@ -12,6 +12,9 @@ export default function Structure(){
     const fur_elise = useRef(new Audio.Sound());
     const variations = useRef(new Audio.Sound());
     const wonderful_world = useRef(new Audio.Sound());
+    const piano_man = useRef(new Audio.Sound());
+    const hundredyears = useRef(new Audio.Sound());
+    const raging_fire = useRef(new Audio.Sound());
 
     useEffect(() => {
         const loadSounds = async () => {
@@ -23,6 +26,9 @@ export default function Structure(){
             await fur_elise.current.loadAsync(require('@/assets/sounds/fur_elise.mp3'));
             await variations.current.loadAsync(require('@/assets/sounds/variations.mp3'));
             await wonderful_world.current.loadAsync(require('@/assets/sounds/wonderful_world.mp3'));
+            await piano_man.current.loadAsync(require('@/assets/sounds/piano_man.mp3'));
+            await hundredyears.current.loadAsync(require('@/assets/sounds/100years.mp3'));
+            await raging_fire.current.loadAsync(require('@/assets/sounds/raging_fire.mp3'));
         };
 
         loadSounds();
@@ -36,6 +42,9 @@ export default function Structure(){
             fur_elise.current.unloadAsync();
             variations.current.unloadAsync();
             wonderful_world.current.unloadAsync();
+            piano_man.current.unloadAsync();
+            hundredyears.current.unloadAsync();
+            raging_fire.current.unloadAsync();
         };
 
     }, []);
@@ -412,6 +421,95 @@ export default function Structure(){
                     <Text style={styles.header}>
                         Verse & Chorus
                     </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.bold}>Verse & chorus form</Text> is the most common form for modern music. The form is named after the two most important sections: the verse & the chorus. 
+                        A <Text style={styles.bold}>verse</Text> is a core section that advances the narrative of the song with lyrics that change as the song progresses. Verses tend to begin on the tonic 
+                        chord, and until the 1960s verses usually harmonically closed (ended on the tonic chord). Beginning in the 1960s, verses became more harmonically open (ended on chords other than tonic chord).
+                        A <Text style={styles.bold}>chorus</Text> is a core section that contains the primary lyrical material for the song. The lyrics do not change as the chorus is repeated throughout the song. 
+                        The function of the chorus is characterized by a greater musical intensity compared to the verses, including features such as a more dense or active instrumental texture, prominent background 
+                        vocals, or a melody in the higher register. The chorus usually begins and ends on the tonic chord. A <Text style={styles.bold}>prechorus</Text> is a short section of music similar to a retransition 
+                        that gains energy in anticipation of the chorus. A <Text style={styles.bold}>postchorus</Text> is a short section of music similar to a transition follows a chorus and decreases energy before leading 
+                        to the next verse. A <Text style={styles.bold}>bridge</Text> is a flexible section in verse & chorus form that may be included in a song to provide contrast to the verses & chorus. 
+                    </Text>
+                    <Image 
+                        source={require('@/assets/images/chorus.png')}
+                        style={styles.image}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.text}>
+                        Billy Joel's classic hit song "Piano Man" is written in verse & chorus form. The pattern of this song is 'Intro-Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Verse-Bridge-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus'.
+                        The song starts with an introductory piano riff before moving to the postchorus featuring the harmonica & piano. Then Billy Joel starts singing the first verse "It's nine o'clock on a Saturday . . ." At its conclusion, he sings syllables 
+                        "la-la la de-de dah" in the prechorus leading up to the chorus, where he sings the title lyric "Sing us a song, you're the piano man!" At the end of the chorus, the postchorus is performed before moving on to the next verse about John the 
+                        bartender. After this verse, the prechorus featuring the sung syllables is heard, but instead of leading to the chorus, the music moves on to another verse "Now Paul is a real estate novelist . . ." After this verse, Billy Joel plays 
+                        through a bridge section featuring solo piano, which then leads straight to the chorus. Afterwards, the postchorus is played and leads to the final verse "It's a pretty good crowd for a Saturday . . ." Then comes the prechorus of sung 
+                        syllables leading to the climactic final chorus, which is then followed by postchorus which ends the song.
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Piano Man - Billy Joel
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Song"
+                                onPress={() => piano_man.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Song"
+                                onPress={() => piano_man.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
+                    <Text style={styles.text}>
+                        Five for Fighting's song "100 Years" is written in verse & chorus form. The pattern of this song is 'Intro-Verse-Prechorus-Chorus-Interlude-Verse-Verse-Prechorus-Chorus-Bridge-Verse-Prechorus-Interlude-Chorus-Outro'.
+                        The song starts with an intro featuring the main melody played on the piano. Then the first verse is sung "I'm 15 for a moment . . ." Then the prechorus is sung "15 there's still time for you . . ."
+                        The music leads to the chorus, which states the title lyric "There's never a wish better than this, when you've got a hundred years to live!" Then there is a brief piano interlude before the next verse 
+                        begins "I'm 33 for a moment . . ." Then the next verse is sung immediately after "I'm 45 for a moment . . ." This is followed by the prechorus, with the lyrics slightly changed, leading up to the chorus 
+                        again. After the chorus comes the bridge section "As time goes by . . ." This is followed by the final verse "I'm 99 for a moment . . ." Afterwards comes an extended prechorus with added lyrics & and an instrumental 
+                        interlude followed by the chorus one last time. The song ends with an outro restating the song's main melody. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            100 Years - Five for Fighting
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Song"
+                                onPress={() => hundredyears.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Song"
+                                onPress={() => hundredyears.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
+                    <Text style={styles.text}>
+                        Phillip Phillips' song "Raging Fire" is written in verse & chorus form. The pattern of this song is 'Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus-Prechrous-Chorus'.
+                        The song begins on the postchorus in the guitar that leads into the first verse "We are dead to rights, born & raised . . ." This is followed by the prechorus "Before the flame goes out tonight, we 
+                        can live before we die." This leads straight into the highly energetic chorus "So come out come out come out, won't you turn my soul into a raging fire?" The chorus gives way to the postchorus in the 
+                        guitar, which leads to the second verse "You know time will give and time will take . . ." This verse is also followed by the prechorus, which leads to the chorus again. Then comes the postchorus on the 
+                        guitar, which then leads to the prechorus again. The prechorus is slightly extended with extra lyrics and a short instrumental interlude before it leads to the climactic final chorus, which is where the song ends. 
+                    </Text>
+                    <View style={styles.card}>
+                        <Text style={{fontSize: 24, color: '#5543A5', textAlign: 'center'}}>
+                            Raging Fire - Phillip Phillips
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color='#4CAF50'
+                                title="Play Song"
+                                onPress={() => raging_fire.current.playAsync()}
+                            />
+                            <Button
+                                color='#F44336'
+                                title="Pause Song"
+                                onPress={() => raging_fire.current.pauseAsync()}
+                            />
+                        </View>
+                    </View>
                 </View>
                 
                 <View style={styles.linksContainer}>
