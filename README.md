@@ -14,9 +14,8 @@ A mobile music synthesizer/beat recording app with Duolingo style learning incen
 - Expo Go
 - Android Studio
 # Important Links
-Kanban Board: [[https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1/timeline?assignee=unassigned]\](https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1)
-
-Designs: [https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?node-id=20-78&p=f&t=BQzAb3eBOK7TijSp-0]\
+Kanban Board: https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1
+Designs: https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?node-id=20-78&p=f&t=BQzAb3eBOK7TijSp-0]\
 
 # How to Run Dev and Test Environment
 
