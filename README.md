@@ -11,15 +11,11 @@ Quality Assurance Tester: Vasu Arora (va2324)
 A mobile music synthesizer/beat recording app with Duolingo style learning incentives and challenges. This will differ from other music creation apps by incorporating a reward system for consistent use, i.e more instruments, sound packs, etc. 
 
 ## Platforms Tested on
-- MacOS
-- Android
-- iOS
-- Linux
-- Windows
+- Expo Go
+- Android Studio
 # Important Links
-Kanban Board: [https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1/timeline?assignee=unassigned]\
+Kanban Board: [[https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1/timeline?assignee=unassigned]\](https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1)
 Designs: [https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?node-id=20-78&p=f&t=BQzAb3eBOK7TijSp-0]\
-Styles Guide(s): [link]
 
 # How to Run Dev and Test Environment
 
@@ -29,11 +25,11 @@ Styles Guide(s): [link]
 ### Downloading Dependencies
 Describe where to download the dependencies here. Some will likely require a web download. Provide links here. For IDE extensions, make sure your project works with the free version of them, and detail which IDE(s) these are available in. 
 
-## Commands
-Describe how the commands and process to launch the project on the main branch in such a way that anyone working on the project knows how to check the affects of any code they add.
+## Execution
+
 
 ```sh
-Example terminal command syntax
+npx expo start
 ```
 
 It is very common in these sections to see code in peculiar boxes to help them stand out. Check the markdown section of the Project Specifications to see how to add more / customize these.
