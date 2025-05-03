@@ -37,6 +37,8 @@ export default function Modes() {
         };
     }, []);
 
+    const [count, setCount] = useState(0);
+
     const correct1 = () => {
         let ionian: any = document.getElementById('ionian1');
         let lydian: any = document.getElementById('lydian1');
@@ -53,6 +55,7 @@ export default function Modes() {
         aeolian.style.color = 'red';
         aeolian.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong1 = () => {
@@ -89,6 +92,7 @@ export default function Modes() {
         aeolian.style.color = 'red';
         aeolian.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong2 = () => {
@@ -125,6 +129,7 @@ export default function Modes() {
         locrian.style.color = 'red';
         locrian.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong3 = () => {
@@ -161,6 +166,7 @@ export default function Modes() {
         locrian.style.color = 'red';
         locrian.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong4 = () => {
@@ -197,6 +203,7 @@ export default function Modes() {
         dorian.style.color = 'red';
         dorian.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong5 = () => {
@@ -233,6 +240,7 @@ export default function Modes() {
         locrian.style.color = 'green';
         locrian.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong6 = () => {

@@ -52,6 +52,8 @@ export default function Pitch(){
                 };
             }, []);
 
+    const [count, setCount] = useState(0);
+
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
@@ -413,6 +415,9 @@ export default function Pitch(){
                                         {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
                                     </Text>
                                 )}
+                                {quiz1Answer && quiz1Answer === answer1 && (
+                                    setCount(count + 1)
+                                )}
                             </View>
                              
                             <View style = {styles.quizContainer}>
@@ -443,6 +448,9 @@ export default function Pitch(){
                                         {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
                                     </Text>
                                 )}
+                                {quiz2Answer && quiz2Answer === answer2 && (
+                                    setCount(count + 1)
+                                )}
                             </View>
                              
                             <View style = {styles.quizContainer}>
@@ -472,6 +480,9 @@ export default function Pitch(){
                                     <Text style={styles.result}>
                                         {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
                                     </Text>
+                                )}
+                                {quiz3Answer && quiz3Answer === answer3 && (
+                                    setCount(count + 1)
                                 )}
                             </View>
                         </View>

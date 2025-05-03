@@ -40,6 +40,8 @@ export default function Melody() {
     const resetQuiz2 = () => setQ2Answer(null);
     const resetQuiz3 = () => setQ3Answer(null);
 
+    const [count, setCount] = useState(0);
+
     return (
 
         <ScrollView
@@ -216,6 +218,9 @@ export default function Melody() {
                                 {"\n"}
                             </Text>
                         )}
+                        {quiz1Answer && quiz1Answer === answer1 && (
+                            setCount(count + 1)
+                        )}
                         <Pressable
                             style={styles.resetButton}
                             onPress={resetQuiz1}
@@ -264,6 +269,9 @@ export default function Melody() {
                                 Correct Answer: {answer2}
                                 {"\n"}
                             </Text>
+                        )}
+                        {quiz2Answer && quiz2Answer === answer2 && (
+                            setCount(count + 1)
                         )}
                         <Pressable
                             style={styles.resetButton}
@@ -314,6 +322,9 @@ export default function Melody() {
                                 Correct Answer: {answer3}
                                 {"\n"}
                             </Text>
+                        )}
+                        {quiz3Answer && quiz3Answer === answer3 && (
+                            setCount(count + 1)
                         )}
                         <Pressable
                             style={styles.resetButton}

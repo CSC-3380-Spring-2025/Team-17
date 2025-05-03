@@ -46,6 +46,8 @@ export default function Intervals() {
     const resetQuiz4 = () => setQ4Answer(null);
     const resetQuiz5 = () => setQ5Answer(null);
 
+    const [count, setCount] = useState(0);
+
     return (
 
         <ScrollView
@@ -356,6 +358,9 @@ export default function Intervals() {
                                 {"\n"}
                             </Text>
                         )}
+                        {quiz1Answer && quiz1Answer === answer1 && (
+                            setCount(count + 1)
+                        )}
                         <Pressable
                             style={styles.resetButton}
                             onPress={resetQuiz1}
@@ -404,6 +409,9 @@ export default function Intervals() {
                                 Correct Answer: {answer2}
                                 {"\n"}
                             </Text>
+                        )}
+                        {quiz2Answer && quiz2Answer === answer2 && (
+                            setCount(count + 1)
                         )}
                         <Pressable
                             style={styles.resetButton}
@@ -455,6 +463,9 @@ export default function Intervals() {
                                 {"\n"}
                             </Text>
                         )}
+                        {quiz3Answer && quiz3Answer === answer3 && (
+                            setCount(count + 1)
+                        )}
                         <Pressable
                             style={styles.resetButton}
                             onPress={resetQuiz3}
@@ -504,6 +515,9 @@ export default function Intervals() {
                                 {"\n"}
                             </Text>
                         )}
+                        {quiz4Answer && quiz4Answer === answer4 && (
+                            setCount(count + 1)
+                        )}
                         <Pressable
                             style={styles.resetButton}
                             onPress={resetQuiz4}
@@ -552,6 +566,9 @@ export default function Intervals() {
                                 Correct Answer: {answer5}
                                 {"\n"}
                             </Text>
+                        )}
+                        {quiz5Answer && quiz5Answer === answer5 && (
+                            setCount(count + 1)
                         )}
                         <Pressable
                             style={styles.resetButton}

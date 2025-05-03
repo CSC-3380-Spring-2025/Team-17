@@ -28,6 +28,8 @@ export default function Scales(){
                         };
                     }, []);
 
+    const [count, setCount] = useState(0);
+
     const correct1 = () => {
         let correct : any = document.getElementById('true1');
         let incorrect : any = document.getElementById('false1');
@@ -38,6 +40,7 @@ export default function Scales(){
         incorrect.style.color = 'green';
         incorrect.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong1 = () => {
@@ -62,6 +65,7 @@ export default function Scales(){
         incorrect.style.color = 'red';
         incorrect.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong2 = () => {
@@ -92,6 +96,7 @@ export default function Scales(){
         g.style.color = 'red';
         g.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong3 = () => {
@@ -128,6 +133,7 @@ export default function Scales(){
         f.style.color = 'green';
         f.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong4 = () => {
@@ -164,6 +170,7 @@ export default function Scales(){
         d.style.color = 'red';
         d.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong5 = () => {
@@ -200,6 +207,7 @@ export default function Scales(){
         d.style.color = 'red';
         d.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong6 = () => {

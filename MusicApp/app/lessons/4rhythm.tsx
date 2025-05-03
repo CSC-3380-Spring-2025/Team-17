@@ -11,6 +11,8 @@ import { Link } from 'expo-router';
     const answer3 = "1/2";
     const answer4 = "False";
 
+    const [count, setCount] = useState(0);
+
 export default function Rhythm(){
     return(
         <ScrollView 
@@ -151,6 +153,9 @@ export default function Rhythm(){
                             {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
+                    {quiz1Answer && quiz1Answer === answer1 && (
+                        setCount(count + 1)
+                    )}
                 </View>
                  
                 <View style={styles.quizContainer}>
@@ -180,6 +185,9 @@ export default function Rhythm(){
                         <Text style={styles.result}>
                             {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
                         </Text>
+                    )}
+                    {quiz2Answer && quiz2Answer === answer2 && (
+                        setCount(count + 1)
                     )}
                 </View>
                  
@@ -211,6 +219,9 @@ export default function Rhythm(){
                             {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
                         </Text>
                     )}
+                    {quiz3Answer && quiz3Answer === answer3 && (
+                        setCount(count + 1)
+                    )}
                 </View>
                  
                 <View style={styles.quizContainer}>
@@ -240,6 +251,9 @@ export default function Rhythm(){
                         <Text style={styles.result}>
                             {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
                         </Text>
+                    )}
+                    {quiz4Answer && quiz4Answer === answer4 && (
+                        setCount(count + 1)
                     )}
                 </View>
             </View>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
@@ -45,6 +45,8 @@ export default function Meter(){
                     };
                 }, []);
 
+    const [count, setCount] = useState(0);
+
     const correct1 = () => {
         let correct : any = document.getElementById('true1');
         let incorrect : any = document.getElementById('false1');
@@ -55,6 +57,7 @@ export default function Meter(){
         incorrect.style.color = 'red';
         incorrect.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong1 = () => {
@@ -79,6 +82,7 @@ export default function Meter(){
         incorrect.style.color = 'green';
         incorrect.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong2 = () => {
@@ -109,6 +113,7 @@ export default function Meter(){
         sixeight.style.color = 'red';
         sixeight.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong3 = () => {
@@ -145,6 +150,7 @@ export default function Meter(){
         twelveeight.style.color = 'red';
         twelveeight.disabled = true;
         p.hidden = false;
+        setCount(count + 1);
     }
 
     const wrong4 = () => {
