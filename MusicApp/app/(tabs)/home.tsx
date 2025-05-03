@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
+import { Text, View, StyleSheet, Pressable, ScrollView, Image, Platform } from "react-native";
 
 import { Link, Stack, useRouter, useNavigation } from 'expo-router';
 
@@ -150,6 +150,10 @@ useEffect(()=>{
 
 
 useEffect(() => {
+  if(Platform.OS === 'web'){
+    console.log('File system operations are not directly supported on the web.')
+  }
+  else{
       const loadSavedSongs = async () => {
         const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory||'');
         const songFiles = files.filter(file => file.startsWith('liveMixingPageState_'));
@@ -161,7 +165,7 @@ useEffect(() => {
         setSavedSongs(songs);
       };
       fetchSavedSongs();
-  
+  }
 }, []);
 
 const handleLoadSong=(name:string)=>{
