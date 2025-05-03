@@ -44,7 +44,7 @@ const Register: React.FC = () => {
       <Text style={styles.registrationTitle}>Registration</Text>
       <TextInput
         style={styles.input}
-        placeholder="Display Name"
+        placeholder="Username"
         placeholderTextColor="#000"
         value={displayName}
         onChangeText={handleDisplayNameInputChange}
