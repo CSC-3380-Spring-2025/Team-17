@@ -14,7 +14,7 @@ export default function App() {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const { recordings, addRecording, updateRecordings } = useAudioContext();
 
-  if (permissionResponse === null){
+  if (permissionResponse === null) {
     return <Text>Loading...</Text>;
   }
 
@@ -73,7 +73,7 @@ export default function App() {
     updatedRecordings[index].isEditing = !updatedRecordings[index].isEditing;
     updateRecordings(updatedRecordings);
   }
-  
+
   function updateRecordingName(index: number, newName: string) {
     const updatedRecordings = [...recordings];
     updatedRecordings[index].name = newName;
@@ -86,24 +86,28 @@ export default function App() {
         data={recordings}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.listContent}
-        renderItem={({ item, index}) => (
+        renderItem={({ item, index }) => (
           <View style={styles.recordingItem}>
-            {item.isEditing?(
+            {item.isEditing ? (
               <TextInput
-                style={styles.recordingName}
+                style={[styles.recordingName, styles.recordingNameInput]}
                 value={item.name}
-                onChangeText={(text)=> updateRecordingName(index, text)}
-                onBlur={()=> toggleEditing(index)}
-               />
-             ):(
-              <Pressable onLongPress={()=> toggleEditing(index)}>
+                onChangeText={(text) => updateRecordingName(index, text)}
+                onBlur={() => toggleEditing(index)}
+                autoFocus
+              />
+            ) : (
+              <View style={styles.recordingInfo}>
                 <Text style={styles.recordingName}>{item.name}</Text>
-              </Pressable>
+                <TouchableOpacity onPress={() => toggleEditing(index)} style={styles.editButton}>
+                  <MaterialIcons name="edit" size={20} color="white" />
+                </TouchableOpacity>
+              </View>
             )}
             <Pressable
               style={styles.playButton}
-              onPress={()=> playSound(item.uri)}
-              android_ripple={{color:'rgba(255, 255, 255, 0.1)'}}
+              onPress={() => playSound(item.uri)}
+              android_ripple={{ color: 'rgba(255, 255, 255, 0.1)' }}
             >
               <MaterialIcons name="play-arrow" size={24} color="white" />
 
@@ -118,7 +122,6 @@ export default function App() {
           </View>
         }
       />
-      
       <View style={styles.recordButtonContainer}>
         <TouchableOpacity
           style={[styles.recordButton, recording && styles.recordingActive]}
@@ -237,5 +240,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 5,
     width: 150,
+  },
+  editButton: {
+    marginLeft: 12,
+    padding: 4,
   },
 });
