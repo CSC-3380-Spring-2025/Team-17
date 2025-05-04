@@ -3,6 +3,7 @@ import { auth, db, addCoins } from '@/firebaseConfig';
 import { doc } from "firebase/firestore";
 import { View } from "react-native";
 import coins from "@/components/coins";
+import { LessonContext } from "./LessonsContext";
 
 
 type Challenge={
@@ -25,6 +26,7 @@ const ChallengesContext = createContext<ChallengesContextType>({challenges:[], h
 
 export const ChallengesProvider=({children}: ChallengesProviderprops)=> {
     const [userId, setUserId]= useState('');
+    const {lessons, setLessons} = useContext(LessonContext);
 
     useEffect(()=>{
         if (auth.currentUser){
@@ -33,12 +35,12 @@ export const ChallengesProvider=({children}: ChallengesProviderprops)=> {
       }, []);
 
     const [challenges, setChallenges] = useState<Challenge[]>([
-        { title: "Complete 2 lessons", progress: 0, goal: 2, reward: 10 }, // Change progress manually
+        { title: "Complete 2 lessons", progress: lessons, goal: 2, reward: 10 }, // Change progress manually
         { title: "Create a new track", progress: 0, goal: 1, reward: 5}, // Change here
         { title: "Use the acoustic guitar in a track", progress: 0, goal: 1, reward: 5 }, // Change here
         { title: "Import a new track", progress: 0, goal: 1 , reward: 5}, // Change here
         { title: "Login three days in a row", progress: 2, goal: 3, reward:15 }, // Change here
-        { title: "Complete all lessons", progress: 0, goal: 13, reward: 35}, // Change here
+        { title: "Complete all lessons", progress: lessons, goal: 13, reward: 35}, // Change here
     ]);
 const handleTaskCompletion = async (challengeTitle: string) => {
   console.log(`handleTaskCompletion called with challengeTitle: ${challengeTitle}`);

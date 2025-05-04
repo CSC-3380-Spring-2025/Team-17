@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef, useContext} from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
+import { LessonContext } from '../context/LessonsContext';
 
 export default function Meter(){
     const sd = useRef(new Audio.Sound());
@@ -46,6 +47,7 @@ export default function Meter(){
                 }, []);
 
     const [count, setCount] = useState(0);
+    const {lessons, setLessons} = useContext(LessonContext);
 
     const correct1 = () => {
         let correct : any = document.getElementById('true1');
@@ -151,6 +153,7 @@ export default function Meter(){
         twelveeight.disabled = true;
         p.hidden = false;
         setCount(count + 1);
+        if(count === 4) {setLessons(lessons + 1)}
     }
 
     const wrong4 = () => {
