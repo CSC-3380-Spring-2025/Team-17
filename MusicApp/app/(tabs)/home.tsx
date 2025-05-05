@@ -1,10 +1,19 @@
-import { Text, View, StyleSheet, Pressable, ScrollView, Image } from "react-native";
-import { Link, Stack } from 'expo-router';
+import { Text, View, StyleSheet, Pressable, ScrollView, Image, Platform } from "react-native";
+
+import { Link, Stack, useRouter, useNavigation } from 'expo-router';
+
 import Coins from '../../components/coins'
 import Streak from'../../components/streak';
-import React, {useState, useEffect} from 'react';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
+
+
+import {useChallenges} from '../context/ChallengesContext';
+
+import React, {useState, useEffect, useRef} from 'react';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore';
+import {auth, db} from '../../firebaseConfig';
+import LiveMixingPage from './recorder';
+import * as FileSystem from 'expo-file-system';
+
 
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 type LessonLink=
@@ -24,17 +33,27 @@ type LessonLink=
 
 
 export default function HomeScreen() {
+
+  const navigation = useNavigation();
+
   const [userId, setUserId]= useState('');
   const [lessonNumber, setLessonNumber]= useState(1);
   const [lessonTitle, setLessonTitle]= useState('');
   const [lessonImage, setLessonImage]= useState(PlaceholderImage);
   const [lessonLink, setLessonLink]= useState<LessonLink>('/lessons/1intro')
-      useEffect(()=>{
+
+  const {handleTaskCompletion}=useChallenges();    
+
+  const [savedSongs, setSavedSongs] = useState<string[]>([]);
+  const router=useRouter();
+
+  useEffect(()=>{
           if (auth.currentUser){
             setUserId(auth.currentUser.uid);
           }
         }, []);
-        useEffect(()=>{
+
+  useEffect(()=>{
   const fetchLessonProgress= async()=>{
     if (!userId) return;
     try{
@@ -135,6 +154,61 @@ useEffect(()=>{
       break;
 }
 }, [lessonNumber]);
+
+
+useEffect(()=>{
+  const checkAndUpdateLoginDates = async()=>{
+    if(!userId) return;
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    try{
+      const docRef= doc(db, 'users', userId);
+      const docSnap= await getDoc(docRef);
+      if(docSnap.exists()){
+        const data = docSnap.data();
+        const homeAccessDates=data.homeAccessDates||[];
+        if(!homeAccessDates.includes(currentDate)){
+          await updateDoc(docRef, {
+            homeAccessDates: arrayUnion(currentDate)
+          });
+          handleTaskCompletion("Login three days in a row")
+        }
+      }else{
+        console.log("No such document");
+      }
+    }catch(error){
+      console.error("Error fetching document: ", error);
+    }
+  };
+  checkAndUpdateLoginDates();
+}, [userId]);
+
+
+
+useEffect(() => {
+  if(Platform.OS === 'web'){
+    console.log('File system operations are not directly supported on the web.')
+  }
+  else{
+      const loadSavedSongs = async () => {
+        const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory||'');
+        const songFiles = files.filter(file => file.startsWith('liveMixingPageState_'));
+        return songFiles.map(file => file.replace('liveMixingPageState_', '').replace('.json', ''));
+      };
+  
+      const fetchSavedSongs = async () => {
+        const songs = await loadSavedSongs();
+        setSavedSongs(songs);
+      };
+      fetchSavedSongs();
+  }
+}, []);
+
+const handleLoadSong=(name:string)=>{
+  router.push(`/recorder?song=${name}`);
+};
+
+
   return (
     <>
       <Stack.Screen
@@ -181,36 +255,25 @@ useEffect(()=>{
           </Link>
 
         
+        {savedSongs.map((song, index)=>(
+          <Pressable
+            key={index}
+            style={styles.recordingBox}
+            onPress={()=>handleLoadSong(song)}
+          >
+            <Text style={styles.recordingTitle}>{song}</Text>
+            <View style={styles.recordingDetails}>
+              <Text style={styles.recordingDate}>Date Unknown</Text>
+              <Text style={styles.recordingDuration}>Duration Unknown</Text>
+            </View>
+          </Pressable>
+
+        ))}
        
-        <View style={styles.recordingBox}>
-          <Text style={styles.recordingTitle}>Song Draft 2</Text>
-          <View style={styles.recordingDetails}>
-            <Text style={styles.recordingDate}>Oct 26, 2024</Text>
-            <Text style={styles.recordingDuration}>03:27</Text>
-          </View>
-        </View>
-        <View style={styles.recordingBox}>
-          <Text style={styles.recordingTitle}>Voice Test</Text>
-          <View style={styles.recordingDetails}>
-            <Text style={styles.recordingDate}>Aug 17, 2024</Text>
-            <Text style={styles.recordingDuration}>00:50</Text>
-          </View>
-        </View>
-        <View style={styles.recordingBox}>
-          <Text style={styles.recordingTitle}>Song Draft</Text>
-          <View style={styles.recordingDetails}>
-            <Text style={styles.recordingDate}>Jul 4, 2024</Text>
-            <Text style={styles.recordingDuration}>02:12</Text>
-          </View>
-        </View>
-        <View style={styles.recordingBox}>
-          <Text style={styles.recordingTitle}>Song Final</Text>
-          <View style={styles.recordingDetails}>
-            <Text style={styles.recordingDate}>Apr 18, 2025</Text>
-            <Text style={styles.recordingDuration}>01:36</Text>
-          </View>
-        </View>
+
+        
         <Pressable style={styles.createButton}>
+
           <Text style={styles.createButtonText}>Create New Track</Text>
         </Pressable>
       </ScrollView>
