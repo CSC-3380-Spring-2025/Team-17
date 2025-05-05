@@ -4,7 +4,7 @@ import { View, Dimensions, Text, StyleSheet, TouchableOpacity } from 'react-nati
 import { AudioProvider } from './AudioContext';
 
 import { Svg, Path } from 'react-native-svg';
-import { usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 
 import Streak from '@/components/streak';
 import Coins from '@/components/coins';
@@ -14,19 +14,36 @@ import { AuthProvider } from '../context/AuthContext';
 
 const FloatingMiddleButton = () => {
     const pathname = usePathname();
+    const router = useRouter();
     const isRecordingPage = pathname.includes('recorder') || pathname.includes('Recording');
   
-    return (
+    if (isRecordingPage) return null;
 
-      <TouchableOpacity style={[styles.fab, isRecordingPage && styles.recordingFab]}>
-        {!isRecordingPage && <Text style={styles.plus}>+</Text>}
+    return (
+      <TouchableOpacity 
+      style={[styles.fab]}
+      onPress={() => router.push('/recorder')}
+      >
+        <Text style={styles.plus}>+</Text>
       </TouchableOpacity>
     );
-  };
+};
 
 const TabBarBackground = () => {
     const { width } = Dimensions.get('window');
     const height = 50;
+    const pathname = usePathname();
+
+    const isRecordingPage = pathname.includes('recorder') || pathname.includes('Recording');
+  
+    if (isRecordingPage) {
+        return (
+          <Svg width={width} height={height} style={{ position: 'absolute', bottom: 0 }}>
+            <Path d={`M0,0 H${width} V${height} H0 Z`} fill="#333232" />
+          </Svg>
+        );
+    }
+  
     const dipWidth = 80;
     const dipDepth = 30;
     const left = (width - dipWidth) / 2;
@@ -47,12 +64,13 @@ const TabBarBackground = () => {
         <Path d={path} fill="#333232" />
       </Svg>
     );
-  };
+};
 
-  export default function TabLayout() {
-    return (<ChallengesProvider>
-      <AuthProvider>
-      
+
+export default function TabLayout() {
+    return (
+      <ChallengesProvider>
+
       <AudioProvider>
         <>
           <Tabs
@@ -102,6 +120,7 @@ const TabBarBackground = () => {
             <Tabs.Screen
               name="recorder"
               options={{
+                headerShown: false,
                 title: 'Mixing',
                 tabBarIcon: ({ color, focused }) => (
                   <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
@@ -122,18 +141,6 @@ const TabBarBackground = () => {
                   <Ionicons name={focused ? 'school' : 'school-outline'} color={color} size={24} />
                 ),
                 tabBarItemStyle: {
-                    marginRight: 20
-                }
-              }}
-            />
-            <Tabs.Screen
-              name="lessons2"
-              options={{
-                title: 'Lessons2',
-                tabBarIcon: ({ color, focused }) => (
-                  <Ionicons name={focused ? 'mic' : 'mic-outline'} color={color} size={24} />
-                ),
-                tabBarItemStyle: {
                     marginLeft: 20
                 }
               }}
@@ -145,14 +152,12 @@ const TabBarBackground = () => {
                 tabBarIcon: ({ color, focused }) => (
                   <Ionicons name={focused ? 'mic-circle' : 'mic-circle-outline'} color={color} size={24} />
                 ),
-                //'mic-circle' : 'mic-circle-outline'
-                //'person-add' : 'person-circle-outline'
-                //
               }}
             />
             <Tabs.Screen
-              name="Recording"
+              name="recordertest"
               options={{
+                headerShown: false,
                 title: 'RecorderTest',
                 tabBarIcon: ({ color, focused }) => (
                   <Ionicons name={focused ? 'mic-circle' : 'mic-circle-outline'} color={color} size={24} />
@@ -163,12 +168,11 @@ const TabBarBackground = () => {
           <FloatingMiddleButton />
         </>
       </AudioProvider>
-        
-        </AuthProvider>
-        </ChallengesProvider>
+
+      </ChallengesProvider>
 
     );
-  }
+}
 
 const styles = StyleSheet.create({
     fab: {
@@ -201,4 +205,4 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: 'white',
       },
-  });
+});

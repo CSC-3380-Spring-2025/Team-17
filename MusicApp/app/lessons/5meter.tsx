@@ -478,9 +478,11 @@ export default function Meter(){
                 3. What is the time signature of the music below?
             </Text>
             <Image source={require('@/assets/images/example1.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play example" onPress={() => e1.current.playAsync()} />
-                <Button color='red' title="Pause example" onPress={() => e1.current.pauseAsync()} />
+
+            <View style={styles.buttonContainer}>
+                <Button color='green' title="Play example" onPress={() => e1.play()} />
+                <Button color='red' title="Pause example" onPress={() => e1.pause()} />
+
             </View>
             <form>
                 <button id='22' style={{fontSize: '24px'}} onClick={wrong3}>2/2</button>
@@ -494,9 +496,11 @@ export default function Meter(){
                 4. What is the time signature of the music below?
             </Text>
             <Image source={require('@/assets/images/example2.png')} />
-            <View style={styles.buttons}>
-                <Button color='green' title="Play example" onPress={() => e2.current.playAsync()} />
-                <Button color='red' title="Pause example" onPress={() => e2.current.pauseAsync()} />
+
+            <View style={styles.buttonContainer}>
+                <Button color='green' title="Play example" onPress={() => e2.play()} />
+                <Button color='red' title="Pause example" onPress={() => e2.pause()} />
+
             </View>
             <form>
                 <button id='4/4' style={{fontSize: '24px'}} onClick={wrong4}>4/4</button>
@@ -596,9 +600,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 10,
         marginTop: 10,
-    },
-    buttons: {
-        flexDirection: 'row'
     },
     linksContainer: {
         width: '100%',
