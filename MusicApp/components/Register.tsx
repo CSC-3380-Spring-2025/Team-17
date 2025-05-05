@@ -1,13 +1,32 @@
 import React, { useState } from 'react';
 import { updateProfile, sendEmailVerification } from 'firebase/auth';
-import { auth, authenticateUser } from '../firebaseConfig';
-import { Text, StyleSheet, View, TextInput, Pressable } from 'react-native';
+import { authenticateUser, db } from '../firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
+import { Text, StyleSheet, View, TextInput, Pressable, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Link } from 'expo-router';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [selectedImage, setSelectedImage] = useState<{ name: string, src: number } | null>(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const profileImages = [
+    { name: 'aesthetic.jpg', src: require('../assets/profilePictures/aesthetic.jpg') },
+    { name: 'bluemusic.jpg', src: require('../assets/profilePictures/bluemusic.jpg') },
+    { name: 'blues.jpg', src: require('../assets/profilePictures/blues.jpg') },
+    { name: 'brain.jpg', src: require('../assets/profilePictures/brain.jpg') },
+    { name: 'grass.jpg', src: require('../assets/profilePictures/grass.jpg') },
+    { name: 'guitarplayer.jpg', src: require('../assets/profilePictures/guitarplayer.jpg') },
+    { name: 'musichead.jpg', src: require('../assets/profilePictures/musichead.jpg') },
+    { name: 'musicmedley.jpg', src: require('../assets/profilePictures/musicmedley.jpg') },
+    { name: 'piano.jpg', src: require('../assets/profilePictures/piano.jpg') },
+    { name: 'purpleheadphone.jpg', src: require('../assets/profilePictures/purpleheadphone.jpg') },
+    { name: 'red.jpg', src: require('../assets/profilePictures/red.jpg') },
+    { name: 'rock.jpg', src: require('../assets/profilePictures/rock.jpg') },
+  ];
+  
 
   const handleEmailInputChange = (input: React.SetStateAction<string>) => {
     setEmail(input);
@@ -29,12 +48,18 @@ const Register: React.FC = () => {
       } else {
         await updateProfile(user, { displayName });
         await sendEmailVerification(user);
-        const name = user.displayName || '';
-        console.log('User registered successfully');
-        alert(`Registration successful! A verification email has been sent to ${email}. ${name}, please verify your email before logging in.`);
+  
+        if (selectedImage) {
+          await setDoc(doc(db, 'users', user.uid), {
+            displayName,
+            profilePicture: selectedImage.name,
+          });
+        }
+  
+        alert(`Registration successful! A verification email has been sent to ${email}.`);
       }
     } catch (error) {
-      console.error('Unknown error caught');
+      console.error('Unknown error caught', error);
       alert('An unknown error occurred.');
     }
   };
@@ -44,7 +69,7 @@ const Register: React.FC = () => {
       <Text style={styles.registrationTitle}>Registration</Text>
       <TextInput
         style={styles.input}
-        placeholder="Display Name"
+        placeholder="Username"
         placeholderTextColor="#000"
         value={displayName}
         onChangeText={handleDisplayNameInputChange}
@@ -67,13 +92,73 @@ const Register: React.FC = () => {
         autoCapitalize='none'
 
       />
+      <Pressable
+        style={{
+          backgroundColor: '#555',
+          paddingVertical: 10,
+          paddingHorizontal: 20,
+          borderRadius: 10,
+          marginBottom: 20,
+        }}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={{ color: '#fff' }}>
+          {selectedImage ? 'Change Profile Picture' : 'Choose Profile Picture'}
+        </Text>
+      </Pressable>
+
+      {selectedImage && (
+        <Image
+          source={selectedImage.src}
+          style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
+        />
+      )}
+
       <Pressable style={styles.registerButton} onPress={handleRegister}>
         <Text style={styles.registerButtonText}>Register</Text>
       </Pressable>
       <Link href="/loginPage" style={styles.createLink}>
         <Text style={styles.createLinkText}>Back to Login Page</Text>
       </Link>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.popUpContainer}>
+          <Text style={styles.popUpText}>Choose a Profile Picture</Text>
+          <ScrollView contentContainerStyle={styles.imageGrid}>
+            {profileImages.map((img, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => {
+                  setSelectedImage(img);
+                  setModalVisible(false);
+                }}
+              >
+                <Image
+                  source={img.src}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 40,
+                    margin: 10,
+                    borderWidth: selectedImage === img ? 2 : 0,
+                    borderColor: '#000',
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          <Pressable onPress={() => setModalVisible(false)} style={styles.popUpClose}>
+            <Text style={{ color: '#fff' }}>Cancel</Text>
+          </Pressable>
+        </View>
+      </Modal>
+
     </View>
+
   );
 };
 
@@ -135,6 +220,30 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     textDecorationLine: 'underline',
+  },
+  popUpContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 40,
+    backgroundColor: '#333232',
+  },
+  popUpText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#fff',
+  },
+  imageGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  popUpClose: {
+    backgroundColor: '#888',
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 20,
   },
 });
 

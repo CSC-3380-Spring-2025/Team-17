@@ -1,14 +1,11 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image, Platform } from "react-native";
 
 import { Link, Stack, useRouter, useNavigation } from 'expo-router';
-
+import ProfilePictureButton from '../../components/profilePictureButton';
 import Coins from '../../components/coins'
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import Streak from'../../components/streak';
-
-
 import {useChallenges} from '../context/ChallengesContext';
-
-import React, {useState, useEffect, useRef} from 'react';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore';
 import {auth, db} from '../../firebaseConfig';
 import LiveMixingPage from './recorder';
@@ -16,7 +13,7 @@ import * as FileSystem from 'expo-file-system';
 
 
 const PlaceholderImage = require('@/assets/images/dog.jpg');
-type LessonLink=
+type LessonLink =
   | "/lessons/1intro"
   | "/lessons/2notation"
   | "/lessons/3pitch"
@@ -53,107 +50,110 @@ export default function HomeScreen() {
           }
         }, []);
 
-  useEffect(()=>{
-  const fetchLessonProgress= async()=>{
-    if (!userId) return;
-    try{
-      const docRef= doc(db, 'users', userId);
-      const docSnap = await getDoc(docRef);
 
-      if(docSnap.exists()){
-        const data = docSnap.data()
-        if(data.lessonProgress && data.lessonProgress.length>0){
-          const highestLesson = Math.max(...data.lessonProgress);
-          setLessonNumber(highestLesson); 
-        }else{
+  useEffect(() => {
+    const fetchLessonProgress = async () => {
+      if (!userId) return;
+      try {
+        const docRef = doc(db, 'users', userId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data()
+          if (data.lessonProgress && data.lessonProgress.length > 0) {
+            const highestLesson = Math.max(...data.lessonProgress);
+            setLessonNumber(highestLesson);
+          } else {
+            setLessonNumber(1);
+          }
+        } else {
+          console.log("No such document");
           setLessonNumber(1);
         }
-      }else{
-        console.log("No such document");
+      } catch (error) {
+        console.error("Error fetching document: ", error);
         setLessonNumber(1);
       }
-    }catch(error){
-      console.error("Error fetching document: ", error);
-      setLessonNumber(1);
-    }
-  };
-  fetchLessonProgress();
-}, [userId]);
+    };
+    fetchLessonProgress();
+  }, [userId]);
 
-useEffect(()=>{
-  switch (lessonNumber) {
-    case 1:
-      setLessonTitle("Intro");
-      setLessonImage(require('@/assets/lessonPics/intro.jpeg'));
-      setLessonLink('/lessons/1intro');
-      break;
-    case 2:
-      setLessonTitle("Notation");
-      setLessonImage(require('@/assets/lessonPics/notation.jpg'));
-      setLessonLink('/lessons/2notation');
-      break;
-    case 3:
-      setLessonTitle("Pitch");
-      setLessonImage(require('@/assets/lessonPics/pitch.jpg'));
-      setLessonLink('/lessons/3pitch');
-      break;
-    case 4:
-      setLessonTitle("Rhythm");
-      setLessonImage(require('@/assets/lessonPics/rhythm.jpg'));
-      setLessonLink('/lessons/4rhythm');
-      break;
-    case 5:
-      setLessonTitle("Meter");
-      setLessonImage(require('@/assets/lessonPics/meter.jpg'));
-      setLessonLink('/lessons/5meter');
-      break;
-    case 6:
-      setLessonTitle("Scales");
-      setLessonImage(require('@/assets/lessonPics/scales.jpg'));
-      setLessonLink('/lessons/6scales');
-      break;
-    case 7:
-      setLessonTitle("Modes");
-      setLessonImage(require('@/assets/lessonPics/modes.jpg'));
-      setLessonLink('/lessons/7modes');
-      break;
-    case 8:
-      setLessonTitle("Intervals");
-      setLessonImage(require('@/assets/lessonPics/intervals.jpg'));
-      setLessonLink('/lessons/8intervals');
-      break;
-    case 9:
-      setLessonTitle("Melody");
-      setLessonImage(require('@/assets/lessonPics/melody.jpg'));
-      setLessonLink('/lessons/9melody');
-      break;
-    case 10:
-      setLessonTitle("Chords");
-      setLessonImage(require('@/assets/lessonPics/chords.jpg'));
-      setLessonLink('/lessons/10chords');
-      break;
-    case 11:
-      setLessonTitle("Progressions");
-      setLessonImage(require('@/assets/lessonPics/progressions.jpg'));
-      setLessonLink('/lessons/11progressions');
-      break;
-    case 12:
-      setLessonTitle("Texture");
-      setLessonImage(require('@/assets/lessonPics/texture.jpg'));
-      setLessonLink('/lessons/12texture');
-      break;
-    case 13:
-      setLessonTitle("Structure");
-      setLessonImage(require('@/assets/lessonPics/structure.jpg'));
-      setLessonLink('/lessons/13structure');
-      break;
-    default:
-      setLessonTitle("Intro");
-      setLessonImage(require('@/assets/lessonPics/intro.jpeg'));
-      setLessonLink('/lessons/1intro');
-      break;
-}
-}, [lessonNumber]);
+  useEffect(() => {
+    switch (lessonNumber) {
+      case 1:
+        setLessonTitle("Intro");
+        setLessonImage(require('@/assets/lessonPics/intro.jpeg'));
+        setLessonLink('/lessons/1intro');
+        break;
+      case 2:
+        setLessonTitle("Notation");
+        setLessonImage(require('@/assets/lessonPics/notation.jpg'));
+        setLessonLink('/lessons/2notation');
+        break;
+      case 3:
+        setLessonTitle("Pitch");
+        setLessonImage(require('@/assets/lessonPics/pitch.jpg'));
+        setLessonLink('/lessons/3pitch');
+        break;
+      case 4:
+        setLessonTitle("Rhythm");
+        setLessonImage(require('@/assets/lessonPics/rhythm.jpg'));
+        setLessonLink('/lessons/4rhythm');
+        break;
+      case 5:
+        setLessonTitle("Meter");
+        setLessonImage(require('@/assets/lessonPics/meter.jpg'));
+        setLessonLink('/lessons/5meter');
+        break;
+      case 6:
+        setLessonTitle("Scales");
+        setLessonImage(require('@/assets/lessonPics/scales.jpg'));
+        setLessonLink('/lessons/6scales');
+        break;
+      case 7:
+        setLessonTitle("Modes");
+        setLessonImage(require('@/assets/lessonPics/modes.jpg'));
+        setLessonLink('/lessons/7modes');
+        break;
+      case 8:
+        setLessonTitle("Intervals");
+        setLessonImage(require('@/assets/lessonPics/intervals.jpg'));
+        setLessonLink('/lessons/8intervals');
+        break;
+      case 9:
+        setLessonTitle("Melody");
+        setLessonImage(require('@/assets/lessonPics/melody.jpg'));
+        setLessonLink('/lessons/9melody');
+        break;
+      case 10:
+        setLessonTitle("Chords");
+        setLessonImage(require('@/assets/lessonPics/chords.jpg'));
+        setLessonLink('/lessons/10chords');
+        break;
+      case 11:
+        setLessonTitle("Progressions");
+        setLessonImage(require('@/assets/lessonPics/progressions.jpg'));
+        setLessonLink('/lessons/11progressions');
+        break;
+      case 12:
+        setLessonTitle("Texture");
+        setLessonImage(require('@/assets/lessonPics/texture.jpg'));
+        setLessonLink('/lessons/12texture');
+        break;
+      case 13:
+        setLessonTitle("Structure");
+        setLessonImage(require('@/assets/lessonPics/structure.jpg'));
+        setLessonLink('/lessons/13structure');
+        break;
+      default:
+        setLessonTitle("Intro");
+        setLessonImage(require('@/assets/lessonPics/intro.jpeg'));
+        setLessonLink('/lessons/1intro');
+        break;
+    }
+  }, [lessonNumber]);
+
+
 
 
 useEffect(()=>{
@@ -204,62 +204,41 @@ useEffect(() => {
   }
 }, []);
 
-const handleLoadSong=(name:string)=>{
-  router.push(`/recorder?song=${name}`);
-};
+
+  }, []);
+
+  const handleLoadSong = (name: string) => {
+    router.push(`/recorder?song=${name}`);
+  };
 
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          
-          headerTitle: () => (
-            <View style={styles.headerContainer}>
-              <View style={styles.headerRow}>
-       
-                <View>
-                  <Text style={styles.headerTitle}>Home</Text>
-                </View>
-                
-              </View>
-            </View>
-          ),
-          headerLeft: () => (
-           <Streak/>
-          ),
-          headerRight: () => (
-            <Coins/>
-          ),
-          headerTitleAlign: "center",
-        }}
-      />
-
       <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
         <Link href={lessonLink} asChild>
-        <Pressable style={styles.lessonBox}>
-        
-          <View style={styles.lessonTextContainer}>
-            <Text style={styles.sectionTitle}>Lesson {lessonNumber}</Text>
-            <Text style={styles.sectionSubtitle}>{lessonTitle}</Text>
-          </View>
-          <View style={styles.dividerLine} />
-          <View style={styles.lessonImageContainer}>
-            <Image
-              source={lessonImage}
-              style={styles.lessonImage}
-              resizeMode="cover"
-            />
-          </View>
-          </Pressable>
-          </Link>
+          <Pressable style={styles.lessonBox}>
 
-        
-        {savedSongs.map((song, index)=>(
+            <View style={styles.lessonTextContainer}>
+              <Text style={styles.sectionTitle}>Lesson {lessonNumber}</Text>
+              <Text style={styles.sectionSubtitle}>{lessonTitle}</Text>
+            </View>
+            <View style={styles.dividerLine} />
+            <View style={styles.lessonImageContainer}>
+              <Image
+                source={lessonImage}
+                style={styles.lessonImage}
+                resizeMode="cover"
+              />
+            </View>
+          </Pressable>
+        </Link>
+
+
+        {savedSongs.map((song, index) => (
           <Pressable
             key={index}
             style={styles.recordingBox}
-            onPress={()=>handleLoadSong(song)}
+            onPress={() => handleLoadSong(song)}
           >
             <Text style={styles.recordingTitle}>{song}</Text>
             <View style={styles.recordingDetails}>
@@ -269,9 +248,9 @@ const handleLoadSong=(name:string)=>{
           </Pressable>
 
         ))}
-       
 
-        
+
+
         <Pressable style={styles.createButton}>
           <Link href="/recorder" asChild>
           <Text style={styles.createButtonText}>Create New Track</Text>
@@ -284,9 +263,8 @@ const handleLoadSong=(name:string)=>{
 
 const styles = StyleSheet.create({
   headerContainer: {
-
-    alignItems: "center",
-    paddingTop: 30,
+    flex: 1,
+    width: '100%',
   },
   container: {
     flex: 1,
@@ -378,8 +356,8 @@ const styles = StyleSheet.create({
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
     width: '100%',
+    justifyContent: 'space-between',
   },
   titleCenter: {
     flex: 1,
@@ -392,13 +370,12 @@ const styles = StyleSheet.create({
   },
   headerRow: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
   titleContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -421,7 +398,25 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: "#fff",
     fontWeight: "bold",
-    marginBottom: 8,
+    textAlign: "center",
+  },
+  headerLeft: {
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingLeft: 10,
+  },
+  headerCenter: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerRight: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: 10,
+    paddingRight: 10,
   },
   imageButton: {
     width: 30,
@@ -433,5 +428,10 @@ const styles = StyleSheet.create({
   buttonImage: {
     width: '100%',
     height: '100%',
+  },
+  headerRightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
 });
