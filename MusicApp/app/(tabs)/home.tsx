@@ -205,7 +205,7 @@ useEffect(() => {
 }, []);
 
 
-  }, []);
+ 
 
   const handleLoadSong = (name: string) => {
     router.push(`/recorder?song=${name}`);
