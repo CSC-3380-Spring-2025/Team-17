@@ -181,22 +181,27 @@ export default function Melody() {
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz1Answer === option;
+                            const correct = option === answer1;
+
                             let buttonStyle = styles.quizButton;
 
-                            if (quiz1Answer !== null) {
-                                if (option === answer1) {
+                            if (quiz1Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
                                     buttonStyle = styles.correctAnswer;
                                 }
-                                else if (selected) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                }
                             }
+
                             return (
                                 <Pressable
                                     key={index}
                                     style={buttonStyle}
+                                    disabled={!!quiz1Answer}
                                     onPress={() => {
-                                        if (!quiz1Answer) setQ1Answer(option); // only once
+                                        if (!quiz1Answer) setQ1Answer(option);
                                     }}
                                 >
 
@@ -205,23 +210,10 @@ export default function Melody() {
                             );
                         })}
                         {quiz1Answer && (
-                            <Text style={styles.result}>
-                                {quiz1Answer === answer1 ? "Correct!" : "Wrong"}
-                                {"\n"}
-                            </Text>
-                        )}
-                        {quiz1Answer && quiz1Answer !== answer1 && (
-                            <Text style={styles.result}>
-                                Correct Answer: {answer1}
-                                {"\n"}
-                            </Text>
-                        )}
-                        <Pressable
-                            style={styles.resetButton}
-                            onPress={resetQuiz1}
-                        >
-                            <Text style={styles.resetButtonText}>Reset</Text>
-                        </Pressable>
+                                                    <Text style={styles.result}>
+                                                        {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                                    </Text>
+                                                )}
                     </View>
 
                     <View style={styles.quizContainer}>
@@ -230,14 +222,17 @@ export default function Melody() {
                         </Text>
                         {["Focal Point", "Contour", "Summit", "Climax"].map((option, index) => {
                             const selected = quiz2Answer === option;
+                            const correct = option === answer2;
+
                             let buttonStyle = styles.quizButton;
 
-                            if (quiz2Answer !== null) {
-                                if (option === answer2) {
+                            if (quiz2Answer) {
+                                if (selected && correct) {
                                     buttonStyle = styles.correctAnswer;
-                                }
-                                else if (selected) {
+                                } else if (selected && !correct) {
                                     buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
                                 }
                             }
 
@@ -245,8 +240,9 @@ export default function Melody() {
                                 <Pressable
                                     key={index}
                                     style={buttonStyle}
+                                    disabled={!!quiz2Answer}
                                     onPress={() => {
-                                        if (!quiz2Answer) setQ2Answer(option); // only once
+                                        if (!quiz2Answer) setQ2Answer(option);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -254,23 +250,10 @@ export default function Melody() {
                             );
                         })}
                         {quiz2Answer && (
-                            <Text style={styles.result}>
-                                {quiz2Answer === answer2 ? "Correct!" : "Wrong"}
-                                {"\n"}
-                            </Text>
-                        )}
-                        {quiz2Answer && quiz2Answer !== answer2 && (
-                            <Text style={styles.result}>
-                                Correct Answer: {answer2}
-                                {"\n"}
-                            </Text>
-                        )}
-                        <Pressable
-                            style={styles.resetButton}
-                            onPress={resetQuiz2}
-                        >
-                            <Text style={styles.resetButtonText}>Reset</Text>
-                        </Pressable>
+                                                    <Text style={styles.result}>
+                                                        {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                                    </Text>
+                                                )}
                     </View>
 
                     <View style={styles.quizContainer}>
@@ -279,14 +262,17 @@ export default function Melody() {
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz3Answer === option;
+                            const correct = option === answer3;
+
                             let buttonStyle = styles.quizButton;
 
-                            if (quiz3Answer !== null) {
-                                if (option === answer3) {
+                            if (quiz3Answer) {
+                                if (selected && correct) {
                                     buttonStyle = styles.correctAnswer;
-                                }
-                                else if (selected) {
+                                } else if (selected && !correct) {
                                     buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
                                 }
                             }
 
@@ -294,8 +280,9 @@ export default function Melody() {
                                 <Pressable
                                     key={index}
                                     style={buttonStyle}
+                                    disabled={!!quiz3Answer}
                                     onPress={() => {
-                                        if (!quiz3Answer) setQ3Answer(option); // only once
+                                        if (!quiz3Answer) setQ3Answer(option);
                                     }}
                                 >
 
@@ -304,23 +291,10 @@ export default function Melody() {
                             );
                         })}
                         {quiz3Answer && (
-                            <Text style={styles.result}>
-                                {quiz3Answer === answer3 ? "Correct!" : "Wrong"}
-                                {"\n"}
-                            </Text>
-                        )}
-                        {quiz3Answer && quiz3Answer !== answer3 && (
-                            <Text style={styles.result}>
-                                Correct Answer: {answer3}
-                                {"\n"}
-                            </Text>
-                        )}
-                        <Pressable
-                            style={styles.resetButton}
-                            onPress={resetQuiz3}
-                        >
-                            <Text style={styles.resetButtonText}>Reset</Text>
-                        </Pressable>
+                                                    <Text style={styles.result}>
+                                                        {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                                    </Text>
+                                                )}
                     </View>
                 </View>
 
@@ -395,6 +369,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5543A5',
     },
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
+    },
     linksContainer: {
         width: '100%',
         alignItems: 'center',
@@ -465,31 +443,47 @@ const styles = StyleSheet.create({
     },
 
     quizContainer: {
-        height: 100,
-        width: 200,
-
-        alignItems: 'center',
-        padding: 7,
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 15,
+        marginBottom: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     quizTitle: {
         color: 'black',
-        fontSize: 50,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        fontSize: 36,
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 30,
         textDecorationLine: 'underline',
-        paddingBottom: 20
     },
     quizText: {
         color: '#840606',
         fontSize: 20,
         alignSelf: 'center',
     },
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
     quizButton: {
-        height: 45,
-        width: 150,
         backgroundColor: 'gray',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        padding: 5,
     },
     quizButtonText: {
         color: 'white',
@@ -497,37 +491,30 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     correctAnswer: {
-        height: 45,
-        width: 150,
         backgroundColor: 'green',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
     },
     incorrectAnswer: {
-        height: 45,
-        width: 150,
         backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
     },
     result: {
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
-    },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
+
+    }
 });
+
+
