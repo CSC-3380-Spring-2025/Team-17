@@ -13,18 +13,18 @@ const Register: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const profileImages = [
-    { name: 'aesthetic.jpg', src: require('../assets/profilePictures/aesthetic.jpg') },
-    { name: 'bluemusic.jpg', src: require('../assets/profilePictures/bluemusic.jpg') },
-    { name: 'blues.jpg', src: require('../assets/profilePictures/blues.jpg') },
-    { name: 'brain.jpg', src: require('../assets/profilePictures/brain.jpg') },
-    { name: 'grass.jpg', src: require('../assets/profilePictures/grass.jpg') },
-    { name: 'guitarplayer.jpg', src: require('../assets/profilePictures/guitarplayer.jpg') },
-    { name: 'musichead.jpg', src: require('../assets/profilePictures/musichead.jpg') },
-    { name: 'musicmedley.jpg', src: require('../assets/profilePictures/musicmedley.jpg') },
-    { name: 'piano.jpg', src: require('../assets/profilePictures/piano.jpg') },
-    { name: 'purpleheadphone.jpg', src: require('../assets/profilePictures/purpleheadphone.jpg') },
-    { name: 'red.jpg', src: require('../assets/profilePictures/red.jpg') },
-    { name: 'rock.jpg', src: require('../assets/profilePictures/rock.jpg') },
+    { name: 'aesthetic.jpg', src: require('../assets/profilepictures/aesthetic.jpg') },
+    { name: 'bluemusic.jpg', src: require('../assets/profilepictures/bluemusic.jpg') },
+    { name: 'blues.jpg', src: require('../assets/profilepictures/blues.jpg') },
+    { name: 'brain.jpg', src: require('../assets/profilepictures/brain.jpg') },
+    { name: 'grass.jpg', src: require('../assets/profilepictures/grass.jpg') },
+    { name: 'guitarplayer.jpg', src: require('../assets/profilepictures/guitarplayer.jpg') },
+    { name: 'musichead.jpg', src: require('../assets/profilepictures/musichead.jpg') },
+    { name: 'musicmedley.jpg', src: require('../assets/profilepictures/musicmedley.jpg') },
+    { name: 'piano.jpg', src: require('../assets/profilepictures/piano.jpg') },
+    { name: 'purpleheadphone.jpg', src: require('../assets/profilepictures/purpleheadphone.jpg') },
+    { name: 'red.jpg', src: require('../assets/profilepictures/red.jpg') },
+    { name: 'rock.jpg', src: require('../assets/profilepictures/rock.jpg') },
   ];
   
 

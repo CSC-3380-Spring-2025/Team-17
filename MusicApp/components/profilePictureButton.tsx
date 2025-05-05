@@ -5,18 +5,18 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 const profileImages = {
-  'aesthetic': require('@/assets/profilePictures/aesthetic.jpg'),
-  'bluemusic': require('@/assets/profilePictures/bluemusic.jpg'),
-  'blues': require('@/assets/profilePictures/blues.jpg'),
-  'brain': require('@/assets/profilePictures/brain.jpg'),
-  'grass': require('@/assets/profilePictures/grass.jpg'),
-  'guitarplayer': require('@/assets/profilePictures/guitarplayer.jpg'),
-  'musichead': require('@/assets/profilePictures/musichead.jpg'),
-  'musicmedley': require('@/assets/profilePictures/musicmedley.jpg'),
-  'piano': require('@/assets/profilePictures/piano.jpg'),
-  'purpleheadphone': require('@/assets/profilePictures/purpleheadphone.jpg'),
-  'red': require('@/assets/profilePictures/red.jpg'),
-  'rock': require('@/assets/profilePictures/rock.jpg'),
+  'aesthetic': require('@/assets/profilepictures/aesthetic.jpg'),
+  'bluemusic': require('@/assets/profilepictures/bluemusic.jpg'),
+  'blues': require('@/assets/profilepictures/blues.jpg'),
+  'brain': require('@/assets/profilepictures/brain.jpg'),
+  'grass': require('@/assets/profilepictures/grass.jpg'),
+  'guitarplayer': require('@/assets/profilepictures/guitarplayer.jpg'),
+  'musichead': require('@/assets/profilepictures/musichead.jpg'),
+  'musicmedley': require('@/assets/profilepictures/musicmedley.jpg'),
+  'piano': require('@/assets/profilepictures/piano.jpg'),
+  'purpleheadphone': require('@/assets/profilepictures/purpleheadphone.jpg'),
+  'red': require('@/assets/profilepictures/red.jpg'),
+  'rock': require('@/assets/profilepictures/rock.jpg'),
 };
 
 export default function ProfilePictureButton() {
