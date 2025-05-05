@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
-import { useAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
 
 export default function Chords(){
-    const triads = useAudioPlayer(require('@/assets/sounds/triads.mp3'));
-    const qualities = useAudioPlayer(require('@/assets/sounds/qualities.mp3'));
-    const symbols = useAudioPlayer(require('@/assets/sounds/chord_symbols.mp3'));
-    const major = useAudioPlayer(require('@/assets/sounds/major_triads.mp3'));
-    const minor = useAudioPlayer(require('@/assets/sounds/minor_triads.mp3'));
-    const big = useAudioPlayer(require('@/assets/sounds/big_triads.mp3'));
+    const triads = useRef(new Audio.Sound());
+    const qualities = useRef(new Audio.Sound());
+    const symbols = useRef(new Audio.Sound());
+    const major = useRef(new Audio.Sound());
+    const minor = useRef(new Audio.Sound());
+    const big = useRef(new Audio.Sound());
+
+
+    useEffect(() => {
+            const loadSounds = async () => {
+                await triads.current.loadAsync(require('@/assets/sounds/triads.mp3'));
+                await qualities.current.loadAsync(require('@/assets/sounds/qualities.mp3'));
+                await symbols.current.loadAsync(require('@/assets/sounds/chord_symbols.mp3'));
+                await major.current.loadAsync(require('@/assets/sounds/major_triads.mp3'));
+                await minor.current.loadAsync(require('@/assets/sounds/minor_triads.mp3'));
+                await big.current.loadAsync(require('@/assets/sounds/big_triads.mp3'));
+            };
+    
+            loadSounds();
+    
+            return () => {
+                triads.current.unloadAsync();
+                qualities.current.unloadAsync();
+                symbols.current.unloadAsync();
+                major.current.unloadAsync();
+                minor.current.unloadAsync();
+                big.current.unloadAsync();
+            };
+        }, []);
 
     return(
         <ScrollView 
@@ -40,12 +63,12 @@ export default function Chords(){
                         <Button 
                             color='#4CAF50'
                             title="Play triads"
-                            onPress={() => triads.play()}
+                            onPress={() => triads.current.playAsync()}
                         />
                         <Button 
                             color='#F44336'
                             title="Pause triads"
-                            onPress={() => triads.pause()}
+                            onPress={() => triads.current.pauseAsync()}
                         />
                     </View>
                     <Text style={styles.text}>
@@ -81,12 +104,12 @@ export default function Chords(){
                         <Button 
                             color='#4CAF50'
                             title="Play triads"
-                            onPress={() => qualities.play()}
+                            onPress={() => qualities.current.playAsync()}
                         />
                         <Button 
                             color='#F44336'
                             title="Pause triads"
-                            onPress={() => qualities.pause()}
+                            onPress={() => qualities.current.pauseAsync()}
                         />
                     </View>
                 </View>
@@ -113,12 +136,12 @@ export default function Chords(){
                         <Button 
                             color='#4CAF50'
                             title="Play triads"
-                            onPress={() => symbols.play()}
+                            onPress={() => symbols.current.playAsync()}
                         />
                         <Button 
                             color='#F44336'
                             title="Pause triads"
-                            onPress={() => symbols.pause()}
+                            onPress={() => symbols.current.pauseAsync()}
                         />
                     </View>
                 </View>
@@ -141,12 +164,12 @@ export default function Chords(){
                         <Button 
                             color='#4CAF50'
                             title="Play triads"
-                            onPress={() => major.play()}
+                            onPress={() => major.current.playAsync()}
                         />
                         <Button 
                             color='#F44336'
                             title="Pause triads"
-                            onPress={() => major.pause()}
+                            onPress={() => major.current.pauseAsync()}
                         />
                     </View>
                     <Text style={styles.text}>
@@ -165,12 +188,12 @@ export default function Chords(){
                         <Button 
                             color='#4CAF50'
                             title="Play triads"
-                            onPress={() => minor.play()}
+                            onPress={() => minor.current.playAsync()}
                         />
                         <Button 
                             color='#F44336'
                             title="Pause triads"
-                            onPress={() => minor.pause()}
+                            onPress={() => minor.current.pauseAsync()}
                         />
                     </View>
                 </View>
@@ -274,12 +297,12 @@ export default function Chords(){
                         <Button 
                             color='#4CAF50'
                             title="Play triads"
-                            onPress={() => big.play()}
+                            onPress={() => big.current.playAsync()}
                         />
                         <Button 
                             color='#F44336'
                             title="Pause triads"
-                            onPress={() => big.pause()}
+                            onPress={() => big.current.pauseAsync()}
                         />
                     </View>
                 </View>

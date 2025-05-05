@@ -1,20 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
-import { useAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
 
 export default function Progressions(){
-    const major = useAudioPlayer(require('@/assets/sounds/major_triads.mp3'));
-    const minor = useAudioPlayer(require('@/assets/sounds/minortriads.mp3'));
-    const dominant = useAudioPlayer(require('@/assets/sounds/dominant.mp3'));
-    const subdominant = useAudioPlayer(require('@/assets/sounds/subdominant.mp3'));
-    const subdominant2 = useAudioPlayer(require('@/assets/sounds/subdominant2.mp3'));
-    const vi_chord = useAudioPlayer(require('@/assets/sounds/vi_chord.mp3'));
-    const iii_chord = useAudioPlayer(require('@/assets/sounds/iii_chord.mp3'));
-    const half_cadence = useAudioPlayer(require('@/assets/sounds/half_cadence.mp3'));
-    const authentic_cadence = useAudioPlayer(require('@/assets/sounds/authentic_cadence.mp3'));
-    const plagal_cadence = useAudioPlayer(require('@/assets/sounds/plagal_cadence.mp3'));
-    const deceptive_cadence = useAudioPlayer(require('@/assets/sounds/deceptive_cadence.mp3'));
+
+
+    const major = useRef(new Audio.Sound());
+    const minor = useRef(new Audio.Sound());
+    const dominant = useRef(new Audio.Sound());
+    const subdominant = useRef(new Audio.Sound());
+    const subdominant2 = useRef(new Audio.Sound());
+    const vi_chord = useRef(new Audio.Sound());
+    const iii_chord = useRef(new Audio.Sound());
+    const half_cadence = useRef(new Audio.Sound());
+    const authentic_cadence = useRef(new Audio.Sound());
+    const plagal_cadence = useRef(new Audio.Sound());
+    const deceptive_cadence = useRef(new Audio.Sound());
+
+    useEffect(() => {
+                const loadSounds = async () => {
+                    await major.current.loadAsync(require('@/assets/sounds/major_triads.mp3'));
+                    await minor.current.loadAsync(require('@/assets/sounds/minortriads.mp3'));
+                    await dominant.current.loadAsync(require('@/assets/sounds/dominant.mp3'));
+                    await subdominant.current.loadAsync(require('@/assets/sounds/subdominant.mp3'));
+                    await subdominant2.current.loadAsync(require('@/assets/sounds/subdominant2.mp3'));
+                    await vi_chord.current.loadAsync(require('@/assets/sounds/vi_chord.mp3'));
+                    await iii_chord.current.loadAsync(require('@/assets/sounds/iii_chord.mp3'));
+                    await half_cadence.current.loadAsync(require('@/assets/sounds/half_cadence.mp3'));
+                    await authentic_cadence.current.loadAsync(require('@/assets/sounds/authentic_cadence.mp3'));
+                    await plagal_cadence.current.loadAsync(require('@/assets/sounds/plagal_cadence.mp3'));
+                    await deceptive_cadence.current.loadAsync(require('@/assets/sounds/deceptive_cadence.mp3'));
+                };
+        
+                loadSounds();
+        
+                return () => {
+                    major.current.unloadAsync();
+                    minor.current.unloadAsync();
+                    dominant.current.unloadAsync();
+                    subdominant.current.unloadAsync();
+                    subdominant2.current.unloadAsync();
+                    vi_chord.current.unloadAsync();
+                    iii_chord.current.unloadAsync();
+                    half_cadence.current.unloadAsync();
+                    authentic_cadence.current.unloadAsync();
+                    plagal_cadence.current.unloadAsync();
+                    deceptive_cadence.current.unloadAsync();
+                };
+            }, []);
 
     return(
         <ScrollView 
@@ -77,12 +111,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play triads"
-                            onPress={() => major.play()}
+                            onPress={() => major.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause triads"
-                            onPress={() => major.pause()}
+                            onPress={() => major.current.pauseAsync()}
                         />
                     </View>
                     <Image 
@@ -94,12 +128,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play triads"
-                            onPress={() => minor.play()}
+                            onPress={() => minor.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause triads"
-                            onPress={() => minor.pause()}
+                            onPress={() => minor.current.pauseAsync()}
                         />
                     </View>
                 </View>
@@ -144,12 +178,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play dominant"
-                            onPress={() => dominant.play()}
+                            onPress={() => dominant.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause dominant"
-                            onPress={() => dominant.pause()}
+                            onPress={() => dominant.current.pauseAsync()}
                         />
                     </View>
                 </View>
@@ -174,12 +208,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play subdominant"
-                            onPress={() => subdominant.play()}
+                            onPress={() => subdominant.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause subdominant"
-                            onPress={() => subdominant.pause()}
+                            onPress={() => subdominant.current.pauseAsync()}
                         />
                     </View>
                     <Text style={styles.text}>
@@ -196,12 +230,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play subdominant"
-                            onPress={() => subdominant2.play()}
+                            onPress={() => subdominant2.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause subdominant"
-                            onPress={() => subdominant2.pause()}
+                            onPress={() => subdominant2.current.pauseAsync()}
                         />
                     </View>
                 </View>
@@ -224,12 +258,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play vi"
-                            onPress={() => vi_chord.play()}
+                            onPress={() => vi_chord.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause vi"
-                            onPress={() => vi_chord.pause()}
+                            onPress={() => vi_chord.current.pauseAsync()}
                         />
                     </View>
                     <Text style={styles.text}>
@@ -247,12 +281,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play iii"
-                            onPress={() => iii_chord.play()}
+                            onPress={() => iii_chord.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause iii"
-                            onPress={() => iii_chord.pause()}
+                            onPress={() => iii_chord.current.pauseAsync()}
                         />
                     </View>
                 </View>
@@ -282,12 +316,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play cadence"
-                            onPress={() => half_cadence.play()}
+                            onPress={() => half_cadence.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause cadence"
-                            onPress={() => half_cadence.pause()}
+                            onPress={() => half_cadence.current.pauseAsync()}
                         />
                     </View>
                     <Text style={styles.text}>
@@ -307,12 +341,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play cadence"
-                            onPress={() => authentic_cadence.play()}
+                            onPress={() => authentic_cadence.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause cadence"
-                            onPress={() => authentic_cadence.pause()}
+                            onPress={() => authentic_cadence.current.pauseAsync()}
                         />
                     </View>
                     <Text style={styles.text}>
@@ -329,12 +363,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play cadence"
-                            onPress={() => plagal_cadence.play()}
+                            onPress={() => plagal_cadence.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause cadence"
-                            onPress={() => plagal_cadence.pause()}
+                            onPress={() => plagal_cadence.current.pauseAsync()}
                         />
                     </View>
                     <Text style={styles.text}>
@@ -351,12 +385,12 @@ export default function Progressions(){
                         <Button 
                             color="#4CAF50"
                             title="Play cadence"
-                            onPress={() => deceptive_cadence.play()}
+                            onPress={() => deceptive_cadence.current.playAsync()}
                         />
                         <Button 
                             color="#F44336"
                             title="Pause cadence"
-                            onPress={() => deceptive_cadence.pause()}
+                            onPress={() => deceptive_cadence.current.pauseAsync()}
                         />
                     </View>
                 </View>
