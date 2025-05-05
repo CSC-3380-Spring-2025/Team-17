@@ -1,13 +1,32 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
-import { useAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
 
 export default function Scales(){
-    const cmajor = useAudioPlayer(require('@/assets/sounds/cmajor.mp3'));
-    const natminor = useAudioPlayer(require('@/assets/sounds/natural_minor.mp3'));
-    const harminor = useAudioPlayer(require('@/assets/sounds/harmonic_minor.mp3'));
-    const melminor = useAudioPlayer(require('@/assets/sounds/melodic_minor.mp3'));
+    const cmajor = useRef(new Audio.Sound());
+    const natminor = useRef(new Audio.Sound());
+    const harminor = useRef(new Audio.Sound());
+    const melminor = useRef(new Audio.Sound());
+
+
+    useEffect(() => {
+                        const loadSounds = async () => {
+                            await cmajor.current.loadAsync(require('@/assets/sounds/cmajor.mp3'));
+                            await natminor.current.loadAsync(require('@/assets/sounds/natural_minor.mp3'));
+                            await harminor.current.loadAsync(require('@/assets/sounds/harmonic_minor.mp3'));
+                            await melminor.current.loadAsync(require('@/assets/sounds/melodic_minor.mp3'));
+                        };
+                
+                        loadSounds();
+                
+                        return() => {
+                            cmajor.current.unloadAsync();
+                            natminor.current.unloadAsync();
+                            harminor.current.unloadAsync();
+                            melminor.current.unloadAsync();
+                        };
+                    }, []);
 
     const correct1 = () => {
         let correct : any = document.getElementById('true1');
@@ -237,12 +256,12 @@ export default function Scales(){
                         <Button 
                             color='#4CAF50' 
                             title="Play C Major" 
-                            onPress={() => cmajor.play()} 
+                            onPress={() => cmajor.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause C Major" 
-                            onPress={() => cmajor.pause()} 
+                            onPress={() => cmajor.current.pauseAsync()} 
                         />
                     </View>
                 </View>
@@ -398,12 +417,12 @@ export default function Scales(){
                         <Button 
                             color='#4CAF50' 
                             title="Play Natural Minor" 
-                            onPress={() => natminor.play()} 
+                            onPress={() => natminor.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause Natural Minor" 
-                            onPress={() => natminor.pause()} 
+                            onPress={() => natminor.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -422,12 +441,12 @@ export default function Scales(){
                         <Button 
                             color='#4CAF50' 
                             title="Play Harmonic Minor" 
-                            onPress={() => harminor.play()} 
+                            onPress={() => harminor.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause Harmonic Minor" 
-                            onPress={() => harminor.pause()} 
+                            onPress={() => harminor.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -446,11 +465,11 @@ export default function Scales(){
                         <Button 
                             color='#4CAF50' 
                             title="Play Melodic Minor" 
-                            onPress={() => melminor.play()} />
+                            onPress={() => melminor.current.playAsync()} />
                         <Button 
                             color='#F44336' 
                             title="Pause Melodic Minor" 
-                            onPress={() => melminor.pause()} 
+                            onPress={() => melminor.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -661,9 +680,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 10,
         marginTop: 10,
-    },
-    buttons: {
-        flexDirection: 'row'
     },
     linksContainer: {
         width: '100%',
