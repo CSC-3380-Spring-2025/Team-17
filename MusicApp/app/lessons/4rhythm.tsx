@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 
- const [quiz1Answer, setQ1Answer] = useState(null);
+
+
+export default function Rhythm(){
+    const [quiz1Answer, setQ1Answer] = useState(null);
     const [quiz2Answer, setQ2Answer] = useState(null);
     const [quiz3Answer, setQ3Answer] = useState(null);
     const [quiz4Answer, setQ4Answer] = useState(null);
@@ -10,8 +13,6 @@ import { Link } from 'expo-router';
     const answer2 = "4";
     const answer3 = "1/2";
     const answer4 = "False";
-
-export default function Rhythm(){
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
@@ -130,17 +131,27 @@ export default function Rhythm(){
                     {["True", "False"].map((option, index) => {
                         const selected = quiz1Answer === option;
                         const correct = option === answer1;
-                        const buttonStyle = selected
-                            ? correct
-                                ? styles.correctAnswer
-                                : styles.incorrectAnswer
-                            : styles.quizButton;
+                        
+                        let buttonStyle = styles.quizButton;
+
+                            if (quiz1Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
 
                         return (
                             <Pressable
                                 key={index}
                                 style={buttonStyle}
-                                onPress={() => setQ1Answer(option)}
+                                disabled={!!quiz1Answer}
+                                    onPress={() => {
+                                        if (!quiz1Answer) setQ1Answer(option);
+                                    }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
                             </Pressable>
@@ -160,17 +171,27 @@ export default function Rhythm(){
                     {["2", "4", "6", "8"].map((option, index) => {
                         const selected = quiz2Answer === option;
                         const correct = option === answer2;
-                        const buttonStyle = selected
-                            ? correct
-                                ? styles.correctAnswer
-                                : styles.incorrectAnswer
-                            : styles.quizButton;
+                        
+                        let buttonStyle = styles.quizButton;
+
+                            if (quiz2Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
 
                         return (
                             <Pressable
                                 key={index}
                                 style={buttonStyle}
-                                onPress={() => setQ2Answer(option)}
+                                disabled={!!quiz2Answer}
+                                    onPress={() => {
+                                        if (!quiz2Answer) setQ2Answer(option);
+                                    }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
                             </Pressable>
@@ -190,17 +211,27 @@ export default function Rhythm(){
                     {["1/6", "1/4", "1/2", "1"].map((option, index) => {
                         const selected = quiz3Answer === option;
                         const correct = option === answer3;
-                        const buttonStyle = selected
-                            ? correct
-                                ? styles.correctAnswer
-                                : styles.incorrectAnswer
-                            : styles.quizButton;
+                        
+                        let buttonStyle = styles.quizButton;
+
+                            if (quiz3Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
 
                         return (
                             <Pressable
                                 key={index}
                                 style={buttonStyle}
-                                onPress={() => setQ3Answer(option)}
+                                disabled={!!quiz3Answer}
+                                    onPress={() => {
+                                        if (!quiz3Answer) setQ3Answer(option);
+                                    }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
                             </Pressable>
@@ -220,17 +251,27 @@ export default function Rhythm(){
                     {["True", "False"].map((option, index) => {
                         const selected = quiz4Answer === option;
                         const correct = option === answer4;
-                        const buttonStyle = selected
-                            ? correct
-                                ? styles.correctAnswer
-                                : styles.incorrectAnswer
-                            : styles.quizButton;
+                        
+                        let buttonStyle = styles.quizButton;
+
+                            if (quiz4Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
 
                         return (
                             <Pressable
                                 key={index}
                                 style={buttonStyle}
-                                onPress={() => setQ4Answer(option)}
+                                disabled={!!quiz4Answer}
+                                    onPress={() => {
+                                        if (!quiz4Answer) setQ4Answer(option);
+                                    }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
                             </Pressable>
@@ -361,26 +402,32 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
     homelink: {
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
     },
     quizContainer: {
-        height: 100,
-        width: 200,
-
-        alignItems: 'center',
-        padding: 7,
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 15,
+        marginBottom: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     quizTitle: {
         color: 'black',
-        fontSize: 50,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        fontSize: 36,
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 30,
         textDecorationLine: 'underline',
-        paddingBottom: 20
     },
     quizText: {
         color: '#840606',
@@ -388,11 +435,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     quizButton: {
-        height: 45,
-        width: 150,
         backgroundColor: 'gray',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        padding: 5,
     },
     quizButtonText: {
         color: 'white',
@@ -400,20 +449,22 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     correctAnswer: {
-        height: 45,
-        width: 150,
         backgroundColor: 'green',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
     },
     incorrectAnswer: {
-        height: 45,
-        width: 150,
         backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
     },
     result: {
         marginTop: 10,
@@ -421,4 +472,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
     }
-})
+});

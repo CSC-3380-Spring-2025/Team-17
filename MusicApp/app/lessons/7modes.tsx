@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, ScrollView, StyleSheet, View, Image, Button } from 'react-native';
+import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
 
@@ -37,221 +37,19 @@ export default function Modes() {
         };
     }, []);
 
-    const correct1 = () => {
-        let ionian: any = document.getElementById('ionian1');
-        let lydian: any = document.getElementById('lydian1');
-        let mixolydian: any = document.getElementById('mixolydian1');
-        let aeolian: any = document.getElementById('aeolian1');
-        let p: any = document.getElementById('correct1');
+    const [quiz1Answer, setQ1Answer] = useState(null);
+    const [quiz2Answer, setQ2Answer] = useState(null);
+    const [quiz3Answer, setQ3Answer] = useState(null);
+    const [quiz4Answer, setQ4Answer] = useState(null);
+    const [quiz5Answer, setQ5Answer] = useState(null);
+    const [quiz6Answer, setQ6Answer] = useState(null);
+    const answer1 = "Ionian";
+    const answer2 = "Aeolian";
+    const answer3 = "Lydian";
+    const answer4 = "Phrygian";
+    const answer5 = "Mixolydian";
+    const answer6 = "Locrian";
 
-        ionian.style.color = 'green';
-        ionian.disabled = true;
-        lydian.style.color = 'red';
-        lydian.disabled = true;
-        mixolydian.style.color = 'red';
-        mixolydian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong1 = () => {
-        let ionian: any = document.getElementById('ionian1');
-        let lydian: any = document.getElementById('lydian1');
-        let mixolydian: any = document.getElementById('mixolydian1');
-        let aeolian: any = document.getElementById('aeolian1');
-        let p: any = document.getElementById('wrong1');
-
-        ionian.style.color = 'green';
-        ionian.disabled = true;
-        lydian.style.color = 'red';
-        lydian.disabled = true;
-        mixolydian.style.color = 'red';
-        mixolydian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct2 = () => {
-        let ionian: any = document.getElementById('ionian2');
-        let lydian: any = document.getElementById('lydian2');
-        let mixolydian: any = document.getElementById('mixolydian2');
-        let aeolian: any = document.getElementById('aeolian2');
-        let p: any = document.getElementById('correct2');
-
-        ionian.style.color = 'green';
-        ionian.disabled = true;
-        lydian.style.color = 'red';
-        lydian.disabled = true;
-        mixolydian.style.color = 'red';
-        mixolydian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong2 = () => {
-        let ionian: any = document.getElementById('ionian2');
-        let lydian: any = document.getElementById('lydian2');
-        let mixolydian: any = document.getElementById('mixolydian2');
-        let aeolian: any = document.getElementById('aeolian2');
-        let p: any = document.getElementById('wrong2');
-
-        ionian.style.color = 'green';
-        ionian.disabled = true;
-        lydian.style.color = 'red';
-        lydian.disabled = true;
-        mixolydian.style.color = 'red';
-        mixolydian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct3 = () => {
-        let ionian: any = document.getElementById('ionian3');
-        let lydian: any = document.getElementById('lydian3');
-        let mixolydian: any = document.getElementById('mixolydian3');
-        let locrian: any = document.getElementById('locrian3');
-        let p: any = document.getElementById('correct3');
-
-        ionian.style.color = 'red';
-        ionian.disabled = true;
-        lydian.style.color = 'green';
-        lydian.disabled = true;
-        mixolydian.style.color = 'red';
-        mixolydian.disabled = true;
-        locrian.style.color = 'red';
-        locrian.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong3 = () => {
-        let ionian: any = document.getElementById('ionian3');
-        let lydian: any = document.getElementById('lydian3');
-        let mixolydian: any = document.getElementById('mixolydian3');
-        let locrian: any = document.getElementById('locrian3');
-        let p: any = document.getElementById('wrong3');
-
-        ionian.style.color = 'red';
-        ionian.disabled = true;
-        lydian.style.color = 'green';
-        lydian.disabled = true;
-        mixolydian.style.color = 'red';
-        mixolydian.disabled = true;
-        locrian.style.color = 'red';
-        locrian.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct4 = () => {
-        let dorian: any = document.getElementById('dorian4');
-        let aeolian: any = document.getElementById('aeolian4');
-        let phrygian: any = document.getElementById('phrygian4');
-        let locrian: any = document.getElementById('locrian4');
-        let p: any = document.getElementById('correct4');
-
-        dorian.style.color = 'red';
-        dorian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        phrygian.style.color = 'green';
-        phrygian.disabled = true;
-        locrian.style.color = 'red';
-        locrian.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong4 = () => {
-        let dorian: any = document.getElementById('dorian4');
-        let aeolian: any = document.getElementById('aeolian4');
-        let phrygian: any = document.getElementById('phrygian4');
-        let locrian: any = document.getElementById('locrian4');
-        let p: any = document.getElementById('wrong4');
-
-        dorian.style.color = 'red';
-        dorian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        phrygian.style.color = 'green';
-        phrygian.disabled = true;
-        locrian.style.color = 'red';
-        locrian.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct5 = () => {
-        let ionian: any = document.getElementById('ionian5');
-        let lydian: any = document.getElementById('lydian5');
-        let mixolydian: any = document.getElementById('mixolydian5');
-        let dorian: any = document.getElementById('dorian5');
-        let p: any = document.getElementById('correct5');
-
-        ionian.style.color = 'red';
-        ionian.disabled = true;
-        lydian.style.color = 'red';
-        lydian.disabled = true;
-        mixolydian.style.color = 'green';
-        mixolydian.disabled = true;
-        dorian.style.color = 'red';
-        dorian.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong5 = () => {
-        let ionian: any = document.getElementById('ionian5');
-        let lydian: any = document.getElementById('lydian5');
-        let mixolydian: any = document.getElementById('mixolydian5');
-        let dorian: any = document.getElementById('dorian5');
-        let p: any = document.getElementById('wrong5');
-
-        ionian.style.color = 'red';
-        ionian.disabled = true;
-        lydian.style.color = 'red';
-        lydian.disabled = true;
-        mixolydian.style.color = 'green';
-        mixolydian.disabled = true;
-        dorian.style.color = 'red';
-        dorian.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct6 = () => {
-        let dorian: any = document.getElementById('dorian6');
-        let aeolian: any = document.getElementById('aeolian6');
-        let phrygian: any = document.getElementById('phrygian6');
-        let locrian: any = document.getElementById('locrian6');
-        let p: any = document.getElementById('correct6');
-
-        dorian.style.color = 'red';
-        dorian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        phrygian.style.color = 'red';
-        phrygian.disabled = true;
-        locrian.style.color = 'green';
-        locrian.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong6 = () => {
-        let dorian: any = document.getElementById('dorian6');
-        let aeolian: any = document.getElementById('aeolian6');
-        let phrygian: any = document.getElementById('phrygian6');
-        let locrian: any = document.getElementById('locrian6');
-        let p: any = document.getElementById('wrong6');
-
-        dorian.style.color = 'red';
-        dorian.disabled = true;
-        aeolian.style.color = 'red';
-        aeolian.disabled = true;
-        phrygian.style.color = 'red';
-        phrygian.disabled = true;
-        locrian.style.color = 'green';
-        locrian.disabled = true;
-        p.hidden = false;
-    }
 
     return (
         <ScrollView
@@ -282,7 +80,7 @@ export default function Modes() {
                     </Text>
                     <Text style={styles.text}>
                         The brightest mode is the <Text style={styles.bold}>lydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        W, W, W, H, W, W, H. You can think of this mode as a major scale with a raised 4 (<i>fi</i>). You can also find this mode if you
+                        W, W, W, H, W, W, H. You can think of this mode as a major scale with a raised 4 (<Text style={styles.italic}>fi</Text>). You can also find this mode if you
                         play all the white keys on a piano keyboard starting from F.
                     </Text>
                     <Image
@@ -348,7 +146,7 @@ export default function Modes() {
                     </Text>
                     <Text style={styles.text}>
                         The next bright mode is the <Text style={styles.bold}>mixolydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        W, W, H, W, W, H, W. You can think of this mode as a major scale with a lowered 7 (<i>te</i>). You can also find this mode
+                        W, W, H, W, W, H, W. You can think of this mode as a major scale with a lowered 7 (<Text style={styles.italic}>te</Text>). You can also find this mode
                         if you play all the white keys on a piano keyboard starting from G.
                     </Text>
                     <Image
@@ -378,8 +176,8 @@ export default function Modes() {
                 <View style={styles.card}>
                     <Text style={styles.text}>
                         The lydian, ionian, and mixolydian modes are considered the brighter modes because they contain an unaltered 3 instead of
-                        a lowered 3 (<i>mi</i> instead of <i>me</i>). The dorian, aeolian, phrygian, and locrian modes are considered darker because
-                        they contain a lowered 3 instead of an unaltered 3 (<i>me</i> instead of <i>mi</i>).
+                        a lowered 3 (<Text style={styles.italic}>mi</Text> instead of <Text style={styles.italic}>me</Text>). The dorian, aeolian, phrygian, and locrian modes are considered darker because
+                        they contain a lowered 3 instead of an unaltered 3 (<Text style={styles.italic}>me</Text> instead of <Text style={styles.italic}>mi</Text>).
                     </Text>
                 </View>
 
@@ -389,7 +187,7 @@ export default function Modes() {
                     </Text>
                     <Text style={styles.text}>
                         The first dark mode is the <Text style={styles.bold}>dorian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        W, H, W, W, W, H, W. You can think of this mode as a minor scale with a raised 6 (<i>la</i>). You can also find this mode if
+                        W, H, W, W, W, H, W. You can think of this mode as a minor scale with a raised 6 (<Text style={styles.italic}>la</Text>). You can also find this mode if
                         you play all the white keys on a piano keyboard starting from D.
                     </Text>
                     <Image
@@ -455,7 +253,7 @@ export default function Modes() {
                     </Text>
                     <Text style={styles.text}>
                         The next dark mode is the <Text style={styles.bold}>phrygian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        H, W, W, W, H, W, W. You can think of this mode as a minor scale with a lowered 2 (<i>ra</i>). You can also find this mode
+                        H, W, W, W, H, W, W. You can think of this mode as a minor scale with a lowered 2 (<Text style={styles.italic}>ra</Text>). You can also find this mode
                         if you play all the white keys on a piano keyboard starting from E.
                     </Text>
                     <Image
@@ -488,7 +286,7 @@ export default function Modes() {
                     </Text>
                     <Text style={styles.text}>
                         The darkest mode is the <Text style={styles.bold}>locrian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        H, W, W, H, W, W, W. You can think of this mode as a minor scale with a lowered 2 (<i>ra</i>) & a lowered 5 (<i>se</i>).
+                        H, W, W, H, W, W, W. You can think of this mode as a minor scale with a lowered 2 (<Text style={styles.italic}>ra</Text>) & a lowered 5 (<Text style={styles.italic}>se</Text>).
                         You can also find this mode if you play all the white keys on a piano keyboard starting from B.
                     </Text>
                     <Image
@@ -515,76 +313,249 @@ export default function Modes() {
                     </View>
                 </View>
 
-                <Text style={styles.header}>
-                    Pop Quiz
-                </Text>
-                <Text style={styles.text}>
-                    1. Which of the following modes is just like the major scale?
-                </Text>
-                <form>
-                    <button id='lydian1' style={{ fontSize: '24px' }} onClick={wrong1}>Lydian</button>
-                    <button id='ionian1' style={{ fontSize: '24px' }} onClick={correct1}>Ionian</button>
-                    <button id='mixolydian1' style={{ fontSize: '24px' }} onClick={wrong1}>Mixolydian</button>
-                    <button id='aeolian1' style={{ fontSize: '24px' }} onClick={wrong1}>Aeolian</button>
-                    <p id='correct1' color='green' style={{ textAlign: 'center' }} hidden>Correct!</p>
-                    <p id='wrong1' color='red' style={{ textAlign: 'center' }} hidden>Wrong! The Ionian mode is the same as a major scale.</p>
-                </form>
-                <Text style={styles.text}>
-                    2. Which of the following modes is just like the minor scale?
-                </Text>
-                <form>
-                    <button id='lydian2' style={{ fontSize: '24px' }} onClick={wrong2}>Lydian</button>
-                    <button id='ionian2' style={{ fontSize: '24px' }} onClick={wrong2}>Ionian</button>
-                    <button id='mixolydian2' style={{ fontSize: '24px' }} onClick={wrong2}>Mixolydian</button>
-                    <button id='aeolian2' style={{ fontSize: '24px' }} onClick={correct2}>Aeolian</button>
-                    <p id='correct2' color='green' style={{ textAlign: 'center' }} hidden>Correct!</p>
-                    <p id='wrong2' color='red' style={{ textAlign: 'center' }} hidden>Wrong! The Aeolian mode is the same as a minor scale.</p>
-                </form>
-                <Text style={styles.text}>
-                    3. Which of the following modes is just like a major scale with a raised 4?
-                </Text>
-                <form>
-                    <button id='lydian3' style={{ fontSize: '24px' }} onClick={correct3}>Lydian</button>
-                    <button id='ionian3' style={{ fontSize: '24px' }} onClick={wrong3}>Ionian</button>
-                    <button id='mixolydian3' style={{ fontSize: '24px' }} onClick={wrong3}>Mixolydian</button>
-                    <button id='locrian3' style={{ fontSize: '24px' }} onClick={wrong3}>Locrian</button>
-                    <p id='correct3' color='green' style={{ textAlign: 'center' }} hidden>Correct!</p>
-                    <p id='wrong3' color='red' style={{ textAlign: 'center' }} hidden>Wrong! The Lydian mode is a major scale with a raised 4.</p>
-                </form>
-                <Text style={styles.text}>
-                    4. Which of the following modes is just like a minor scale with a lowered 2?
-                </Text>
-                <form>
-                    <button id='dorian4' style={{ fontSize: '24px' }} onClick={wrong4}>Dorian</button>
-                    <button id='aeolian4' style={{ fontSize: '24px' }} onClick={wrong4}>Aeolian</button>
-                    <button id='phrygian4' style={{ fontSize: '24px' }} onClick={correct4}>Phrygian</button>
-                    <button id='locrian4' style={{ fontSize: '24px' }} onClick={wrong4}>Locrian</button>
-                    <p id='correct4' color='green' style={{ textAlign: 'center' }} hidden>Correct!</p>
-                    <p id='wrong4' color='red' style={{ textAlign: 'center' }} hidden>Wrong! The Phrygian mode is a minor scale with a lowered 2.</p>
-                </form>
-                <Text style={styles.text}>
-                    5. Which of the following modes is just like a major scale with a lowered 7?
-                </Text>
-                <form>
-                    <button id='lydian5' style={{ fontSize: '24px' }} onClick={wrong5}>Lydian</button>
-                    <button id='ionian5' style={{ fontSize: '24px' }} onClick={wrong5}>Ionian</button>
-                    <button id='mixolydian5' style={{ fontSize: '24px' }} onClick={correct5}>Mixolydian</button>
-                    <button id='dorian5' style={{ fontSize: '24px' }} onClick={wrong5}>Dorian</button>
-                    <p id='correct5' color='green' style={{ textAlign: 'center' }} hidden>Correct!</p>
-                    <p id='wrong5' color='red' style={{ textAlign: 'center' }} hidden>Wrong! The Mixolydian mode is a major scale with a lowered 7.</p>
-                </form>
-                <Text style={styles.text}>
-                    6. Which of the following modes is just like a minor scale with a lowered 2 & a lowered 5?
-                </Text>
-                <form>
-                    <button id='dorian6' style={{ fontSize: '24px' }} onClick={wrong6}>Dorian</button>
-                    <button id='aeolian6' style={{ fontSize: '24px' }} onClick={wrong6}>Aeolian</button>
-                    <button id='phrygian6' style={{ fontSize: '24px' }} onClick={wrong6}>Phrygian</button>
-                    <button id='locrian6' style={{ fontSize: '24px' }} onClick={correct6}>Locrian</button>
-                    <p id='correct6' color='green' style={{ textAlign: 'center' }} hidden>Correct!</p>
-                    <p id='wrong6' color='red' style={{ textAlign: 'center' }} hidden>Wrong! The Locrian mode is a minor scale with a lowered
-                        2 & a lowered 5.</p>
-                </form>
+                <View>
+                    <Text style={styles.quizTitle}>Quiz</Text>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            1. Which of the following modes is just like the major scale?
+                        </Text>
+                        {["Lydian", "Ionian", "Mixolydian", "Aeolian"].map((option, index) => {
+                            const selected = quiz1Answer === option;
+                            const correct = option === answer1;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz1Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz1Answer}
+                                    onPress={() => {
+                                        if (!quiz1Answer) setQ1Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz1Answer && (
+                            <Text style={styles.result}>
+                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            2. Which of the following modes is just like the minor scale?
+                        </Text>
+                        {["Lydian", "Ionian", "Mixolydian", "Aeolian"].map((option, index) => {
+                            const selected = quiz2Answer === option;
+                            const correct = option === answer2;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz2Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz2Answer}
+                                    onPress={() => {
+                                        if (!quiz2Answer) setQ2Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz2Answer && (
+                            <Text style={styles.result}>
+                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            3. Which of the following modes is just like a major scale with a raised 4?
+                        </Text>
+                        {["Lydian", "Ionian", "Mixolydian", "Locrian"].map((option, index) => {
+                            const selected = quiz3Answer === option;
+                            const correct = option === answer3;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz3Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz3Answer}
+                                    onPress={() => {
+                                        if (!quiz3Answer) setQ3Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz3Answer && (
+                            <Text style={styles.result}>
+                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            4. Which of the following modes is just like a minor scale with a lowered 2?
+                        </Text>
+                        {["Dorian", "Aeolian", "Phrygian", "Locrian"].map((option, index) => {
+                            const selected = quiz4Answer === option;
+                            const correct = option === answer4;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz4Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz4Answer}
+                                    onPress={() => {
+                                        if (!quiz4Answer) setQ4Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz4Answer && (
+                            <Text style={styles.result}>
+                                {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            5. Which of the following modes is just like a major scale with a lowered 7?
+                        </Text>
+                        {["Lydian", "Ionian", "Mixolydian", "Dorian"].map((option, index) => {
+                            const selected = quiz5Answer === option;
+                            const correct = option === answer5;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz5Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz5Answer}
+                                    onPress={() => {
+                                        if (!quiz5Answer) setQ5Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz5Answer && (
+                            <Text style={styles.result}>
+                                {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            6. Which of the following modes is just like a minor scale with a lowered 2 & a lowered 5?
+                        </Text>
+                        {["Dorian", "Aeolian", "Phrygian", "Locrian"].map((option, index) => {
+                            const selected = quiz6Answer === option;
+                            const correct = option === answer6;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz6Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz6Answer}
+                                    onPress={() => {
+                                        if (!quiz6Answer) setQ6Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz6Answer && (
+                            <Text style={styles.result}>
+                                {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+                </View>
+
+
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./6scales' style={styles.secondaryLink}>
@@ -657,6 +628,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5543A5',
     },
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
+    },
     header: {
         color: '#5543A5',
         fontSize: 24,
@@ -675,9 +650,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 10,
         marginTop: 10,
-    },
-    buttons: {
-        flexDirection: 'row'
     },
     linksContainer: {
         width: '100%',
@@ -711,4 +683,76 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
+    quizContainer: {
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 15,
+        marginBottom: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    quizTitle: {
+        color: 'black',
+        fontSize: 36,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 30,
+        textDecorationLine: 'underline',
+    },
+    quizText: {
+        color: '#840606',
+        fontSize: 20,
+        alignSelf: 'center',
+    },
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
+    quizButton: {
+        backgroundColor: 'gray',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
+        alignItems: 'center',
+    },
+    quizButtonText: {
+        color: 'white',
+        fontSize: 15,
+        alignSelf: 'center',
+    },
+    correctAnswer: {
+        backgroundColor: 'green',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
+        alignItems: 'center',
+    },
+    incorrectAnswer: {
+        backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
+        alignItems: 'center',
+    },
+    result: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+    }
 });

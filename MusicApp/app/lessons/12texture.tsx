@@ -1,17 +1,50 @@
-import React from 'react';
-import {Text, ScrollView, StyleSheet, View, Button} from 'react-native';
+import React, { useState, useEffect, useRef} from 'react';
+import {Text, ScrollView, StyleSheet, View, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
-import { useAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
 
 export default function Texture(){
-    const bach = useAudioPlayer(require('@/assets/sounds/bach_cello.mp3'));
-    const oboe = useAudioPlayer(require('@/assets/sounds/messiaen_oboe.mp3'));
-    const seikilos = useAudioPlayer(require('@/assets/sounds/seikilos.mp3'));
-    const turkey = useAudioPlayer(require('@/assets/sounds/turkey.mp3'));
-    const handel = useAudioPlayer(require('@/assets/sounds/handel.mp3'));
-    const jazz = useAudioPlayer(require('@/assets/sounds/jazz.mp3'));
-    const canon = useAudioPlayer(require('@/assets/sounds/canon.mp3'));
-    const chakrulo = useAudioPlayer(require('@/assets/sounds/chakrulo.mp3'));
+    const bach = useRef(new Audio.Sound());
+    const oboe = useRef(new Audio.Sound());
+    const seikilos = useRef(new Audio.Sound());
+    const turkey = useRef(new Audio.Sound());
+    const handel = useRef(new Audio.Sound());
+    const jazz = useRef(new Audio.Sound());
+    const canon = useRef(new Audio.Sound());
+    const chakrulo = useRef(new Audio.Sound());
+
+    useEffect(() => {
+            const loadSounds = async () => {
+                await bach.current.loadAsync(require('@/assets/sounds/bach_cello.mp3'));
+                await oboe.current.loadAsync(require('@/assets/sounds/messiaen_oboe.mp3'));
+                await seikilos.current.loadAsync(require('@/assets/sounds/seikilos.mp3'));
+                await turkey.current.loadAsync(require('@/assets/sounds/turkey.mp3'));
+                await handel.current.loadAsync(require('@/assets/sounds/handel.mp3'));
+                await jazz.current.loadAsync(require('@/assets/sounds/jazz.mp3'));
+                await canon.current.loadAsync(require('@/assets/sounds/canon.mp3'));
+                await chakrulo.current.loadAsync(require('@/assets/sounds/chakrulo.mp3'));
+            };
+    
+            loadSounds();
+    
+            return () => {
+                bach.current.unloadAsync();
+                oboe.current.unloadAsync();
+                seikilos.current.unloadAsync();
+                turkey.current.unloadAsync();
+                handel.current.unloadAsync();
+                jazz.current.unloadAsync();
+                canon.current.unloadAsync();
+                chakrulo.current.unloadAsync();
+            };
+        }, []);
+
+        const [quiz1Answer, setQ1Answer] = useState(null);
+            const [quiz2Answer, setQ2Answer] = useState(null);
+            const [quiz3Answer, setQ3Answer] = useState(null);
+            const answer1 = "G,A,B,C,D,E,F,G,A";
+            const answer2 = "Raises the Note by a 1/2 Step";
+            const answer3 = "False";
 
     return(
         <ScrollView 
@@ -52,12 +85,12 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Monophony" 
-                                onPress={() => bach.play()} 
+                                onPress={() => bach.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Monophony" 
-                                onPress={() => bach.pause()} 
+                                onPress={() => bach.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
@@ -73,12 +106,12 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Monophony" 
-                                onPress={() => oboe.play()} 
+                                onPress={() => oboe.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Monophony" 
-                                onPress={() => oboe.pause()} 
+                                onPress={() => oboe.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
@@ -107,12 +140,12 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Heterophony" 
-                                onPress={() => seikilos.play()} 
+                                onPress={() => seikilos.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Heterophony" 
-                                onPress={() => seikilos.pause()} 
+                                onPress={() => seikilos.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
@@ -129,12 +162,12 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Heterophony" 
-                                onPress={() => turkey.play()} 
+                                onPress={() => turkey.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Heterophony" 
-                                onPress={() => turkey.pause()} 
+                                onPress={() => turkey.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
@@ -164,12 +197,12 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Homophony" 
-                                onPress={() => handel.play()} 
+                                onPress={() => handel.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Homophony" 
-                                onPress={() => handel.pause()} 
+                                onPress={() => handel.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
@@ -189,12 +222,12 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Homophony" 
-                                onPress={() => jazz.play()} 
+                                onPress={() => jazz.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Homophony" 
-                                onPress={() => jazz.pause()} 
+                                onPress={() => jazz.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
@@ -221,12 +254,12 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Polyphony" 
-                                onPress={() => canon.play()} 
+                                onPress={() => canon.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Polyphony" 
-                                onPress={() => canon.pause()} 
+                                onPress={() => canon.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
@@ -243,17 +276,140 @@ export default function Texture(){
                             <Button 
                                 color='#4CAF50' 
                                 title="Play Polyphony" 
-                                onPress={() => chakrulo.play()} 
+                                onPress={() => chakrulo.current.playAsync()} 
                             />
                             <Button 
                                 color='#F44336' 
                                 title="Pause Polyphony" 
-                                onPress={() => chakrulo.pause()} 
+                                onPress={() => chakrulo.current.pauseAsync()} 
                             /> 
                         </View>
                     </View>
                 </View>
 
+<View>
+                    <Text style={styles.quizTitle}>Quiz</Text>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                        1. The four most common types of textures are Monophony, Heterophony, Homophony, & _______
+                        </Text>
+                        {["Multiphony", "Solophony", "Cacophony", "Polyphony"].map((option, index) => {
+                            const selected = quiz1Answer === option;
+                            const correct = option === answer1;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz1Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz1Answer}
+                                    onPress={() => {
+                                        if (!quiz1Answer) setQ1Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz1Answer && (
+                            <Text style={styles.result}>
+                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                        2. The Song of Seikilos has what kind of texture?
+                        </Text>
+                        {["Monophony", "Heterophony", "Homophony", "Polyphony"].map((option, index) => {
+                            const selected = quiz2Answer === option;
+                            const correct = option === answer2;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz2Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz2Answer}
+                                    onPress={() => {
+                                        if (!quiz2Answer) setQ2Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz2Answer && (
+                            <Text style={styles.result}>
+                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            3. Homorhythm is a type of homophonic texture in which all voices move in a similar or 
+                            completely unison rhythm.
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                            const selected = quiz3Answer === option;
+                            const correct = option === answer3;
+
+                            let buttonStyle = styles.quizButton;
+
+                            if (quiz3Answer) {
+                                if (selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                } else if (selected && !correct) {
+                                    buttonStyle = styles.incorrectAnswer;
+                                } else if (!selected && correct) {
+                                    buttonStyle = styles.correctAnswer;
+                                }
+                            }
+
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={buttonStyle}
+                                    disabled={!!quiz3Answer}
+                                    onPress={() => {
+                                        if (!quiz3Answer) setQ3Answer(option);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz3Answer && (
+                            <Text style={styles.result}>
+                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+                </View>
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./11progressions' style={styles.secondaryLink}>
@@ -393,68 +549,68 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     quizContainer: {
-        height: 100,
-        width: 200,
-        alignItems: 'center',
-        padding:7,
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 15,
+        marginBottom: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     quizTitle: {
         color: 'black',
-        fontSize: 50,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        fontSize: 36,
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 30,
         textDecorationLine: 'underline',
-        paddingBottom: 20
     },
     quizText: {
         color: '#840606',
         fontSize: 20,
-        alignSelf:'center',
+        alignSelf: 'center',
     },
     quizButton: {
-        height: 45,
-        width:150,
         backgroundColor: 'gray',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        padding: 5,
     },
     quizButtonText: {
         color: 'white',
         fontSize: 15,
-        alignSelf:'center',
+        alignSelf: 'center',
     },
     correctAnswer: {
-        height: 45,
-        width: 150,
         backgroundColor: 'green',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
-      },
-      incorrectAnswer: {
-        height: 45,
-        width: 150,
+    },
+    incorrectAnswer: {
         backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
-      },
-      result: {
+    },
+    result: {
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
-      },
-      resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
+    }
 });
