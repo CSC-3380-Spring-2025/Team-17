@@ -82,12 +82,12 @@ export default function Intervals() {
                                       }
                                       else{
                                         await setDoc(userDocRef, {
-                                            lessonProgress:[8],
+                                            lessonProgress:[1],
                                         }, {merge: true});
                                       }
                                     } else {
                                       await setDoc(userDocRef, {
-                                        lessonProgress: [8],
+                                        lessonProgress: [1],
                                       });
                                     }
                             

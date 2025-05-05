@@ -90,12 +90,12 @@ export default function Pitch(){
                           }
                           else{
                             await setDoc(userDocRef, {
-                                lessonProgress:[3],
+                                lessonProgress:[1],
                             }, {merge: true});
                           }
                         } else {
                           await setDoc(userDocRef, {
-                            lessonProgress: [3],
+                            lessonProgress: [1],
                           });
                         }
                 

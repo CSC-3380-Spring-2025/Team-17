@@ -83,12 +83,12 @@ export default function Meter(){
                               }
                               else{
                                 await setDoc(userDocRef, {
-                                    lessonProgress:[5],
+                                    lessonProgress:[1],
                                 }, {merge: true});
                               }
                             } else {
                               await setDoc(userDocRef, {
-                                lessonProgress: [5],
+                                lessonProgress: [1],
                               });
                             }
                     

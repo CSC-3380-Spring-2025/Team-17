@@ -51,12 +51,12 @@ export default function Rhythm(){
                           }
                           else{
                             await setDoc(userDocRef, {
-                                lessonProgress:[4],
+                                lessonProgress:[1],
                             }, {merge: true});
                           }
                         } else {
                           await setDoc(userDocRef, {
-                            lessonProgress: [4],
+                            lessonProgress: [1],
                           });
                         }
                 

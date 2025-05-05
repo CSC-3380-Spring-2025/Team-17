@@ -75,12 +75,12 @@ export default function Modes() {
                                   }
                                   else{
                                     await setDoc(userDocRef, {
-                                        lessonProgress:[7],
+                                        lessonProgress:[1],
                                     }, {merge: true});
                                   }
                                 } else {
                                   await setDoc(userDocRef, {
-                                    lessonProgress: [7],
+                                    lessonProgress: [1],
                                   });
                                 }
                         

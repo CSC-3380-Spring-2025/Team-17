@@ -65,12 +65,12 @@ export default function Scales(){
                                   }
                                   else{
                                     await setDoc(userDocRef, {
-                                        lessonProgress:[6],
+                                        lessonProgress:[1],
                                     }, {merge: true});
                                   }
                                 } else {
                                   await setDoc(userDocRef, {
-                                    lessonProgress: [6],
+                                    lessonProgress: [1],
                                   });
                                 }
                         

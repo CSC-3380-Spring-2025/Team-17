@@ -68,12 +68,12 @@ export default function Notation(){
                       }
                       else{
                         await setDoc(userDocRef, {
-                            lessonProgress:[2],
+                            lessonProgress:[1],
                         }, {merge: true});
                       }
                     } else {
                       await setDoc(userDocRef, {
-                        lessonProgress: [2],
+                        lessonProgress: [1],
                       });
                     }
             

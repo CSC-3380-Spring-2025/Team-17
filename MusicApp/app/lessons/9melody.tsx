@@ -76,12 +76,12 @@ export default function Melody() {
                                           }
                                           else{
                                             await setDoc(userDocRef, {
-                                                lessonProgress:[9],
+                                                lessonProgress:[1],
                                             }, {merge: true});
                                           }
                                         } else {
                                           await setDoc(userDocRef, {
-                                            lessonProgress: [9],
+                                            lessonProgress: [1],
                                           });
                                         }
                                 
