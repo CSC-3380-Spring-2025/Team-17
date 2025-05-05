@@ -273,8 +273,9 @@ const handleLoadSong=(name:string)=>{
 
         
         <Pressable style={styles.createButton}>
-
+          <Link href="/recorder" asChild>
           <Text style={styles.createButtonText}>Create New Track</Text>
+          </Link>
         </Pressable>
       </ScrollView>
     </>
