@@ -76,22 +76,22 @@ export default function Pitch(){
                           console.log('Document data:', userDoc.data());
                           const userData = userDoc.data();
                           if(userData.lessonProgress){
-                            if(!userData.lessonProgress.includes(1)){
+                            if(!userData.lessonProgress.includes(3)){
                                 if(count === 3){
                                     await updateDoc(userDocRef, {
-                                        lessonProgress: arrayUnion(1),
+                                        lessonProgress: arrayUnion(3),
                                     });
                                 }
                             }
                           }
                           else{
                             await setDoc(userDocRef, {
-                                lessonProgress:[1],
+                                lessonProgress:[3],
                             }, {merge: true});
                           }
                         } else {
                           await setDoc(userDocRef, {
-                            lessonProgress: [1],
+                            lessonProgress: [3],
                           });
                         }
                 

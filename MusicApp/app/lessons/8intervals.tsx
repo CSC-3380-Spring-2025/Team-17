@@ -68,22 +68,22 @@ export default function Intervals() {
                                       console.log('Document data:', userDoc.data());
                                       const userData = userDoc.data();
                                       if(userData.lessonProgress){
-                                        if(!userData.lessonProgress.includes(1)){
+                                        if(!userData.lessonProgress.includes(8)){
                                             if(count === 5){
                                                 await updateDoc(userDocRef, {
-                                                    lessonProgress: arrayUnion(1),
+                                                    lessonProgress: arrayUnion(8),
                                                 });
                                             }
                                         }
                                       }
                                       else{
                                         await setDoc(userDocRef, {
-                                            lessonProgress:[1],
+                                            lessonProgress:[8],
                                         }, {merge: true});
                                       }
                                     } else {
                                       await setDoc(userDocRef, {
-                                        lessonProgress: [1],
+                                        lessonProgress: [8],
                                       });
                                     }
                             

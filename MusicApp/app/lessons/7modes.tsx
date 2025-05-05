@@ -61,22 +61,22 @@ export default function Modes() {
                                   console.log('Document data:', userDoc.data());
                                   const userData = userDoc.data();
                                   if(userData.lessonProgress){
-                                    if(!userData.lessonProgress.includes(1)){
+                                    if(!userData.lessonProgress.includes(7)){
                                         if(count === 6){
                                             await updateDoc(userDocRef, {
-                                                lessonProgress: arrayUnion(1),
+                                                lessonProgress: arrayUnion(7),
                                             });
                                         }
                                     }
                                   }
                                   else{
                                     await setDoc(userDocRef, {
-                                        lessonProgress:[1],
+                                        lessonProgress:[7],
                                     }, {merge: true});
                                   }
                                 } else {
                                   await setDoc(userDocRef, {
-                                    lessonProgress: [1],
+                                    lessonProgress: [7],
                                   });
                                 }
                         

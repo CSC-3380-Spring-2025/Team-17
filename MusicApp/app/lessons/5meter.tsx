@@ -69,22 +69,22 @@ export default function Meter(){
                               console.log('Document data:', userDoc.data());
                               const userData = userDoc.data();
                               if(userData.lessonProgress){
-                                if(!userData.lessonProgress.includes(1)){
+                                if(!userData.lessonProgress.includes(5)){
                                     if(count === 4){
                                         await updateDoc(userDocRef, {
-                                            lessonProgress: arrayUnion(1),
+                                            lessonProgress: arrayUnion(5),
                                         });
                                     }
                                 }
                               }
                               else{
                                 await setDoc(userDocRef, {
-                                    lessonProgress:[1],
+                                    lessonProgress:[5],
                                 }, {merge: true});
                               }
                             } else {
                               await setDoc(userDocRef, {
-                                lessonProgress: [1],
+                                lessonProgress: [5],
                               });
                             }
                     

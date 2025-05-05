@@ -51,22 +51,22 @@ export default function Scales(){
                                   console.log('Document data:', userDoc.data());
                                   const userData = userDoc.data();
                                   if(userData.lessonProgress){
-                                    if(!userData.lessonProgress.includes(1)){
+                                    if(!userData.lessonProgress.includes(6)){
                                         if(count === 6){
                                             await updateDoc(userDocRef, {
-                                                lessonProgress: arrayUnion(1),
+                                                lessonProgress: arrayUnion(6),
                                             });
                                         }
                                     }
                                   }
                                   else{
                                     await setDoc(userDocRef, {
-                                        lessonProgress:[1],
+                                        lessonProgress:[6],
                                     }, {merge: true});
                                   }
                                 } else {
                                   await setDoc(userDocRef, {
-                                    lessonProgress: [1],
+                                    lessonProgress: [6],
                                   });
                                 }
                         
