@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`image viewer renders dog pic 1`] = `
+<ViewManagerAdapter_ExpoImage
+  borderRadius={18}
+  containerViewRef={"[React.ref]"}
+  contentFit="cover"
+  contentPosition={
+    {
+      "left": "50%",
+      "top": "50%",
+    }
+  }
+  height={440}
+  nativeViewRef={"[React.ref]"}
+  onError={[Function]}
+  onLoad={[Function]}
+  onLoadStart={[Function]}
+  onProgress={[Function]}
+  placeholder={[]}
+  source={
+    [
+      {
+        "testUri": "../../../assets/images/dog.jpg",
+      },
+    ]
+  }
+  style={
+    {
+      "borderRadius": 18,
+      "height": 440,
+      "width": 320,
+    }
+  }
+  transition={null}
+  width={320}
+/>
+`;

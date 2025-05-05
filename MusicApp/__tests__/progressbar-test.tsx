@@ -1,9 +1,10 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import renderer from 'react-test-renderer';
 import ProgressBar from '@/components/ProgressBar';
 
 describe('progress bar', () => {
     test('renders successfully', () => {
-        render(<ProgressBar progress={100} />);
+        const tree = renderer.create(<ProgressBar progress={100} />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 });
