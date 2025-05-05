@@ -460,6 +460,7 @@ export default function Meter() {
                             onPress={() => b2.current.pauseAsync()}
                         />
                     </View>
+
 </View>
                 <View>
                     <Text style={styles.quizTitle}>Quiz</Text>
@@ -586,6 +587,7 @@ export default function Meter() {
                                 {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
                             </Text>
                         )}
+
                     </View>
 
                     <View style={styles.quizContainer}>
@@ -721,9 +723,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 10,
         marginTop: 10,
-    },
-    buttons: {
-        flexDirection: 'row'
     },
     linksContainer: {
         width: '100%',

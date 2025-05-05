@@ -1,5 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import FileUploader from '@/components/fileUploader'
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,24 +10,19 @@ import {
   SafeAreaView,
   Alert,
   StyleSheet,
-
   ScrollView,
-  Button,
   TextInput,
-
   Animated,
-  Easing
-
+  Easing,
+  Dimensions
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';
-import { useAudioContext } from './AudioContext';
-
-import {  useLocalSearchParams } from 'expo-router';
-import * as FileSystem from 'expo-file-system';
-
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { useAudioContext } from './AudioContext';
+import { useLocalSearchParams } from 'expo-router';
+import * as FileSystem from 'expo-file-system';
+import FileUploader from '@/components/fileUploader';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
@@ -43,11 +37,11 @@ interface AudioTrack {
   volume?: number;
   rate?: number;
   reverb?: boolean;
-  fadeIn?: number;
-  fadeOut?: number;
+  isPlaying?: boolean;
+  drumSequence?: DrumHit[];
 }
 
-interface uploadedDocument{
+interface UploadedDocument {
   name: string;
   mimeType: string;
   size: number;
@@ -62,132 +56,183 @@ interface SoundSettingsModalProps {
     volume: number;
     rate: number;
     reverb: boolean;
-    fadeIn: number;
-    fadeOut: number;
+    drumBeats?: DrumHit[];
   }) => void;
 }
+
+interface DrumPad {
+  id: string;
+  sound: Audio.Sound | null;
+  label: string;
+  uri: any;
+  color: string;
+}
+
+interface DrumHit {
+  time: number;
+  padId: string;
+}
+
 const SoundSettingsModal: React.FC<SoundSettingsModalProps> = ({ visible, track, onClose, onSave }) => {
   const [volume, setVolume] = useState(track?.volume || 1.0);
   const [rate, setRate] = useState(track?.rate || 1.0);
   const [reverb, setReverb] = useState(track?.reverb || false);
-  const [fadeIn, setFadeIn] = useState(track?.fadeIn || 0);
-  const [fadeOut, setFadeOut] = useState(track?.fadeOut || 0);
+  const [drumBeats, setDrumBeats] = useState<DrumHit[]>(track?.drumSequence || []);
 
   useEffect(() => {
     if (track) {
       setVolume(track.volume || 1.0);
       setRate(track.rate || 1.0);
       setReverb(track.reverb || false);
-      setFadeIn(track.fadeIn || 0);
-      setFadeOut(track.fadeOut || 0);
+      setDrumBeats(track.drumSequence || []);
     }
   }, [track]);
-const handleSave = () => {
-  onSave({
-    volume,
-    rate,
-    reverb,
-    fadeIn,
-    fadeOut
-  });
-  onClose();
-};
 
-return (
-  <Modal
-    animationType="slide"
-    transparent={true}
-    visible={visible}
-    onRequestClose={onClose}>
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>Sound Settings: {track?.title}</Text>
-        
-        <View style={styles.sliderContainer}>
-          <Text>Volume: {volume.toFixed(1)}</Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={2}
-            step={0.1}
-            value={volume}
-            onValueChange={setVolume}
-            minimumTrackTintColor="#6200ee"
-            maximumTrackTintColor="#000000"
-          />
-        </View>
-        
-        <View style={styles.sliderContainer}>
-          <Text>Speed: {rate.toFixed(1)}x</Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={0.5}
-            maximumValue={2}
-            step={0.1}
-            value={rate}
-            onValueChange={setRate}
-            minimumTrackTintColor="#6200ee"
-            maximumTrackTintColor="#000000"
-          />
-        </View>
-        
-        <View style={styles.sliderContainer}>
-          <Text>Fade In: {fadeIn}s</Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={5}
-            step={0.5}
-            value={fadeIn}
-            onValueChange={setFadeIn}
-            minimumTrackTintColor="#6200ee"
-            maximumTrackTintColor="#000000"
-          />
-        </View>
-        
-        <View style={styles.sliderContainer}>
-          <Text>Fade Out: {fadeOut}s</Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={5}
-            step={0.5}
-            value={fadeOut}
-            onValueChange={setFadeOut}
-            minimumTrackTintColor="#6200ee"
-            maximumTrackTintColor="#000000"
-          />
-        </View>
-        
-        <TouchableOpacity
-          style={[styles.modalOption, reverb ? styles.reverbActive : styles.reverbInactive]}
-          onPress={() => setReverb(!reverb)}>
-          <Text style={styles.modalOptionText}>Reverb: {reverb ? 'ON' : 'OFF'}</Text>
-        </TouchableOpacity>
-        
-        <View style={styles.modalButtons}>
-          <TouchableOpacity
-            style={[styles.modalButton, styles.saveButton]}
-            onPress={handleSave}>
-            <Text style={styles.modalButtonText}>Save</Text>
-          </TouchableOpacity>
-          
+  const handleSave = () => {
+    const settings = {
+      volume,
+      rate,
+      reverb
+    };
+
+    if (track?.sourceType === 'virtual-instrument') {
+      onSave({
+        ...settings,
+        drumBeats: adjustBeatsForRate(drumBeats, rate)
+      });
+    } else {
+      onSave(settings);
+    }
+    onClose();
+  };
+
+  const adjustBeatsForRate = (beats: DrumHit[], newRate: number): DrumHit[] => {
+    if (!track?.rate) return beats;
+    const rateRatio = track.rate / newRate;
+    return beats.map(beat => ({
+      ...beat,
+      time: beat.time * rateRatio
+    }));
+  };
+
+  const updateBeatTime = (index: number, newTime: number) => {
+    setDrumBeats(prev => prev.map((beat, i) =>
+      i === index ? { ...beat, time: Math.max(0, newTime) } : beat
+    ));
+  };
+
+  const removeDrumBeat = (index: number) => {
+    setDrumBeats(prev => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Sound Settings: {track?.title}</Text>
+
+          <View style={styles.sliderContainer}>
+            <Text style={styles.modalOptionText}>Volume: {volume.toFixed(1)}</Text>
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={1}
+              step={0.1}
+              value={volume}
+              onValueChange={setVolume}
+              minimumTrackTintColor="#6200ee"
+              maximumTrackTintColor="#000000"
+            />
+          </View>
+
+          <View style={styles.sliderContainer}>
+            <Text style={styles.modalOptionText}>Speed: {rate.toFixed(1)}x</Text>
+            <Slider
+              style={styles.slider}
+              minimumValue={0.5}
+              maximumValue={2}
+              step={0.1}
+              value={rate}
+              onValueChange={setRate}
+              minimumTrackTintColor="#6200ee"
+              maximumTrackTintColor="#000000"
+            />
+          </View>
 
           <TouchableOpacity
-            style={[styles.modalButton, styles.cancelButton]}
-            onPress={onClose}>
-            <Text style={styles.modalButtonText}>Cancel</Text>
+            style={[styles.modalOption, reverb ? styles.reverbActive : styles.reverbInactive]}
+            onPress={() => setReverb(!reverb)}>
+            <Text style={styles.modalOptionText}>Reverb: {reverb ? 'ON' : 'OFF'}</Text>
           </TouchableOpacity>
 
+          {track?.sourceType === 'virtual-instrument' && (
+            <View style={styles.drumBeatSection}>
+              <Text style={styles.sectionTitle}>Drum Beats ({drumBeats.length})</Text>
+              <ScrollView style={styles.drumBeatList}>
+                {drumBeats.map((beat, index) => (
+                  <View key={index} style={styles.drumBeatItem}>
+                    <Text style={styles.drumBeatText}>{beat.padId}</Text>
+
+                    <TextInput
+                      style={styles.timeInput}
+                      value={(beat.time / 1000).toFixed(2)}
+                      onChangeText={(text) => {
+                        const seconds = parseFloat(text) || 0;
+                        updateBeatTime(index, seconds * 1000);
+                      }}
+                      keyboardType="numeric"
+                      returnKeyType="done"
+                    />
+
+                    <Text style={styles.timeLabel}>seconds</Text>
+
+                    <Slider
+                      style={styles.beatTimeSlider}
+                      minimumValue={0}
+                      maximumValue={5000} 
+                      step={50}
+                      value={beat.time}
+                      onValueChange={(value) => updateBeatTime(index, value)}
+                      minimumTrackTintColor="#6200ee"
+                      maximumTrackTintColor="#000000"
+                    />
+
+                    <TouchableOpacity
+                      style={styles.removeBeatButton}
+                      onPress={() => removeDrumBeat(index)}>
+                      <MaterialIcons name="delete" size={18} color="white" />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
+          <View style={styles.modalButtons}>
+            <TouchableOpacity
+              style={[styles.modalButton, styles.saveButton]}
+              onPress={handleSave}>
+              <Text style={styles.modalButtonText}>Save</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.modalButton, styles.cancelButton]}
+              onPress={onClose}>
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
-  </Modal>
-);
+    </Modal>
+  );
 };
 
-
-const LiveMixingPage =() => {
+const LiveMixingPage = () => {
+  // central state vars
   const [modalVisible, setModalVisible] = useState(false);
   const [showRecordingsModal, setShowRecordingsModal] = useState(false);
   const [tracks, setTracks] = useState<AudioTrack[]>([]);
@@ -197,67 +242,75 @@ const LiveMixingPage =() => {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [soundObjects, setSoundObjects] = useState<Audio.Sound[]>([]);
   const [selectedTrack, setSelectedTrack] = useState<AudioTrack | null>(null);
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
-  const [songName, setSongName]= useState('');
-  const [songNameModalVisible, setSongNameModalVisible]= useState(false);
+  // song states
+  const [songName, setSongName] = useState('');
+  const [songNameModalVisible, setSongNameModalVisible] = useState(false);
   const { recordings } = useAudioContext();
   const params = useLocalSearchParams();
-  const song=Array.isArray(params.song)? params.song[0]:params.song;
-   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
-  
-  const pulseAnim = new Animated.Value(1);
-  
+  const song = Array.isArray(params.song) ? params.song[0] : params.song;
 
-  const saveState = async (name: string) => {
-    const state = {
-      tracks,
-      isRecording,
-      isPlayingAll,
-      isLooping,
-      selectedTrack,
-      settingsModalVisible,
-      modalVisible,
-      showRecordingsModal,
+  // drum states
+  const [drumKitModalVisible, setDrumKitModalVisible] = useState(false);
+  const [drumTimeouts, setDrumTimeouts] = useState<NodeJS.Timeout[]>([]);
+  const [isRecordingDrums, setIsRecordingDrums] = useState(false);
+  const [recordedDrums, setRecordedDrums] = useState<DrumHit[]>([]);
+  const [recordingStartTime, setRecordingStartTime] = useState(0);
+  const [drumPads, setDrumPads] = useState<DrumPad[]>([
+    {
+      id: 'kick',
+      sound: null,
+      label: 'Kick',
+      uri: require('../../assets/sounds/kick.mp3'),
+      color: '#E53935'
+    },
+    {
+      id: 'snare',
+      sound: null,
+      label: 'Snare',
+      uri: require('../../assets/sounds/snare.mp3'),
+      color: '#3949AB'
+    },
+    {
+      id: 'hihat',
+      sound: null,
+      label: 'Hi-Hat',
+      uri: require('../../assets/sounds/hihat.mp3'),
+      color: '#43A047'
+    },
+    {
+      id: 'crash',
+      sound: null,
+      label: 'Crash',
+      uri: require('../../assets/sounds/crash.mp3'),
+      color: '#FB8C00'
+    },
+  ]);
+
+
+  useEffect(() => {
+    const loadDrumSounds = async () => {
+      const loadedPads = await Promise.all(
+        drumPads.map(async pad => {
+          const { sound } = await Audio.Sound.createAsync(pad.uri);
+          return { ...pad, sound };
+        })
+      );
+      setDrumPads(loadedPads);
     };
-    const fileUri = 
-    `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
-      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
-  };
 
-  const loadState = async (name: string) => {
-    const fileUri=
-    `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
-    const savedState = await FileSystem.readAsStringAsync(fileUri);
-    if (savedState) {
-      const state = JSON.parse(savedState);
-      setTracks(state.tracks);
-      setIsRecording(state.isRecording);
-      setIsPlayingAll(state.isPlayingAll);
-      setIsLooping(state.isLooping);
-      setSelectedTrack(state.selectedTrack);
-      setSettingsModalVisible(state.settingsModalVisible);
-      setModalVisible(state.modalVisible);
-      setShowRecordingsModal(state.showRecordingsModal);
-    }
-  };
-  useEffect(()=>{
-    if(song){
-      loadState(song);
-    }
-  }, [song]);
-  const handleSaveSong=()=>{
-    setSongNameModalVisible(true);
-  };
-  const handleSaveSongName=()=>{
-    if(songName){
-      saveState(songName);
-      Alert.alert(`Song "${songName}" saved successfully!`);
-      setSongNameModalVisible(false);
-    }
-  };
-  
+    loadDrumSounds();
 
- 
+    return () => {
+      drumPads.forEach(pad => {
+        if (pad.sound) {
+          pad.sound.unloadAsync();
+        }
+      });
+    };
+  }, []);
 
 
   useEffect(() => {
@@ -267,8 +320,12 @@ const LiveMixingPage =() => {
           try {
             const status = await sound.getStatusAsync();
             if (status.isLoaded) {
-              setTracks(prev => prev.map((track, i) => 
-                i === index ? { ...track, positionMillis: status.positionMillis, durationMillis: status.durationMillis } : track
+              setTracks(prev => prev.map((track, i) =>
+                i === index ? {
+                  ...track,
+                  positionMillis: status.positionMillis,
+                  durationMillis: status.durationMillis
+                } : track
               ));
             }
           } catch (error) {
@@ -276,7 +333,7 @@ const LiveMixingPage =() => {
           }
         });
       }
-    }, 175); 
+    }, 175);
 
     return () => clearInterval(interval);
   }, [soundObjects, isPlayingAll]);
@@ -293,6 +350,7 @@ const LiveMixingPage =() => {
     };
   }, [soundObjects, recording]);
 
+
   useEffect(() => {
     soundObjects.forEach(sound => {
       sound.setOnPlaybackStatusUpdate(status => {
@@ -302,6 +360,7 @@ const LiveMixingPage =() => {
       });
     });
   }, [soundObjects, isLooping]);
+
 
   useEffect(() => {
     if (isRecording) {
@@ -326,6 +385,49 @@ const LiveMixingPage =() => {
     }
   }, [isRecording]);
 
+  // the song persists (hallelujah)
+  const saveState = async (name: string) => {
+    const state = {
+      tracks,
+      isRecording,
+      isPlayingAll,
+      isLooping,
+      selectedTrack,
+      settingsModalVisible,
+      modalVisible,
+      showRecordingsModal,
+    };
+    const fileUri = `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
+    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+  };
+
+  const loadState = async (name: string) => {
+    const fileUri = `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
+    try {
+      const savedState = await FileSystem.readAsStringAsync(fileUri);
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        setTracks(state.tracks);
+        setIsRecording(state.isRecording);
+        setIsPlayingAll(state.isPlayingAll);
+        setIsLooping(state.isLooping);
+        setSelectedTrack(state.selectedTrack);
+        setSettingsModalVisible(state.settingsModalVisible);
+        setModalVisible(state.modalVisible);
+        setShowRecordingsModal(state.showRecordingsModal);
+      }
+    } catch (error) {
+      console.warn('Error loading state:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (song) {
+      loadState(song);
+    }
+  }, [song]);
+
+  //recording functions
   const startRecording = async () => {
     try {
       if (Platform.OS === 'android') {
@@ -380,6 +482,9 @@ const LiveMixingPage =() => {
         title: `Recording ${new Date().toLocaleTimeString()}`,
         artist: '',
         sourceType: 'voice',
+        volume: 1.0,
+        rate: 1.0,
+        reverb: false
       };
 
       setTracks(prev => [...prev, newTrack]);
@@ -389,6 +494,7 @@ const LiveMixingPage =() => {
     }
   };
 
+  //playback functions
   const playAllTracks = async () => {
     if (isPlayingAll) {
       await stopAllPlayback();
@@ -405,21 +511,25 @@ const LiveMixingPage =() => {
       const newSoundObjects: Audio.Sound[] = [];
 
       for (const track of tracks) {
-        if (track.url) {
+        if (track.sourceType === 'virtual-instrument' && track.drumSequence) {
+          
+          playDrumSequence(track, isLooping);
+        } else if (track.url) {
           const { sound } = await Audio.Sound.createAsync(
             { uri: track.url },
-            { shouldPlay: true, isLooping: isLooping, volume: track.volume|| 1.0, rate: track.rate || 1.0 }
+            {
+              shouldPlay: true,
+              isLooping: isLooping,
+              volume: track.volume || 1.0,
+              rate: track.rate || 1.0
+            }
           );
-          if (track.fadeIn && track.fadeIn > 0) {
-            await sound.setVolumeAsync(0);
-            sound.setVolumeAsync(track.volume || 1.0, { duration: track.fadeIn * 1000 });
-          }
           newSoundObjects.push(sound);
-          await sound.playAsync();
         }
       }
 
       setSoundObjects(newSoundObjects);
+      setTracks(prev => prev.map(track => ({ ...track, isPlaying: true })));
     } catch (error) {
       console.error('Failed to play all tracks', error);
       setIsPlayingAll(false);
@@ -433,16 +543,26 @@ const LiveMixingPage =() => {
     soundObjects.forEach(sound => {
       sound.setIsLoopingAsync(newLoopingState);
     });
-
-    if (newLoopingState && !isPlayingAll) {
-      playAllTracks();
+    
+    if (isPlayingAll) {
+      tracks.forEach(track => {
+        if (track.sourceType === 'virtual-instrument' && track.drumSequence) {
+          playDrumSequence(track, newLoopingState);
+        }
+      });
     }
   };
 
   const stopAllPlayback = async () => {
     try {
+      
       await Promise.all(soundObjects.map(sound => sound.stopAsync()));
       setSoundObjects([]);
+      
+      drumTimeouts.forEach(timeout => clearTimeout(timeout));
+      setDrumTimeouts([]);
+
+      setTracks(prev => prev.map(track => ({ ...track, isPlaying: false })));
     } catch (error) {
       console.error('Failed to stop playback', error);
     }
@@ -456,6 +576,7 @@ const LiveMixingPage =() => {
     }
   };
 
+  //track functions
   const deleteTrack = (trackId: string) => {
     setTracks(prev => prev.filter(track => track.id !== trackId));
   };
@@ -464,29 +585,128 @@ const LiveMixingPage =() => {
     setSelectedTrack(track);
     setSettingsModalVisible(true);
   };
+
   const saveTrackSettings = (settings: {
     volume: number;
     rate: number;
     reverb: boolean;
-    fadeIn: number;
-    fadeOut: number;
+    drumBeats?: DrumHit[];
   }) => {
     if (!selectedTrack) return;
-    
-    setTracks(prev => prev.map(track => 
-      track.id === selectedTrack.id ? { ...track, ...settings } : track
+
+    const updatedTrack = {
+      ...selectedTrack,
+      volume: settings.volume,
+      rate: settings.rate,
+      reverb: settings.reverb
+    };
+
+    if (selectedTrack.sourceType === 'virtual-instrument' && settings.drumBeats) {
+      updatedTrack.drumSequence = settings.drumBeats;
+    }
+
+    setTracks(prev => prev.map(track =>
+      track.id === selectedTrack.id ? updatedTrack : track
     ));
 
-    
     const soundIndex = tracks.findIndex(t => t.id === selectedTrack.id);
     if (soundIndex >= 0 && soundIndex < soundObjects.length) {
       const sound = soundObjects[soundIndex];
       sound.setVolumeAsync(settings.volume);
       sound.setRateAsync(settings.rate, true);
-      
     }
   };
 
+  //drum functions
+  const playDrumSound = async (pad: DrumPad) => {
+    if (pad.sound) {
+      await pad.sound.replayAsync();
+
+      if (isRecordingDrums) {
+        const currentTime = Date.now();
+        const timeFromStart = currentTime - recordingStartTime;
+        setRecordedDrums(prev => [...prev, { time: timeFromStart, padId: pad.id }]);
+      }
+    }
+  };
+
+  const startDrumRecording = async () => {
+    setIsRecordingDrums(true);
+    setRecordedDrums([]);
+    setRecordingStartTime(Date.now());
+  };
+
+  const stopDrumRecording = async () => {
+    if (!isRecordingDrums) return;
+
+    setIsRecordingDrums(false);
+
+    try {
+      const newTrack: AudioTrack = {
+        id: `drums_${Date.now()}`,
+        url: '',
+        title: `Drum Loop ${new Date().toLocaleTimeString()}`,
+        artist: '',
+        sourceType: 'virtual-instrument',
+        volume: 1.0,
+        rate: 1.0,
+        reverb: false,
+        drumSequence: [...recordedDrums]
+      };
+
+      setTracks(prev => [...prev, newTrack]);
+      setDrumKitModalVisible(false);
+    } catch (error) {
+      console.error('Failed to create drum sequence', error);
+    }
+  };
+
+  const toggleDrumRecording = () => {
+    if (isRecordingDrums) {
+      stopDrumRecording();
+    } else {
+      startDrumRecording();
+    }
+  };
+
+  const playDrumSequence = async (track: AudioTrack, loop = false) => {
+    if (!track.drumSequence) return;
+
+    
+    drumTimeouts.forEach(timeout => clearTimeout(timeout));
+    setDrumTimeouts([]);
+
+    try {
+      const playBeats = () => {
+        const newTimeouts: NodeJS.Timeout[] = [];
+
+        track.drumSequence.forEach(hit => {
+          const pad = drumPads.find(p => p.id === hit.padId);
+          if (pad && pad.sound) {
+            const timeout = setTimeout(() => {
+              pad.sound?.replayAsync();
+            }, hit.time / (track.rate || 1.0));
+            newTimeouts.push(timeout);
+          }
+        });
+
+        setDrumTimeouts(newTimeouts);
+
+        //loopy d loop
+        if (loop) {
+          const duration = Math.max(...track.drumSequence.map(b => b.time)) / (track.rate || 1.0);
+          const loopTimeout = setTimeout(() => playBeats(), duration);
+          setDrumTimeouts(prev => [...prev, loopTimeout]);
+        }
+      };
+
+      playBeats();
+    } catch (error) {
+      console.error('Error playing drum sequence:', error);
+    }
+  };
+
+  //track creation functions
   const addTrack = (sourceType: SoundSource) => {
     setModalVisible(false);
 
@@ -499,22 +719,13 @@ const LiveMixingPage =() => {
       return;
     }
 
+    if (sourceType === 'virtual-instrument') {
+      setDrumKitModalVisible(true);
+      return;
+    }
+
     let newTrack: AudioTrack;
     switch (sourceType) {
-      case 'virtual-instrument':
-        newTrack = {
-          id: `instrument_${Date.now()}`,
-          url: '',
-          title: 'Virtual Instrument',
-          artist: '',
-          sourceType: 'virtual-instrument',
-          volume: 1.0,
-          rate: 1.0,
-          reverb: false,
-          fadeIn: 0,
-          fadeOut: 0
-        };
-        break;
       case 'local-file':
       default:
         newTrack = {
@@ -525,119 +736,138 @@ const LiveMixingPage =() => {
           sourceType: 'local-file',
           volume: 1.0,
           rate: 1.0,
-          reverb: false,
-          fadeIn: 0,
-          fadeOut: 0
+          reverb: false
         };
     }
 
     setTracks(prev => [...prev, newTrack]);
   };
 
-  const handleFileUpload = (document: uploadedDocument)=>{
-    const newTrack:AudioTrack={
-      id:`file_${Date.now()}`,
+  const handleFileUpload = (document: UploadedDocument) => {
+    const newTrack: AudioTrack = {
+      id: `file_${Date.now()}`,
       url: document.uri,
       title: document.name,
       artist: '',
       sourceType: 'local-file',
+      volume: 1.0,
+      rate: 1.0,
+      reverb: false
     };
-    setTracks(prev=>[...prev, newTrack]);
+    setTracks(prev => [...prev, newTrack]);
   };
-  const renderTrackItem = ({ item }: { item: AudioTrack }) => (
-    <View style={styles.trackItem}>
-      <View style={styles.trackInfo}>
-        <Text style={styles.trackTitle} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
-        <Text style={styles.trackType}>{item.sourceType}</Text>
-        
-        <View style={styles.trackMeta}>
-          <View style={[
-            styles.sourceBadge, 
-            item.sourceType === 'voice' ? styles.voiceBadge :
-            item.sourceType === 'virtual-instrument' ? styles['virtual-instrumentBadge'] :
-            styles['local-fileBadge']
-          ]}>
-            <Text style={styles.sourceBadgeText}>{item.sourceType.replace('-', ' ')}</Text>
-          </View>
-        </View>
-        
-        
-        
-      </View>
-      
-      <View style={styles.trackButtons}>
-      <TouchableOpacity 
-        style={styles.playButton}
-        onPress={() => playTrack(item)}>
-        <Text style={styles.playButtonText}>
-        ▶️
-        </Text>
-      </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.settingsButton}
-          onPress={() => openSettingsModal(item)}>
-          <Text style={styles.settingsButtonText}>⚙️</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-        style={styles.deleteButton} 
-        onPress={() => deleteTrack(item.id)}
-        activeOpacity={0.7}
-      >
-        <MaterialIcons name="delete" size={20} color="white" />
-      </TouchableOpacity>
-
-      </View>
-    </View>
-  );
-
+  //single track playback
   const playTrack = async (track: AudioTrack) => {
+    if (track.sourceType === 'virtual-instrument' && track.drumSequence) {
+      await playDrumSequence(track);
+      setTracks(prev => prev.map(t =>
+        t.id === track.id ? { ...t, isPlaying: true } : t
+      ));
+      return;
+    }
+
     try {
       const sound = await Audio.Sound.createAsync(
         { uri: track.url },
         { shouldPlay: true, volume: track.volume || 1.0, rate: track.rate || 1.0 }
       );
-  
-      // Update track with 'isPlaying' state
-      setTracks(prev => prev.map(t => 
+
+      setTracks(prev => prev.map(t =>
         t.id === track.id ? { ...t, isPlaying: true } : t
       ));
-  
-      // Update sound status when finished
-      sound.setOnPlaybackStatusUpdate(status => {
+
+      sound.sound.setOnPlaybackStatusUpdate(status => {
         if (status.didJustFinish) {
-          setTracks(prev => prev.map(t => 
+          setTracks(prev => prev.map(t =>
             t.id === track.id ? { ...t, isPlaying: false } : t
           ));
         }
       });
-      
-      // Keep track of the sound for later manipulation
-      setSoundObjects(prev => [...prev, sound]);
+
+      setSoundObjects(prev => [...prev, sound.sound]);
     } catch (error) {
       console.error('Error playing track:', error);
     }
   };
-  
+
   const stopTrack = (track: AudioTrack) => {
-    // Find the sound object and stop it
-    const soundObject = soundObjects.find(sound => sound.id === track.id);
+    const soundObject = soundObjects.find(sound => sound._loaded && sound._loading === false);
     if (soundObject) {
       soundObject.stopAsync();
     }
-  
-    // Update track with 'isPlaying' state
-    setTracks(prev => prev.map(t => 
+
+    setTracks(prev => prev.map(t =>
       t.id === track.id ? { ...t, isPlaying: false } : t
     ));
   };
 
+  //the managers
+  const handleSaveSong = () => {
+    setSongNameModalVisible(true);
+  };
+
+  const handleSaveSongName = () => {
+    if (songName) {
+      saveState(songName);
+      Alert.alert(`Song "${songName}" saved successfully!`);
+      setSongNameModalVisible(false);
+      setSongName('');
+    }
+  };
+
+
+  const renderTrackItem = ({ item }: { item: AudioTrack }) => (
+    <View style={styles.trackItem}>
+      <View style={styles.trackInfo}>
+        <Text style={styles.trackTitle} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+        <Text style={styles.trackType}>{item.sourceType}</Text>
+
+        <View style={styles.trackMeta}>
+          <View style={[
+            styles.sourceBadge,
+            item.sourceType === 'voice' ? styles.voiceBadge :
+              item.sourceType === 'virtual-instrument' ? styles['virtual-instrumentBadge'] :
+                styles['local-fileBadge']
+          ]}>
+            <Text style={styles.sourceBadgeText}>{item.sourceType.replace('-', ' ')}</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.trackButtons}>
+        <TouchableOpacity
+          style={styles.playButton}
+          onPress={() => item.isPlaying ? stopTrack(item) : playTrack(item)}>
+          <MaterialIcons
+            name={item.isPlaying ? 'stop' : 'play-arrow'}
+            size={20}
+            color="white"
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.settingsButton}
+          onPress={() => openSettingsModal(item)}>
+          <MaterialIcons name="settings" size={20} color="white" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => deleteTrack(item.id)}
+          activeOpacity={0.7}
+        >
+          <MaterialIcons name="delete" size={20} color="white" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.addButton} 
+        <TouchableOpacity
+          style={styles.addButton}
           onPress={() => setModalVisible(true)}
           activeOpacity={0.7}
         >
@@ -647,9 +877,10 @@ const LiveMixingPage =() => {
         <TouchableOpacity
           style={styles.addButton}
           onPress={handleSaveSong}>
+          <MaterialIcons name="save" size={24} color="white" />
           <Text style={styles.addButtonText}>Save Song</Text>
         </TouchableOpacity>
-        </View>
+      </View>
 
       {tracks.length === 0 ? (
         <View style={styles.emptyState}>
@@ -669,8 +900,8 @@ const LiveMixingPage =() => {
 
       <View style={styles.controls}>
         <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-          <TouchableOpacity 
-            style={[styles.controlButton, styles.recordButton]} 
+          <TouchableOpacity
+            style={[styles.controlButton, styles.recordButton]}
             onPress={toggleRecording}
             activeOpacity={0.7}
           >
@@ -678,8 +909,8 @@ const LiveMixingPage =() => {
           </TouchableOpacity>
         </Animated.View>
 
-        <TouchableOpacity 
-          style={[styles.controlButton, styles.playAllButton]} 
+        <TouchableOpacity
+          style={[styles.controlButton, styles.playAllButton]}
           onPress={playAllTracks}
           activeOpacity={0.7}
         >
@@ -695,39 +926,38 @@ const LiveMixingPage =() => {
         </TouchableOpacity>
       </View>
 
+      {/* Add Track Modal */}
       <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-            <Text style={styles.modalTitle}>Add New Track</Text>
+              <Text style={styles.modalTitle}>Add New Track</Text>
 
-            <TouchableOpacity style={styles.modalOption} onPress={() => addTrack('voice')}>
-              <Text style={styles.modalOptionText}>Import Track</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.modalOption} onPress={() => addTrack('voice')}>
+                <MaterialIcons name="mic" size={24} color="white" />
+                <Text style={styles.modalOptionText}>Voice Recording</Text>
+              </TouchableOpacity>
 
-            
-            <TouchableOpacity
-              style={styles.modalOption}
+              <TouchableOpacity
+                style={styles.modalOption}
+                onPress={() => addTrack('virtual-instrument')}>
+                <MaterialIcons name="piano" size={24} color="white" />
+                <Text style={styles.modalOptionText}>Virtual Instrument</Text>
+              </TouchableOpacity>
 
-              
-              onPress={() => addTrack('virtual-instrument')}>
-              <Text style={styles.modalOptionText}>Virtual Instrument</Text>
-            </TouchableOpacity>
-            
-            <FileUploader onFileUpload={handleFileUpload}
-             setModalVisible={setModalVisible}/>
+              <FileUploader onFileUpload={handleFileUpload} setModalVisible={setModalVisible} />
 
-            <TouchableOpacity
-              style={styles.modalClose}
-              onPress={() => setModalVisible(false)}>
-
-              <Text style={styles.modalCloseText}>Cancel</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalClose}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.modalCloseText}>Cancel</Text>
+              </TouchableOpacity>
             </ScrollView>
           </View>
         </View>
       </Modal>
 
+      {/* Recordings Selection Modal */}
       <Modal animationType="slide" transparent={true} visible={showRecordingsModal} onRequestClose={() => setShowRecordingsModal(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -748,9 +978,7 @@ const LiveMixingPage =() => {
                       sourceType: 'voice',
                       volume: 1.0,
                       rate: 1.0,
-                      reverb: false,
-                      fadeIn: 0,
-                      fadeOut: 0
+                      reverb: false
                     };
                     setTracks(prev => [...prev, newTrack]);
                     setShowRecordingsModal(false);
@@ -767,19 +995,22 @@ const LiveMixingPage =() => {
         </View>
       </Modal>
 
+      {/* Song Name Modal */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={songNameModalVisible}
-        onRequestClose={()=>setSongNameModalVisible(false)}>
+        onRequestClose={() => setSongNameModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Enter Song Name</Text>
             <TextInput
               placeholder="Song Name"
+              placeholderTextColor="#999"
               value={songName}
               onChangeText={setSongName}
-              style={{height:40, borderColor:'gray', borderWidth:1, marginBottom:20}}/>
+              style={styles.songNameInput}
+            />
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.saveButton]}
@@ -788,7 +1019,7 @@ const LiveMixingPage =() => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
-                onPress={()=> setSongNameModalVisible(false)}>
+                onPress={() => setSongNameModalVisible(false)}>
                 <Text style={styles.modalButtonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
@@ -796,6 +1027,57 @@ const LiveMixingPage =() => {
         </View>
       </Modal>
 
+      {/* Drum Kit Modal */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={drumKitModalVisible}
+        onRequestClose={() => setDrumKitModalVisible(false)}
+        supportedOrientations={['landscape']}
+      >
+        <View style={styles.drumKitContainer}>
+          <Text style={styles.drumKitTitle}>Virtual Drum Kit</Text>
+
+          <View style={styles.drumPadGrid}>
+            {drumPads.map(pad => (
+              <TouchableOpacity
+                key={pad.id}
+                style={[styles.drumPad, { backgroundColor: pad.color }]}
+                onPress={() => playDrumSound(pad)}
+              >
+                <Text style={styles.drumPadLabel}>{pad.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <TouchableOpacity
+            style={[styles.drumRecordButton, isRecordingDrums && styles.drumRecordButtonActive]}
+            onPress={toggleDrumRecording}
+          >
+            <MaterialIcons
+              name={isRecordingDrums ? 'stop' : 'fiber-manual-record'}
+              size={24}
+              color="white"
+            />
+            <Text style={styles.drumRecordButtonText}>
+              {isRecordingDrums ? 'Stop Recording' : 'Record Drum Loop'}
+            </Text>
+          </TouchableOpacity>
+
+          {isRecordingDrums && (
+            <Text style={styles.recordingStatusText}>
+              Recording... {recordedDrums.length} hits
+            </Text>
+          )}
+
+          <TouchableOpacity
+            style={styles.drumKitCloseButton}
+            onPress={() => setDrumKitModalVisible(false)}
+          >
+            <Text style={styles.drumKitCloseButtonText}>Close Drum Kit</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
 
       <SoundSettingsModal
         visible={settingsModalVisible}
@@ -805,35 +1087,95 @@ const LiveMixingPage =() => {
       />
     </SafeAreaView>
   );
-
 };
-    
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D2D2D2',
-  },
-  header: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#2A2B2D',
     backgroundColor: '#1C1D1F',
   },
-  addButton: {
-    backgroundColor: '#5A5A5A',
-    paddingVertical: 14,
-    borderRadius: 8,
+  timeInput: {
+    width: 60,
+    height: 30,
+    backgroundColor: '#1C1D1F',
+    color: 'white',
+    borderWidth: 1,
+    borderColor: '#4243FF',
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    marginHorizontal: 8,
+    textAlign: 'center',
+  },
+  timeLabel: {
+    color: 'white',
+    fontSize: 12,
+    width: 60,
+  },
+  drumBeatItem: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  beatTimeSlider: {
+    flex: 1,
+    height: 40,
+    marginHorizontal: 8,
+  },
+  drumBeatSection: {
+    marginTop: 16,
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  drumBeatList: {
+    maxHeight: 150,
+    backgroundColor: '#1C1D1F',
+    borderRadius: 8,
+    padding: 8,
+  },
+  drumBeatItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  drumBeatText: {
+    color: 'white',
+    fontSize: 14,
+  },
+  removeBeatButton: {
+    padding: 4,
+    borderRadius: 12,
+    backgroundColor: '#E53935',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+    backgroundColor: '#252628',
+    borderBottomWidth: 1,
+    borderBottomColor: '#2A2B2D',
+  },
+  addButton: {
+    flexDirection: 'row',
+    backgroundColor: '#4243FF',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    width: '100%',
+    flex: 1,
+    marginHorizontal: 8,
   },
   addButtonText: {
     color: 'white',
@@ -842,24 +1184,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   emptyState: {
-    position: 'absolute',
-    top: '30%',
-    left: 0,
-    right: 0,
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 40,
-  },  
-  sliderContainer: {
-    marginBottom: 16,
   },
   emptyStateText: {
-    color: 'black',
+    color: 'white',
     fontSize: 18,
     fontWeight: '600',
     marginTop: 16,
   },
   emptyStateSubtext: {
-    color: '#000',
+    color: '#999',
     fontSize: 14,
     marginTop: 8,
     textAlign: 'center',
@@ -868,47 +1205,8 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
     paddingHorizontal: 12,
   },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 16,
-  },
-  modalButton: {
-    flex: 1,
-    padding: 12,
-    borderRadius: 4,
-    marginHorizontal: 8,
-  },
-  saveButton: {
-    backgroundColor: '#6200ee',
-  },
-  cancelButton: {
-    backgroundColor: '#e0e0e0',
-  },
-  modalButtonText: {
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  settingsButtonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  reverbInactive: {
-    backgroundColor: '#f5f5f5',
-  },
-
-  trackType: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  slider: {
-    width: '100%',
-    height: 40,
-  },
   trackItem: {
-    backgroundColor: '#1E1F21',
+    backgroundColor: '#252628',
     padding: 16,
     marginVertical: 8,
     borderRadius: 12,
@@ -923,18 +1221,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
-  settingsButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#6200ee',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 8,
-  },
-  reverbActive: {
-    backgroundColor: '#4CAF50',
-  },
   trackInfo: {
     flex: 1,
     marginRight: 12,
@@ -945,9 +1231,15 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginBottom: 6,
   },
+  trackType: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
+  },
   trackMeta: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 8,
   },
   sourceBadge: {
     paddingVertical: 4,
@@ -970,6 +1262,28 @@ const styles = StyleSheet.create({
   'local-fileBadge': {
     backgroundColor: '#F57C00',
   },
+  trackButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  playButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#4CAF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  settingsButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#6200ee',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
   deleteButton: {
     width: 36,
     height: 36,
@@ -978,19 +1292,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  trackButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   controls: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 0,
     left: 0,
     right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1C1D1F',
+    backgroundColor: '#252628',
     paddingVertical: 16,
     borderTopWidth: 1,
     borderTopColor: '#2A2B2D',
@@ -1037,11 +1347,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.7)',
   },
   modalContent: {
-    backgroundColor: '#1C1D1F',
+    backgroundColor: '#252628',
     width: '85%',
     borderRadius: 16,
     padding: 20,
-    maxHeight: '60%',
+    maxHeight: '80%',
   },
   modalTitle: {
     fontSize: 20,
@@ -1051,22 +1361,24 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   modalOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     borderRadius: 8,
-    backgroundColor: '#252628',
+    backgroundColor: '#1C1D1F',
     marginBottom: 12,
   },
   modalOptionText: {
     fontSize: 16,
-    textAlign: 'center',
     color: '#fff',
     fontWeight: '500',
+    marginLeft: 12,
   },
   modalClose: {
     marginTop: 16,
     padding: 14,
     borderRadius: 8,
-    backgroundColor: '#252628',
+    backgroundColor: '#1C1D1F',
   },
   modalCloseText: {
     fontSize: 16,
@@ -1074,25 +1386,118 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600',
   },
-  playButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
-    marginRight: 8,
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
   },
-  playButtonText: {
+  modalButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    marginHorizontal: 8,
+  },
+  saveButton: {
+    backgroundColor: '#4243FF',
+  },
+  cancelButton: {
+    backgroundColor: '#1C1D1F',
+    borderWidth: 1,
+    borderColor: '#4243FF',
+  },
+  modalButtonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  sliderContainer: {
+    marginBottom: 16,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  reverbActive: {
+    backgroundColor: '#4CAF50',
+  },
+  reverbInactive: {
+    backgroundColor: '#1C1D1F',
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+  songNameInput: {
+    height: 50,
+    borderColor: '#4243FF',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    color: 'white',
+    marginBottom: 20,
+    backgroundColor: '#1C1D1F',
+  },
+  drumKitContainer: {
+    flex: 1,
+    backgroundColor: '#1C1D1F',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  drumKitTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 30,
+  },
+  drumPadGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  drumPad: {
+    width: Dimensions.get('window').width / 4 - 30,
+    height: Dimensions.get('window').width / 4 - 30,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+    elevation: 4,
+  },
+  drumPadLabel: {
     color: 'white',
     fontSize: 18,
+    fontWeight: 'bold',
   },
-  
-
-scrollViewContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  drumRecordButton: {
+    flexDirection: 'row',
+    backgroundColor: '#D32F2F',
+    padding: 15,
+    borderRadius: 8,
+    marginTop: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  
-
+  drumRecordButtonActive: {
+    backgroundColor: '#FF5252',
+  },
+  drumRecordButtonText: {
+    color: 'white',
+    fontSize: 18,
+    marginLeft: 10,
+  },
+  drumKitCloseButton: {
+    marginTop: 20,
+    padding: 12,
+    backgroundColor: '#4243FF',
+    borderRadius: 8,
+  },
+  drumKitCloseButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default LiveMixingPage;

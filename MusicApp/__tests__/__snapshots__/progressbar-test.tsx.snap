@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`progress bar renders successfully 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#E5E7EB",
+      "borderRadius": 8,
+      "height": 16,
+      "overflow": "hidden",
+      "width": 200,
+    }
+  }
+>
+  <View
+    style={
+      [
+        {
+          "backgroundColor": "#a12916",
+          "height": "100%",
+        },
+        {
+          "width": "100%",
+        },
+      ]
+    }
+  />
+</View>
+`;

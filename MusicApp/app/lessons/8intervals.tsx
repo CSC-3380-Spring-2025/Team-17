@@ -627,6 +627,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#5543A5',
     },
+
     italic: {
         fontStyle: 'italic',
         color: '#5543A5',
@@ -634,6 +635,7 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection: 'row'
     },
+
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -731,6 +733,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
+
     }
 });
+
 

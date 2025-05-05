@@ -1,9 +1,10 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
 import ImageViewer from '@/components/ImageViewer';
+import renderer from 'react-test-renderer';
 
 describe('image viewer', () => {
     test('renders dog pic', () => {
-        render(<ImageViewer imgSource={require('@/assets/images/dog.jpg')} />);
+        const tree = renderer.create(<ImageViewer imgSource={require('@/assets/images/dog.jpg')} />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 });

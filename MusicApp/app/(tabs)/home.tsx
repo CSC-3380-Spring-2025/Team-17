@@ -4,11 +4,16 @@ import { Link, Stack, useRouter, useNavigation } from 'expo-router';
 
 import Coins from '../../components/coins'
 import Streak from'../../components/streak';
+
+
+import {useChallenges} from '../context/ChallengesContext';
+
 import React, {useState, useEffect, useRef} from 'react';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore';
 import {auth, db} from '../../firebaseConfig';
 import LiveMixingPage from './recorder';
 import * as FileSystem from 'expo-file-system';
+
 
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 type LessonLink=
@@ -36,9 +41,12 @@ export default function HomeScreen() {
   const [lessonTitle, setLessonTitle]= useState('');
   const [lessonImage, setLessonImage]= useState(PlaceholderImage);
   const [lessonLink, setLessonLink]= useState<LessonLink>('/lessons/1intro')
+
+  const {handleTaskCompletion}=useChallenges();    
+
   const [savedSongs, setSavedSongs] = useState<string[]>([]);
   const router=useRouter();
-  
+
   useEffect(()=>{
           if (auth.currentUser){
             setUserId(auth.currentUser.uid);
@@ -148,6 +156,34 @@ useEffect(()=>{
 }, [lessonNumber]);
 
 
+useEffect(()=>{
+  const checkAndUpdateLoginDates = async()=>{
+    if(!userId) return;
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    try{
+      const docRef= doc(db, 'users', userId);
+      const docSnap= await getDoc(docRef);
+      if(docSnap.exists()){
+        const data = docSnap.data();
+        const homeAccessDates=data.homeAccessDates||[];
+        if(!homeAccessDates.includes(currentDate)){
+          await updateDoc(docRef, {
+            homeAccessDates: arrayUnion(currentDate)
+          });
+          handleTaskCompletion("Login three days in a row")
+        }
+      }else{
+        console.log("No such document");
+      }
+    }catch(error){
+      console.error("Error fetching document: ", error);
+    }
+  };
+  checkAndUpdateLoginDates();
+}, [userId]);
+
+
 
 useEffect(() => {
   if(Platform.OS === 'web'){
@@ -237,8 +273,9 @@ const handleLoadSong=(name:string)=>{
 
         
         <Pressable style={styles.createButton}>
-
+          <Link href="/recorder" asChild>
           <Text style={styles.createButtonText}>Create New Track</Text>
+          </Link>
         </Pressable>
       </ScrollView>
     </>

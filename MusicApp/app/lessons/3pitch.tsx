@@ -601,9 +601,6 @@ const styles = StyleSheet.create({
         gap: 10,
         marginTop: 10,
     },
-    buttons: {
-        flexDirection: 'row'
-    },
     linksContainer: {
         width: '100%',
         alignItems: 'center',
@@ -636,13 +633,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
     homelink: {
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
     },
     quizContainer: {
+
         width: '100%',
         backgroundColor: '#fff',
         borderRadius: 12,
@@ -655,6 +652,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 2,
+
     },
     quizTitle: {
         color: 'black',
@@ -706,6 +704,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
-    }
-})
+
+      }
+});
 
