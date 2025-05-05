@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
 export default function Scales(){
     const cmajor = useRef(new Audio.Sound());
@@ -9,26 +11,72 @@ export default function Scales(){
     const harminor = useRef(new Audio.Sound());
     const melminor = useRef(new Audio.Sound());
 
-
     useEffect(() => {
-                        const loadSounds = async () => {
-                            await cmajor.current.loadAsync(require('@/assets/sounds/cmajor.mp3'));
-                            await natminor.current.loadAsync(require('@/assets/sounds/natural_minor.mp3'));
-                            await harminor.current.loadAsync(require('@/assets/sounds/harmonic_minor.mp3'));
-                            await melminor.current.loadAsync(require('@/assets/sounds/melodic_minor.mp3'));
-                        };
+        const loadSounds = async () => {
+            await cmajor.current.loadAsync(require('@/assets/sounds/cmajor.mp3'));
+            await natminor.current.loadAsync(require('@/assets/sounds/natural_minor.mp3'));
+            await harminor.current.loadAsync(require('@/assets/sounds/harmonic_minor.mp3'));
+            await melminor.current.loadAsync(require('@/assets/sounds/melodic_minor.mp3'));
+        };
                 
-                        loadSounds();
+        loadSounds();
                 
-                        return() => {
-                            cmajor.current.unloadAsync();
-                            natminor.current.unloadAsync();
-                            harminor.current.unloadAsync();
-                            melminor.current.unloadAsync();
-                        };
-                    }, []);
+        return() => {
+            cmajor.current.unloadAsync();
+            natminor.current.unloadAsync();
+            harminor.current.unloadAsync();
+            melminor.current.unloadAsync();
+        };
+    }, []);
 
     const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+                
+                    useEffect(()=>{
+                        if (auth.currentUser){
+                          setUserId(auth.currentUser.uid);
+                        }
+                      }, []);
+                    
+                      useEffect(()=>{
+                          const fetchUserData= async()=>{
+                            if(userId){
+                              console.log('Fetching data for userId:', userId);
+                      
+                              try{
+                                const userDocRef= doc(db, 'users', userId);
+                                const userDoc = await getDoc(userDocRef)
+                                
+                                if (userDoc.exists()) {
+                                  console.log('Document data:', userDoc.data());
+                                  const userData = userDoc.data();
+                                  if(userData.lessonProgress){
+                                    if(!userData.lessonProgress.includes(1)){
+                                        if(count === 6){
+                                            await updateDoc(userDocRef, {
+                                                lessonProgress: arrayUnion(1),
+                                            });
+                                        }
+                                    }
+                                  }
+                                  else{
+                                    await setDoc(userDocRef, {
+                                        lessonProgress:[1],
+                                    }, {merge: true});
+                                  }
+                                } else {
+                                  await setDoc(userDocRef, {
+                                    lessonProgress: [1],
+                                  });
+                                }
+                        
+                              }catch(error){
+                                console.error('Error fetching user data:', error);
+                              }
+                            }
+                          };
+                          fetchUserData();
+                        }, [userId]);
 
     const correct1 = () => {
         let correct : any = document.getElementById('true1');

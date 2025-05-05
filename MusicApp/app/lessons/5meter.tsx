@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useRef, useContext} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
-import { LessonContext } from '../context/LessonsContext';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
 export default function Meter(){
     const sd = useRef(new Audio.Sound());
@@ -17,37 +18,83 @@ export default function Meter(){
     const e2 = useRef(new Audio.Sound());
 
     useEffect(() => {
-                    const loadSounds = async () => {
-                        await sd.current.loadAsync(require('@/assets/sounds/simple_duple.mp3'));
-                        await st.current.loadAsync(require('@/assets/sounds/simple_triple.mp3'));
-                        await sq.current.loadAsync(require('@/assets/sounds/simple_quadruple.mp3'));
-                        await cd.current.loadAsync(require('@/assets/sounds/compound_duple.mp3'));
-                        await ct.current.loadAsync(require('@/assets/sounds/compound_triple.mp3'));
-                        await cq.current.loadAsync(require('@/assets/sounds/compound_quadruple.mp3'));
-                        await b1.current.loadAsync(require('@/assets/sounds/beams1.mp3'));
-                        await b2.current.loadAsync(require('@/assets/sounds/beams2.mp3'));
-                        await e1.current.loadAsync(require('@/assets/sounds/example1.mp3'));
-                        await e2.current.loadAsync(require('@/assets/sounds/example2.mp3'));
-                    };
+        const loadSounds = async () => {
+            await sd.current.loadAsync(require('@/assets/sounds/simple_duple.mp3'));
+            await st.current.loadAsync(require('@/assets/sounds/simple_triple.mp3'));
+            await sq.current.loadAsync(require('@/assets/sounds/simple_quadruple.mp3'));
+            await cd.current.loadAsync(require('@/assets/sounds/compound_duple.mp3'));
+            await ct.current.loadAsync(require('@/assets/sounds/compound_triple.mp3'));
+            await cq.current.loadAsync(require('@/assets/sounds/compound_quadruple.mp3'));
+            await b1.current.loadAsync(require('@/assets/sounds/beams1.mp3'));
+            await b2.current.loadAsync(require('@/assets/sounds/beams2.mp3'));
+            await e1.current.loadAsync(require('@/assets/sounds/example1.mp3'));
+            await e2.current.loadAsync(require('@/assets/sounds/example2.mp3'));
+        };
             
-                    loadSounds();
+        loadSounds();
             
-                    return() => {
-                        sd.current.unloadAsync();
-                        st.current.unloadAsync();
-                        sq.current.unloadAsync();
-                        cd.current.unloadAsync();
-                        ct.current.unloadAsync();
-                        cq.current.unloadAsync();
-                        b1.current.unloadAsync();
-                        b2.current.unloadAsync();
-                        e1.current.unloadAsync();
-                        e2.current.unloadAsync();
-                    };
-                }, []);
+        return() => {
+            sd.current.unloadAsync();
+            st.current.unloadAsync();
+            sq.current.unloadAsync();
+            cd.current.unloadAsync();
+            ct.current.unloadAsync();
+            cq.current.unloadAsync();
+            b1.current.unloadAsync();
+            b2.current.unloadAsync();
+            e1.current.unloadAsync();
+            e2.current.unloadAsync();
+        };
+    }, []);
 
     const [count, setCount] = useState(0);
-    const {lessons, setLessons} = useContext(LessonContext);
+    const [userId, setUserId]= useState('');
+            
+                useEffect(()=>{
+                    if (auth.currentUser){
+                      setUserId(auth.currentUser.uid);
+                    }
+                  }, []);
+                
+                  useEffect(()=>{
+                      const fetchUserData= async()=>{
+                        if(userId){
+                          console.log('Fetching data for userId:', userId);
+                  
+                          try{
+                            const userDocRef= doc(db, 'users', userId);
+                            const userDoc = await getDoc(userDocRef)
+                            
+                            if (userDoc.exists()) {
+                              console.log('Document data:', userDoc.data());
+                              const userData = userDoc.data();
+                              if(userData.lessonProgress){
+                                if(!userData.lessonProgress.includes(1)){
+                                    if(count === 4){
+                                        await updateDoc(userDocRef, {
+                                            lessonProgress: arrayUnion(1),
+                                        });
+                                    }
+                                }
+                              }
+                              else{
+                                await setDoc(userDocRef, {
+                                    lessonProgress:[1],
+                                }, {merge: true});
+                              }
+                            } else {
+                              await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                              });
+                            }
+                    
+                          }catch(error){
+                            console.error('Error fetching user data:', error);
+                          }
+                        }
+                      };
+                      fetchUserData();
+                    }, [userId]);
 
     const correct1 = () => {
         let correct : any = document.getElementById('true1');
@@ -153,7 +200,6 @@ export default function Meter(){
         twelveeight.disabled = true;
         p.hidden = false;
         setCount(count + 1);
-        if(count === 4) {setLessons(lessons + 1)}
     }
 
     const wrong4 = () => {

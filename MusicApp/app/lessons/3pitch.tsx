@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
 export default function Pitch(){
     const flute1 = useRef(new Audio.Sound());
@@ -16,11 +18,11 @@ export default function Pitch(){
     const piano2 = useRef(new Audio.Sound());
 
     const [quiz1Answer, setQ1Answer] = useState(null);
-        const [quiz2Answer, setQ2Answer] = useState(null);
-        const [quiz3Answer, setQ3Answer] = useState(null);
-        const answer1 = "G,A,B,C,D,E,F,G,A";
-        const answer2 = "Raises the Note by a 1/2 Step";
-        const answer3 = "False";
+    const [quiz2Answer, setQ2Answer] = useState(null);
+    const [quiz3Answer, setQ3Answer] = useState(null);
+    const answer1 = "G,A,B,C,D,E,F,G,A";
+    const answer2 = "Raises the Note by a 1/2 Step";
+    const answer3 = "False";
 
             useEffect(() => {
                 const loadSounds = async () => {
@@ -53,6 +55,53 @@ export default function Pitch(){
             }, []);
 
     const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+        
+            useEffect(()=>{
+                if (auth.currentUser){
+                  setUserId(auth.currentUser.uid);
+                }
+              }, []);
+            
+              useEffect(()=>{
+                  const fetchUserData= async()=>{
+                    if(userId){
+                      console.log('Fetching data for userId:', userId);
+              
+                      try{
+                        const userDocRef= doc(db, 'users', userId);
+                        const userDoc = await getDoc(userDocRef)
+                        
+                        if (userDoc.exists()) {
+                          console.log('Document data:', userDoc.data());
+                          const userData = userDoc.data();
+                          if(userData.lessonProgress){
+                            if(!userData.lessonProgress.includes(1)){
+                                if(count === 3){
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(1),
+                                    });
+                                }
+                            }
+                          }
+                          else{
+                            await setDoc(userDocRef, {
+                                lessonProgress:[1],
+                            }, {merge: true});
+                          }
+                        } else {
+                          await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                          });
+                        }
+                
+                      }catch(error){
+                        console.error('Error fetching user data:', error);
+                      }
+                    }
+                  };
+                  fetchUserData();
+                }, [userId]);
 
     return(
         <ScrollView 
@@ -389,7 +438,7 @@ export default function Pitch(){
                              
                         <View style = {styles.quizContainer}>
                                 <Text style={styles.quizText}>
-                                    In what order are pitches notated with a Bass Clef
+                                    In what order are pitches notated with a Bass Clef?
                                 </Text>
                                 {["F,G,A,B,C,D,E,F,G", "E,F,G,A,B,C,D,E,F", "D,E,F,G,A,B,C,D,E", "G,A,B,C,D,E,F,G,A"].map((option, index) =>{
                                     const selected = quiz1Answer === option;
@@ -422,7 +471,7 @@ export default function Pitch(){
                              
                             <View style = {styles.quizContainer}>
                                 <Text style={styles.quizText}>
-                                    What does a  Sharp  do to a note?
+                                    What does a Sharp do to a note?
                                 </Text>
                                 {["Raises the Note by a 1/2 Step", "Raises the note by a Whole Step", "Lowers the note by a 1/2 Step", "Lowers the note by a Whole Step"].map((option, index) =>{
                                     const selected = quiz2Answer === option;
@@ -455,7 +504,7 @@ export default function Pitch(){
                              
                             <View style = {styles.quizContainer}>
                                 <Text style={styles.quizText}>
-                                    An  Enharmonic Equivalence  can also occur when two notes have the same name but different sounds.
+                                    An Enharmonic Equivalence can occur when two notes have the same name but different sounds.
                                 </Text>
                                 {["True", "False"].map((option, index) =>{
                                     const selected = quiz3Answer === option;

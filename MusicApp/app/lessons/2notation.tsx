@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import {ScrollView, View, Text, StyleSheet, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
 export default function Notation(){
     const slurSound = useRef(new Audio.Sound());
     const staccatoSound = useRef(new Audio.Sound());
     const accentSound = useRef(new Audio.Sound());
-  const [quiz1Answer, setQ1Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState(null);
     const [quiz2Answer, setQ2Answer] = useState(null);
     const [quiz3Answer, setQ3Answer] = useState(null);
     const answer1 = "Pitch and Rhythm";
@@ -31,6 +33,53 @@ export default function Notation(){
     }, []);
 
     const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+    
+        useEffect(()=>{
+            if (auth.currentUser){
+              setUserId(auth.currentUser.uid);
+            }
+          }, []);
+        
+          useEffect(()=>{
+              const fetchUserData= async()=>{
+                if(userId){
+                  console.log('Fetching data for userId:', userId);
+          
+                  try{
+                    const userDocRef= doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+                    
+                    if (userDoc.exists()) {
+                      console.log('Document data:', userDoc.data());
+                      const userData = userDoc.data();
+                      if(userData.lessonProgress){
+                        if(!userData.lessonProgress.includes(1)){
+                            if(count === 3){
+                                await updateDoc(userDocRef, {
+                                    lessonProgress: arrayUnion(1),
+                                });
+                            }
+                        }
+                      }
+                      else{
+                        await setDoc(userDocRef, {
+                            lessonProgress:[1],
+                        }, {merge: true});
+                      }
+                    } else {
+                      await setDoc(userDocRef, {
+                        lessonProgress: [1],
+                      });
+                    }
+            
+                  }catch(error){
+                    console.error('Error fetching user data:', error);
+                  }
+                }
+              };
+              fetchUserData();
+            }, [userId]);
 
     return(
         <ScrollView 
@@ -292,7 +341,7 @@ export default function Notation(){
                  
                 <View style = {styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        What term means  moderately loud ?
+                        What term means moderately loud ?
                     </Text>
                     {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) =>{
                         const selected = quiz3Answer === option;

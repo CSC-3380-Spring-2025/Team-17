@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-
 import { Text, ScrollView, StyleSheet, Image, View, Button, Pressable } from 'react-native';
-
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
 export default function Intervals() {
     const intervals = useRef(new Audio.Sound());
@@ -47,6 +47,53 @@ export default function Intervals() {
     const resetQuiz5 = () => setQ5Answer(null);
 
     const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+                    
+                        useEffect(()=>{
+                            if (auth.currentUser){
+                              setUserId(auth.currentUser.uid);
+                            }
+                          }, []);
+                        
+                          useEffect(()=>{
+                              const fetchUserData= async()=>{
+                                if(userId){
+                                  console.log('Fetching data for userId:', userId);
+                          
+                                  try{
+                                    const userDocRef= doc(db, 'users', userId);
+                                    const userDoc = await getDoc(userDocRef)
+                                    
+                                    if (userDoc.exists()) {
+                                      console.log('Document data:', userDoc.data());
+                                      const userData = userDoc.data();
+                                      if(userData.lessonProgress){
+                                        if(!userData.lessonProgress.includes(1)){
+                                            if(count === 5){
+                                                await updateDoc(userDocRef, {
+                                                    lessonProgress: arrayUnion(1),
+                                                });
+                                            }
+                                        }
+                                      }
+                                      else{
+                                        await setDoc(userDocRef, {
+                                            lessonProgress:[1],
+                                        }, {merge: true});
+                                      }
+                                    } else {
+                                      await setDoc(userDocRef, {
+                                        lessonProgress: [1],
+                                      });
+                                    }
+                            
+                                  }catch(error){
+                                    console.error('Error fetching user data:', error);
+                                  }
+                                }
+                              };
+                              fetchUserData();
+                            }, [userId]);
 
     return (
 
@@ -319,7 +366,7 @@ export default function Intervals() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            1. An Interval is  harmonic  when sung or played
+                            1. An Interval is harmonic when sung or played . . .
                         </Text>
                         {["Separately", "Simultaneously", "One after the Other", "Twice"].map((option, index) => {
                             const selected = quiz1Answer === option;
@@ -371,7 +418,7 @@ export default function Intervals() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            2. Which one of these is  NOT  a quality of intervals?
+                            2. Which one of these is NOT a quality of intervals?
                         </Text>
                         {["Augmented", "Major", "Perfect", "Flat", "Diminished"].map((option, index) => {
                             const selected = quiz2Answer === option;
@@ -475,7 +522,7 @@ export default function Intervals() {
                     </View>
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            4. Dissonant Intervals are more stable
+                            4. Dissonant Intervals are more stable.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz4Answer === option;
@@ -527,7 +574,7 @@ export default function Intervals() {
                     </View>
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            5. Any interval  larger  than an octave is a Compound Interval
+                            5. Any interval larger than an octave is a Compound Interval.
                         </Text>
                         {["3", "6", "7", "9"].map((option, index) => {
                             const selected = quiz5Answer === option;

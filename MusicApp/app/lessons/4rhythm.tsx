@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Pressable } from 'react-native';
 import { Link } from 'expo-router';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
- const [quiz1Answer, setQ1Answer] = useState(null);
+export default function Rhythm(){
+    const [quiz1Answer, setQ1Answer] = useState(null);
     const [quiz2Answer, setQ2Answer] = useState(null);
     const [quiz3Answer, setQ3Answer] = useState(null);
     const [quiz4Answer, setQ4Answer] = useState(null);
@@ -12,8 +15,54 @@ import { Link } from 'expo-router';
     const answer4 = "False";
 
     const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+        
+            useEffect(()=>{
+                if (auth.currentUser){
+                  setUserId(auth.currentUser.uid);
+                }
+              }, []);
+            
+              useEffect(()=>{
+                  const fetchUserData= async()=>{
+                    if(userId){
+                      console.log('Fetching data for userId:', userId);
+              
+                      try{
+                        const userDocRef= doc(db, 'users', userId);
+                        const userDoc = await getDoc(userDocRef)
+                        
+                        if (userDoc.exists()) {
+                          console.log('Document data:', userDoc.data());
+                          const userData = userDoc.data();
+                          if(userData.lessonProgress){
+                            if(!userData.lessonProgress.includes(1)){
+                                if(count === 4){
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(1),
+                                    });
+                                }
+                            }
+                          }
+                          else{
+                            await setDoc(userDocRef, {
+                                lessonProgress:[1],
+                            }, {merge: true});
+                          }
+                        } else {
+                          await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                          });
+                        }
+                
+                      }catch(error){
+                        console.error('Error fetching user data:', error);
+                      }
+                    }
+                  };
+                  fetchUserData();
+                }, [userId]);
 
-export default function Rhythm(){
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
@@ -127,7 +176,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        2 Quarters and 1 Half Note Equals to 1 Whole Note
+                        2 Quarter Notes and 1 Half Note equals 1 Whole Note.
                     </Text>
                     {["True", "False"].map((option, index) => {
                         const selected = quiz1Answer === option;
@@ -160,7 +209,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        How many  Thirty-Second Notes  are in an Eigth Note?
+                        How many Thirty-Second Notes are in an Eighth Note?
                     </Text>
                     {["2", "4", "6", "8"].map((option, index) => {
                         const selected = quiz2Answer === option;
@@ -193,7 +242,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        A  Dot  increases the duration of a note by what?
+                        A Dot increases the duration of a note by what?
                     </Text>
                     {["1/6", "1/4", "1/2", "1"].map((option, index) => {
                         const selected = quiz3Answer === option;
@@ -226,7 +275,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        A  Tie  is essentially the same as a  Slur 
+                        A Tie is essentially the same as a Slur. 
                     </Text>
                     {["True", "False"].map((option, index) => {
                         const selected = quiz4Answer === option;
