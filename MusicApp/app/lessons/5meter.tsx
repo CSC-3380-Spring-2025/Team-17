@@ -1,19 +1,49 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
-import { useAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
 
 export default function Meter(){
-    const sd = useAudioPlayer(require('@/assets/sounds/simple_duple.mp3'));
-    const st = useAudioPlayer(require('@/assets/sounds/simple_triple.mp3'));
-    const sq = useAudioPlayer(require('@/assets/sounds/simple_quadruple.mp3'));
-    const cd = useAudioPlayer(require('@/assets/sounds/compound_duple.mp3'));
-    const ct = useAudioPlayer(require('@/assets/sounds/compound_triple.mp3'));
-    const cq = useAudioPlayer(require('@/assets/sounds/compound_quadruple.mp3'));
-    const b1 = useAudioPlayer(require('@/assets/sounds/beams1.mp3'));
-    const b2 = useAudioPlayer(require('@/assets/sounds/beams2.mp3'));
-    const e1 = useAudioPlayer(require('@/assets/sounds/example1.mp3'));
-    const e2 = useAudioPlayer(require('@/assets/sounds/example2.mp3'));
+    const sd = useRef(new Audio.Sound());
+    const st = useRef(new Audio.Sound());
+    const sq = useRef(new Audio.Sound());
+    const cd = useRef(new Audio.Sound());
+    const ct = useRef(new Audio.Sound());
+    const cq = useRef(new Audio.Sound());
+    const b1 = useRef(new Audio.Sound());
+    const b2 = useRef(new Audio.Sound());
+    const e1 = useRef(new Audio.Sound());
+    const e2 = useRef(new Audio.Sound());
+
+    useEffect(() => {
+                    const loadSounds = async () => {
+                        await sd.current.loadAsync(require('@/assets/sounds/simple_duple.mp3'));
+                        await st.current.loadAsync(require('@/assets/sounds/simple_triple.mp3'));
+                        await sq.current.loadAsync(require('@/assets/sounds/simple_quadruple.mp3'));
+                        await cd.current.loadAsync(require('@/assets/sounds/compound_duple.mp3'));
+                        await ct.current.loadAsync(require('@/assets/sounds/compound_triple.mp3'));
+                        await cq.current.loadAsync(require('@/assets/sounds/compound_quadruple.mp3'));
+                        await b1.current.loadAsync(require('@/assets/sounds/beams1.mp3'));
+                        await b2.current.loadAsync(require('@/assets/sounds/beams2.mp3'));
+                        await e1.current.loadAsync(require('@/assets/sounds/example1.mp3'));
+                        await e2.current.loadAsync(require('@/assets/sounds/example2.mp3'));
+                    };
+            
+                    loadSounds();
+            
+                    return() => {
+                        sd.current.unloadAsync();
+                        st.current.unloadAsync();
+                        sq.current.unloadAsync();
+                        cd.current.unloadAsync();
+                        ct.current.unloadAsync();
+                        cq.current.unloadAsync();
+                        b1.current.unloadAsync();
+                        b2.current.unloadAsync();
+                        e1.current.unloadAsync();
+                        e2.current.unloadAsync();
+                    };
+                }, []);
 
     const correct1 = () => {
         let correct : any = document.getElementById('true1');
@@ -214,12 +244,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano" 
-                            onPress={() => sd.play()} 
+                            onPress={() => sd.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => sd.pause()} 
+                            onPress={() => sd.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -235,12 +265,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano"
-                            onPress={() => st.play()} 
+                            onPress={() => st.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => st.pause()} 
+                            onPress={() => st.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -256,12 +286,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano" 
-                            onPress={() => sq.play()} 
+                            onPress={() => sq.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => sq.pause()} 
+                            onPress={() => sq.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -286,12 +316,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano" 
-                            onPress={() => b1.play()} 
+                            onPress={() => b1.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => b1.pause()} 
+                            onPress={() => b1.current.pauseAsync()} 
                         />
                     </View>
                 </View>
@@ -344,12 +374,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano"  
-                            onPress={() => cd.play()} 
+                            onPress={() => cd.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => cd.pause()} 
+                            onPress={() => cd.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -365,12 +395,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano" 
-                            onPress={() => ct.play()} 
+                            onPress={() => ct.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => ct.pause()} 
+                            onPress={() => ct.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -386,12 +416,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano" 
-                            onPress={() => cq.play()} 
+                            onPress={() => cq.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => cq.pause()} 
+                            onPress={() => cq.current.pauseAsync()} 
                         />
                     </View>
                     <Text style={styles.text}>
@@ -413,12 +443,12 @@ export default function Meter(){
                         <Button 
                             color='#4CAF50' 
                             title="Play piano" 
-                            onPress={() => b2.play()} 
+                            onPress={() => b2.current.playAsync()} 
                         />
                         <Button 
                             color='#F44336' 
                             title="Pause piano" 
-                            onPress={() => b2.pause()} 
+                            onPress={() => b2.current.pauseAsync()} 
                         />
                     </View>
                 </View>
@@ -448,9 +478,11 @@ export default function Meter(){
                 3. What is the time signature of the music below?
             </Text>
             <Image source={require('@/assets/images/example1.png')} />
+
             <View style={styles.buttonContainer}>
                 <Button color='green' title="Play example" onPress={() => e1.play()} />
                 <Button color='red' title="Pause example" onPress={() => e1.pause()} />
+
             </View>
             <form>
                 <button id='22' style={{fontSize: '24px'}} onClick={wrong3}>2/2</button>
@@ -464,9 +496,11 @@ export default function Meter(){
                 4. What is the time signature of the music below?
             </Text>
             <Image source={require('@/assets/images/example2.png')} />
+
             <View style={styles.buttonContainer}>
                 <Button color='green' title="Play example" onPress={() => e2.play()} />
                 <Button color='red' title="Pause example" onPress={() => e2.pause()} />
+
             </View>
             <form>
                 <button id='4/4' style={{fontSize: '24px'}} onClick={wrong4}>4/4</button>

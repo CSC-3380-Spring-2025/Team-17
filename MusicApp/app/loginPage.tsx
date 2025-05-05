@@ -3,20 +3,22 @@ import { View, Text, TextInput, StyleSheet, Pressable, Image } from 'react-nativ
 import Login from '../components/Login';
 import Register from '../components/Register';
 import { Link, Stack } from 'expo-router';
+import { ChallengesProvider } from './context/ChallengesContext';
 
 const account = () => {
   return (
+    <ChallengesProvider>
     <>
       
       <View style={styles.container}>
+        
         <Login />
         
-<Link href="/registrationPage" style={styles.createButton}>
-          <Text style={styles.createButtonText}>Create New Account</Text>
-        </Link>
 
       </View>
+      
     </>
+    </ChallengesProvider>
   );
 };
 
@@ -27,9 +29,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#D2D2D2',
+    backgroundColor: '#333232',
     justifyContent: 'center',
     paddingHorizontal: 20,
+    flexDirection: 'column',
   },
   linkText: {
     color: "#0000FF",
@@ -74,24 +77,21 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   input: {
-    height: 40,
+    height: 30,
     borderColor: '#fff',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
     color: '#fff',
   },
-  createButton: {
-    backgroundColor: '#000',
-    borderRadius: 25,
-    padding: 15,
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  createButtonText: {
+  createLink: {
+    marginTop: 20,
+    alignSelf: 'center',
+  }, 
+  createLinkText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
 });
 

@@ -1,13 +1,22 @@
-// recordertest.tsx
 import { useState } from 'react';
-import { View, StyleSheet, Button, FlatList, Text, TouchableOpacity, Pressable } from 'react-native';
+
+import { View, StyleSheet, Button, FlatList, Text, TouchableOpacity, Pressable, TextInput } from 'react-native';
+
+
 import { Audio } from 'expo-av';
 import { useAudioContext } from './AudioContext';
+import { MaterialIcons } from '@expo/vector-icons';
+
 
 export default function App() {
-  const [recording, setRecording] = useState();
+  const [recording, setRecording] = useState<Audio.Recording | undefined>(undefined);
+
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const { recordings, addRecording } = useAudioContext();
+  const { recordings, addRecording, updateRecordings } = useAudioContext();
+
+  if (permissionResponse === null){
+    return <Text>Loading...</Text>;
+  }
 
   async function startRecording() {
     try {
@@ -40,10 +49,10 @@ export default function App() {
     });
     const uri = recording.getURI();
 
-    // Add the new recording to the context
     addRecording({
       uri: uri,
       name: `Recording ${recordings.length + 1}`,
+      isEditing: false,
     });
     console.log('Recording stopped and stored at', uri);
   }
@@ -59,82 +68,174 @@ export default function App() {
     });
   }
 
+  function toggleEditing(index: number) {
+    const updatedRecordings = [...recordings];
+    updatedRecordings[index].isEditing = !updatedRecordings[index].isEditing;
+    updateRecordings(updatedRecordings);
+  }
+  
+  function updateRecordingName(index: number, newName: string) {
+    const updatedRecordings = [...recordings];
+    updatedRecordings[index].name = newName;
+    updateRecordings(updatedRecordings);
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         data={recordings}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+        contentContainerStyle={styles.listContent}
+        renderItem={({ item, index}) => (
           <View style={styles.recordingItem}>
-            <Text style={styles.recordingName}>{item.name}</Text>
-            <Pressable style={styles.playButton} onPress={() => playSound(item.uri)}>
-              <Text style={styles.playText}> Play </Text>
+            {item.isEditing?(
+              <TextInput
+                style={styles.recordingName}
+                value={item.name}
+                onChangeText={(text)=> updateRecordingName(index, text)}
+                onBlur={()=> toggleEditing(index)}
+               />
+             ):(
+              <Pressable onLongPress={()=> toggleEditing(index)}>
+                <Text style={styles.recordingName}>{item.name}</Text>
+              </Pressable>
+            )}
+            <Pressable
+              style={styles.playButton}
+              onPress={()=> playSound(item.uri)}
+              android_ripple={{color:'rgba(255, 255, 255, 0.1)'}}
+            >
+              <MaterialIcons name="play-arrow" size={24} color="white" />
+
             </Pressable>
           </View>
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <MaterialIcons name="queue-music" size={48} color="#666" />
+            <Text style={styles.emptyText}>No recordings yet</Text>
+            <Text style={styles.emptySubtext}>Press the mic button to start recording</Text>
+          </View>
+        }
       />
       
-      <View>
+      <View style={styles.recordButtonContainer}>
         <TouchableOpacity
-          style={styles.buttonContainer}
+          style={[styles.recordButton, recording && styles.recordingActive]}
           onPress={recording ? stopRecording : startRecording}
+          activeOpacity={0.8}
         >
-          <Text style={styles.recordingText}>{recording ? '◼' : '⬤'}</Text>
+          <View style={styles.recordButtonInner}>
+            {recording ? (
+              <MaterialIcons name="stop" size={36} color="white" />
+            ) : (
+              <MaterialIcons name="mic" size={36} color="white" />
+            )}
+          </View>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
 
-// ... keep the existing styles ...
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#4f5252',
-    padding: 10,
+    backgroundColor: '#D2D2D2',
+    paddingTop: 16,
   },
-  buttonContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 45,
-    left: 160,
-    backgroundColor: "#333636",
-    alignItems: "center",
-    justifyContent: "center",
-    
-  },
-  recordingText: {
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 75,
-    color: 'red',
-    bottom: 5,
-  },
-  playButton: {
-    
-    backgroundColor: 'red',
-    
-  },
-  playText: {
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 20,
-    color: 'white',
-   
+  listContent: {
+    paddingBottom: 120,
+    paddingHorizontal: 16,
   },
   recordingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#292b2b',
-    borderBottomWidth: 1,
-    borderBottomColor: '#4f5252',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    backgroundColor: '#2A2A2A',
+    borderRadius: 12,
+    marginBottom: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  recordingInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 16,
   },
   recordingName: {
     color: 'white',
     fontSize: 16,
+    marginLeft: 12,
+    flexShrink: 1,
+  },
+  playButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#4243FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  recordButtonContainer: {
+    position: 'absolute',
+    bottom: 60,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  recordButton: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#D32F2F',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  recordingActive: {
+    backgroundColor: '#4243FF',
+  },
+  recordButtonInner: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+    marginTop: 100,
+  },
+  emptyText: {
+    color: '#000',
+    fontSize: 16,
+    marginTop: 16,
+    fontWeight: '500',
+  },
+  emptySubtext: {
+    color: '#000',
+    fontSize: 14,
+    marginTop: 8,
+  },
+  recordingNameInput: {
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 16,
+    padding: 5,
+    width: 150,
   },
 });

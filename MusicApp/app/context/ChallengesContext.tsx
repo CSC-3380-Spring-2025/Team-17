@@ -40,28 +40,42 @@ export const ChallengesProvider=({children}: ChallengesProviderprops)=> {
         { title: "Login three days in a row", progress: 2, goal: 3, reward:15 }, // Change here
         { title: "Complete all lessons", progress: 0, goal: 13, reward: 35}, // Change here
     ]);
+const handleTaskCompletion = async (challengeTitle: string) => {
+  console.log(`handleTaskCompletion called with challengeTitle: ${challengeTitle}`);
+  console.log(`User ID: ${userId}`); // Add log to check userId
+  
+  if (!userId) {
+    console.error("User ID is required to add coins.");
+    return;
+  }
+  
+  setChallenges((prevChallenges) =>
+    prevChallenges.map((challenge) => {
+      if (challenge.title === challengeTitle) {
+        const updatedProgress = challenge.progress + 1;
+        console.log(`Updated progress for ${challengeTitle}: ${updatedProgress}`);
+        
+        if (updatedProgress === challenge.goal) {
+          challenge.progress = 0;
+          console.log(`Challenge completed: ${challengeTitle}`);
+          
+          addCoins(userId, challenge.reward).then(() => {
+            console.log(`Coins added: ${challenge.reward}`);
+          }).catch((error) => {
+            console.error(`Error adding coins: ${error.message}`);
+          });
+          
+          alert(`Congrats! You completed the challenge "${challenge.title}"! You earned ${challenge.reward} coins!`);
+        }
+        
+        return { ...challenge, progress: updatedProgress };
+      }
+      return challenge;
+    })
+  );
+};
 
-    const handleTaskCompletion = async (challengeTitle: string) => {
-      
-        setChallenges((prevChallenges) =>
-          prevChallenges.map((challenge) => {
-            
-            if (challenge.title === challengeTitle) {
-              const updatedProgress = challenge.progress + 1;
-              if (updatedProgress === challenge.goal) {
-                challenge.progress=0;
-                addCoins(userId, challenge.reward).then(() => {
-                   // Re-fetch user data after updating coins
-                });
-                alert(`Congrats! You completed the challenge "${challenge.title}"! You earned ${challenge.reward} coins!`);
-                
-              }
-              return { ...challenge, progress: updatedProgress };
-            }
-            return challenge;
-          })
-        );
-      };
+    
       
 
     return(
