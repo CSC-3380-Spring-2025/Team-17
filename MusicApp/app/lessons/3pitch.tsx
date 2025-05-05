@@ -4,6 +4,7 @@ import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
 import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Pitch(){
     const flute1 = useRef(new Audio.Sound());
@@ -56,6 +57,7 @@ export default function Pitch(){
 
     const [count, setCount] = useState(0);
     const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
         
             useEffect(()=>{
                 if (auth.currentUser){
@@ -81,6 +83,8 @@ export default function Pitch(){
                                     await updateDoc(userDocRef, {
                                         lessonProgress: arrayUnion(3),
                                     });
+                                    handleTaskCompletion("Complete 2 challenges");
+                                    handleTaskCompletion("Complete all challenges");
                                 }
                             }
                           }

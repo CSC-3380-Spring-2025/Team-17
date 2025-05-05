@@ -3,6 +3,8 @@ import { Text, ScrollView, StyleSheet, View, Image, Pressable } from 'react-nati
 import { Link } from 'expo-router';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
 import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
+import { disableErrorHandling } from 'expo';
 
 export default function Rhythm(){
     const [quiz1Answer, setQ1Answer] = useState(null);
@@ -16,6 +18,7 @@ export default function Rhythm(){
 
     const [count, setCount] = useState(0);
     const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
         
             useEffect(()=>{
                 if (auth.currentUser){
@@ -41,6 +44,8 @@ export default function Rhythm(){
                                     await updateDoc(userDocRef, {
                                         lessonProgress: arrayUnion(4),
                                     });
+                                    handleTaskCompletion("Complete 2 lessons");
+                                    handleTaskCompletion("Complete all lessons");
                                 }
                             }
                           }

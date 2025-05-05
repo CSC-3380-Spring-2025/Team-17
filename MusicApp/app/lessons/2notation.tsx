@@ -4,6 +4,7 @@ import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
 import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Notation(){
     const slurSound = useRef(new Audio.Sound());
@@ -34,6 +35,7 @@ export default function Notation(){
 
     const [count, setCount] = useState(0);
     const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
     
         useEffect(()=>{
             if (auth.currentUser){
@@ -59,6 +61,8 @@ export default function Notation(){
                                 await updateDoc(userDocRef, {
                                     lessonProgress: arrayUnion(2),
                                 });
+                                handleTaskCompletion("Complete 2 lessons");
+                                handleTaskCompletion("Complete all lessons");
                             }
                         }
                       }

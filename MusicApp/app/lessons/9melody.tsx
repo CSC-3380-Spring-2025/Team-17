@@ -4,6 +4,7 @@ import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
 import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Melody() {
     const conjunct = useRef(new Audio.Sound());
@@ -42,6 +43,7 @@ export default function Melody() {
 
     const [count, setCount] = useState(0);
     const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
                         
                             useEffect(()=>{
                                 if (auth.currentUser){
@@ -67,6 +69,8 @@ export default function Melody() {
                                                     await updateDoc(userDocRef, {
                                                         lessonProgress: arrayUnion(9),
                                                     });
+                                                    handleTaskCompletion("Complete 2 lessons");
+                                                    handleTaskCompletion("Complete all lessons");
                                                 }
                                             }
                                           }

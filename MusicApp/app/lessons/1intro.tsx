@@ -3,8 +3,11 @@ import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Link} from 'expo-router';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
 import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
+
 export default function Intro() {
     const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
 
     useEffect(()=>{
         if (auth.currentUser){
@@ -29,6 +32,8 @@ export default function Intro() {
                         await updateDoc(userDocRef, {
                             lessonProgress: arrayUnion(1),
                         });
+                        handleTaskCompletion("Complete 2 lessons");
+                        handleTaskCompletion("Complete all lessons");
                     }
                   }else{
                     await setDoc(userDocRef, {
