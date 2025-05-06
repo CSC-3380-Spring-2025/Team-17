@@ -1,4 +1,4 @@
-# [Name of the Project] : 17
+# Melodify (or iBeat) : Team 17
 # Members
 Project Manager: Cash Cooper (Rcoop31)\
 Communications Lead: Micah Broussard (MicahBroussard)\
@@ -13,6 +13,7 @@ A mobile music synthesizer/beat recording app with Duolingo style learning incen
 ## Platforms Tested on
 - Expo Go
 - Android Studio
+
 # Important Links
 Kanban Board: https://objorient2025.atlassian.net/jira/software/projects/SCRUM/boards/1
 
@@ -46,9 +47,15 @@ npm install expo-cli
 https://expo.dev/go
 Go to this site to download SDK 52 
 
-## Execution
+# Execution
 
 ```sh
 npx expo start
 ```
+## Android
+Ensure you have an android simulator device open.
+press a after the metro bundler compiles.
 
+## Expo Go
+Scan the QR code and it should link directly to the app.
+Let the app load and enjoy!
