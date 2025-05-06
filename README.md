@@ -54,12 +54,12 @@ Go to this site to download SDK 52 for android simulator or normal android devic
 
 Last check for any missing dependencies:
 ```sh
-npx expo install --check
+\Team17\MusicApp\npx expo install --check
 ```
 
 Running the server:
 ```sh
-npx expo start
+\Team17\MusicApp\npx expo start
 ```
 ## Android
 Ensure you have an android simulator device open.
