@@ -22,7 +22,7 @@ Designs: https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?
 
 ## Dependencies
 - NodeJS
-- Expocli
+- Expo-cli
 ### Downloading Dependencies
 
 Verify you have Node.js installed
