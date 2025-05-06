@@ -21,8 +21,8 @@ export default function Pitch() {
     const [quiz1Answer, setQ1Answer] = useState(null);
     const [quiz2Answer, setQ2Answer] = useState(null);
     const [quiz3Answer, setQ3Answer] = useState(null);
-    const answer1 = "Polyphony";
-    const answer2 = "Heterophony";
+    const answer1 = "G,A,B,C,D,E,F,G,A";
+    const answer2 = "Raises the Note by a 1/2 Step";
     const answer3 = "True";
 
     useEffect(() => {
