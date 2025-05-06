@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
-
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Melody() {
     const conjunct = useRef(new Audio.Sound());
@@ -39,6 +40,58 @@ export default function Melody() {
     const resetQuiz1 = () => setQ1Answer(null);
     const resetQuiz2 = () => setQ2Answer(null);
     const resetQuiz3 = () => setQ3Answer(null);
+
+    const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
+            
+                useEffect(()=>{
+                    if (auth.currentUser){
+                      setUserId(auth.currentUser.uid);
+                    }
+                  }, []);
+                
+                  useEffect(()=>{
+                      const fetchUserData= async()=>{
+                        if(userId){
+                          console.log('Fetching data for userId:', userId);
+                  
+                          try{
+                            const userDocRef= doc(db, 'users', userId);
+                            const userDoc = await getDoc(userDocRef)
+                            
+                            if (userDoc.exists()) {
+                              console.log('Document data:', userDoc.data());
+                              const userData = userDoc.data();
+                              if(userData.lessonProgress){
+                                if(!userData.lessonProgress.includes(9)){
+                                    if(count === 3){
+                                        await updateDoc(userDocRef, {
+                                            lessonProgress: arrayUnion(9),
+                                        });
+                                        handleTaskCompletion("Complete 2 lessons");
+                                        handleTaskCompletion("Complete all lessons");
+                                    }
+                                }
+                              }else{
+                                await setDoc(userDocRef, {
+                                    lessonProgress:[1],
+                                }, {merge: true});
+                              }
+                            } else {
+                              await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                              });
+                            }
+                    
+                          }catch(error){
+                            console.error('Error fetching user data:', error);
+                          }
+                        }
+                      };
+                      fetchUserData();
+                    }, [userId]);
+    
 
     return (
 
@@ -177,7 +230,7 @@ export default function Melody() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            1. Melodies are comprised of singular notes organized rhythmically
+                            1. Melodies are comprised of singular notes organized rhythmically.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz1Answer === option;
@@ -202,23 +255,23 @@ export default function Melody() {
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
                                         if (!quiz1Answer) setQ1Answer(option);
+                                        if (option === answer1) setCount(count + 1);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );
                         })}
                         {quiz1Answer && (
-                                                    <Text style={styles.result}>
-                                                        {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
-                                                    </Text>
-                                                )}
+                            <Text style={styles.result}>
+                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
                     </View>
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            2. The highest/lowest note in a melody is a/an ______
+                            2. The highest/lowest note in a melody is a/an ______.
                         </Text>
                         {["Focal Point", "Contour", "Summit", "Climax"].map((option, index) => {
                             const selected = quiz2Answer === option;
@@ -243,6 +296,7 @@ export default function Melody() {
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
                                         if (!quiz2Answer) setQ2Answer(option);
+                                        if (option === answer2) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -250,15 +304,15 @@ export default function Melody() {
                             );
                         })}
                         {quiz2Answer && (
-                                                    <Text style={styles.result}>
-                                                        {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
-                                                    </Text>
-                                                )}
+                            <Text style={styles.result}>
+                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
                     </View>
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            3. Short Phrases can be Grouped together to form a loneger Phrase.
+                            3. Short phrases can be grouped together to form a longer phrase.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz3Answer === option;
@@ -283,18 +337,18 @@ export default function Melody() {
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
                                         if (!quiz3Answer) setQ3Answer(option);
+                                        if (option === answer3) setCount(count + 1);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );
                         })}
                         {quiz3Answer && (
-                                                    <Text style={styles.result}>
-                                                        {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
-                                                    </Text>
-                                                )}
+                            <Text style={styles.result}>
+                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
                     </View>
                 </View>
 

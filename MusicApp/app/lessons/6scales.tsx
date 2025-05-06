@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Scales() {
     const cmajor = useRef(new Audio.Sound());
@@ -41,7 +44,56 @@ export default function Scales() {
     const answer5 = "B minor";
     const answer6 = "Gb major";
 
-    
+    const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
+                    
+                        useEffect(()=>{
+                            if (auth.currentUser){
+                              setUserId(auth.currentUser.uid);
+                            }
+                          }, []);
+                        
+                          useEffect(()=>{
+                              const fetchUserData= async()=>{
+                                if(userId){
+                                  console.log('Fetching data for userId:', userId);
+                          
+                                  try{
+                                    const userDocRef= doc(db, 'users', userId);
+                                    const userDoc = await getDoc(userDocRef)
+                                    
+                                    if (userDoc.exists()) {
+                                      console.log('Document data:', userDoc.data());
+                                      const userData = userDoc.data();
+                                      if(userData.lessonProgress){
+                                        if(!userData.lessonProgress.includes(6)){
+                                            if(count === 6){
+                                                await updateDoc(userDocRef, {
+                                                    lessonProgress: arrayUnion(6),
+                                                });
+                                                handleTaskCompletion("Complete 2 lessons");
+                                                handleTaskCompletion("Complete all lessons");
+                                            }
+                                        }
+                                      }else{
+                                        await setDoc(userDocRef, {
+                                            lessonProgress:[1],
+                                        }, {merge: true});
+                                      }
+                                    } else {
+                                      await setDoc(userDocRef, {
+                                        lessonProgress: [1],
+                                      });
+                                    }
+                            
+                                  }catch(error){
+                                    console.error('Error fetching user data:', error);
+                                  }
+                                }
+                              };
+                              fetchUserData();
+                            }, [userId]);
 
     return (
         <ScrollView
@@ -350,7 +402,7 @@ export default function Scales() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                        1. True or False: The natural minor scale features a raised 7.
+                        1. The natural minor scale features a raised 7.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz1Answer === option;
@@ -375,6 +427,7 @@ export default function Scales() {
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
                                         if (!quiz1Answer) setQ1Answer(option);
+                                        if (option === answer1) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -390,7 +443,7 @@ export default function Scales() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                        2. True or False: The melodic minor scale features a raised 6 & 7.
+                        2. The melodic minor scale features a raised 6 & 7.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz2Answer === option;
@@ -415,6 +468,7 @@ export default function Scales() {
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
                                         if (!quiz2Answer) setQ2Answer(option);
+                                        if (option === answer2) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -433,8 +487,8 @@ export default function Scales() {
                         3. What major scale has the following key signature?
                         </Text>
                         <Image source={require('@/assets/images/bmajor.png')} 
-                        style={styles.quizImage}
-        resizeMode="contain"
+                               style={styles.quizImage}
+                               resizeMode="contain"
                         />
                         {["F major", "E major", "B major", "G major"].map((option, index) => {
                             const selected = quiz3Answer === option;
@@ -459,6 +513,7 @@ export default function Scales() {
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
                                         if (!quiz3Answer) setQ3Answer(option);
+                                        if (option === answer3) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -477,8 +532,8 @@ export default function Scales() {
                         4. What minor scale has the following key signature?
                         </Text>
                         <Image source={require('@/assets/images/fminor.png')} 
-                        style={styles.quizImage}
-        resizeMode="contain"
+                               style={styles.quizImage}
+                               resizeMode="contain"
                         />
                         {["G Minor", "Bb minor", "Eb minor", "F minor"].map((option, index) => {
                             const selected = quiz4Answer === option;
@@ -503,6 +558,7 @@ export default function Scales() {
                                     disabled={!!quiz4Answer}
                                     onPress={() => {
                                         if (!quiz4Answer) setQ4Answer(option);
+                                        if (option === answer4) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -542,6 +598,7 @@ export default function Scales() {
                                     disabled={!!quiz5Answer}
                                     onPress={() => {
                                         if (!quiz5Answer) setQ5Answer(option);
+                                        if (option === answer5) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -581,6 +638,7 @@ export default function Scales() {
                                     disabled={!!quiz6Answer}
                                     onPress={() => {
                                         if (!quiz6Answer) setQ6Answer(option);
+                                        if (option === answer6) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>

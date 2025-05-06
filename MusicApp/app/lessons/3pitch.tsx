@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Pitch() {
     const flute1 = useRef(new Audio.Sound());
@@ -51,6 +54,57 @@ export default function Pitch() {
             piano2.current.unloadAsync();
         };
     }, []);
+
+    const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
+        
+            useEffect(()=>{
+                if (auth.currentUser){
+                  setUserId(auth.currentUser.uid);
+                }
+              }, []);
+            
+              useEffect(()=>{
+                  const fetchUserData= async()=>{
+                    if(userId){
+                      console.log('Fetching data for userId:', userId);
+              
+                      try{
+                        const userDocRef= doc(db, 'users', userId);
+                        const userDoc = await getDoc(userDocRef)
+                        
+                        if (userDoc.exists()) {
+                          console.log('Document data:', userDoc.data());
+                          const userData = userDoc.data();
+                          if(userData.lessonProgress){
+                            if(!userData.lessonProgress.includes(3)){
+                                if(count === 3){
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(3),
+                                    });
+                                    handleTaskCompletion("Complete 2 lessons");
+                                    handleTaskCompletion("Complete all lessons");
+                                }
+                            }
+                          }else{
+                            await setDoc(userDocRef, {
+                                lessonProgress:[1],
+                            }, {merge: true});
+                          }
+                        } else {
+                          await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                          });
+                        }
+                
+                      }catch(error){
+                        console.error('Error fetching user data:', error);
+                      }
+                    }
+                  };
+                  fetchUserData();
+                }, [userId]);
 
     return (
         <ScrollView
@@ -387,7 +441,7 @@ export default function Pitch() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            1. In what order are pitches notated with a Bass Clef
+                            1. In what order are pitches notated with a bass clef?
                         </Text>
                         {["F,G,A,B,C,D,E,F,G", "E,F,G,A,B,C,D,E,F", "D,E,F,G,A,B,C,D,E", "G,A,B,C,D,E,F,G,A"].map((option, index) => {
                             const selected = quiz1Answer === option;
@@ -412,6 +466,7 @@ export default function Pitch() {
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
                                         if (!quiz1Answer) setQ1Answer(option);
+                                        if (option === answer1) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -427,7 +482,7 @@ export default function Pitch() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            2. What does a  Sharp  do to a note?
+                            2. What does a sharp do to a note?
                         </Text>
                         {["Raises the Note by a 1/2 Step", "Raises the note by a Whole Step", "Lowers the note by a 1/2 Step", "Lowers the note by a Whole Step"].map((option, index) => {
                             const selected = quiz2Answer === option;
@@ -451,6 +506,7 @@ export default function Pitch() {
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
                                         if (!quiz2Answer) setQ2Answer(option);
+                                        if (option === answer2) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -466,7 +522,7 @@ export default function Pitch() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            3. An  Enharmonic Equivalence  can also occur when two notes have the same name but different sounds.
+                            3. An enharmonic equivalence can also occur when two notes have the same name but different sounds.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz3Answer === option;
@@ -491,6 +547,7 @@ export default function Pitch() {
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
                                         if (!quiz3Answer) setQ3Answer(option);
+                                        if (option === answer3) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>

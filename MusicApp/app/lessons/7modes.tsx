@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Modes() {
     const lydian = useRef(new Audio.Sound());
@@ -50,6 +53,56 @@ export default function Modes() {
     const answer5 = "Mixolydian";
     const answer6 = "Locrian";
 
+    const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
+                        
+                            useEffect(()=>{
+                                if (auth.currentUser){
+                                  setUserId(auth.currentUser.uid);
+                                }
+                              }, []);
+                            
+                              useEffect(()=>{
+                                  const fetchUserData= async()=>{
+                                    if(userId){
+                                      console.log('Fetching data for userId:', userId);
+                              
+                                      try{
+                                        const userDocRef= doc(db, 'users', userId);
+                                        const userDoc = await getDoc(userDocRef)
+                                        
+                                        if (userDoc.exists()) {
+                                          console.log('Document data:', userDoc.data());
+                                          const userData = userDoc.data();
+                                          if(userData.lessonProgress){
+                                            if(!userData.lessonProgress.includes(7)){
+                                                if(count === 6){
+                                                    await updateDoc(userDocRef, {
+                                                        lessonProgress: arrayUnion(7),
+                                                    });
+                                                    handleTaskCompletion("Complete 2 lessons");
+                                                    handleTaskCompletion("Complete all lessons");
+                                                }
+                                            }
+                                          }else{
+                                            await setDoc(userDocRef, {
+                                                lessonProgress:[1],
+                                            }, {merge: true});
+                                          }
+                                        } else {
+                                          await setDoc(userDocRef, {
+                                            lessonProgress: [1],
+                                          });
+                                        }
+                                
+                                      }catch(error){
+                                        console.error('Error fetching user data:', error);
+                                      }
+                                    }
+                                  };
+                                  fetchUserData();
+                                }, [userId]);
 
     return (
         <ScrollView
@@ -343,6 +396,7 @@ export default function Modes() {
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
                                         if (!quiz1Answer) setQ1Answer(option);
+                                        if (option === answer1) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -383,6 +437,7 @@ export default function Modes() {
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
                                         if (!quiz2Answer) setQ2Answer(option);
+                                        if (option === answer2) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -423,6 +478,7 @@ export default function Modes() {
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
                                         if (!quiz3Answer) setQ3Answer(option);
+                                        if (option === answer3) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -463,6 +519,7 @@ export default function Modes() {
                                     disabled={!!quiz4Answer}
                                     onPress={() => {
                                         if (!quiz4Answer) setQ4Answer(option);
+                                        if (option === answer4) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -502,6 +559,7 @@ export default function Modes() {
                                     disabled={!!quiz5Answer}
                                     onPress={() => {
                                         if (!quiz5Answer) setQ5Answer(option);
+                                        if (option === answer5) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -541,6 +599,7 @@ export default function Modes() {
                                     disabled={!!quiz6Answer}
                                     onPress={() => {
                                         if (!quiz6Answer) setQ6Answer(option);
+                                        if (option === answer6) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>

@@ -2,6 +2,8 @@ import React, {useEffect, useRef} from 'react';
 import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
 
 export default function Progressions(){
     const major = useRef(new Audio.Sound());

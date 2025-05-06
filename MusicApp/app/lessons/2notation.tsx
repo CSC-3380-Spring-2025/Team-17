@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Notation() {
     const slurSound = useRef(new Audio.Sound());
@@ -29,6 +32,57 @@ export default function Notation() {
             accentSound.current.unloadAsync();
         };
     }, []);
+
+    const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
+    
+        useEffect(()=>{
+            if (auth.currentUser){
+              setUserId(auth.currentUser.uid);
+            }
+          }, []);
+        
+          useEffect(()=>{
+              const fetchUserData= async()=>{
+                if(userId){
+                  console.log('Fetching data for userId:', userId);
+          
+                  try{
+                    const userDocRef= doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+                    
+                    if (userDoc.exists()) {
+                      console.log('Document data:', userDoc.data());
+                      const userData = userDoc.data();
+                      if(userData.lessonProgress){
+                        if(!userData.lessonProgress.includes(2)){
+                            if(count === 3){
+                                await updateDoc(userDocRef, {
+                                    lessonProgress: arrayUnion(2),
+                                });
+                                handleTaskCompletion("Complete 2 lessons");
+                                handleTaskCompletion("Complete all lessons");
+                            }
+                        }
+                      }else{
+                        await setDoc(userDocRef, {
+                            lessonProgress:[1],
+                        }, {merge: true});
+                      }
+                    } else {
+                      await setDoc(userDocRef, {
+                        lessonProgress: [1],
+                      });
+                    }
+            
+                  }catch(error){
+                    console.error('Error fetching user data:', error);
+                  }
+                }
+              };
+              fetchUserData();
+            }, [userId]);
 
 
     return (
@@ -222,10 +276,9 @@ export default function Notation() {
 
                 <View>
                     <Text style={styles.quizTitle}>Quiz</Text>
-
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            A musical note represents what?
+                            1. A musical note represents what?
                         </Text>
                         {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) => {
                             const selected = quiz1Answer === option;
@@ -249,6 +302,7 @@ export default function Notation() {
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
                                         if (!quiz1Answer) setQ1Answer(option);
+                                        if(option === answer1) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -264,7 +318,7 @@ export default function Notation() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            If a note is in a space, it can go beyond the lines.
+                            2. If a note is in a space, it can go beyond the lines.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz2Answer === option;
@@ -289,6 +343,7 @@ export default function Notation() {
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
                                         if (!quiz2Answer) setQ2Answer(option);
+                                        if(option === answer2) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -304,7 +359,7 @@ export default function Notation() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            What term means  moderately loud ?
+                            3. What term means moderately loud?
                         </Text>
                         {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) => {
                             const selected = quiz3Answer === option;
@@ -330,6 +385,7 @@ export default function Notation() {
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
                                         if (!quiz3Answer) setQ3Answer(option);
+                                        if (option === answer3) setCount(count + 1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>

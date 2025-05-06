@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Pressable } from 'react-native';
 import { Link } from 'expo-router';
-
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 
 export default function Rhythm(){
@@ -13,6 +15,58 @@ export default function Rhythm(){
     const answer2 = "4";
     const answer3 = "1/2";
     const answer4 = "False";
+
+    const [count, setCount] = useState(0);
+    const [userId, setUserId]= useState('');
+    const {handleTaskCompletion} = useChallenges();
+            
+                useEffect(()=>{
+                    if (auth.currentUser){
+                      setUserId(auth.currentUser.uid);
+                    }
+                  }, []);
+                
+                  useEffect(()=>{
+                      const fetchUserData= async()=>{
+                        if(userId){
+                          console.log('Fetching data for userId:', userId);
+                  
+                          try{
+                            const userDocRef= doc(db, 'users', userId);
+                            const userDoc = await getDoc(userDocRef)
+                            
+                            if (userDoc.exists()) {
+                              console.log('Document data:', userDoc.data());
+                              const userData = userDoc.data();
+                              if(userData.lessonProgress){
+                                if(!userData.lessonProgress.includes(4)){
+                                    if(count === 4){
+                                        await updateDoc(userDocRef, {
+                                            lessonProgress: arrayUnion(4),
+                                        });
+                                        handleTaskCompletion("Complete 2 lessons");
+                                        handleTaskCompletion("Complete all lessons");
+                                    }
+                                }
+                              }else{
+                                await setDoc(userDocRef, {
+                                    lessonProgress:[1],
+                                }, {merge: true});
+                              }
+                            } else {
+                              await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                              });
+                            }
+                    
+                          }catch(error){
+                            console.error('Error fetching user data:', error);
+                          }
+                        }
+                      };
+                      fetchUserData();
+                    }, [userId]);
+
     return(
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
@@ -126,7 +180,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        2 Quarters and 1 Half Note Equals to 1 Whole Note
+                        1. 2 quarter notes and 1 half note are equivalent to 1 whole note.
                     </Text>
                     {["True", "False"].map((option, index) => {
                         const selected = quiz1Answer === option;
@@ -151,6 +205,7 @@ export default function Rhythm(){
                                 disabled={!!quiz1Answer}
                                     onPress={() => {
                                         if (!quiz1Answer) setQ1Answer(option);
+                                        if (option === answer1) setCount(count + 1);
                                     }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
@@ -166,7 +221,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        How many  Thirty-Second Notes  are in an Eigth Note?
+                        How many thirty-second notes are in an eighth note?
                     </Text>
                     {["2", "4", "6", "8"].map((option, index) => {
                         const selected = quiz2Answer === option;
@@ -191,6 +246,7 @@ export default function Rhythm(){
                                 disabled={!!quiz2Answer}
                                     onPress={() => {
                                         if (!quiz2Answer) setQ2Answer(option);
+                                        if (option === answer2) setCount(count + 1);
                                     }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
@@ -206,7 +262,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        A  Dot  increases the duration of a note by what?
+                        A dot increases the duration of a note by what?
                     </Text>
                     {["1/6", "1/4", "1/2", "1"].map((option, index) => {
                         const selected = quiz3Answer === option;
@@ -231,6 +287,7 @@ export default function Rhythm(){
                                 disabled={!!quiz3Answer}
                                     onPress={() => {
                                         if (!quiz3Answer) setQ3Answer(option);
+                                        if (option === answer3) setCount(count + 1);
                                     }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
@@ -246,7 +303,7 @@ export default function Rhythm(){
                  
                 <View style={styles.quizContainer}>
                     <Text style={styles.quizText}>
-                        A  Tie  is essentially the same as a  Slur 
+                        A tie is essentially the same as a slur. 
                     </Text>
                     {["True", "False"].map((option, index) => {
                         const selected = quiz4Answer === option;
@@ -271,6 +328,7 @@ export default function Rhythm(){
                                 disabled={!!quiz4Answer}
                                     onPress={() => {
                                         if (!quiz4Answer) setQ4Answer(option);
+                                        if (option === answer4) setCount(count + 1);
                                     }}
                             >
                                 <Text style={styles.quizButtonText}>{option}</Text>
