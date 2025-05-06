@@ -42,7 +42,7 @@ Install Expo-cli
 npm install expo-cli
 ```
 
-##Install Expo Go App
+## Install Expo Go App
 !!! ENSURE YOU ARE USING SDK 52 !!!
 https://expo.dev/go
 Go to this site to download SDK 52 
