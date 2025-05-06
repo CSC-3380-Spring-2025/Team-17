@@ -50,6 +50,8 @@ https://expo.dev/go
 Go to this site to download SDK 52 for android simulator or normal android device, IOS will not let you use anything but the newest version unfortunately.
 
 # Execution
+!!! Ensure you are in the ./MusicApp/ Directory before running these commands. !!!
+
 Last check for any missing dependencies:
 ```sh
 npx expo install --check
