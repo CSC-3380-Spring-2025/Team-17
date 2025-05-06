@@ -50,7 +50,12 @@ https://expo.dev/go
 Go to this site to download SDK 52 for android simulator or normal android device, IOS will not let you use anything but the newest version unfortunately.
 
 # Execution
+Last check for any missing dependencies:
+```sh
+npx expo install --check
+```
 
+Running the server:
 ```sh
 npx expo start
 ```
