@@ -22,21 +22,29 @@ Designs: https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?
 
 ## Dependencies
 - NodeJS
-- 
+- Expocli
 ### Downloading Dependencies
 
 Verify you have Node.js installed
 
 ```sh
-node -v
+node -v #v22.15.0
 ```
 
 ```sh
-npm -v
+npm -v #v10.9.2
 ```
 
-## Execution
+Install Expo-cli
 
+```sh
+npm install expo-cli
+```
+
+Install Expo Go App
+!!! ENSURE YOU ARE USING SDK 52 !!!
+
+## Execution
 
 ```sh
 npx expo start
