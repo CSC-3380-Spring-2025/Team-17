@@ -8,7 +8,7 @@ Quality Assurance Tester: Vasu Arora (va2324)
 
 # About Our Software
 
-A mobile music synthesizer/beat recording app with Duolingo style learning incentives and challenges. This will differ from other music creation apps by incorporating a reward system for consistent use, i.e more instruments, sound packs, etc. 
+A mobile music synthesizer/beat recording app with Duolingo style learning incentives and challenges. This will differ from other music creation apps by incorporating a reward system for consistent use. 
 
 ## Platforms Tested on
 - Expo Go
@@ -21,10 +21,19 @@ Designs: https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?
 # How to Run Dev and Test Environment
 
 ## Dependencies
-- List all dependencies here
-- Don't forget to include versions
+- NodeJS
+- 
 ### Downloading Dependencies
-Describe where to download the dependencies here. Some will likely require a web download. Provide links here. For IDE extensions, make sure your project works with the free version of them, and detail which IDE(s) these are available in. 
+
+Verify you have Node.js installed
+
+```sh
+node -v
+```
+
+```sh
+npm -v
+```
 
 ## Execution
 
