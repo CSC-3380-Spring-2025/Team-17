@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
 import {auth, db} from '../../firebaseConfig'
+
 export default function Intro() {
     const [userId, setUserId]= useState('');
 
@@ -54,8 +55,9 @@ export default function Intro() {
         <ScrollView 
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
+            style={styles.container}
         >
-            <View style={styles.container}>
+            <View style={styles.contentContainer}>
                 <Text style={styles.title}>
                     Introduction
                 </Text>
@@ -89,13 +91,17 @@ export default function Intro() {
                 
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
-                        <Link href='./2notation' style={styles.link}>
-                            Next: Music Notation →
+                        <Link href='./2notation' asChild>
+                            <Pressable style={styles.link}>
+                                <Text style={styles.linkText}>Next: Music Notation →</Text>
+                            </Pressable>
                         </Link>
                     </View>
                     <View style={styles.linkWrapper}>
-                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
-                            ← Back to Home
+                        <Link href='../(tabs)/home' asChild>
+                            <Pressable style={styles.secondaryLink}>
+                                <Text style={styles.secondaryLinkText}>← Back to Home</Text>
+                            </Pressable>
                         </Link>
                     </View>
                 </View>
@@ -105,63 +111,63 @@ export default function Intro() {
 }
 
 const styles = StyleSheet.create({
-    scrollContainer: {
-        flexGrow: 1,
-        backgroundColor: '#f8f9fa',
-    },
     container: {
         flex: 1,
-        backgroundColor: '#f0f0f0', 
+        backgroundColor: '#1C1D1F',
+    },
+    scrollContainer: {
+        flexGrow: 1,
+        padding: 15,
+        paddingBottom: 30,
+    },
+    contentContainer: {
+        flex: 1,
         alignItems: 'center',
-        paddingHorizontal: 24,
-        paddingBottom: 40,
-        paddingTop: 20,
+        paddingHorizontal: 15,
+        paddingBottom: 20,
+        paddingTop: 10,
     },
     title: {
-        color: '#5543A5',
-        fontSize: 32, 
-        fontFamily: 'Inter_700Bold',
+        color: '#fff',
+        fontSize: 32,
         fontWeight: 'bold',
         marginVertical: 24,
         textAlign: 'center',
-        letterSpacing: 0.5,
     },
     card: {
-        backgroundColor: 'white',
-        borderRadius: 16, 
-        padding: 24,
+        backgroundColor: '#2A2A2A',
+        borderRadius: 12,
+        padding: 20,
         marginBottom: 20,
         width: '100%',
-        shadowColor: '#5543A5',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        borderWidth: 1, 
-        borderColor: 'rgba(85, 67, 165, 0.1)',
-        elevation: 2,
+        borderColor: '#5543A5',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     text: {
-        color: '#333',
+        color: '#D2D2D2',
         fontSize: 16,
         lineHeight: 26,
         textAlign: 'left',
-        letterSpacing: 0.2,
     },
     ctaContainer: {
         marginVertical: 24,
         padding: 16,
-        backgroundColor: 'rgba(164, 157, 196, 0.2)', 
+        backgroundColor: 'rgba(85, 67, 165, 0.2)',
         borderRadius: 12,
         width: '100%',
         borderWidth: 1,
-        borderColor: 'rgba(85, 67, 165, 0.1)',
+        borderColor: '#5543A5',
     },
     ctaText: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 16,
         fontWeight: '600',
         textAlign: 'center',
-        letterSpacing: 0.3,
     },
     linksContainer: {
         width: '100%',
@@ -175,25 +181,34 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     link: {
-        color: 'white',
-        fontSize: 18,
         padding: 18,
-        textAlign: 'center',
         backgroundColor: '#5543A5',
         borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#5543A5',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+        elevation: 5,
+    },
+    linkText: {
+        color: '#fff',
+        fontSize: 18,
         fontWeight: '600',
-        letterSpacing: 0.3,
-        overflow: 'hidden',
     },
     secondaryLink: {
-        color: '#5543A5',
-        fontSize: 16,
         padding: 16,
-        textAlign: 'center',
         backgroundColor: 'transparent',
         borderWidth: 1.5,
         borderColor: '#5543A5',
         borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    secondaryLinkText: {
+        color: '#fff',
+        fontSize: 16,
         fontWeight: '600',
     },
 });

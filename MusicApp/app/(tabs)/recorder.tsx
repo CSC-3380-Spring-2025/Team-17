@@ -265,28 +265,28 @@ const LiveMixingPage = () => {
       sound: null,
       label: 'Kick',
       uri: require('../../assets/sounds/kick.mp3'),
-      color: '#E53935'
+      color: '#4A148C'
     },
     {
       id: 'snare',
       sound: null,
       label: 'Snare',
       uri: require('../../assets/sounds/snare.mp3'),
-      color: '#3949AB'
+      color: '#1E3A8A'
     },
     {
       id: 'hihat',
       sound: null,
       label: 'Hi-Hat',
       uri: require('../../assets/sounds/hihat.mp3'),
-      color: '#43A047'
+      color: '#B71C1C'
     },
     {
       id: 'crash',
       sound: null,
       label: 'Crash',
       uri: require('../../assets/sounds/crash.mp3'),
-      color: '#FB8C00'
+      color: '#2C6B2F'
     },
   ]);
 
@@ -941,7 +941,7 @@ const LiveMixingPage = () => {
 
       {tracks.length === 0 ? (
         <View style={styles.emptyState}>
-          <MaterialIcons name="queue-music" size={64} color="#4243FF" />
+          <MaterialIcons name="queue-music" size={64} color="#5543A5" />
           <Text style={styles.emptyStateText}>No tracks added yet</Text>
           <Text style={styles.emptyStateSubtext}>Add your first track to begin mixing</Text>
         </View>
@@ -1154,6 +1154,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1C1D1F',
+    paddingBottom: 50
   },
   timeInput: {
     width: 60,
@@ -1201,14 +1202,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
   },
-  drumBeatItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
   drumBeatText: {
     color: 'white',
     fontSize: 14,
@@ -1228,7 +1221,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     flexDirection: 'row',
-    backgroundColor: '#4243FF',
+    backgroundColor: '#5543A5',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
@@ -1354,7 +1347,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#00BFA6',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
@@ -1395,6 +1388,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -5 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
+    paddingBottom: 70,
   },
   controlButton: {
     width: 64,
@@ -1410,19 +1404,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   recordButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: '#E53935',
   },
   playAllButton: {
-    backgroundColor: '#388E3C',
+    backgroundColor: '#5543A5',
     width: 72,
     height: 72,
     borderRadius: 36,
   },
   loopButton: {
-    backgroundColor: '#4243FF',
+    backgroundColor: '#00BFA6',
   },
   loopButtonActive: {
-    backgroundColor: '#F57C00',
+    backgroundColor: '#FFD54F',
   },
   modalContainer: {
     flex: 1,
@@ -1482,7 +1476,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   saveButton: {
-    backgroundColor: '#4243FF',
+    backgroundColor: '#5543A5',
   },
   cancelButton: {
     backgroundColor: '#1C1D1F',
@@ -1502,7 +1496,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   reverbActive: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#00BFA6',
   },
   reverbInactive: {
     backgroundColor: '#1C1D1F',
@@ -1564,17 +1558,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   drumRecordButtonActive: {
-    backgroundColor: '#FF5252',
+    backgroundColor: '#E64A19',
   },
   drumRecordButtonText: {
     color: 'white',
     fontSize: 18,
     marginLeft: 10,
   },
+  recordingStatusText: {
+    color: 'white',
+    fontSize: 16,
+    marginTop: 10,
+  },
   drumKitCloseButton: {
     marginTop: 20,
     padding: 12,
-    backgroundColor: '#4243FF',
+    backgroundColor: '#616161',
     borderRadius: 8,
   },
   drumKitCloseButtonText: {

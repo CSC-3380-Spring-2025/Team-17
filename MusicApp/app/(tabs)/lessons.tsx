@@ -210,31 +210,33 @@ export default function lessonsScreen() {
 
 const { width, height } = Dimensions.get('window');
 const buttonSize = Math.min(width, height) * 0.9;
+const buttonWidth = width * 0.9;
+const buttonHeight = buttonWidth * 0.5;
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        backgroundColor: "#D2D2D2",
-        padding: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: "#1C1D1F",
+        padding: 15,
+        paddingBottom: 100,
     },
     buttonsContainer: { 
         flex: 1,
         justifyContent: 'center',
         gap: 20,
+        alignItems: 'center',
     },
     squareButton: {
-        width: buttonSize,
-        height: buttonSize - 80,
-        borderRadius: 20,
-        backgroundColor: '#D9D9D9',
-        borderWidth: 2,
-        borderColor: '#000',
+        width: buttonWidth,
+        height: buttonHeight,
+        borderRadius: 12,
+        backgroundColor: '#2A2A2A',
+        borderWidth: 1,
+        borderColor: '#5543A5',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
         elevation: 5,
         overflow: 'hidden',
     },
@@ -242,31 +244,27 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     imageContainer: {
-        flex: 3,
+        flex: 1,
     },
     imageStyle: {
         flex: 1,
-        borderTopLeftRadius: 18,
-        borderTopRightRadius: 18,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
     },
     textWrapper: {
         flex: 1,
         justifyContent: 'center',
-        paddingLeft: 10,
+        paddingLeft: 16,
+        backgroundColor: 'rgba(42, 42, 42, 0.8)',
     },
     buttonText: {
-        color: 'black',
-        fontSize: 16,
+        color: '#fff',
+        fontSize: 20,
         fontWeight: 'bold',
-        fontFamily: 'Inter_700Bold',
         textAlign: 'left',
         textAlignVertical: 'center',
     },
     line: {
         height: 1,
         width: '100%',
-        backgroundColor: 'black',
+        backgroundColor: '#5543A5',
     },
 });

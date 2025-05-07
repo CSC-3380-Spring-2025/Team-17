@@ -44,6 +44,7 @@ export default function Scales() {
     const answer5 = "B minor";
     const answer6 = "Gb major";
 
+
     const [count, setCount] = useState<number>(0);
     const [userId, setUserId]= useState<string>('');
     const {handleTaskCompletion} = useChallenges();
@@ -108,6 +109,7 @@ export default function Scales() {
                                 }
                             };
 
+
     return (
         <ScrollView
             contentContainerStyle={styles.scrollContainer}
@@ -141,16 +143,18 @@ export default function Scales() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play C Major"
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => cmajor.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause C Major"
+                        >
+                            <Text style={styles.buttonText}>Play C Major</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => cmajor.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause C Major</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -302,16 +306,18 @@ export default function Scales() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Natural Minor"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => natminor.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Natural Minor"
+                        >
+                            <Text style={styles.buttonText}>Play Natural Minor</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => natminor.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Play Natural Minor</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         A <Text style={styles.bold}>harmonic minor</Text> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern:
@@ -326,16 +332,18 @@ export default function Scales() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Harmonic Minor"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => harminor.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Harmonic Minor"
+                        >
+                            <Text style={styles.buttonText}>Play Harmonic Minor</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => harminor.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Harmonic Minor</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         A <Text style={styles.bold}>melodic minor</Text> scale is an ordered collection of whole steps (W) & half steps (H) in the following pattern:
@@ -350,15 +358,18 @@ export default function Scales() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Melodic Minor"
-                            onPress={() => melminor.current.playAsync()} />
-                        <Button
-                            color='#F44336'
-                            title="Pause Melodic Minor"
+                    <Pressable
+                            style={styles.playButton}
+                            onPress={() => melminor.current.playAsync()}
+                        >
+                            <Text style={styles.buttonText}>Play Melodic Minor</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => melminor.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Melodic Minor</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         The solfege syllables of minor scales differ slightly from the solfege syllables of major scales because of the lowered
@@ -415,7 +426,9 @@ export default function Scales() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
+
                         1. The natural minor scale features a raised 7.
+
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz1Answer === option;
@@ -443,7 +456,9 @@ export default function Scales() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
+
                         2. The melodic minor scale features a raised 6 & 7.
+
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz2Answer === option;
@@ -471,11 +486,13 @@ export default function Scales() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                        3. What major scale has the following key signature?
+                            3. What major scale has the following key signature?
                         </Text>
+
                         <Image source={require('@/assets/images/bmajor.png')} 
                                style={styles.quizImage}
                                resizeMode="contain"
+
                         />
                         {["F major", "E major", "B major", "G major"].map((option, index) => {
                             const selected = quiz3Answer === option;
@@ -503,11 +520,13 @@ export default function Scales() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                        4. What minor scale has the following key signature?
+                            4. What minor scale has the following key signature?
                         </Text>
+
                         <Image source={require('@/assets/images/fminor.png')} 
                                style={styles.quizImage}
                                resizeMode="contain"
+
                         />
                         {["G Minor", "Bb minor", "Eb minor", "F minor"].map((option, index) => {
                             const selected = quiz4Answer === option;
@@ -534,7 +553,7 @@ export default function Scales() {
                     </View>
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                        5. What is the relative minor of D major?
+                            5. What is the relative minor of D major?
                         </Text>
                         {["A minor", "E minor", "B minor", "D minor"].map((option, index) => {
                             const selected = quiz5Answer === option;
@@ -561,7 +580,7 @@ export default function Scales() {
                     </View>
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                        6. What is the relative major of Eb minor?
+                            6. What is the relative major of Eb minor?
                         </Text>
                         {["Ab major", "Gb major", "Eb major", "Db major"].map((option, index) => {
                             const selected = quiz6Answer === option;
@@ -587,7 +606,7 @@ export default function Scales() {
                         )}
                     </View>
                 </View>
-                
+
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./5meter' style={styles.secondaryLink}>
@@ -617,13 +636,13 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#D2D2D2',
+        backgroundColor: '#1C1D1F',
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingBottom: 40,
     },
     title: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 36,
         fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
@@ -634,55 +653,57 @@ const styles = StyleSheet.create({
         textShadowRadius: 3,
     },
     card: {
-        backgroundColor: 'white',
+        backgroundColor: '#2A2A2A',
         borderRadius: 12,
-        padding: 20,
-        marginBottom: 20,
+        padding: 25,
+        marginBottom: 25,
         width: '100%',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        borderColor: 'black',
+        borderColor: '5543A5',
         borderWidth: 2,
         elevation: 3,
     },
     text: {
-        color: '#333',
+        color: '#D2D2D2',
         fontSize: 16,
-        lineHeight: 24,
+        lineHeight: 26,
         textAlign: 'left',
-        marginBottom: 10,
+        marginBottom: 12,
     },
     bold: {
         fontWeight: 'bold',
         color: '#5543A5',
-    },
-    italic: {
-        fontStyle: 'italic',
-        color: '#5543A5',
+        letterSpacing: 0.2,
     },
     header: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 15,
+        marginBottom: 20,
+        marginTop: 20,
         textAlign: 'left',
+    },
+    subHeader: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '600',
+        marginTop: 20,
+        marginBottom: 15,
     },
     image: {
         width: '100%',
         height: 150,
-        marginVertical: 15,
+        marginVertical: 20,
         borderRadius: 8,
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 10,
-        marginTop: 10,
+        justifyContent: 'space-between',
+        marginVertical: 15,
+        width: '100%',
     },
     linksContainer: {
         width: '100%',
@@ -697,13 +718,16 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     link: {
-        color: 'white',
-        fontSize: 18,
-        padding: 15,
-        textAlign: 'center',
+        padding: 18,
         backgroundColor: '#5543A5',
-        borderRadius: 8,
-        fontWeight: '600',
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#5543A5',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+        elevation: 5,
     },
     secondaryLink: {
         color: '#5543A5',
@@ -716,67 +740,56 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
+    homelink: {
+        color: 'purple',
+        fontSize: 30,
+        alignSelf: 'center'
+    },
     quizContainer: {
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: '#2A2A2A',
         borderRadius: 12,
-        padding: 15,
-        marginBottom: 20,
-        borderColor: 'black',
+        padding: 25,
+        marginBottom: 25,
+        borderColor: '#5543A5',
         borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
     },
     quizTitle: {
-        color: 'black',
-        fontSize: 36,
+        color: '#fff',
+        fontSize: 32,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 30,
-        textDecorationLine: 'underline',
+        marginVertical: 24,
     },
     quizText: {
-        color: '#840606',
-        fontSize: 20,
-        alignSelf: 'center',
-    },
-    quizImage: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-        resizeMode: 'contain',
-        alignSelf: 'center',
+        color: '#D2D2D2',
+        fontSize: 16,
+        lineHeight: 26,
+        textAlign: 'center',
     },
     quizButton: {
-        backgroundColor: 'gray',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        backgroundColor: '#3A3A3A',
+        padding: 15,
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     quizButtonText: {
-        color: 'white',
-        fontSize: 15,
-        alignSelf: 'center',
+        color: '#D2D2D2',
+        fontSize: 16,
     },
     correctAnswer: {
-        backgroundColor: 'green',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        backgroundColor: '#2E7D32',
+        padding: 15,
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     incorrectAnswer: {
-        backgroundColor: 'red',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        backgroundColor: '#C62828',
+        padding: 15,
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -786,6 +799,59 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'black',
-    }
+        color: '#fff',
+        textAlign: 'center',
+    },
+    resetButton: {
+        marginTop: 10,
+        backgroundColor: '#5543A5',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    resetButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
+    },
+    examples: {
+        alignItems: 'flex-start'
+    },
+    playButton: {
+        backgroundColor: '#7E57C2',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    pauseButton: {
+        backgroundColor: '#9575CD',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+        textAlign: 'center',
+    },
 });

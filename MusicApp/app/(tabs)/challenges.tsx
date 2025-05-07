@@ -68,20 +68,21 @@ export default function ChallengesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D2D2D2",
+    backgroundColor: "#1C1D1F",
     padding: 20,
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#5543A5",
   },
   challengeGroup: {
     borderWidth: 2,
-    borderColor: "#000",
+    borderColor: "#5543A5",
     borderRadius: 10,
     overflow: "hidden",
-    backgroundColor: "#E5E5E5",
+    backgroundColor: "#2A2A2A",
     marginBottom: 20,
   },
 });

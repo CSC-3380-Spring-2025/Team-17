@@ -63,58 +63,8 @@ const ProfileHeaderButton = () => {
   );
 };
 
-const FloatingMiddleButton = () => {
-  const pathname = usePathname();
-  const router = useRouter();
-  const isRecordingPage = pathname.includes('recorder') || pathname.includes('Recording');
-
-  if (isRecordingPage) return null;
-
-  return (
-    <TouchableOpacity
-      style={[styles.middleButton]}
-      onPress={() => router.push('/recorder')}
-    >
-      <Text style={styles.plus}>+</Text>
-    </TouchableOpacity>
-  );
-};
-
 const TabBarBackground = () => {
-  const { width } = Dimensions.get('window');
-  const height = 50;
-  const pathname = usePathname();
-
-  const isRecordingPage = pathname.includes('recorder') || pathname.includes('Recording');
-
-  if (isRecordingPage) {
-    return (
-      <Svg width={width} height={height} style={{ position: 'absolute', bottom: 0 }}>
-        <Path d={`M0,0 H${width} V${height} H0 Z`} fill="#333232" />
-      </Svg>
-    );
-  }
-
-  const dipWidth = 80;
-  const dipDepth = 30;
-  const left = (width - dipWidth) / 2;
-
-  const path = `
-      M0,0 
-      H${left}
-      C${left + 15},0 ${left + 25},${dipDepth} ${left + dipWidth / 2},${dipDepth}
-      C${left + dipWidth - 25},${dipDepth} ${left + dipWidth - 15},0 ${left + dipWidth},0
-      H${width} 
-      V${height} 
-      H0 
-      Z
-    `;
-
-  return (
-    <Svg width={width} height={height} style={{ position: 'absolute', bottom: 0 }}>
-      <Path d={path} fill="#333232" />
-    </Svg>
-  );
+  return null;
 };
 
 
@@ -128,11 +78,14 @@ export default function TabLayout() {
             initialRouteName="home"
             screenOptions={{
               tabBarActiveTintColor: '#fff',
+              tabBarInactiveTintColor: '#888',
               tabBarStyle: {
-                backgroundColor: 'transparent',
-                borderTopWidth: 0,
-                height: 50,
+                backgroundColor: '#333232',
+                borderTopWidth: 1,
+                borderTopColor: '#554A35',
+                height: 60,
                 position: 'absolute',
+                elevation: 0,
               },
               tabBarBackground: () => <TabBarBackground />,
               headerStyle: {
@@ -201,9 +154,6 @@ export default function TabLayout() {
                 tabBarIcon: ({ color, focused }) => (
                   <Ionicons name={focused ? 'school' : 'school-outline'} color={color} size={24} />
                 ),
-                tabBarItemStyle: {
-                  marginLeft: 20
-                }
               }}
             />
             <Tabs.Screen
@@ -223,7 +173,6 @@ export default function TabLayout() {
               }}
             />
           </Tabs>
-          <FloatingMiddleButton />
         </>
       </AudioProvider>
 

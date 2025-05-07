@@ -39,10 +39,11 @@ const styles=StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         fontFamily: "Inter_700Bold",
+        color: "#fff",
     },
     progressText: {
         fontSize: 14,
-        color: "#555",
+        color: "#fff",
         fontFamily: "Inter_400Regular",
         marginTop: 5,
     },
