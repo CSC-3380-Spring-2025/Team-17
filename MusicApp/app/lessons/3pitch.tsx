@@ -18,9 +18,9 @@ export default function Pitch() {
     const piano1 = useRef(new Audio.Sound());
     const piano2 = useRef(new Audio.Sound());
 
-    const [quiz1Answer, setQ1Answer] = useState(null);
-    const [quiz2Answer, setQ2Answer] = useState(null);
-    const [quiz3Answer, setQ3Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
     const answer1 = "G,A,B,C,D,E,F,G,A";
     const answer2 = "Raises the Note by a 1/2 Step";
     const answer3 = "True";
@@ -55,15 +55,15 @@ export default function Pitch() {
         };
     }, []);
 
-    const [count, setCount] = useState(0);
-    const [userId, setUserId]= useState('');
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
     const {handleTaskCompletion} = useChallenges();
         
             useEffect(()=>{
                 if (auth.currentUser){
                   setUserId(auth.currentUser.uid);
                 }
-              }, []);
+              }, [auth.currentUser]);
             
               useEffect(()=>{
                   const fetchUserData= async()=>{
@@ -87,7 +87,8 @@ export default function Pitch() {
                                     handleTaskCompletion("Complete all lessons");
                                 }
                             }
-                          }else{
+                          }
+                          else{
                             await setDoc(userDocRef, {
                                 lessonProgress:[1],
                             }, {merge: true});
@@ -104,7 +105,19 @@ export default function Pitch() {
                     }
                   };
                   fetchUserData();
-                }, [userId]);
+                }, [userId, count]);
+
+                const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                    if (!selected) return styles.quizButton;
+                    return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                };
+                        
+                const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                    setAnswer(option);
+                    if (option === correctAnswer) {
+                        setCount(prevCount => prevCount + 1);
+                    }
+                };
 
     return (
         <ScrollView
@@ -447,26 +460,14 @@ export default function Pitch() {
                             const selected = quiz1Answer === option;
                             const correct = option === answer1;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz1Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
 
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
-                                        if (!quiz1Answer) setQ1Answer(option);
-                                        if (option === answer1) setCount(count + 1);
+                                        handlePress(option, setQ1Answer, answer1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -488,25 +489,13 @@ export default function Pitch() {
                             const selected = quiz2Answer === option;
                             const correct = option === answer2;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz2Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
-                                        if (!quiz2Answer) setQ2Answer(option);
-                                        if (option === answer2) setCount(count + 1);
+                                        handlePress(option, setQ2Answer, answer2);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -528,26 +517,13 @@ export default function Pitch() {
                             const selected = quiz3Answer === option;
                             const correct = option === answer3;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz3Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
-                                        if (!quiz3Answer) setQ3Answer(option);
-                                        if (option === answer3) setCount(count + 1);
+                                        handlePress(option, setQ3Answer, answer3);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>

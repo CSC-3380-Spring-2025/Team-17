@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
-import { Audio } from 'expo-av';
+import { Audio, PitchCorrectionQuality } from 'expo-av';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
 import {auth, db} from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
@@ -48,24 +48,24 @@ export default function Meter() {
         };
     }, []);
 
-    const [quiz1Answer, setQ1Answer] = useState(null);
-    const [quiz2Answer, setQ2Answer] = useState(null);
-    const [quiz3Answer, setQ3Answer] = useState(null);
-    const [quiz4Answer, setQ4Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
     const answer1 = "True";
     const answer2 = "False";
     const answer3 = "4/4";
     const answer4 = "9/8";
 
-    const [count, setCount] = useState(0);
-    const [userId, setUserId]= useState('');
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
     const {handleTaskCompletion} = useChallenges();
                 
                     useEffect(()=>{
                         if (auth.currentUser){
                           setUserId(auth.currentUser.uid);
                         }
-                      }, []);
+                      }, [auth.currentUser]);
                     
                       useEffect(()=>{
                           const fetchUserData= async()=>{
@@ -89,7 +89,8 @@ export default function Meter() {
                                             handleTaskCompletion("Complete all lessons");
                                         }
                                     }
-                                  }else{
+                                  }
+                                  else{
                                     await setDoc(userDocRef, {
                                         lessonProgress:[1],
                                     }, {merge: true});
@@ -106,7 +107,19 @@ export default function Meter() {
                             }
                           };
                           fetchUserData();
-                        }, [userId]);
+                        }, [userId, count]);
+
+                        const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                            if (!selected) return styles.quizButton;
+                            return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                        };
+                                
+                        const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                            setAnswer(option);
+                            if (option === correctAnswer) {
+                                setCount(prevCount => prevCount + 1);
+                            }
+                        };
 
     return (
 
@@ -407,26 +420,13 @@ export default function Meter() {
                             const selected = quiz1Answer === option;
                             const correct = option === answer1;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz1Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
-                                        if (!quiz1Answer) setQ1Answer(option);
-                                        if (option === answer1) setCount(count + 1);
+                                        handlePress(option, setQ1Answer, answer1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -448,26 +448,13 @@ export default function Meter() {
                             const selected = quiz2Answer === option;
                             const correct = option === answer2;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz2Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
-                                        if (!quiz2Answer) setQ2Answer(option);
-                                        if (option === answer2) setCount(count + 1);
+                                        handlePress(option, setQ2Answer, answer2);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -493,26 +480,13 @@ export default function Meter() {
                             const selected = quiz3Answer === option;
                             const correct = option === answer3;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz3Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
-                                        if (!quiz3Answer) setQ3Answer(option);
-                                        if (option === answer3) setCount(count + 1);
+                                        handlePress(option, setQ3Answer, answer3);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -539,26 +513,14 @@ export default function Meter() {
                             const selected = quiz4Answer === option;
                             const correct = option === answer4;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz4Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
 
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz4Answer}
                                     onPress={() => {
-                                        if (!quiz4Answer) setQ4Answer(option);
-                                        if (option === answer4) setCount(count + 1);
+                                        handlePress(option, setQ4Answer, answer4);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>

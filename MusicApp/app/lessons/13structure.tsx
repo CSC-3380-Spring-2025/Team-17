@@ -1,5 +1,5 @@
-import React, {useEffect, useRef} from 'react';
-import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
 import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
 import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
@@ -49,8 +49,84 @@ export default function Structure(){
             hundredyears.current.unloadAsync();
             raging_fire.current.unloadAsync();
         };
-
     }, []);
+
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
+    const [quiz5Answer, setQ5Answer] = useState<string | null>(null);
+    const [quiz6Answer, setQ6Answer] = useState<string | null>(null);
+    const answer1 = "A Complete Phrase";
+    const answer2 = "It restates the beginning of the main theme in the second reprise";
+    const answer3 = "True";
+    const answer4 = "True";
+    const answer5 = "12";
+    const answer6 = "Verse & Chorus Form";
+
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+                            
+                                useEffect(()=>{
+                                    if (auth.currentUser){
+                                      setUserId(auth.currentUser.uid);
+                                    }
+                                  }, [auth.currentUser]);
+                                
+                                  useEffect(()=>{
+                                      const fetchUserData= async()=>{
+                                        if(userId){
+                                          console.log('Fetching data for userId:', userId);
+                                  
+                                          try{
+                                            const userDocRef= doc(db, 'users', userId);
+                                            const userDoc = await getDoc(userDocRef)
+                                            
+                                            if (userDoc.exists()) {
+                                              console.log('Document data:', userDoc.data());
+                                              const userData = userDoc.data();
+                                              if(userData.lessonProgress){
+                                                if(!userData.lessonProgress.includes(7)){
+                                                    if(count === 6){
+                                                        await updateDoc(userDocRef, {
+                                                            lessonProgress: arrayUnion(7),
+                                                        });
+                                                        handleTaskCompletion("Complete 2 lessons");
+                                                        handleTaskCompletion("Complete all lessons");
+                                                    }
+                                                }
+                                              }
+                                              else{
+                                                await setDoc(userDocRef, {
+                                                    lessonProgress:[1],
+                                                }, {merge: true});
+                                              }
+                                            } else {
+                                              await setDoc(userDocRef, {
+                                                lessonProgress: [1],
+                                              });
+                                            }
+                                    
+                                          }catch(error){
+                                            console.error('Error fetching user data:', error);
+                                          }
+                                        }
+                                      };
+                                      fetchUserData();
+                                    }, [userId, count]);
+    
+                                    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                                        if (!selected) return styles.quizButton;
+                                        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                                    };
+                                            
+                                    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                                        setAnswer(option);
+                                        if (option === correctAnswer) {
+                                            setCount(prevCount => prevCount + 1);
+                                        }
+                                    };
 
     return(
         <ScrollView 
@@ -288,7 +364,7 @@ export default function Structure(){
                         return of the refrain. Codas are also quite common, but introductions are not.  
                     </Text>
                     <Text style={styles.text}>
-                        Wolfgang Amadeus Mozart's "Turkish March" is written in rondo form. The pattern is rather complicated: ABACDEDCABAC-Coda. The piece starts with a repeated main theme in A major that 
+                        Wolfgang Amadeus Mozart's "Turkish March" is written in rondo form. The pattern is rather complicated: <Text style={styles.bold}>ABACDEDCABAC-Coda</Text>. The piece starts with a repeated main theme in A major that 
                         goes into the B section in C major before returning to the main theme in A major. Then the music moves to a C section featuring loud dynamics and fast rhythmic activity. Afterward comes 
                         a softer D section in F# minor that ends on a half cadence. There is a brief E section afterward that is in A major and sounds relatively unstable and leads back into the D section in 
                         F# minor which is more developed. Then comes the loud & energetic C section that leads back to the refrain. The A section brings the music back to a stable position, followed by the B 
@@ -440,7 +516,7 @@ export default function Structure(){
                         resizeMode="contain"
                     />
                     <Text style={styles.text}>
-                        Billy Joel's classic hit song "Piano Man" is written in verse & chorus form. The pattern of this song is 'Intro-Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Verse-Bridge-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus'.
+                        Billy Joel's classic hit song "Piano Man" is written in verse & chorus form. The pattern of this song is <Text style={styles.bold}>Intro-Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Verse-Bridge-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus</Text>.
                         The song starts with an introductory piano riff before moving to the postchorus featuring the harmonica & piano. Then Billy Joel starts singing the first verse "It's nine o'clock on a Saturday . . ." At its conclusion, he sings syllables 
                         "la-la la de-de dah" in the prechorus leading up to the chorus, where he sings the title lyric "Sing us a song, you're the piano man!" At the end of the chorus, the postchorus is performed before moving on to the next verse about John the 
                         bartender. After this verse, the prechorus featuring the sung syllables is heard, but instead of leading to the chorus, the music moves on to another verse "Now Paul is a real estate novelist . . ." After this verse, Billy Joel plays 
@@ -465,8 +541,8 @@ export default function Structure(){
                         </View>
                     </View>
                     <Text style={styles.text}>
-                        Five for Fighting's song "100 Years" is written in verse & chorus form. The pattern of this song is 'Intro-Verse-Prechorus-Chorus-Interlude-Verse-Verse-Prechorus-Chorus-Bridge-Verse-Prechorus-Interlude-Chorus-Outro'.
-                        The song starts with an intro featuring the main melody played on the piano. Then the first verse is sung "I'm 15 for a moment . . ." Then the prechorus is sung "15 there's still time for you . . ."
+                        Five for Fighting's song "100 Years" is written in verse & chorus form. The pattern of this song is <Text style={styles.bold}>Intro-Verse-Verse-Prechorus-Chorus-Interlude-Verse-Verse-Prechorus-Chorus-Bridge-Verse-Prechorus-Interlude-Chorus-Outro</Text>.
+                        The song starts with an intro featuring the main melody played on the piano. Then the first two verses are sung "I'm 15 for a moment . . ." followed by "I'm 22 for a moment . . ." Then the prechorus is sung "15 there's still time for you . . ."
                         The music leads to the chorus, which states the title lyric "There's never a wish better than this, when you've got a hundred years to live!" Then there is a brief piano interlude before the next verse 
                         begins "I'm 33 for a moment . . ." Then the next verse is sung immediately after "I'm 45 for a moment . . ." This is followed by the prechorus, with the lyrics slightly changed, leading up to the chorus 
                         again. After the chorus comes the bridge section "As time goes by . . ." This is followed by the final verse "I'm 99 for a moment . . ." Afterwards comes an extended prechorus with added lyrics & and an instrumental 
@@ -490,7 +566,7 @@ export default function Structure(){
                         </View>
                     </View>
                     <Text style={styles.text}>
-                        Phillip Phillips' song "Raging Fire" is written in verse & chorus form. The pattern of this song is 'Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus-Prechrous-Chorus'.
+                        Phillip Phillips' song "Raging Fire" is written in verse & chorus form. The pattern of this song is <Text style={styles.bold}>Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus-Prechrous-Chorus</Text>.
                         The song begins on the postchorus in the guitar that leads into the first verse "We are dead to rights, born & raised . . ." This is followed by the prechorus "Before the flame goes out tonight, we 
                         can live before we die." This leads straight into the highly energetic chorus "So come out come out come out, won't you turn my soul into a raging fire?" The chorus gives way to the postchorus in the 
                         guitar, which leads to the second verse "You know time will give and time will take . . ." This verse is also followed by the prechorus, which leads to the chorus again. Then comes the postchorus on the 
@@ -512,6 +588,180 @@ export default function Structure(){
                                 onPress={() => raging_fire.current.pauseAsync()}
                             />
                         </View>
+                    </View>
+                </View>
+
+                <View>
+                    <Text style={styles.quizTitle}>
+                        Quiz
+                    </Text>
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            1. What does a large prefix or suffix have that a small prefix or suffix does not have?
+                        </Text>
+                        {["A Cadence", "A Complete Phrase", "A Core Section", "A Contrasting Section"].map((option, index) => {
+                                const selected = quiz1Answer === option;
+                                const correct = option === answer1;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz1Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ1Answer, answer1);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz1Answer && (
+                                <Text style={styles.result}>
+                                    {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            2. How does rounded binary form differ from simple binary form?
+                        </Text>
+                        {["It contains three core sections instead of two", "It repeats the main theme multiple times", 
+                        "It restates the beginning of the main theme in the second reprise", "It does not have a contrasting section"].map((option, index) => {
+                                const selected = quiz2Answer === option;
+                                const correct = option === answer2;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz2Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ2Answer, answer2);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz2Answer && (
+                                <Text style={styles.result}>
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            3. A section in a larger form can contain a whole form within itself. 
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                                const selected = quiz3Answer === option;
+                                const correct = option === answer3;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz3Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ3Answer, answer3);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz3Answer && (
+                                <Text style={styles.result}>
+                                    {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            4. Rondo form features a recurring refrain separated by various episodes.
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                                const selected = quiz4Answer === option;
+                                const correct = option === answer4;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz4Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ4Answer, answer4);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz4Answer && (
+                                <Text style={styles.result}>
+                                    {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            5. How many variations are there in Mozart's "Twinkle, Twinkle, Little Star"?
+                        </Text>
+                        {["8", "12", "14", "20"].map((option, index) => {
+                                const selected = quiz5Answer === option;
+                                const correct = option === answer5;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz5Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ5Answer, answer5);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz5Answer && (
+                                <Text style={styles.result}>
+                                    {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+                    
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            6. What is the most common form for modern music?
+                        </Text>
+                        {["Rondo Form", "Strophic Form", "32-Bar Song Form", "Verse & Chorus Form"].map((option, index) => {
+                                const selected = quiz6Answer === option;
+                                const correct = option === answer6;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz6Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ6Answer, answer6);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz6Answer && (
+                                <Text style={styles.result}>
+                                    {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
                     </View>
                 </View>
                 
@@ -574,7 +824,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         textAlign: 'left',
-        padding: 10
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: '#5543A5',
+    },
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
     },
     linksContainer: {
         width: '100%',
@@ -615,21 +872,23 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'left',
     },
-    bold: {
-        fontWeight: 'bold',
-        color: '#5543A5',
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
+    },
+    examples: {
+        alignItems: 'flex-start'
+    },
+    buttons: {
+        flexDirection: 'row'
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         gap: 10,
         marginTop: 10,
-    },
-    image: {
-        width: '100%',
-        height: 150,
-        marginVertical: 15,
-        borderRadius: 8,
     },
     links: {
         flexDirection: 'row',
@@ -645,32 +904,49 @@ const styles = StyleSheet.create({
         fontSize: 30,
         alignSelf: 'center'
     },
-    quizContainer: {
-        height: 100,
-        width: 200,
 
-        alignItems: 'center',
-        padding: 7,
+    quizContainer: {
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 15,
+        marginBottom: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     quizTitle: {
         color: 'black',
-        fontSize: 50,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        fontSize: 36,
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 30,
         textDecorationLine: 'underline',
-        paddingBottom: 20
     },
     quizText: {
         color: '#840606',
         fontSize: 20,
         alignSelf: 'center',
     },
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
     quizButton: {
-        height: 45,
-        width: 150,
         backgroundColor: 'gray',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        padding: 5,
     },
     quizButtonText: {
         color: 'white',
@@ -678,37 +954,28 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     correctAnswer: {
-        height: 45,
-        width: 150,
         backgroundColor: 'green',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
     },
     incorrectAnswer: {
-        height: 45,
-        width: 150,
         backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
     },
     result: {
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
-    },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
+
+    }
 });
