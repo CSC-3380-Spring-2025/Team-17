@@ -2,17 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Notation() {
     const slurSound = useRef(new Audio.Sound());
     const staccatoSound = useRef(new Audio.Sound());
     const accentSound = useRef(new Audio.Sound());
-    const [quiz1Answer, setQ1Answer] = useState(null);
-    const [quiz2Answer, setQ2Answer] = useState(null);
-    const [quiz3Answer, setQ3Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
     const answer1 = "Pitch and Rhythm";
     const answer2 = "False";
     const answer3 = "Mezzo Forte";
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
 
     useEffect(() => {
         const loadSounds = async () => {
@@ -29,7 +35,67 @@ export default function Notation() {
             accentSound.current.unloadAsync();
         };
     }, []);
+    
+        useEffect(()=>{
+            if (auth.currentUser){
+              setUserId(auth.currentUser.uid);
+            }
+          }, [auth.currentUser]);
+        
+          useEffect(()=>{
+              const fetchUserData= async()=>{
+                if(userId){
+                  console.log('Fetching data for userId:', userId);
+          
+                  try{
+                    const userDocRef= doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+                    
+                    if (userDoc.exists()) {
+                      console.log('Document data:', userDoc.data());
+                      const userData = userDoc.data();
+                      if(userData.lessonProgress){
+                        if(!userData.lessonProgress.includes(2)){
+                            if(count === 3){
+                                await updateDoc(userDocRef, {
+                                    lessonProgress: arrayUnion(2),
+                                });
+                                handleTaskCompletion("Complete 2 lessons");
+                                handleTaskCompletion("Complete all lessons");
+                            }
+                        }
+                      }
+                      else{
+                        await setDoc(userDocRef, {
+                            lessonProgress:[1],
+                        }, {merge: true});
+                      }
+                    } 
+                    else {
+                      await setDoc(userDocRef, {
+                        lessonProgress: [1],
+                      });
+                    }
+            
+                  }catch(error){
+                    console.error('Error fetching user data:', error);
+                  }
+                }
+              };
+              fetchUserData();
+            }, [userId, count]);
 
+            const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                if (!selected) return styles.quizButton;
+                return correct ? styles.correctAnswer : styles.incorrectAnswer;
+            };
+        
+            const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                setAnswer(option);
+                if (option === correctAnswer) {
+                    setCount(prevCount => prevCount + 1);
+                }
+            };
 
     return (
         <ScrollView
@@ -222,33 +288,21 @@ export default function Notation() {
 
                 <View>
                     <Text style={styles.quizTitle}>Quiz</Text>
-
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            A musical note represents what?
+                            1. A musical note represents what?
                         </Text>
                         {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) => {
                             const selected = quiz1Answer === option;
                             const correct = option === answer1;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz1Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
-                                        if (!quiz1Answer) setQ1Answer(option);
+                                        handlePress(option, setQ1Answer, answer1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -264,31 +318,19 @@ export default function Notation() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            If a note is in a space, it can go beyond the lines.
+                            2. If a note is in a space, it can go beyond the lines.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz2Answer === option;
                             const correct = option === answer2;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz2Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
-                                        if (!quiz2Answer) setQ2Answer(option);
+                                        handlePress(option, setQ2Answer, answer2);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -304,32 +346,19 @@ export default function Notation() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            What term means  moderately loud ?
+                            3. What term means moderately loud?
                         </Text>
                         {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) => {
                             const selected = quiz3Answer === option;
                             const correct = option === answer3;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz3Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
-                                        if (!quiz3Answer) setQ3Answer(option);
+                                        handlePress(option, setQ3Answer, answer3);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
