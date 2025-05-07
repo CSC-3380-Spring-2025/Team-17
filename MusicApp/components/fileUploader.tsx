@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import { Button, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useChallenges } from '@/app/context/ChallengesContext';
 
 interface uploadedDocument {
   name: string;
@@ -14,6 +15,7 @@ interface FileUploaderProps{
 }
 const FileUploader: React.FC<FileUploaderProps> = ({onFileUpload, setModalVisible}) => {
   const [document, setDocument] = useState<uploadedDocument | null>(null);
+  const {handleTaskCompletion} = useChallenges();
 
   const pickDocument = async () => {
     try {
@@ -32,6 +34,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({onFileUpload, setModalVisibl
         setDocument(doc);
         onFileUpload(doc);
         setModalVisible(false);
+        handleTaskCompletion("Import a new track");
       } else {
         console.log("Document selection cancelled.");
       }

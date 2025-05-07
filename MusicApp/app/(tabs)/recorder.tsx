@@ -23,6 +23,7 @@ import { useAudioContext } from './AudioContext';
 import { useLocalSearchParams } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
 import FileUploader from '@/components/fileUploader';
+import { useChallenges } from '../context/ChallengesContext';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
@@ -398,7 +399,12 @@ const LiveMixingPage = () => {
       showRecordingsModal,
     };
     const fileUri = `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
-    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+    if (Platform.OS === 'web') {
+      console.log("File system operations are not directly supported on the web.");
+    }
+    else{
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+    }
   };
 
   const loadState = async (name: string) => {
@@ -816,6 +822,8 @@ const LiveMixingPage = () => {
     }
   };
 
+  const {handleTaskCompletion} = useChallenges();
+
   const [editingTrackId, setEditingTrackId] = useState<string | null>(null);
   const [editingTrackName, setEditingTrackName] = useState('');
 
@@ -836,6 +844,7 @@ const LiveMixingPage = () => {
   const cancelEditing = () => {
     setEditingTrackId(null);
   };
+
 
   const renderTrackItem = ({ item }: { item: AudioTrack }) => (
     <View style={styles.trackItem}>
@@ -1062,7 +1071,10 @@ const LiveMixingPage = () => {
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.saveButton]}
-                onPress={handleSaveSongName}>
+                onPress={() => {
+                  handleSaveSongName();
+                  handleTaskCompletion("Create a new track");
+                }}>
                 <Text style={styles.modalButtonText}>Save</Text>
               </TouchableOpacity>
               <TouchableOpacity
