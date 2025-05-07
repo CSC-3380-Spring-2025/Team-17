@@ -1,7 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
-import { Link } from 'expo-router';
+
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
+import {Link} from 'expo-router';
+
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Structure() {
     const field = useRef(new Audio.Sound());
@@ -46,11 +51,89 @@ export default function Structure() {
             hundredyears.current.unloadAsync();
             raging_fire.current.unloadAsync();
         };
-
     }, []);
 
-    return (
-        <ScrollView
+
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
+    const [quiz5Answer, setQ5Answer] = useState<string | null>(null);
+    const [quiz6Answer, setQ6Answer] = useState<string | null>(null);
+    const answer1 = "A Complete Phrase";
+    const answer2 = "It restates the beginning of the main theme in the second reprise";
+    const answer3 = "True";
+    const answer4 = "True";
+    const answer5 = "12";
+    const answer6 = "Verse & Chorus Form";
+
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+                            
+                                useEffect(()=>{
+                                    if (auth.currentUser){
+                                      setUserId(auth.currentUser.uid);
+                                    }
+                                  }, [auth.currentUser]);
+                                
+                                  useEffect(()=>{
+                                      const fetchUserData= async()=>{
+                                        if(userId){
+                                          console.log('Fetching data for userId:', userId);
+                                  
+                                          try{
+                                            const userDocRef= doc(db, 'users', userId);
+                                            const userDoc = await getDoc(userDocRef)
+                                            
+                                            if (userDoc.exists()) {
+                                              console.log('Document data:', userDoc.data());
+                                              const userData = userDoc.data();
+                                              if(userData.lessonProgress){
+                                                if(!userData.lessonProgress.includes(7)){
+                                                    if(count === 6){
+                                                        await updateDoc(userDocRef, {
+                                                            lessonProgress: arrayUnion(7),
+                                                        });
+                                                        handleTaskCompletion("Complete 2 lessons");
+                                                        handleTaskCompletion("Complete all lessons");
+                                                    }
+                                                }
+                                              }
+                                              else{
+                                                await setDoc(userDocRef, {
+                                                    lessonProgress:[1],
+                                                }, {merge: true});
+                                              }
+                                            } else {
+                                              await setDoc(userDocRef, {
+                                                lessonProgress: [1],
+                                              });
+                                            }
+                                    
+                                          }catch(error){
+                                            console.error('Error fetching user data:', error);
+                                          }
+                                        }
+                                      };
+                                      fetchUserData();
+                                    }, [userId, count]);
+    
+                                    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                                        if (!selected) return styles.quizButton;
+                                        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                                    };
+                                            
+                                    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                                        setAnswer(option);
+                                        if (option === correctAnswer) {
+                                            setCount(prevCount => prevCount + 1);
+                                        }
+                                    };
+
+    return(
+        <ScrollView 
+
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
         >
@@ -293,11 +376,13 @@ export default function Structure() {
                         return of the refrain. Codas are also quite common, but introductions are not.
                     </Text>
                     <Text style={styles.text}>
-                        Wolfgang Amadeus Mozart's "Turkish March" is written in rondo form. The pattern is rather complicated: ABACDEDCABAC-Coda. The piece starts with a repeated main theme in A major that
-                        goes into the B section in C major before returning to the main theme in A major. Then the music moves to a C section featuring loud dynamics and fast rhythmic activity. Afterward comes
-                        a softer D section in F# minor that ends on a half cadence. There is a brief E section afterward that is in A major and sounds relatively unstable and leads back into the D section in
-                        F# minor which is more developed. Then comes the loud & energetic C section that leads back to the refrain. The A section brings the music back to a stable position, followed by the B
-                        section in C major and returning to the main theme again. Finally, the C section returns in a more developed form and leads into the coda to end the piece on a high note.
+
+                        Wolfgang Amadeus Mozart's "Turkish March" is written in rondo form. The pattern is rather complicated: <Text style={styles.bold}>ABACDEDCABAC-Coda</Text>. The piece starts with a repeated main theme in A major that 
+                        goes into the B section in C major before returning to the main theme in A major. Then the music moves to a C section featuring loud dynamics and fast rhythmic activity. Afterward comes 
+                        a softer D section in F# minor that ends on a half cadence. There is a brief E section afterward that is in A major and sounds relatively unstable and leads back into the D section in 
+                        F# minor which is more developed. Then comes the loud & energetic C section that leads back to the refrain. The A section brings the music back to a stable position, followed by the B 
+                        section in C major and returning to the main theme again. Finally, the C section returns in a more developed form and leads into the coda to end the piece on a high note. 
+
                     </Text>
                     <View style={styles.card}>
                         <Text style={{ fontSize: 24, color: '#5543A5', textAlign: 'center' }}>
@@ -453,11 +538,13 @@ export default function Structure() {
                         resizeMode="contain"
                     />
                     <Text style={styles.text}>
-                        Billy Joel's classic hit song "Piano Man" is written in verse & chorus form. The pattern of this song is 'Intro-Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Verse-Bridge-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus'.
-                        The song starts with an introductory piano riff before moving to the postchorus featuring the harmonica & piano. Then Billy Joel starts singing the first verse "It's nine o'clock on a Saturday . . ." At its conclusion, he sings syllables
-                        "la-la la de-de dah" in the prechorus leading up to the chorus, where he sings the title lyric "Sing us a song, you're the piano man!" At the end of the chorus, the postchorus is performed before moving on to the next verse about John the
-                        bartender. After this verse, the prechorus featuring the sung syllables is heard, but instead of leading to the chorus, the music moves on to another verse "Now Paul is a real estate novelist . . ." After this verse, Billy Joel plays
-                        through a bridge section featuring solo piano, which then leads straight to the chorus. Afterwards, the postchorus is played and leads to the final verse "It's a pretty good crowd for a Saturday . . ." Then comes the prechorus of sung
+
+                        Billy Joel's classic hit song "Piano Man" is written in verse & chorus form. The pattern of this song is <Text style={styles.bold}>Intro-Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Verse-Bridge-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus</Text>.
+                        The song starts with an introductory piano riff before moving to the postchorus featuring the harmonica & piano. Then Billy Joel starts singing the first verse "It's nine o'clock on a Saturday . . ." At its conclusion, he sings syllables 
+                        "la-la la de-de dah" in the prechorus leading up to the chorus, where he sings the title lyric "Sing us a song, you're the piano man!" At the end of the chorus, the postchorus is performed before moving on to the next verse about John the 
+                        bartender. After this verse, the prechorus featuring the sung syllables is heard, but instead of leading to the chorus, the music moves on to another verse "Now Paul is a real estate novelist . . ." After this verse, Billy Joel plays 
+                        through a bridge section featuring solo piano, which then leads straight to the chorus. Afterwards, the postchorus is played and leads to the final verse "It's a pretty good crowd for a Saturday . . ." Then comes the prechorus of sung 
+
                         syllables leading to the climactic final chorus, which is then followed by postchorus which ends the song.
                     </Text>
                     <View style={styles.card}>
@@ -480,12 +567,14 @@ export default function Structure() {
                         </View>
                     </View>
                     <Text style={styles.text}>
-                        Five for Fighting's song "100 Years" is written in verse & chorus form. The pattern of this song is 'Intro-Verse-Prechorus-Chorus-Interlude-Verse-Verse-Prechorus-Chorus-Bridge-Verse-Prechorus-Interlude-Chorus-Outro'.
-                        The song starts with an intro featuring the main melody played on the piano. Then the first verse is sung "I'm 15 for a moment . . ." Then the prechorus is sung "15 there's still time for you . . ."
-                        The music leads to the chorus, which states the title lyric "There's never a wish better than this, when you've got a hundred years to live!" Then there is a brief piano interlude before the next verse
-                        begins "I'm 33 for a moment . . ." Then the next verse is sung immediately after "I'm 45 for a moment . . ." This is followed by the prechorus, with the lyrics slightly changed, leading up to the chorus
-                        again. After the chorus comes the bridge section "As time goes by . . ." This is followed by the final verse "I'm 99 for a moment . . ." Afterwards comes an extended prechorus with added lyrics & and an instrumental
-                        interlude followed by the chorus one last time. The song ends with an outro restating the song's main melody.
+
+                        Five for Fighting's song "100 Years" is written in verse & chorus form. The pattern of this song is <Text style={styles.bold}>Intro-Verse-Verse-Prechorus-Chorus-Interlude-Verse-Verse-Prechorus-Chorus-Bridge-Verse-Prechorus-Interlude-Chorus-Outro</Text>.
+                        The song starts with an intro featuring the main melody played on the piano. Then the first two verses are sung "I'm 15 for a moment . . ." followed by "I'm 22 for a moment . . ." Then the prechorus is sung "15 there's still time for you . . ."
+                        The music leads to the chorus, which states the title lyric "There's never a wish better than this, when you've got a hundred years to live!" Then there is a brief piano interlude before the next verse 
+                        begins "I'm 33 for a moment . . ." Then the next verse is sung immediately after "I'm 45 for a moment . . ." This is followed by the prechorus, with the lyrics slightly changed, leading up to the chorus 
+                        again. After the chorus comes the bridge section "As time goes by . . ." This is followed by the final verse "I'm 99 for a moment . . ." Afterwards comes an extended prechorus with added lyrics & and an instrumental 
+                        interlude followed by the chorus one last time. The song ends with an outro restating the song's main melody. 
+
                     </Text>
                     <View style={styles.card}>
                         <Text style={{ fontSize: 24, color: '#5543A5', textAlign: 'center' }}>
@@ -507,11 +596,13 @@ export default function Structure() {
                         </View>
                     </View>
                     <Text style={styles.text}>
-                        Phillip Phillips' song "Raging Fire" is written in verse & chorus form. The pattern of this song is 'Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus-Prechrous-Chorus'.
-                        The song begins on the postchorus in the guitar that leads into the first verse "We are dead to rights, born & raised . . ." This is followed by the prechorus "Before the flame goes out tonight, we
-                        can live before we die." This leads straight into the highly energetic chorus "So come out come out come out, won't you turn my soul into a raging fire?" The chorus gives way to the postchorus in the
-                        guitar, which leads to the second verse "You know time will give and time will take . . ." This verse is also followed by the prechorus, which leads to the chorus again. Then comes the postchorus on the
-                        guitar, which then leads to the prechorus again. The prechorus is slightly extended with extra lyrics and a short instrumental interlude before it leads to the climactic final chorus, which is where the song ends.
+
+                        Phillip Phillips' song "Raging Fire" is written in verse & chorus form. The pattern of this song is <Text style={styles.bold}>Postchorus-Verse-Prechorus-Chorus-Postchorus-Verse-Prechorus-Chorus-Postchorus-Prechrous-Chorus</Text>.
+                        The song begins on the postchorus in the guitar that leads into the first verse "We are dead to rights, born & raised . . ." This is followed by the prechorus "Before the flame goes out tonight, we 
+                        can live before we die." This leads straight into the highly energetic chorus "So come out come out come out, won't you turn my soul into a raging fire?" The chorus gives way to the postchorus in the 
+                        guitar, which leads to the second verse "You know time will give and time will take . . ." This verse is also followed by the prechorus, which leads to the chorus again. Then comes the postchorus on the 
+                        guitar, which then leads to the prechorus again. The prechorus is slightly extended with extra lyrics and a short instrumental interlude before it leads to the climactic final chorus, which is where the song ends. 
+
                     </Text>
                     <View style={styles.card}>
                         <Text style={{ fontSize: 24, color: '#5543A5', textAlign: 'center' }}>
@@ -533,6 +624,182 @@ export default function Structure() {
                         </View>
                     </View>
                 </View>
+
+
+                <View>
+                    <Text style={styles.quizTitle}>
+                        Quiz
+                    </Text>
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            1. What does a large prefix or suffix have that a small prefix or suffix does not have?
+                        </Text>
+                        {["A Cadence", "A Complete Phrase", "A Core Section", "A Contrasting Section"].map((option, index) => {
+                                const selected = quiz1Answer === option;
+                                const correct = option === answer1;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz1Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ1Answer, answer1);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz1Answer && (
+                                <Text style={styles.result}>
+                                    {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            2. How does rounded binary form differ from simple binary form?
+                        </Text>
+                        {["It contains three core sections instead of two", "It repeats the main theme multiple times", 
+                        "It restates the beginning of the main theme in the second reprise", "It does not have a contrasting section"].map((option, index) => {
+                                const selected = quiz2Answer === option;
+                                const correct = option === answer2;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz2Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ2Answer, answer2);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz2Answer && (
+                                <Text style={styles.result}>
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            3. A section in a larger form can contain a whole form within itself. 
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                                const selected = quiz3Answer === option;
+                                const correct = option === answer3;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz3Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ3Answer, answer3);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz3Answer && (
+                                <Text style={styles.result}>
+                                    {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            4. Rondo form features a recurring refrain separated by various episodes.
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                                const selected = quiz4Answer === option;
+                                const correct = option === answer4;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz4Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ4Answer, answer4);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz4Answer && (
+                                <Text style={styles.result}>
+                                    {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            5. How many variations are there in Mozart's "Twinkle, Twinkle, Little Star"?
+                        </Text>
+                        {["8", "12", "14", "20"].map((option, index) => {
+                                const selected = quiz5Answer === option;
+                                const correct = option === answer5;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz5Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ5Answer, answer5);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz5Answer && (
+                                <Text style={styles.result}>
+                                    {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+                    
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            6. What is the most common form for modern music?
+                        </Text>
+                        {["Rondo Form", "Strophic Form", "32-Bar Song Form", "Verse & Chorus Form"].map((option, index) => {
+                                const selected = quiz6Answer === option;
+                                const correct = option === answer6;
+                        
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz6Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ6Answer, answer6);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz6Answer && (
+                                <Text style={styles.result}>
+                                    {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                    </View>
+                </View>
+                
 
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
@@ -608,6 +875,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         textAlign: 'left',
     },
+
     subHeader: {
         color: '#fff',
         fontSize: 18,
@@ -626,6 +894,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: 15,
         width: '100%',
+
+    
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
+
     },
     linksContainer: {
         width: '100%',
@@ -662,11 +936,44 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
+
+    header: {
+        color: '#5543A5',
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        textAlign: 'left',
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
+    },
+    examples: {
+        alignItems: 'flex-start'
+    },
+    buttons: {
+        flexDirection: 'row'
+    },
+    
+    },
+    links: {
+        flexDirection: 'row',
+        padding: 40,
+        gap: 500
+    },
+    edgelinks: {
+        color: 'purple',
+        fontSize: 30
+    },
+
     homelink: {
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
     },
+
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -682,6 +989,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 24,
+
     },
     quizText: {
         color: '#D2D2D2',
@@ -689,9 +997,18 @@ const styles = StyleSheet.create({
         lineHeight: 26,
         textAlign: 'center',
     },
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
     quizButton: {
+
         backgroundColor: '#3A3A3A',
         padding: 15,
+
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -702,16 +1019,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     correctAnswer: {
+
         backgroundColor: '#2E7D32',
         padding: 15,
+
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     incorrectAnswer: {
+
         backgroundColor: '#C62828',
         padding: 15,
+
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -721,6 +1042,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
+
         color: '#fff',
         textAlign: 'center',
     },
@@ -778,4 +1100,5 @@ const styles = StyleSheet.create({
         wordWrap: 'break-word',
         overflow: 'hidden',
     },
+
 });

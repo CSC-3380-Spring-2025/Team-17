@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
-
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Melody() {
     const conjunct = useRef(new Audio.Sound());
@@ -30,15 +31,80 @@ export default function Melody() {
         };
     }, []);
 
-    const [quiz1Answer, setQ1Answer] = useState(null);
-    const [quiz2Answer, setQ2Answer] = useState(null);
-    const [quiz3Answer, setQ3Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
     const answer1 = "True";
     const answer2 = "Focal Point";
     const answer3 = "True";
     const resetQuiz1 = () => setQ1Answer(null);
     const resetQuiz2 = () => setQ2Answer(null);
     const resetQuiz3 = () => setQ3Answer(null);
+
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+            
+                useEffect(()=>{
+                    if (auth.currentUser){
+                      setUserId(auth.currentUser.uid);
+                    }
+                  }, [auth.currentUser]);
+                
+                  useEffect(()=>{
+                      const fetchUserData= async()=>{
+                        if(userId){
+                          console.log('Fetching data for userId:', userId);
+                  
+                          try{
+                            const userDocRef= doc(db, 'users', userId);
+                            const userDoc = await getDoc(userDocRef)
+                            
+                            if (userDoc.exists()) {
+                              console.log('Document data:', userDoc.data());
+                              const userData = userDoc.data();
+                              if(userData.lessonProgress){
+                                if(!userData.lessonProgress.includes(9)){
+                                    if(count === 3){
+                                        await updateDoc(userDocRef, {
+                                            lessonProgress: arrayUnion(9),
+                                        });
+                                        handleTaskCompletion("Complete 2 lessons");
+                                        handleTaskCompletion("Complete all lessons");
+                                    }
+                                }
+                              }
+                              else{
+                                await setDoc(userDocRef, {
+                                    lessonProgress:[1],
+                                }, {merge: true});
+                              }
+                            } else {
+                              await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                              });
+                            }
+                    
+                          }catch(error){
+                            console.error('Error fetching user data:', error);
+                          }
+                        }
+                      };
+                      fetchUserData();
+                    }, [userId, count]);
+
+                    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                        if (!selected) return styles.quizButton;
+                        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                    };
+                            
+                    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                        setAnswer(option);
+                        if (option === correctAnswer) {
+                            setCount(prevCount => prevCount + 1);
+                        }
+                    };
+    
 
     return (
 
@@ -185,34 +251,21 @@ export default function Melody() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            1. Melodies are comprised of singular notes organized rhythmically
+                            1. Melodies are comprised of singular notes organized rhythmically.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz1Answer === option;
                             const correct = option === answer1;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz1Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
-                                        if (!quiz1Answer) setQ1Answer(option);
+                                        handlePress(option, setQ1Answer, answer1);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );
@@ -226,31 +279,19 @@ export default function Melody() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            2. The highest/lowest note in a melody is a/an ______
+                            2. The highest/lowest note in a melody is a ______.
                         </Text>
                         {["Focal Point", "Contour", "Summit", "Climax"].map((option, index) => {
                             const selected = quiz2Answer === option;
                             const correct = option === answer2;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz2Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
-                                        if (!quiz2Answer) setQ2Answer(option);
+                                        handlePress(option, setQ2Answer, answer2);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -266,34 +307,23 @@ export default function Melody() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            3. Short Phrases can be Grouped together to form a longer Phrase.
+
+                            3. Short phrases can be grouped together to form a longer phrase.
+
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz3Answer === option;
                             const correct = option === answer3;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz3Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
-                                        if (!quiz3Answer) setQ3Answer(option);
+                                        handlePress(option, setQ3Answer, answer3);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );
@@ -500,6 +530,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
+
         color: '#fff',
         textAlign: 'center',
     },
@@ -555,4 +586,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textAlign: 'center',
     },
+
+       
 });

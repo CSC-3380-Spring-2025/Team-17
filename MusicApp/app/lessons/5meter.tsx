@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
-import { Audio } from 'expo-av';
+import { Audio, PitchCorrectionQuality } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Meter() {
     const sd = useRef(new Audio.Sound());
@@ -45,134 +48,78 @@ export default function Meter() {
         };
     }, []);
 
-    const [quiz1Answer, setQ1Answer] = useState(null);
-    const [quiz2Answer, setQ2Answer] = useState(null);
-    const [quiz3Answer, setQ3Answer] = useState(null);
-    const [quiz4Answer, setQ4Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
     const answer1 = "True";
     const answer2 = "False";
     const answer3 = "4/4";
     const answer4 = "9/8";
 
-    const correct1 = () => {
-        let correct: any = document.getElementById('true1');
-        let incorrect: any = document.getElementById('false1');
-        let p: any = document.getElementById('correct1');
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+                
+                    useEffect(()=>{
+                        if (auth.currentUser){
+                          setUserId(auth.currentUser.uid);
+                        }
+                      }, [auth.currentUser]);
+                    
+                      useEffect(()=>{
+                          const fetchUserData= async()=>{
+                            if(userId){
+                              console.log('Fetching data for userId:', userId);
+                      
+                              try{
+                                const userDocRef= doc(db, 'users', userId);
+                                const userDoc = await getDoc(userDocRef)
+                                
+                                if (userDoc.exists()) {
+                                  console.log('Document data:', userDoc.data());
+                                  const userData = userDoc.data();
+                                  if(userData.lessonProgress){
+                                    if(!userData.lessonProgress.includes(5)){
+                                        if(count === 4){
+                                            await updateDoc(userDocRef, {
+                                                lessonProgress: arrayUnion(5),
+                                            });
+                                            handleTaskCompletion("Complete 2 lessons");
+                                            handleTaskCompletion("Complete all lessons");
+                                        }
+                                    }
+                                  }
+                                  else{
+                                    await setDoc(userDocRef, {
+                                        lessonProgress:[1],
+                                    }, {merge: true});
+                                  }
+                                } else {
+                                  await setDoc(userDocRef, {
+                                    lessonProgress: [1],
+                                  });
+                                }
+                        
+                              }catch(error){
+                                console.error('Error fetching user data:', error);
+                              }
+                            }
+                          };
+                          fetchUserData();
+                        }, [userId, count]);
 
-        correct.style.color = 'green';
-        correct.disabled = true;
-        incorrect.style.color = 'red';
-        incorrect.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong1 = () => {
-        let correct: any = document.getElementById('true1');
-        let incorrect: any = document.getElementById('false1');
-        let p: any = document.getElementById('wrong1');
-
-        correct.style.color = 'green';
-        correct.disabled = true;
-        incorrect.style.color = 'red';
-        incorrect.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct2 = () => {
-        let correct: any = document.getElementById('true2');
-        let incorrect: any = document.getElementById('false2');
-        let p: any = document.getElementById('correct2');
-
-        correct.style.color = 'red';
-        correct.disabled = true;
-        incorrect.style.color = 'green';
-        incorrect.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong2 = () => {
-        let correct: any = document.getElementById('true2');
-        let incorrect: any = document.getElementById('false2');
-        let p: any = document.getElementById('wrong2');
-
-        correct.style.color = 'red';
-        correct.disabled = true;
-        incorrect.style.color = 'green';
-        incorrect.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct3 = () => {
-        let twotwo: any = document.getElementById('22');
-        let threefour: any = document.getElementById('34');
-        let fourfour: any = document.getElementById('44');
-        let sixeight: any = document.getElementById('68');
-        let p: any = document.getElementById('correct3');
-
-        twotwo.style.color = 'red';
-        twotwo.disabled = true;
-        threefour.style.color = 'red';
-        threefour.disabled = true;
-        fourfour.style.color = 'green';
-        fourfour.disabled = true;
-        sixeight.style.color = 'red';
-        sixeight.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong3 = () => {
-        let twotwo: any = document.getElementById('22');
-        let threefour: any = document.getElementById('34');
-        let fourfour: any = document.getElementById('44');
-        let sixeight: any = document.getElementById('68');
-        let p: any = document.getElementById('wrong3');
-
-        twotwo.style.color = 'red';
-        twotwo.disabled = true;
-        threefour.style.color = 'red';
-        threefour.disabled = true;
-        fourfour.style.color = 'green';
-        fourfour.disabled = true;
-        sixeight.style.color = 'red';
-        sixeight.disabled = true;
-        p.hidden = false;
-    }
-
-    const correct4 = () => {
-        let fourfour: any = document.getElementById('4/4');
-        let sixeight: any = document.getElementById('6/8');
-        let nineeight: any = document.getElementById('9/8');
-        let twelveeight: any = document.getElementById('12/8');
-        let p: any = document.getElementById('correct4');
-
-        fourfour.style.color = 'red';
-        fourfour.disabled = true;
-        sixeight.style.color = 'red';
-        sixeight.disabled = true;
-        nineeight.style.color = 'green';
-        nineeight.disabled = true;
-        twelveeight.style.color = 'red';
-        twelveeight.disabled = true;
-        p.hidden = false;
-    }
-
-    const wrong4 = () => {
-        let fourfour: any = document.getElementById('4/4');
-        let sixeight: any = document.getElementById('6/8');
-        let nineeight: any = document.getElementById('9/8');
-        let twelveeight: any = document.getElementById('12/8');
-        let p: any = document.getElementById('wrong4');
-
-        fourfour.style.color = 'red';
-        fourfour.disabled = true;
-        sixeight.style.color = 'red';
-        sixeight.disabled = true;
-        nineeight.style.color = 'green';
-        nineeight.disabled = true;
-        twelveeight.style.color = 'red';
-        twelveeight.disabled = true;
-        p.hidden = false;
-    }
+                        const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                            if (!selected) return styles.quizButton;
+                            return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                        };
+                                
+                        const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                            setAnswer(option);
+                            if (option === correctAnswer) {
+                                setCount(prevCount => prevCount + 1);
+                            }
+                        };
 
     return (
 
@@ -460,38 +407,26 @@ export default function Meter() {
                             onPress={() => b2.current.pauseAsync()}
                         />
                     </View>
+                </View>
 
-</View>
                 <View>
                     <Text style={styles.quizTitle}>Quiz</Text>
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            1. True or False: Simple meter is divided into two beats while compound meter is divided into three beats.
+                            1. Simple meter is divided into two beats while compound meter is divided into three beats.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz1Answer === option;
                             const correct = option === answer1;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz1Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
-                                        if (!quiz1Answer) setQ1Answer(option);
+                                        handlePress(option, setQ1Answer, answer1);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -507,31 +442,19 @@ export default function Meter() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            2. True or False: The beat is always represented by dotted notes in simple meter.
+                            2. The beat is always represented by dotted notes in simple meter.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz2Answer === option;
                             const correct = option === answer2;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz2Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
-                                        if (!quiz2Answer) setQ2Answer(option);
+                                        handlePress(option, setQ2Answer, answer2);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -550,32 +473,20 @@ export default function Meter() {
                             3. What is the time signature of the music below?      
                         </Text>
                         <Image source={require('@/assets/images/example1.png')} 
-                        style={styles.quizImage}
-        resizeMode="contain"
+                               style={styles.quizImage}
+                               resizeMode="contain"
                         />
                         {["2/2", "3/4", "4/4", "6/8"].map((option, index) => {
                             const selected = quiz3Answer === option;
                             const correct = option === answer3;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz3Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
-                                        if (!quiz3Answer) setQ3Answer(option);
+                                        handlePress(option, setQ3Answer, answer3);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -595,32 +506,21 @@ export default function Meter() {
                             4. What is the time signature of the music below?
                         </Text>
                         <Image source={require('@/assets/images/example2.png')} 
-                        style={styles.quizImage}
-        resizeMode="contain"
+                               style={styles.quizImage}
+                               resizeMode="contain"
                         />
                         {["4/4", "6/8", "9/8", "12/8"].map((option, index) => {
                             const selected = quiz4Answer === option;
                             const correct = option === answer4;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz4Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
 
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz4Answer}
                                     onPress={() => {
-                                        if (!quiz4Answer) setQ4Answer(option);
+                                        handlePress(option, setQ4Answer, answer4);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>

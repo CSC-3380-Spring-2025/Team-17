@@ -1,7 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
-import { Link } from 'expo-router';
+
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
+import {Link} from 'expo-router';
+
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Chords() {
     const triads = useRef(new Audio.Sound());
@@ -33,8 +38,91 @@ export default function Chords() {
         };
     }, [])
 
-    return (
-        <ScrollView
+
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
+    const [quiz5Answer, setQ5Answer] = useState<string | null>(null);
+    const [quiz6Answer, setQ6Answer] = useState<string | null>(null);
+    const [quiz7Answer, setQ7Answer] = useState<string | null>(null);
+    const [quiz8Answer, setQ8Answer] = useState<string | null>(null);
+    const answer1 = "Perfect";
+    const answer2 = "False";
+    const answer3 = "True";
+    const answer4 = "G";
+    const answer5 = "Eo";
+    const answer6 = "False";
+    const answer7 = "Fm6"
+    const answer8 = "Bb+ 6/4"
+ 
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+                
+                    useEffect(()=>{
+                        if (auth.currentUser){
+                          setUserId(auth.currentUser.uid);
+                        }
+                      }, [auth.currentUser]);
+                    
+                      useEffect(()=>{
+                          const fetchUserData= async()=>{
+                            if(userId){
+                              console.log('Fetching data for userId:', userId);
+                      
+                              try{
+                                const userDocRef= doc(db, 'users', userId);
+                                const userDoc = await getDoc(userDocRef)
+                                
+                                if (userDoc.exists()) {
+                                  console.log('Document data:', userDoc.data());
+                                  const userData = userDoc.data();
+                                  if(userData.lessonProgress){
+                                    if(!userData.lessonProgress.includes(9)){
+                                        if(count === 8){
+                                            await updateDoc(userDocRef, {
+                                                lessonProgress: arrayUnion(9),
+                                            });
+                                            handleTaskCompletion("Complete 2 lessons");
+                                            handleTaskCompletion("Complete all lessons");
+                                        }
+                                    }
+                                  }
+                                  else{
+                                    await setDoc(userDocRef, {
+                                        lessonProgress:[1],
+                                    }, {merge: true});
+                                  }
+                                } else {
+                                  await setDoc(userDocRef, {
+                                    lessonProgress: [1],
+                                  });
+                                }
+                        
+                              }catch(error){
+                                console.error('Error fetching user data:', error);
+                              }
+                            }
+                          };
+                          fetchUserData();
+                        }, [userId, count]);
+    
+                        const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                            if (!selected) return styles.quizButton;
+                            return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                        };
+                                
+                        const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                            setAnswer(option);
+                            if (option === correctAnswer) {
+                                setCount(prevCount => prevCount + 1);
+                            }
+                        };
+
+    return(
+        <ScrollView 
+
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
         >
@@ -323,12 +411,14 @@ export default function Chords() {
                         Triad Inversion & Figured Bass
                     </Text>
                     <Text style={styles.text}>
-                        Musicians often prioritize the lowest note in a harmony, which is called the bass.An <Text style={styles.bold}>inversion </Text>
-                        is a change in the bass note of a harmony. When a triad is stacked in such a way that the bass note is the root of the triad, then
-                        the triad is in root position. If the triad is stacked in such a way that the bass note is the third of the triad, then the triad is
-                        in 1st inversion. If the triad is stacked in such a way that the bass note is the fifth of the triad, then the triad is in 2nd inversion.
-                        It is important to note that the bass note and the root of the triad are NOT the same thing. The root of a triad always remains the same,
-                        no matter what inversion it is in. The bass note will change depending on the triad's inversion.
+
+                    Musicians often prioritize the lowest note in a harmony, which is called the bass. An <Text style={styles.bold}>inversion </Text> 
+                    is a change in the bass note of a harmony. When a triad is stacked in such a way that the bass note is the root of the triad, then 
+                    the triad is in root position. If the triad is stacked in such a way that the bass note is the third of the triad, then the triad is 
+                    in 1st inversion. If the triad is stacked in such a way that the bass note is the fifth of the triad, then the triad is in 2nd inversion.
+                    It is important to note that the bass note and the root of the triad are NOT the same thing. The root of a triad always remains the same, 
+                    no matter what inversion it is in. The bass note will change depending on the triad's inversion. 
+
                     </Text>
                     <Image
                         source={require('@/assets/images/inversions.png')}
@@ -387,6 +477,252 @@ export default function Chords() {
                     </Text>
                 </View>
 
+                <View>
+                    <Text style={styles.quizTitle}>
+                        Quiz
+                    </Text>
+                
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        1. What are the qualities of the fifths in major & minor triads?
+                    </Text>
+                    {["Major", "Perfect", "Diminished", "Augmented"].map((option, index) => {
+                    const selected = quiz1Answer === option;
+                    const correct = option === answer1;
+                    
+                    return (
+                        <Pressable
+                            key={index}
+                            style={getButtonStyle(option, selected, correct)}
+                            disabled={!!quiz1Answer}
+                            onPress={() => {
+                                handlePress(option, setQ1Answer, answer1);
+                            }}
+                            >
+                            <Text style={styles.quizButtonText}>{option}</Text>
+                        </Pressable>
+                        );
+                    })}
+                    {quiz1Answer && (
+                        <Text style={styles.result}>
+                            {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        2. The root & the bass of a triad are the same thing.
+                    </Text>
+                    {["True", "False"].map((option, index) => {
+                        const selected = quiz2Answer === option;
+                        const correct = option === answer2;
+
+                        return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz2Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ2Answer, answer2);
+                                }}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz2Answer && (
+                        <Text style={styles.result}>
+                            {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        3. Doubling and spacing of notes in a triad does not affect a triad's identification.
+                    </Text>
+                    {["True", "False"].map((option, index) => {
+                        const selected = quiz3Answer === option;
+                        const correct = option === answer3;
+
+                        return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz3Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ3Answer, answer3);
+                                }}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz3Answer && (
+                        <Text style={styles.result}>
+                            {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        4. Identify the chord symbol for the triad in the image below.
+                    </Text>
+                    <Image source={require('@/assets/images/quiz1.png')}
+                           style={styles.image}
+                           resizeMode="contain"
+                    />
+                    {["G", "Gm", "Go", "G+"].map((option, index) => {
+                        const selected = quiz4Answer === option;
+                        const correct = option === answer4;
+
+                        return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz4Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ4Answer, answer4);
+                                }}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz4Answer && (
+                        <Text style={styles.result}>
+                            {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        5. Identify the chord symbol for the triad in the image below.
+                    </Text>
+                    <Image source={require('@/assets/images/quiz2.png')}
+                           style={styles.image}
+                           resizeMode="contain"
+                    />
+                    {["E", "Em", "Eo", "E+"].map((option, index) => {
+                        const selected = quiz5Answer === option;
+                        const correct = option === answer5;
+
+                        return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz5Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ5Answer, answer5);
+                                }}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz5Answer && (
+                        <Text style={styles.result}>
+                            {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        6. 2nd inversion triads are typically identified by the abbreviated figured bass 6 while 1st inversion triads must keep the 
+                        full form of their figured bass. 
+                    </Text>
+                    {["True", "False"].map((option, index) => {
+                        const selected = quiz6Answer === option;
+                        const correct = option === answer6;
+
+                        return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz6Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ6Answer, answer6);
+                                }}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz6Answer && (
+                        <Text style={styles.result}>
+                            {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        7. Identify the chord symbol for the inverted triad in the image below.
+                    </Text>
+                    <Image source={require('@/assets/images/quiz3.png')}
+                           style={styles.image}
+                           resizeMode="contain"
+                    />
+                    {["Fm", "F6", "Fm6", "Fm 6/4"].map((option, index) => {
+                        const selected = quiz7Answer === option;
+                        const correct = option === answer7;
+
+                        return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz7Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ7Answer, answer7);
+                                }}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz7Answer && (
+                        <Text style={styles.result}>
+                            {quiz7Answer === answer7 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+
+                <View style={styles.quizContainer}>
+                    <Text style={styles.quizText}>
+                        8. Identify the chord symbol for the inverted triad in the image below.
+                    </Text>
+                    <Image source={require('@/assets/images/quiz4.png')}
+                           style={styles.image}
+                           resizeMode="contain"
+                    />
+                    {["Bbo6", "Bb+ 6/4", "Bbm6", "Bb 6/4"].map((option, index) => {
+                        const selected = quiz8Answer === option;
+                        const correct = option === answer8;
+
+                        return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz8Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ8Answer, answer8);
+                                }}
+                            >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                        );
+                    })}
+                    {quiz8Answer && (
+                        <Text style={styles.result}>
+                            {quiz8Answer === answer8 ? "Correct!" : "Try Again"}
+                        </Text>
+                    )}
+                </View>
+                </View>
+                
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./9melody' style={styles.secondaryLink}>
@@ -456,6 +792,7 @@ const styles = StyleSheet.create({
     bold: {
         fontWeight: 'bold',
         color: '#5543A5',
+
         letterSpacing: 0.2,
     },
     header: {
@@ -484,6 +821,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: 15,
         width: '100%',
+
+    },
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
+
     },
     linksContainer: {
         width: '100%',
@@ -520,11 +863,48 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
+
+    header: {
+        color: '#5543A5',
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        textAlign: 'left',
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 15,
+        borderRadius: 8,
+    },
+    examples: {
+        alignItems: 'flex-start'
+    },
+    buttons: {
+        flexDirection: 'row'
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 10,
+        marginTop: 10,
+    },
+    links: {
+        flexDirection: 'row',
+        padding: 40,
+        gap: 500
+    },
+    edgelinks: {
+        color: 'purple',
+        fontSize: 30
+    },
+
     homelink: {
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
     },
+
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -550,26 +930,39 @@ const styles = StyleSheet.create({
     quizButton: {
         backgroundColor: '#3A3A3A',
         padding: 15,
+
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
+    quizButton: {
+        backgroundColor: 'gray',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     quizButtonText: {
+
         color: '#D2D2D2',
         fontSize: 16,
     },
     correctAnswer: {
         backgroundColor: '#2E7D32',
         padding: 15,
-        marginTop: 10,
-        borderRadius: 8,
-        width: '100%',
-        alignItems: 'center',
-    },
+
+       
     incorrectAnswer: {
+
         backgroundColor: '#C62828',
         padding: 15,
+
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -579,6 +972,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
+
         color: '#fff',
         textAlign: 'center',
     },
@@ -634,4 +1028,5 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textAlign: 'center',
     },
+
 });

@@ -4,16 +4,16 @@ import AuthHandler from "@/app/AuthHandler"
 import {ChallengesProvider} from './context/ChallengesContext'
 
 export default function Layout() {
- return (
+ return (< AuthProvider>
         <ChallengesProvider>
- < AuthProvider>
+ 
    
         
             <AuthHandler />
             <Slot />
         
     
-    </AuthProvider>
-    </ChallengesProvider>
+    
+    </ChallengesProvider></AuthProvider>
  )
 }

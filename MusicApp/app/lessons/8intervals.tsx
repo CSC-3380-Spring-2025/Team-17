@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-
 import { Text, ScrollView, StyleSheet, Image, View, Button, Pressable } from 'react-native';
-
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
 export default function Intervals() {
     const intervals = useRef(new Audio.Sound());
@@ -30,11 +31,11 @@ export default function Intervals() {
         };
     }, []);
 
-    const [quiz1Answer, setQ1Answer] = useState(null);
-    const [quiz2Answer, setQ2Answer] = useState(null);
-    const [quiz3Answer, setQ3Answer] = useState(null);
-    const [quiz4Answer, setQ4Answer] = useState(null);
-    const [quiz5Answer, setQ5Answer] = useState(null);
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
+    const [quiz5Answer, setQ5Answer] = useState<string | null>(null);
     const answer1 = "Simultaneously";
     const answer2 = "Flat";
     const answer3 = "9";
@@ -45,6 +46,70 @@ export default function Intervals() {
     const resetQuiz3 = () => setQ3Answer(null);
     const resetQuiz4 = () => setQ4Answer(null);
     const resetQuiz5 = () => setQ5Answer(null);
+
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+                            
+                                useEffect(()=>{
+                                    if (auth.currentUser){
+                                      setUserId(auth.currentUser.uid);
+                                    }
+                                  }, [auth.currentUser]);
+                                
+                                  useEffect(()=>{
+                                      const fetchUserData= async()=>{
+                                        if(userId){
+                                          console.log('Fetching data for userId:', userId);
+                                  
+                                          try{
+                                            const userDocRef= doc(db, 'users', userId);
+                                            const userDoc = await getDoc(userDocRef)
+                                            
+                                            if (userDoc.exists()) {
+                                              console.log('Document data:', userDoc.data());
+                                              const userData = userDoc.data();
+                                              if(userData.lessonProgress){
+                                                if(!userData.lessonProgress.includes(8)){
+                                                    if(count === 5){
+                                                        await updateDoc(userDocRef, {
+                                                            lessonProgress: arrayUnion(8),
+                                                        });
+                                                        handleTaskCompletion("Complete 2 lessons");
+                                                        handleTaskCompletion("Complete all lessons");
+                                                    }
+                                                }
+                                              }
+                                              else{
+                                                await setDoc(userDocRef, {
+                                                    lessonProgress:[1],
+                                                }, {merge: true});
+                                              }
+                                            } else {
+                                              await setDoc(userDocRef, {
+                                                lessonProgress: [1],
+                                              });
+                                            }
+                                    
+                                          }catch(error){
+                                            console.error('Error fetching user data:', error);
+                                          }
+                                        }
+                                      };
+                                      fetchUserData();
+                                    }, [userId, count]);
+
+                                    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                                        if (!selected) return styles.quizButton;
+                                        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                                    };
+                                            
+                                    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                                        setAnswer(option);
+                                        if (option === correctAnswer) {
+                                            setCount(prevCount => prevCount + 1);
+                                        }
+                                    };
 
     return (
 
@@ -318,41 +383,26 @@ export default function Intervals() {
                     />
                 </View>
 
-
-
                 <View>
                     <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            1. An Interval is  harmonic  when sung or played
+                            1. An interval is harmonic when sung or played.
                         </Text>
                         {["Separately", "Simultaneously", "One after the Other", "Twice"].map((option, index) => {
                             const selected = quiz1Answer === option;
                             const correct = option === answer1;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz1Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz1Answer}
                                     onPress={() => {
-                                        if (!quiz1Answer) setQ1Answer(option);
+                                        handlePress(option, setQ1Answer, answer1);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );
@@ -366,31 +416,19 @@ export default function Intervals() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            2. Which one of these is  NOT  a quality of intervals?
+                            2. Which one of these is NOT a quality of intervals?
                         </Text>
                         {["Augmented", "Major", "Perfect", "Flat", "Diminished"].map((option, index) => {
                             const selected = quiz2Answer === option;
                             const correct = option === answer2;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz2Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz2Answer}
                                     onPress={() => {
-                                        if (!quiz2Answer) setQ2Answer(option);
+                                        handlePress(option, setQ2Answer, answer2);
                                     }}
                                 >
                                     <Text style={styles.quizButtonText}>{option}</Text>
@@ -399,41 +437,30 @@ export default function Intervals() {
                         })}
                         {quiz2Answer && (
                             <Text style={styles.result}>
-                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+
                             </Text>
                         )}
                     </View>
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            The sizes of Inverted Pairs always add up to what?
+                            The sizes of inverted pairs always add up to what?
                         </Text>
                         {["3", "6", "7", "9"].map((option, index) => {
                             const selected = quiz3Answer === option;
                             const correct = option === answer3;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz3Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz3Answer}
                                     onPress={() => {
-                                        if (!quiz3Answer) setQ3Answer(option);
+                                        handlePress(option, setQ3Answer, answer3);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );
@@ -446,33 +473,20 @@ export default function Intervals() {
                     </View>
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            4. Dissonant Intervals are more stable
+                            4. Dissonant intervals are more stable.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz4Answer === option;
                             const correct = option === answer4;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz4Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     onPress={() => {
-                                        if (!quiz4Answer) setQ4Answer(option); // only once
+                                        handlePress(option, setQ4Answer, answer4);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );
@@ -485,34 +499,21 @@ export default function Intervals() {
                     </View>
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            5. Any interval  larger  than an octave is a Compound Interval
+                            5. Any interval larger than an octave is a compound interval.
                         </Text>
                         {["True", "False"].map((option, index) => {
                             const selected = quiz5Answer === option;
                             const correct = option === answer5;
 
-                            let buttonStyle = styles.quizButton;
-
-                            if (quiz5Answer) {
-                                if (selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                } else if (selected && !correct) {
-                                    buttonStyle = styles.incorrectAnswer;
-                                } else if (!selected && correct) {
-                                    buttonStyle = styles.correctAnswer;
-                                }
-                            }
-
                             return (
                                 <Pressable
                                     key={index}
-                                    style={buttonStyle}
+                                    style={getButtonStyle(option, selected, correct)}
                                     disabled={!!quiz5Answer}
                                     onPress={() => {
-                                        if (!quiz5Answer) setQ5Answer(option);
+                                        handlePress(option, setQ5Answer, answer5);
                                     }}
                                 >
-
                                     <Text style={styles.quizButtonText}>{option}</Text>
                                 </Pressable>
                             );

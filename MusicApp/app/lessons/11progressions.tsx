@@ -1,8 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
-import { Link } from 'expo-router';
+
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, ScrollView, StyleSheet, View, Image, Button, Pressable} from 'react-native';
+import {Link} from 'expo-router';
 import { Audio } from 'expo-av';
-import { auth } from '@/firebaseConfig';
+import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
+import {auth, db} from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
+
 
 export default function Progressions() {
     const major = useRef(new Audio.Sound());
@@ -49,8 +53,91 @@ export default function Progressions() {
         };
     }, []);
 
-    return (
-        <ScrollView
+
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
+    const [quiz5Answer, setQ5Answer] = useState<string | null>(null);
+    const [quiz6Answer, setQ6Answer] = useState<string | null>(null);
+    const [quiz7Answer, setQ7Answer] = useState<string | null>(null);
+    const [quiz8Answer, setQ8Answer] = useState<string | null>(null);
+    const answer1 = "True";
+    const answer2 = "Major & Diminished";
+    const answer3 = "False";
+    const answer4 = "False";
+    const answer5 = "None";
+    const answer6 = "Phyrgian Cadence";
+    const answer7 = "Tonic"
+    const answer8 = "False"
+
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+                    
+                        useEffect(()=>{
+                            if (auth.currentUser){
+                              setUserId(auth.currentUser.uid);
+                            }
+                          }, [auth.currentUser]);
+                        
+                          useEffect(()=>{
+                              const fetchUserData= async()=>{
+                                if(userId){
+                                  console.log('Fetching data for userId:', userId);
+                          
+                                  try{
+                                    const userDocRef= doc(db, 'users', userId);
+                                    const userDoc = await getDoc(userDocRef)
+                                    
+                                    if (userDoc.exists()) {
+                                      console.log('Document data:', userDoc.data());
+                                      const userData = userDoc.data();
+                                      if(userData.lessonProgress){
+                                        if(!userData.lessonProgress.includes(9)){
+                                            if(count === 8){
+                                                await updateDoc(userDocRef, {
+                                                    lessonProgress: arrayUnion(9),
+                                                });
+                                                handleTaskCompletion("Complete 2 lessons");
+                                                handleTaskCompletion("Complete all lessons");
+                                            }
+                                        }
+                                      }
+                                      else{
+                                        await setDoc(userDocRef, {
+                                            lessonProgress:[1],
+                                        }, {merge: true});
+                                      }
+                                    } else {
+                                      await setDoc(userDocRef, {
+                                        lessonProgress: [1],
+                                      });
+                                    }
+                            
+                                  }catch(error){
+                                    console.error('Error fetching user data:', error);
+                                  }
+                                }
+                              };
+                              fetchUserData();
+                            }, [userId, count]);
+        
+                            const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                                if (!selected) return styles.quizButton;
+                                return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                            };
+                                    
+                            const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                                setAnswer(option);
+                                if (option === correctAnswer) {
+                                    setCount(prevCount => prevCount + 1);
+                                }
+                            };
+
+    return(
+        <ScrollView 
+
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
         >
@@ -416,6 +503,237 @@ export default function Progressions() {
                     </View>
                 </View>
 
+
+                <View>
+                    <Text style={styles.quizTitle}>
+                        Quiz
+                    </Text>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            1. The tonic chord is stable while the dominant chord is unstable. 
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                        const selected = quiz1Answer === option;
+                        const correct = option === answer1;
+                                            
+                         return (
+                            <Pressable
+                                key={index}
+                                style={getButtonStyle(option, selected, correct)}
+                                disabled={!!quiz1Answer}
+                                onPress={() => {
+                                    handlePress(option, setQ1Answer, answer1);
+                                }}
+                                >
+                                <Text style={styles.quizButtonText}>{option}</Text>
+                            </Pressable>
+                            );
+                        })}
+                        {quiz1Answer && (
+                            <Text style={styles.result}>
+                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            2. What are the qualities of the dominant and subtonic chords in minor when the leading tone is raised?
+                        </Text>
+                        {["Major & Diminished", "Minor & Augmented", "Major & Augmented", "Minor & Diminished"].map((option, index) => {
+                            const selected = quiz2Answer === option;
+                            const correct = option === answer2;
+                        
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={getButtonStyle(option, selected, correct)}
+                                    disabled={!!quiz2Answer}
+                                    onPress={() => {
+                                        handlePress(option, setQ2Answer, answer2);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz2Answer && (
+                            <Text style={styles.result}>
+                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            3. The viio chord has a stronger dominant function than the V chord. 
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                            const selected = quiz3Answer === option;
+                            const correct = option === answer3;
+                        
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={getButtonStyle(option, selected, correct)}
+                                    disabled={!!quiz3Answer}
+                                    onPress={() => {
+                                        handlePress(option, setQ3Answer, answer3);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz3Answer && (
+                            <Text style={styles.result}>
+                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            4. The iio chord & the viio chord can be used in root position. 
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                            const selected = quiz4Answer === option;
+                            const correct = option === answer4;
+                        
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={getButtonStyle(option, selected, correct)}
+                                    disabled={!!quiz4Answer}
+                                    onPress={() => {
+                                        handlePress(option, setQ4Answer, answer4);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz4Answer && (
+                            <Text style={styles.result}>
+                                {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            5. What function do the vi and iii chords have? 
+                        </Text>
+                        {["Tonic", "Subdominant", "Dominant", "None"].map((option, index) => {
+                            const selected = quiz5Answer === option;
+                            const correct = option === answer5;
+                        
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={getButtonStyle(option, selected, correct)}
+                                    disabled={!!quiz5Answer}
+                                    onPress={() => {
+                                        handlePress(option, setQ5Answer, answer5);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz5Answer && (
+                            <Text style={styles.result}>
+                                {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            6. In which cadence does a iv6 chord resolve to a V chord? 
+                        </Text>
+                        {["Half Cadence", "Phrygian Cadence", "Plagal Cadence", "Deceptive Cadence"].map((option, index) => {
+                            const selected = quiz6Answer === option;
+                            const correct = option === answer6;
+                        
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={getButtonStyle(option, selected, correct)}
+                                    disabled={!!quiz6Answer}
+                                    onPress={() => {
+                                        handlePress(option, setQ6Answer, answer6);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz6Answer && (
+                            <Text style={styles.result}>
+                                {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            7. What note must the melody end on in a perfect authentic cadence? 
+                        </Text>
+                        {["Tonic", "Subdominant", "Dominant", "Leading Tone"].map((option, index) => {
+                            const selected = quiz7Answer === option;
+                            const correct = option === answer7;
+                        
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={getButtonStyle(option, selected, correct)}
+                                    disabled={!!quiz7Answer}
+                                    onPress={() => {
+                                        handlePress(option, setQ7Answer, answer7);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz7Answer && (
+                            <Text style={styles.result}>
+                                {quiz7Answer === answer7 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+
+                    <View style={styles.quizContainer}>
+                        <Text style={styles.quizText}>
+                            8. A deceptive cadence does not need to be followed by an authentic cadence. 
+                        </Text>
+                        {["True", "False"].map((option, index) => {
+                            const selected = quiz8Answer === option;
+                            const correct = option === answer8;
+                        
+                            return (
+                                <Pressable
+                                    key={index}
+                                    style={getButtonStyle(option, selected, correct)}
+                                    disabled={!!quiz8Answer}
+                                    onPress={() => {
+                                        handlePress(option, setQ8Answer, answer8);
+                                    }}
+                                >
+                                    <Text style={styles.quizButtonText}>{option}</Text>
+                                </Pressable>
+                            );
+                        })}
+                        {quiz8Answer && (
+                            <Text style={styles.result}>
+                                {quiz8Answer === answer8 ? "Correct!" : "Try Again"}
+                            </Text>
+                        )}
+                    </View>
+                </View>
+
                 <View style={styles.linksContainer}>
                     <View style={styles.linkWrapper}>
                         <Link href='./10chords' style={styles.secondaryLink}>
@@ -480,7 +798,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 26,
         textAlign: 'left',
+
         marginBottom: 12,
+
     },
     bold: {
         fontWeight: 'bold',
@@ -513,6 +833,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: 15,
         width: '100%',
+    },
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
     },
     linksContainer: {
         width: '100%',
@@ -549,13 +873,31 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
+
+   
+    buttons: {
+        flexDirection: 'row'
+    },
+    
+    links: {
+        flexDirection: 'row',
+        padding: 40,
+        gap: 500
+    },
+    edgelinks: {
+        color: 'purple',
+        fontSize: 30
+    },
+
     homelink: {
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
     },
+
     quizContainer: {
         width: '100%',
+
         backgroundColor: '#2A2A2A',
         borderRadius: 12,
         padding: 25,
@@ -579,24 +921,38 @@ const styles = StyleSheet.create({
     quizButton: {
         backgroundColor: '#3A3A3A',
         padding: 15,
+
+   
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
+   
+
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     quizButtonText: {
+
         color: '#D2D2D2',
         fontSize: 16,
     },
     correctAnswer: {
         backgroundColor: '#2E7D32',
         padding: 15,
+
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     incorrectAnswer: {
+
         backgroundColor: '#C62828',
         padding: 15,
         marginTop: 10,
@@ -612,15 +968,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     resetButton: {
+
         marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
         borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
     },
-    resetButtonText: {
-        color: 'white',
+    result: {
+        marginTop: 10,
         fontSize: 16,
+
         fontWeight: '600',
     },
     quizImage: {
@@ -663,4 +1020,5 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textAlign: 'center',
     },
+
 });

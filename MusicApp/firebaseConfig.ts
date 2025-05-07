@@ -10,10 +10,11 @@ import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, i
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBBQVC3VGLGF6TdYjIbB2NogGAkdEWMvL8",
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
   authDomain: "music-app-65dfe.firebaseapp.com",
   projectId: "music-app-65dfe",
   storageBucket: "music-app-65dfe.firebasestorage.app",

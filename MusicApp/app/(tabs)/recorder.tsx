@@ -23,6 +23,7 @@ import { useAudioContext } from './AudioContext';
 import { useLocalSearchParams } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
 import FileUploader from '@/components/fileUploader';
+import { useChallenges } from '../context/ChallengesContext';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
@@ -398,7 +399,12 @@ const LiveMixingPage = () => {
       showRecordingsModal,
     };
     const fileUri = `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
-    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+    if (Platform.OS === 'web') {
+      console.log("File system operations are not directly supported on the web.");
+    }
+    else{
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+    }
   };
 
   const loadState = async (name: string) => {
@@ -816,11 +822,61 @@ const LiveMixingPage = () => {
     }
   };
 
+  const {handleTaskCompletion} = useChallenges();
+
+  const [editingTrackId, setEditingTrackId] = useState<string | null>(null);
+  const [editingTrackName, setEditingTrackName] = useState('');
+
+  const startEditingTrack = (track: AudioTrack) => {
+    setEditingTrackId(track.id);
+    setEditingTrackName(track.title);
+  };
+  
+  const saveTrackName = () => {
+    if (editingTrackId) {
+      setTracks(prev => prev.map(track =>
+        track.id === editingTrackId ? { ...track, title: editingTrackName } : track
+      ));
+      setEditingTrackId(null);
+    }
+  };
+  
+  const cancelEditing = () => {
+    setEditingTrackId(null);
+  };
+
 
   const renderTrackItem = ({ item }: { item: AudioTrack }) => (
     <View style={styles.trackItem}>
       <View style={styles.trackInfo}>
-        <Text style={styles.trackTitle} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+        {editingTrackId === item.id ? (
+          <View style={styles.recordingInfo}>
+          <TextInput
+            style={[styles.recordingName, styles.recordingNameInput]}
+            value={editingTrackName}
+            onChangeText={setEditingTrackName}
+            onBlur={saveTrackName}
+            onSubmitEditing={saveTrackName}
+            autoFocus
+          />
+          <TouchableOpacity 
+            onPress={cancelEditing} 
+            style={styles.editButton}
+          >
+            <MaterialIcons name="close" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.recordingInfo}>
+          <Text style={styles.recordingName}>{item.title}</Text>
+          <TouchableOpacity 
+            onPress={() => startEditingTrack(item)} 
+            style={styles.editButton}
+            >
+            <MaterialIcons name="edit" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
+        )}
         <Text style={styles.trackType}>{item.sourceType}</Text>
 
         <View style={styles.trackMeta}>
@@ -863,6 +919,7 @@ const LiveMixingPage = () => {
     </View>
   );
 
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -1014,7 +1071,10 @@ const LiveMixingPage = () => {
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.saveButton]}
-                onPress={handleSaveSongName}>
+                onPress={() => {
+                  handleSaveSongName();
+                  handleTaskCompletion("Create a new track");
+                }}>
                 <Text style={styles.modalButtonText}>Save</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -1258,6 +1318,30 @@ const styles = StyleSheet.create({
   trackButtons: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  recordingInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 16,
+  },
+  recordingName: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 12,
+    flexShrink: 1,
+  },
+  recordingNameInput: {
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 16,
+    padding: 5,
+    width: 150,
+    borderRadius: 4,
+  },
+  editButton: {
+    marginLeft: 12,
+    padding: 4,
   },
   playButton: {
     width: 36,

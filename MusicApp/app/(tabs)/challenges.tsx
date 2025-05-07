@@ -1,42 +1,42 @@
-import React, { useEffect, useRef, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import {useChallenges} from '../context/ChallengesContext'
+import { useChallenges } from '../context/ChallengesContext'
 import ChallengeBox from '../../components/ChallengeBox'
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/firebaseConfig";
 
-export default function ChallengesScreen(){
-  const [userId, setUserId]= useState('');
-  const {challenges, handleTaskCompletion} = useChallenges();
-  const [isFirstLoginOfDay, setIsFirstLoginOfDay]= useState('');
-  
-  const checkStreakChallenge = () => {
-    handleTaskCompletion('Login three days in a row');
-  }
+export default function ChallengesScreen() {
+  const [userId, setUserId] = useState('');
+  const { challenges } = useChallenges();
+  const [isFirstLoginOfDay, setIsFirstLoginOfDay] = useState('');
 
-  useEffect(()=>{
-    if (auth.currentUser){
+
+
+
+  useEffect(() => {
+    if (auth.currentUser) {
       setUserId(auth.currentUser.uid);
     }
   }, []);
 
-  useEffect(()=>{
-    const fetchUserData= async()=>{
-      if(userId){
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (userId) {
         console.log('Fetching data for userId:', userId);
 
-        try{
-          const userRef= doc(db, 'users', userId);
+        try {
+          const userRef = doc(db, 'users', userId);
           const userDoc = await getDoc(userRef)
-          
+
           if (userDoc.exists()) {
             console.log('Document data:', userDoc.data());
             setIsFirstLoginOfDay(userDoc.data()?.isFirstLoginOfDay || '');
           } else {
             console.log('No such document!');
           }
-  
-        }catch(error){
+
+        } catch (error) {
           console.error('Error fetching user data:', error);
         }
       }
@@ -44,32 +44,26 @@ export default function ChallengesScreen(){
     fetchUserData();
   }, [userId]);
 
-    
-  useEffect(() => {
-    if (isFirstLoginOfDay) {
-      checkStreakChallenge();
-    }
-  }, [isFirstLoginOfDay]);
-
-  return(
+  return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Daily</Text>
       <View style={styles.challengeGroup}>
-        {challenges.slice(0,3).map((challenge, index)=>
+        {challenges.slice(0, 3).map((challenge, index) =>
         (
-          <ChallengeBox key={index}{...challenge}/>
+          <ChallengeBox key={index}{...challenge} />
         ))}
       </View>
 
       <Text style={styles.header}>Longterm</Text>
       <View style={styles.challengeGroup}>
-        {challenges.slice(3).map((challenge, index)=>(
-          <ChallengeBox key={index}{...challenge}/>
+        {challenges.slice(3).map((challenge, index) => (
+          <ChallengeBox key={index}{...challenge} />
         ))}
       </View>
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
