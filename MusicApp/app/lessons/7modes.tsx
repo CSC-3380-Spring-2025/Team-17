@@ -94,16 +94,18 @@ export default function Modes() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Lydian"
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => lydian.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Lydian"
+                        >
+                            <Text style={styles.buttonText}>Play Lydian</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => lydian.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Lydian</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -127,16 +129,18 @@ export default function Modes() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Ionian"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => ionian.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Ionian"
+                        >
+                            <Text style={styles.buttonText}>Play Ionian</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => ionian.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Ionian</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -160,16 +164,18 @@ export default function Modes() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Mixolydian"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => mixolydian.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Mixolydian"
+                        >
+                            <Text style={styles.buttonText}>Play Mixolydian</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => mixolydian.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Mixolydian</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -201,16 +207,18 @@ export default function Modes() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Dorian"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => dorian.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Dorian"
+                        >
+                            <Text style={styles.buttonText}>Play Dorian</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => dorian.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Dorian</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -234,16 +242,18 @@ export default function Modes() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Aeolian"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => aeolian.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Aeolian"
+                        >
+                            <Text style={styles.buttonText}>Play Aeolian</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => aeolian.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Aeolian</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -267,16 +277,18 @@ export default function Modes() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Phrygian"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => phrygian.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Phrygian"
+                        >
+                            <Text style={styles.buttonText}>Play Phrygian</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => phrygian.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Phrygian</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -300,16 +312,18 @@ export default function Modes() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#4CAF50'
-                            title="Play Locrian"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => locrian.current.playAsync()}
-                        />
-                        <Button
-                            color='#F44336'
-                            title="Pause Locrian"
+                        >
+                            <Text style={styles.buttonText}>Play Locrian</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => locrian.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Locrian</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -587,13 +601,13 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#D2D2D2',
+        backgroundColor: '#1C1D1F',
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingBottom: 40,
     },
     title: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 36,
         fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
@@ -604,52 +618,57 @@ const styles = StyleSheet.create({
         textShadowRadius: 3,
     },
     card: {
-        backgroundColor: 'white',
+        backgroundColor: '#2A2A2A',
         borderRadius: 12,
-        padding: 20,
-        marginBottom: 20,
+        padding: 25,
+        marginBottom: 25,
         width: '100%',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        borderColor: 'black',
+        borderColor: '5543A5',
         borderWidth: 2,
         elevation: 3,
     },
     text: {
-        color: '#333',
+        color: '#D2D2D2',
         fontSize: 16,
-        lineHeight: 24,
+        lineHeight: 26,
         textAlign: 'left',
-        marginBottom: 10,
+        marginBottom: 12,
     },
     bold: {
         fontWeight: 'bold',
         color: '#5543A5',
-    },
-    italic: {
-        fontStyle: 'italic',
-        color: '#5543A5',
+        letterSpacing: 0.2,
     },
     header: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 15,
+        marginBottom: 20,
+        marginTop: 20,
         textAlign: 'left',
+    },
+    subHeader: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '600',
+        marginTop: 20,
+        marginBottom: 15,
     },
     image: {
         width: '100%',
         height: 150,
-        marginVertical: 15,
+        marginVertical: 20,
         borderRadius: 8,
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 10,
-        marginTop: 10,
+        justifyContent: 'space-between',
+        marginVertical: 15,
+        width: '100%',
     },
     linksContainer: {
         width: '100%',
@@ -664,13 +683,16 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     link: {
-        color: 'white',
-        fontSize: 18,
-        padding: 15,
-        textAlign: 'center',
+        padding: 18,
         backgroundColor: '#5543A5',
-        borderRadius: 8,
-        fontWeight: '600',
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#5543A5',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+        elevation: 5,
     },
     secondaryLink: {
         color: '#5543A5',
@@ -683,67 +705,56 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
+    homelink: {
+        color: 'purple',
+        fontSize: 30,
+        alignSelf: 'center'
+    },
     quizContainer: {
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: '#2A2A2A',
         borderRadius: 12,
-        padding: 15,
-        marginBottom: 20,
-        borderColor: 'black',
+        padding: 25,
+        marginBottom: 25,
+        borderColor: '#5543A5',
         borderWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
     },
     quizTitle: {
-        color: 'black',
-        fontSize: 36,
+        color: '#fff',
+        fontSize: 32,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 30,
-        textDecorationLine: 'underline',
+        marginVertical: 24,
     },
     quizText: {
-        color: '#840606',
-        fontSize: 20,
-        alignSelf: 'center',
-    },
-    quizImage: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-        resizeMode: 'contain',
-        alignSelf: 'center',
+        color: '#D2D2D2',
+        fontSize: 16,
+        lineHeight: 26,
+        textAlign: 'center',
     },
     quizButton: {
-        backgroundColor: 'gray',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        backgroundColor: '#3A3A3A',
+        padding: 15,
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     quizButtonText: {
-        color: 'white',
-        fontSize: 15,
-        alignSelf: 'center',
+        color: '#D2D2D2',
+        fontSize: 16,
     },
     correctAnswer: {
-        backgroundColor: 'green',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        backgroundColor: '#2E7D32',
+        padding: 15,
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     incorrectAnswer: {
-        backgroundColor: 'red',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        backgroundColor: '#C62828',
+        padding: 15,
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -753,6 +764,59 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'black',
-    }
+        color: '#fff',
+        textAlign: 'center',
+    },
+    resetButton: {
+        marginTop: 10,
+        backgroundColor: '#5543A5',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    resetButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+    },
+    italic: {
+        fontStyle: 'italic',
+        color: '#5543A5',
+    },
+    examples: {
+        alignItems: 'flex-start'
+    },
+    playButton: {
+        backgroundColor: '#7E57C2',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    pauseButton: {
+        backgroundColor: '#9575CD',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+        textAlign: 'center',
+    },
 });
