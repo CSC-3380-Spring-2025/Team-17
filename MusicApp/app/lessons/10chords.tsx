@@ -863,31 +863,11 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
-    header: {
-        color: '#5543A5',
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 15,
-        textAlign: 'left',
-    },
-    image: {
-        width: '100%',
-        height: 150,
-        marginVertical: 15,
-        borderRadius: 8,
-    },
     examples: {
         alignItems: 'flex-start'
     },
     buttons: {
         flexDirection: 'row'
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 10,
-        marginTop: 10,
     },
     links: {
         flexDirection: 'row',
@@ -927,10 +907,6 @@ const styles = StyleSheet.create({
         lineHeight: 26,
         textAlign: 'center',
     },
-    quizButton: {
-        backgroundColor: '#3A3A3A',
-        padding: 15,
-
     quizImage: {
         width: 300,
         height: 150,
@@ -956,7 +932,7 @@ const styles = StyleSheet.create({
     correctAnswer: {
         backgroundColor: '#2E7D32',
         padding: 15,
-
+    },
        
     incorrectAnswer: {
 
@@ -987,20 +963,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '600',
-    },
-    quizImage: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-        resizeMode: 'contain',
-        alignSelf: 'center',
-    },
-    italic: {
-        fontStyle: 'italic',
-        color: '#5543A5',
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     playButton: {
         backgroundColor: '#7E57C2',

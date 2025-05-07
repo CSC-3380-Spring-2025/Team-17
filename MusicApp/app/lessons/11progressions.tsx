@@ -922,20 +922,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#3A3A3A',
         padding: 15,
 
-   
+    },
     quizImage: {
         width: 300,
         height: 150,
         marginVertical: 10,
         resizeMode: 'contain',
         alignSelf: 'center',
-    },
-   
-
-        marginTop: 10,
-        borderRadius: 8,
-        width: '100%',
-        alignItems: 'center',
     },
     quizButtonText: {
 
@@ -973,23 +966,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
-    },
-    result: {
-        marginTop: 10,
-        fontSize: 16,
-
-        fontWeight: '600',
-    },
-    quizImage: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-        resizeMode: 'contain',
-        alignSelf: 'center',
-    },
-    italic: {
-        fontStyle: 'italic',
-        color: '#5543A5',
     },
     examples: {
         alignItems: 'flex-start'
