@@ -908,6 +908,9 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     link: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '600',
         padding: 18,
         backgroundColor: '#5543A5',
         borderRadius: 12,
@@ -921,8 +924,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     secondaryLink: {
-        color: '#5543A5',
-        fontSize: 16,
+        color: '#fff',
         padding: 15,
         textAlign: 'center',
         backgroundColor: 'transparent',
