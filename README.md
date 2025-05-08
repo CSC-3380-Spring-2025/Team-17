@@ -33,7 +33,7 @@ git clone https://github.com/CSC-3380-Spring-2025/Team-17.git
 
 ## Dependencies
 - NodeJS
-- Expo-cli
+- Expo-Cli
 
 ```sh
     "@expo-google-fonts/inter": "^0.2.3",
@@ -120,7 +120,7 @@ Running the server:
 ```
 ## Android
 Ensure you have an android simulator device open.
-press a after the metro bundler compiles.
+Press a after the metro bundler compiles.
 
 ## Expo Go
 Scan the QR code and it should link directly to the app.
