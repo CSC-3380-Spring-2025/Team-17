@@ -839,6 +839,9 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     link: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '600',
         padding: 18,
         backgroundColor: '#5543A5',
         borderRadius: 12,
@@ -852,7 +855,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     secondaryLink: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 16,
         padding: 15,
         textAlign: 'center',
@@ -895,17 +898,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     quizButton: {
-        backgroundColor: 'gray',
+        backgroundColor: '#3A3A3A',
         paddingVertical: 10,
         paddingHorizontal: 15,
-
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     quizButtonText: {
-
         color: '#D2D2D2',
         fontSize: 16,
     },
@@ -914,10 +915,8 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     incorrectAnswer: {
-
         backgroundColor: '#C62828',
         padding: 15,
-
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -927,7 +926,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
-
         color: '#fff',
         textAlign: 'center',
     },

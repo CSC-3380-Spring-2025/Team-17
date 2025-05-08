@@ -414,6 +414,9 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     link: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '600',
         padding: 18,
         backgroundColor: '#5543A5',
         borderRadius: 12,
@@ -427,7 +430,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     secondaryLink: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 16,
         padding: 15,
         textAlign: 'center',
