@@ -20,6 +20,8 @@ Kanban Board: https://objorient2025.atlassian.net/jira/software/projects/SCRUM/b
 Designs: https://www.figma.com/design/p7Us4zqbBWOuInS3xgW2oi/Synth-Draft-1%2F30?node-id=20-78&p=f&t=BQzAb3eBOK7TijSp-0]\
 
 # Cloning the project
+Download Visual Studio Code
+https://code.visualstudio.com/download
 
 Download Git Bash
 https://git-scm.com/downloads
@@ -78,7 +80,7 @@ git clone https://github.com/CSC-3380-Spring-2025/Team-17.git
 
 ### Downloading Dependencies
 
-Verify you have Node.js installed
+Verify you have Node.js installed using Terminal
 
 ```sh
 node -v #v22.15.0
