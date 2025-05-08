@@ -78,6 +78,9 @@ node -v #v22.15.0
 npm -v #v10.9.2
 ```
 
+If not go to this site and download. 
+https://nodejs.org/en/download
+
 Install Expo-cli
 
 ```sh
