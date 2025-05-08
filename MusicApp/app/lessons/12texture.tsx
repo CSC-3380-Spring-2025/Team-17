@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Texture() {
     const bach = useRef(new Audio.Sound());
@@ -114,7 +114,7 @@ export default function Texture() {
     };
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
@@ -157,7 +157,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Monophony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => bach.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Monophony</Text>
@@ -180,7 +180,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Monophony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => oboe.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Monophony</Text>
@@ -216,7 +216,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Heterophony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => seikilos.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Heterophony</Text>
@@ -240,7 +240,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Heterophony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => turkey.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Heterophony</Text>
@@ -277,7 +277,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Homophony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => handel.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Homophony</Text>
@@ -304,7 +304,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Homophony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => jazz.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Homophony</Text>
@@ -338,7 +338,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Polyphony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => canon.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Polyphony</Text>
@@ -362,7 +362,7 @@ export default function Texture() {
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Play Polyphony</Text>
                                 </Pressable>
                                 <Pressable
-                                    style={styles.playButton}
+                                    style={styles.pauseButton}
                                     onPress={() => chakrulo.current.pauseAsync()}
                                 >
                                     <Text style={styles.buttonText} textBreakStrategy="simple">Pause Polyphony</Text>
@@ -478,7 +478,7 @@ export default function Texture() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -594,11 +594,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    },
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -655,32 +650,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
         textAlign: 'center',
-    },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
-    quizImage: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-        resizeMode: 'contain',
-        alignSelf: 'center',
-    },
-    italic: {
-        fontStyle: 'italic',
-        color: '#5543A5',
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     playButton: {
         backgroundColor: '#7E57C2',

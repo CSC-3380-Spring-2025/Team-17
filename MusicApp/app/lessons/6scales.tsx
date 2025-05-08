@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Scales() {
     const cmajor = useRef(new Audio.Sound());
@@ -112,7 +112,7 @@ export default function Scales() {
 
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
@@ -628,7 +628,7 @@ export default function Scales() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -744,11 +744,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    },
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -805,18 +800,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
         textAlign: 'center',
-    },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
     },
     quizImage: {
         width: 300,

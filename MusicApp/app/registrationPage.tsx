@@ -26,7 +26,7 @@ const registrationPage = () => {
         </Svg>
         <View style={styles.headerContent}>
           <MaterialIcons name="queue-music" size={128} color="#fff" />
-          <Text style={styles.appTitle}>Melodify</Text>
+          <Text style={styles.melodifyLogo}>Melodify</Text>
         </View>
       </View>
       <View style={styles.registerContainer}>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 200,
   },
-  appTitle: {
+  melodifyLogo: {
     color: '#fff',
     fontSize: 36,
     fontWeight: 'bold',

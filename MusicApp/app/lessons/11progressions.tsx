@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Progressions() {
     const major = useRef(new Audio.Sound());
@@ -135,7 +135,7 @@ export default function Progressions() {
     };
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
 
                 contentContainerStyle={styles.scrollContainer}
@@ -201,7 +201,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => major.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -220,7 +220,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => minor.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -272,7 +272,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Dominant</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => dominant.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Dominant</Text>
@@ -304,7 +304,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Subdominant</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => subdominant.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Subdominant</Text>
@@ -328,7 +328,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Subdominant</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => subdominant2.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Subdominant</Text>
@@ -358,7 +358,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play VI</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => vi_chord.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause VI</Text>
@@ -383,7 +383,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play III</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => iii_chord.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause III</Text>
@@ -420,7 +420,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Cadence</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => half_cadence.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Cadence</Text>
@@ -447,7 +447,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Cadence</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => authentic_cadence.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Cadence</Text>
@@ -471,7 +471,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Cadence</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => plagal_cadence.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Cadence</Text>
@@ -495,7 +495,7 @@ export default function Progressions() {
                                 <Text style={styles.buttonText}>Play Cadence</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => deceptive_cadence.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Cadence</Text>
@@ -753,7 +753,7 @@ export default function Progressions() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -875,22 +875,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
-
-    buttons: {
-        flexDirection: 'row'
-    },
-
-    links: {
-        flexDirection: 'row',
-        padding: 40,
-        gap: 500
-    },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
-    },
-
     homelink: {
         color: 'purple',
         fontSize: 30,
@@ -961,16 +945,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
         textAlign: 'center',
-    },
-    resetButton: {
-
-        marginTop: 10,
-        borderRadius: 8,
-        width: '100%',
-        alignItems: 'center',
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     playButton: {
         backgroundColor: '#7E57C2',

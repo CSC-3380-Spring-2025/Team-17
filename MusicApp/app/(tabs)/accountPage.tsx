@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, ActivityIndicator, ScrollView, ImageSourcePropType } from 'react-native';
 import { getAuth, updatePassword, EmailAuthProvider, reauthenticateWithCredential, updateProfile } from 'firebase/auth';
 import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const profilePictureKeys = [
   'aesthetic',
@@ -171,7 +171,7 @@ const AccountPage = () => {
   };
 
   return (
-    <SafeAreaView>
+    <>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.profileHeader}>
           <TouchableOpacity
@@ -303,7 +303,7 @@ const AccountPage = () => {
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 };
 

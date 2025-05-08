@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions, ImageBackground, ScrollView } from "react-native";
 import { Link } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function lessonsScreen() {
     return (
-        <SafeAreaView>
+        <>
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.buttonsContainer}>
                     <Link href="/lessons/1intro" asChild>
@@ -205,7 +205,7 @@ export default function lessonsScreen() {
                     </Link>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 

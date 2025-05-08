@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Modes() {
     const lydian = useRef(new Audio.Sound());
@@ -118,7 +118,7 @@ export default function Modes() {
     };
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
@@ -168,7 +168,7 @@ export default function Modes() {
                                 <Text style={styles.buttonText}>Play Lydian</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => lydian.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Lydian</Text>
@@ -203,7 +203,7 @@ export default function Modes() {
                                 <Text style={styles.buttonText}>Play Ionian</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => ionian.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Ionian</Text>
@@ -281,7 +281,7 @@ export default function Modes() {
                                 <Text style={styles.buttonText}>Play Dorian</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => dorian.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Dorian</Text>
@@ -586,7 +586,7 @@ export default function Modes() {
                 </View>
 
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -702,11 +702,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    },
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -764,18 +759,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
     },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
     quizImage: {
         width: 300,
         height: 150,
@@ -786,9 +769,6 @@ const styles = StyleSheet.create({
     italic: {
         fontStyle: 'italic',
         color: '#5543A5',
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     playButton: {
         backgroundColor: '#7E57C2',

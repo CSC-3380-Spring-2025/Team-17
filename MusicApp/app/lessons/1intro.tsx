@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 export default function Intro() {
     const [userId, setUserId] = useState('');
 
@@ -52,7 +52,7 @@ export default function Intro() {
 
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
@@ -108,7 +108,7 @@ export default function Intro() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 

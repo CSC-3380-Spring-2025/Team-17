@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Intervals() {
     const intervals = useRef(new Audio.Sound());
@@ -112,7 +112,7 @@ export default function Intervals() {
     };
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
@@ -142,7 +142,7 @@ export default function Intervals() {
                                 <Text style={styles.buttonText}>Play Intervals</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => intervals.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Intervals</Text>
@@ -175,7 +175,7 @@ export default function Intervals() {
                                 <Text style={styles.buttonText}>Play Sizes</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => sizes.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Sizes</Text>
@@ -259,7 +259,7 @@ export default function Intervals() {
                                 <Text style={styles.buttonText}>Play Augmented</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => augmented.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Augmented</Text>
@@ -287,7 +287,7 @@ export default function Intervals() {
                                 <Text style={styles.buttonText}>Play Diminished</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => diminished.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Diminished</Text>
@@ -547,7 +547,7 @@ export default function Intervals() {
 
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -663,11 +663,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    },
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -725,18 +720,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
     },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
     quizImage: {
         width: 300,
         height: 150,
@@ -747,9 +730,6 @@ const styles = StyleSheet.create({
     italic: {
         fontStyle: 'italic',
         color: '#5543A5',
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     playButton: {
         backgroundColor: '#7E57C2',

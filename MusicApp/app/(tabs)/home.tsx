@@ -6,7 +6,7 @@ import { useChallenges } from '../context/ChallengesContext';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 import * as FileSystem from 'expo-file-system';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 type LessonLink =
   | "/lessons/1intro"
@@ -214,7 +214,7 @@ export default function HomeScreen() {
 
   return (
     <>
-      <SafeAreaView>
+      <>
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
           <Link href={lessonLink} asChild>
             <Pressable style={styles.lessonBox}>
@@ -264,16 +264,12 @@ export default function HomeScreen() {
             <Text style={styles.createButtonText}>Refresh</Text>
           </Pressable>
         </View>
-      </SafeAreaView>
+      </>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    flex: 1,
-    width: '100%',
-  },
   container: {
     flex: 1,
     backgroundColor: '#1C1D1F',

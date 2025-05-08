@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Structure() {
     const field = useRef(new Audio.Sound());
@@ -131,7 +131,7 @@ export default function Structure() {
     };
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
 
                 contentContainerStyle={styles.scrollContainer}
@@ -815,7 +815,7 @@ export default function Structure() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -895,11 +895,6 @@ const styles = StyleSheet.create({
         marginVertical: 15,
         width: '100%',
     },
-    italic: {
-        fontStyle: 'italic',
-        color: '#5543A5',
-
-    },
     linksContainer: {
         width: '100%',
         alignItems: 'center',
@@ -936,28 +931,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-    examples: {
-        alignItems: 'flex-start'
-    },
-    buttons: {
-        flexDirection: 'row'
-    },
-    links: {
-        flexDirection: 'row',
-        padding: 40,
-        gap: 500
-    },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
-    },
-
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    },
-
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -973,7 +946,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 24,
-
     },
     quizText: {
         color: '#D2D2D2',
@@ -981,18 +953,9 @@ const styles = StyleSheet.create({
         lineHeight: 26,
         textAlign: 'center',
     },
-    quizImage: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-        resizeMode: 'contain',
-        alignSelf: 'center',
-    },
     quizButton: {
-
         backgroundColor: '#3A3A3A',
         padding: 15,
-
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -1025,18 +988,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
     },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
     playButton: {
         backgroundColor: '#7E57C2',
         paddingVertical: 12,
@@ -1065,5 +1016,4 @@ const styles = StyleSheet.create({
         wordWrap: 'break-word',
         overflow: 'hidden',
     },
-
 });

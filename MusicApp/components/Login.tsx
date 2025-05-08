@@ -106,12 +106,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#fff',
-  },
   input: {
     height: 30,
     backgroundColor: '#fff',

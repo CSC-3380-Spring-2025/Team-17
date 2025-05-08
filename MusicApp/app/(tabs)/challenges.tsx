@@ -5,7 +5,7 @@ import { useChallenges } from '../context/ChallengesContext'
 import ChallengeBox from '../../components/ChallengeBox'
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/firebaseConfig";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {  } from "react-native-safe-area-context";
 
 export default function ChallengesScreen() {
   const [userId, setUserId] = useState('');
@@ -46,7 +46,7 @@ export default function ChallengesScreen() {
   }, [userId]);
 
   return (
-    <SafeAreaView>
+    <>
       <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
         <Text style={styles.header}>Daily</Text>
         <View style={styles.challengeGroup}>
@@ -63,7 +63,7 @@ export default function ChallengesScreen() {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 }
 

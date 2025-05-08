@@ -6,7 +6,7 @@ import { View, StyleSheet, FlatList, Text, TouchableOpacity, Pressable, TextInpu
 import { Audio } from 'expo-av';
 import { useAudioContext } from './AudioContext';
 import { MaterialIcons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function App() {
   const [recording, setRecording] = useState<Audio.Recording | undefined>(undefined);
@@ -81,7 +81,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView>
+    <>
       <View style={styles.container}>
         <FlatList
           data={recordings}
@@ -139,7 +139,7 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </>
   );
 }
 

@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Melody() {
     const conjunct = useRef(new Audio.Sound());
@@ -108,7 +108,7 @@ export default function Melody() {
 
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
                 contentContainerStyle={styles.scrollContainer}
                 showsVerticalScrollIndicator={false}
@@ -156,7 +156,7 @@ export default function Melody() {
                                 <Text style={styles.buttonText}>Play Conjunct</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => conjunct.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Conjunct</Text>
@@ -179,7 +179,7 @@ export default function Melody() {
                                 <Text style={styles.buttonText}>Play Disjunct</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => disjunct.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Disjunct</Text>
@@ -202,7 +202,7 @@ export default function Melody() {
                                 <Text style={styles.buttonText}>Play Melody</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => condis.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Melody</Text>
@@ -233,7 +233,7 @@ export default function Melody() {
                                 <Text style={styles.buttonText}>Play Melody</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => phrases.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Melody</Text>
@@ -358,7 +358,7 @@ export default function Melody() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -537,18 +537,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
     },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
-    },
     quizImage: {
         width: 300,
         height: 150,
@@ -559,9 +547,6 @@ const styles = StyleSheet.create({
     italic: {
         fontStyle: 'italic',
         color: '#5543A5',
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     playButton: {
         backgroundColor: '#7E57C2',

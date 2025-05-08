@@ -181,25 +181,6 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  middleButton: {
-    position: 'absolute',
-    bottom: 30,
-    alignSelf: 'center',
-    width: 40,
-    height: 40,
-    backgroundColor: '#333232',
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
-    elevation: 2,
-  },
-  plus: {
-    color: 'white',
-    fontSize: 25,
-    lineHeight: 34,
-    marginTop: -2,
-  },
   profileButton: {
     width: 36,
     height: 36,
@@ -212,12 +193,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 18,
-  },
-  headerRightContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginRight: 12,
-    paddingVertical: 8,
   },
 });

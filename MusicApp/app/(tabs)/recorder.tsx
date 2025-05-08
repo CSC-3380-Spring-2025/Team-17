@@ -7,7 +7,7 @@ import {
   Platform,
   PermissionsAndroid,
   FlatList,
-  SafeAreaView,
+  ,
   Alert,
   StyleSheet,
   ScrollView,
@@ -921,7 +921,7 @@ const LiveMixingPage = () => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.addButton}
@@ -1137,7 +1137,7 @@ const LiveMixingPage = () => {
         onClose={() => setSettingsModalVisible(false)}
         onSave={saveTrackSettings}
       />
-    </SafeAreaView>
+    </>
   );
 };
 
@@ -1269,12 +1269,6 @@ const styles = StyleSheet.create({
   trackInfo: {
     flex: 1,
     marginRight: 12,
-  },
-  trackTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 6,
   },
   trackType: {
     fontSize: 14,

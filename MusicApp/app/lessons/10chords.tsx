@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Chords() {
     const triads = useRef(new Audio.Sound());
@@ -120,7 +120,7 @@ export default function Chords() {
     };
 
     return (
-        <SafeAreaView>
+        <>
             <ScrollView
 
                 contentContainerStyle={styles.scrollContainer}
@@ -154,7 +154,7 @@ export default function Chords() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => triads.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -197,7 +197,7 @@ export default function Chords() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => qualities.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -231,7 +231,7 @@ export default function Chords() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => symbols.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -261,7 +261,7 @@ export default function Chords() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => major.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -287,7 +287,7 @@ export default function Chords() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => minor.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -398,7 +398,7 @@ export default function Chords() {
                                 <Text style={styles.buttonText}>Play Triads</Text>
                             </Pressable>
                             <Pressable
-                                style={styles.playButton}
+                                style={styles.pauseButton}
                                 onPress={() => big.current.pauseAsync()}
                             >
                                 <Text style={styles.buttonText}>Pause Triads</Text>
@@ -742,7 +742,7 @@ export default function Chords() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
@@ -821,12 +821,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: 15,
         width: '100%',
-
     },
     italic: {
         fontStyle: 'italic',
         color: '#5543A5',
-
     },
     linksContainer: {
         width: '100%',
@@ -867,25 +865,6 @@ const styles = StyleSheet.create({
     examples: {
         alignItems: 'flex-start'
     },
-    buttons: {
-        flexDirection: 'row'
-    },
-    links: {
-        flexDirection: 'row',
-        padding: 40,
-        gap: 500
-    },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
-    },
-
-    homelink: {
-        color: 'purple',
-        fontSize: 30,
-        alignSelf: 'center'
-    },
-
     quizContainer: {
         width: '100%',
         backgroundColor: '#2A2A2A',
@@ -934,7 +913,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#2E7D32',
         padding: 15,
     },
-
     incorrectAnswer: {
 
         backgroundColor: '#C62828',
@@ -952,18 +930,6 @@ const styles = StyleSheet.create({
 
         color: '#fff',
         textAlign: 'center',
-    },
-    resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    resetButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: '600',
     },
     playButton: {
         backgroundColor: '#7E57C2',

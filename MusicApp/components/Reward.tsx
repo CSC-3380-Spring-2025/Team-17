@@ -31,11 +31,6 @@ export default function Reward ({ reward }: Props){
       justifyContent: 'flex-end',
       width: '100%',
     },
-    
-    buttonImage: {
-      width: 20,
-      height: 20,
-    },
     coins: {
       fontSize: 20,
       color: "#fff",
