@@ -52,6 +52,8 @@ Go to this site to download SDK 52 for android simulator or normal android devic
 # Execution
 !!! Ensure you are in the ./MusicApp/ Directory before running these commands. !!!
 
+Create a new file in the ./MusicApp/ Directory titled ".env". In this file paste the code containing the Firebase API key shared via email.
+
 Last check for any missing dependencies:
 ```sh
 \Team17\MusicApp\npx expo install --check
