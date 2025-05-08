@@ -39,7 +39,7 @@ export default function HomeScreen() {
   const [lessonImage, setLessonImage]= useState(PlaceholderImage);
   const [lessonLink, setLessonLink]= useState<LessonLink>('/lessons/1intro')
 
-  const {handleTaskCompletion}=useChallenges();    
+  const {handleTaskCompletion, loading}=useChallenges();    
 
   const [savedSongs, setSavedSongs] = useState<string[]>([]);
   const router=useRouter();
@@ -158,7 +158,7 @@ export default function HomeScreen() {
 
 useEffect(()=>{
   const checkAndUpdateLoginDates = async()=>{
-    if(!userId) return;
+    if(!userId||loading) return;
     const currentDate = new Date().toISOString().split('T')[0];
 
     try{
@@ -171,7 +171,10 @@ useEffect(()=>{
           await updateDoc(docRef, {
             homeAccessDates: arrayUnion(currentDate)
           });
+          await 
           handleTaskCompletion("Login three days in a row")
+
+
         }
       }else{
         console.log("No such document");
@@ -181,7 +184,7 @@ useEffect(()=>{
     }
   };
   checkAndUpdateLoginDates();
-}, [userId]);
+}, [userId, loading]);
 
 
 
