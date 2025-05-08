@@ -62,8 +62,8 @@ export default function Notation() {
                                     await updateDoc(userDocRef, {
                                         lessonProgress: arrayUnion(2),
                                     });
-                                    handleTaskCompletion("Complete 2 lessons");
-                                    handleTaskCompletion("Complete all lessons");
+                                    handleTaskCompletion("Complete 2 quizzes");
+                                    handleTaskCompletion("Complete all quizzes");
                                 }
 
                             }
