@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio, PitchCorrectionQuality } from 'expo-av';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
 
 export default function Meter() {
@@ -58,7 +58,7 @@ export default function Meter() {
     const answer4 = "9/8";
 
     const [count, setCount] = useState<number>(0);
-    const [userId, setUserId]= useState<string>('');
+const [userId, setUserId]= useState<string>('');
     const {handleTaskCompletion} = useChallenges();
                 
                     useEffect(()=>{
@@ -120,6 +120,7 @@ export default function Meter() {
                                 setCount(prevCount => prevCount + 1);
                             }
                         };
+
 
     return (
 
@@ -197,16 +198,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => sd.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => sd.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         Try counting the rhythm below. This example is in simple triple meter. The time signature 3/4 means that there are 3 beats
@@ -218,16 +221,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => st.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => st.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         Try counting the rhythm below. This example is in simple quadruple meter. The time signature 4/4 means that there are 4 beats
@@ -239,16 +244,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => sq.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => sq.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         In simple meters with other beat units, like the half note, eighth note, or sixteenth note, the same counting pattern
@@ -269,16 +276,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => b1.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => b1.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -327,16 +336,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => cd.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => cd.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         Try counting the rhythm below. This example is in compound triple meter. The time signature 9/8 means that there are 3 beats
@@ -348,16 +359,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => ct.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => ct.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         Try counting the rhythm below. This example is in compound quadruple meter. The time signature 12/8 means that there are 4 beats
@@ -369,16 +382,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => cq.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => cq.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         In compound meters with other beat units, like the dotted half note or dotted eighth note the same counting pattern
@@ -396,16 +411,18 @@ export default function Meter() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => b2.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => b2.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -470,11 +487,11 @@ export default function Meter() {
 
                     <View style={styles.quizContainer}>
                         <Text style={styles.quizText}>
-                            3. What is the time signature of the music below?      
+                            3. What is the time signature of the music below?
                         </Text>
-                        <Image source={require('@/assets/images/example1.png')} 
-                               style={styles.quizImage}
-                               resizeMode="contain"
+                        <Image source={require('@/assets/images/example1.png')}
+                            style={styles.quizImage}
+                            resizeMode="contain"
                         />
                         {["2/2", "3/4", "4/4", "6/8"].map((option, index) => {
                             const selected = quiz3Answer === option;
@@ -505,9 +522,9 @@ export default function Meter() {
                         <Text style={styles.quizText}>
                             4. What is the time signature of the music below?
                         </Text>
-                        <Image source={require('@/assets/images/example2.png')} 
-                               style={styles.quizImage}
-                               resizeMode="contain"
+                        <Image source={require('@/assets/images/example2.png')}
+                            style={styles.quizImage}
+                            resizeMode="contain"
                         />
                         {["4/4", "6/8", "9/8", "12/8"].map((option, index) => {
                             const selected = quiz4Answer === option;
@@ -602,8 +619,8 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     bold: {
-        fontWeight: 'bold',
-        color: '#5543A5',
+        fontWeight: '900',
+        color: '#B39DDB',
         letterSpacing: 0.2,
     },
     header: {
@@ -657,6 +674,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 6,
         elevation: 5,
+        textAlign: 'center',
     },
     secondaryLink: {
         color: '#5543A5',
@@ -749,5 +767,31 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         resizeMode: 'contain',
         alignSelf: 'center',
+    },
+    playButton: {
+        backgroundColor: '#7E57C2',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    pauseButton: {
+        backgroundColor: '#9575CD',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+        textAlign: 'center',
     },
 });

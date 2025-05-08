@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
 
 export default function Pitch() {
@@ -56,30 +56,30 @@ export default function Pitch() {
     }, []);
 
     const [count, setCount] = useState<number>(0);
-    const [userId, setUserId]= useState<string>('');
-    const {handleTaskCompletion} = useChallenges();
-        
-            useEffect(()=>{
-                if (auth.currentUser){
-                  setUserId(auth.currentUser.uid);
-                }
-              }, [auth.currentUser]);
-            
-              useEffect(()=>{
-                  const fetchUserData= async()=>{
-                    if(userId){
-                      console.log('Fetching data for userId:', userId);
-              
-                      try{
-                        const userDocRef= doc(db, 'users', userId);
-                        const userDoc = await getDoc(userDocRef)
-                        
-                        if (userDoc.exists()) {
-                          console.log('Document data:', userDoc.data());
-                          const userData = userDoc.data();
-                          if(userData.lessonProgress){
-                            if(!userData.lessonProgress.includes(3)){
-                                if(count === 3){
+    const [userId, setUserId] = useState<string>('');
+    const { handleTaskCompletion } = useChallenges();
+
+    useEffect(() => {
+        if (auth.currentUser) {
+            setUserId(auth.currentUser.uid);
+        }
+    }, [auth.currentUser]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userId) {
+                console.log('Fetching data for userId:', userId);
+
+                try {
+                    const userDocRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+
+                    if (userDoc.exists()) {
+                        console.log('Document data:', userDoc.data());
+                        const userData = userDoc.data();
+                        if (userData.lessonProgress) {
+                            if (!userData.lessonProgress.includes(3)) {
+                                if (count === 3) {
                                     await updateDoc(userDocRef, {
                                         lessonProgress: arrayUnion(3),
                                     });
@@ -87,37 +87,37 @@ export default function Pitch() {
                                     handleTaskCompletion("Complete all quizzes");
                                 }
                             }
-                          }
-                          else{
-                            await setDoc(userDocRef, {
-                                lessonProgress:[1],
-                            }, {merge: true});
-                          }
-                        } else {
-                          await setDoc(userDocRef, {
-                            lessonProgress: [1],
-                          });
                         }
-                
-                      }catch(error){
-                        console.error('Error fetching user data:', error);
-                      }
+                        else {
+                            await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                            }, { merge: true });
+                        }
+                    } else {
+                        await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                        });
                     }
-                  };
-                  fetchUserData();
-                }, [userId, count]);
 
-                const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
-                    if (!selected) return styles.quizButton;
-                    return correct ? styles.correctAnswer : styles.incorrectAnswer;
-                };
-                        
-                const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
-                    setAnswer(option);
-                    if (option === correctAnswer) {
-                        setCount(prevCount => prevCount + 1);
-                    }
-                };
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, [userId, count]);
+
+    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+        if (!selected) return styles.quizButton;
+        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+    };
+
+    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+        setAnswer(option);
+        if (option === correctAnswer) {
+            setCount(prevCount => prevCount + 1);
+        }
+    };
 
     return (
         <ScrollView
@@ -161,16 +161,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play flute"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => flute1.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause flute"
+                        >
+                            <Text style={styles.buttonText}>Play Flute</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => flute1.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Flute</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         The spaces in the treble clef are used to notate the pitches F, A, C, E. This pattern can be remembered by the fact
@@ -182,16 +184,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play flute"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => flute2.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause flute"
+                        >
+                            <Text style={styles.buttonText}>Play Flute</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => flute2.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Flute</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -209,16 +213,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play trombone"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => trombone1.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause trombone"
+                        >
+                            <Text style={styles.buttonText}>Play Trombone</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => trombone1.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Trombone</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         The spaces in the bass clef are used to notate the pitches A, C, E, G. This pattern can be remembered by the
@@ -230,16 +236,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play trombone"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => trombone2.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause trombone"
+                        >
+                            <Text style={styles.buttonText}>Play Trombone</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => trombone2.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Trombone</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -256,16 +264,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play viola"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => viola1.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause viola"
+                        >
+                            <Text style={styles.buttonText}>Play Viola</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => viola1.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Viola</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         The spaces in the alto clef are used to notate the pitches G, B, D, F. This pattern can be remembered by the
@@ -277,15 +287,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play viola"
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => viola2.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause viola"
-                            onPress={() => viola2.current.pauseAsync()} />
+                        >
+                            <Text style={styles.buttonText}>Play Viola</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
+                            onPress={() => viola2.current.pauseAsync()}
+                        >
+                            <Text style={styles.buttonText}>Pause Viola</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -303,16 +316,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play cello"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => cello1.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause cello"
+                        >
+                            <Text style={styles.buttonText}>Play Cello</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => cello1.current.pauseAsync()}
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Cello</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         The spaces in the tenor clef are used to notate the pitches E, G, B, D. This pattern can be remembered by the
@@ -324,15 +339,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play cello"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => cello2.current.playAsync()}
-                        />
-                        <Button
-                            color='#9575CD'
-                            title="Pause cello"
-                            onPress={() => cello2.current.pauseAsync()} />
+                        >
+                            <Text style={styles.buttonText}>Play Cello</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
+                            onPress={() => cello2.current.pauseAsync()}
+                        >
+                            <Text style={styles.buttonText}>Pause Cello</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -374,14 +392,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
-                            onPress={() => piano1.current.playAsync()} />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
-                            onPress={() => piano1.current.pauseAsync()} />
+                    <Pressable
+                            style={styles.playButton}
+                            onPress={() => piano1.current.playAsync()}
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
+                            onPress={() => piano1.current.pauseAsync()}
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                 </View>
                 <View style={styles.card}>
@@ -433,14 +455,18 @@ export default function Pitch() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            color='#7E57C2'
-                            title="Play piano"
-                            onPress={() => piano2.current.playAsync()} />
-                        <Button
-                            color='#9575CD'
-                            title="Pause piano"
-                            onPress={() => piano2.current.pauseAsync()} />
+                        <Pressable
+                            style={styles.playButton}
+                            onPress={() => piano2.current.playAsync()}
+                        >
+                            <Text style={styles.buttonText}>Play Piano</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
+                            onPress={() => piano2.current.pauseAsync()}
+                        >
+                            <Text style={styles.buttonText}>Pause Piano</Text>
+                        </Pressable>
                     </View>
                     <Text style={styles.text}>
                         Each key on the keyboard has more than one name.  Enharmonic equivalence  is when two notes have different names,
@@ -604,8 +630,8 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     bold: {
-        fontWeight: 'bold',
-        color: '#5543A5',
+        fontWeight: '900',
+        color: '#B39DDB',
     },
     header: {
         color: '#fff',
@@ -644,6 +670,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderRadius: 8,
         overflow: 'hidden',
+        justifyContent: 'center',
     },
     link: {
         padding: 18,
@@ -656,6 +683,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 6,
         elevation: 5,
+        textAlign: 'center',
     },
     secondaryLink: {
         color: '#5543A5',
@@ -741,5 +769,31 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '600',
+    },
+    playButton: {
+        backgroundColor: '#7E57C2',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    pauseButton: {
+        backgroundColor: '#9575CD',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+        textAlign: 'center',
     },
 });

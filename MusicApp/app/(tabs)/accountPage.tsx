@@ -307,7 +307,7 @@ const AccountPage = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#D2D2D2',
+    backgroundColor: '#1C1D1F',
     paddingBottom: 30,
   },
   profileHeader: {
@@ -365,10 +365,10 @@ const styles = StyleSheet.create({
     color: '#777',
   },
   changePhotoText: {
-    color: '#5543A5',
-    marginBottom: 5,
+    color: '#B39DDB',
+    marginBottom: 0,
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '500',
   },
   inputGroup: {
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
   profilePictureContainer: {
     width: '100%',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF',
   },
   selectorTitle: {
     fontSize: 16,

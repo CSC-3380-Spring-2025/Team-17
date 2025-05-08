@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   popUpClose: {
-    backgroundColor: '#888',
+    backgroundColor: '#5543A5',
     padding: 10,
     borderRadius: 8,
     marginTop: 20,
