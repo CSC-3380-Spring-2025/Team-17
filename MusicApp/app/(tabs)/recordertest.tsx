@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   recordButtonContainer: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 100,
     left: 0,
     right: 0,
     alignItems: 'center',

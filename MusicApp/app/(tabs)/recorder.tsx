@@ -982,8 +982,6 @@ const LiveMixingPage = () => {
           <MaterialIcons name="loop" size={28} color="white" />
         </TouchableOpacity>
       </View>
-
-      {/* Add Track Modal */}
       <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -1013,8 +1011,6 @@ const LiveMixingPage = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Recordings Selection Modal */}
       <Modal animationType="slide" transparent={true} visible={showRecordingsModal} onRequestClose={() => setShowRecordingsModal(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -1051,8 +1047,6 @@ const LiveMixingPage = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Song Name Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -1086,8 +1080,6 @@ const LiveMixingPage = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Drum Kit Modal */}
       <Modal
         animationType="slide"
         transparent={false}

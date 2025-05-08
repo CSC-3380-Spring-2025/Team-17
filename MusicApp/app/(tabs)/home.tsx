@@ -261,11 +261,13 @@ export default function HomeScreen() {
             <Text style={styles.createButtonText}>Create New Track</Text>
           </Link>
         </Pressable>
-
-        <Pressable style={styles.createButton} onPress={handleRefresh}>
-            <Text style={styles.createButtonText}>Refresh</Text>
-        </Pressable>
       </ScrollView>
+
+      <View style={styles.footer}>
+        <Pressable style={styles.refreshButton} onPress={handleRefresh}>
+          <Text style={styles.createButtonText}>Refresh</Text>
+        </Pressable>
+      </View>
     </>
   );
 }
@@ -281,7 +283,15 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 15,
-    paddingBottom: 30,
+    paddingBottom: 80,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 15,
+    paddingBottom: 60,
   },
   lessonBox: {
     backgroundColor: '#2A2A2A',
@@ -340,6 +350,19 @@ const styles = StyleSheet.create({
     color: '#D2D2D2',
   },
   createButton: {
+    backgroundColor: '#5543A5',
+    borderRadius: 25,
+    paddingVertical: 16,
+    marginTop: 20,
+    alignItems: 'center',
+    shadowColor: '#5543A5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  refreshButton: {
     backgroundColor: '#5543A5',
     borderRadius: 25,
     paddingVertical: 16,

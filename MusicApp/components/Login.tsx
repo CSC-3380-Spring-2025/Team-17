@@ -28,7 +28,7 @@ const Login = () => {
       if (user) {
         if (user.emailVerified) {
           await login({ name: user.displayName || "" });
-          await StoreLoginDate(user.uid); // Pass handleTaskCompletion here
+          await StoreLoginDate(user.uid);
           const userDoc = await getDoc(doc(db, "users", user.uid));
           const loginDates = userDoc.data()?.loginDates || [];
           const consecutiveDays = checkConsecutiveDays(loginDates, user.uid);
