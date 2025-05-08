@@ -52,6 +52,7 @@ export default function Notation() {
                     const userDoc = await getDoc(userDocRef)
 
                     if (userDoc.exists()) {
+
                         console.log('Document data:', userDoc.data());
                         const userData = userDoc.data();
                         if (userData.lessonProgress) {
@@ -63,6 +64,7 @@ export default function Notation() {
                                     handleTaskCompletion("Complete 2 lessons");
                                     handleTaskCompletion("Complete all lessons");
                                 }
+
                             }
                         }
                         else {

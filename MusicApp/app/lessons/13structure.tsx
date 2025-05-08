@@ -95,8 +95,8 @@ export default function Structure() {
                                                         await updateDoc(userDocRef, {
                                                             lessonProgress: arrayUnion(7),
                                                         });
-                                                        handleTaskCompletion("Complete 2 lessons");
-                                                        handleTaskCompletion("Complete all lessons");
+                                                        handleTaskCompletion("Complete 2 quizzes");
+                                                        handleTaskCompletion("Complete all quizzes");
                                                     }
                                                 }
                                               }
@@ -875,7 +875,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
         textAlign: 'left',
     },
-
     subHeader: {
         color: '#fff',
         fontSize: 18,
@@ -894,8 +893,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: 15,
         width: '100%',
-
-    
+    },
     italic: {
         fontStyle: 'italic',
         color: '#5543A5',
@@ -937,27 +935,11 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-
-    header: {
-        color: '#5543A5',
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 15,
-        textAlign: 'left',
-    },
-    image: {
-        width: '100%',
-        height: 150,
-        marginVertical: 15,
-        borderRadius: 8,
-    },
     examples: {
         alignItems: 'flex-start'
     },
     buttons: {
         flexDirection: 'row'
-    },
-    
     },
     links: {
         flexDirection: 'row',
@@ -1020,20 +1002,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     correctAnswer: {
-
         backgroundColor: '#2E7D32',
         padding: 15,
-
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
     },
     incorrectAnswer: {
-
         backgroundColor: '#C62828',
         padding: 15,
-
         marginTop: 10,
         borderRadius: 8,
         width: '100%',
@@ -1043,7 +1021,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
-
         color: '#fff',
         textAlign: 'center',
     },
@@ -1058,20 +1035,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '600',
-    },
-    quizImage: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-        resizeMode: 'contain',
-        alignSelf: 'center',
-    },
-    italic: {
-        fontStyle: 'italic',
-        color: '#5543A5',
-    },
-    examples: {
-        alignItems: 'flex-start'
     },
     playButton: {
         backgroundColor: '#7E57C2',

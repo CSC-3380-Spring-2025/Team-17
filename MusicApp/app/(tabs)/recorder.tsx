@@ -1073,7 +1073,7 @@ const LiveMixingPage = () => {
                 style={[styles.modalButton, styles.saveButton]}
                 onPress={() => {
                   handleSaveSongName();
-                  handleTaskCompletion("Create a new track");
+                  handleTaskCompletion("Save 2 new songs");
                 }}>
                 <Text style={styles.modalButtonText}>Save</Text>
               </TouchableOpacity>

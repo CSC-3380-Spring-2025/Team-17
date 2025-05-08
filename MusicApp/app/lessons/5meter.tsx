@@ -58,68 +58,69 @@ export default function Meter() {
     const answer4 = "9/8";
 
     const [count, setCount] = useState<number>(0);
-    const [userId, setUserId] = useState<string>('');
-    const { handleTaskCompletion } = useChallenges();
-
-    useEffect(() => {
-        if (auth.currentUser) {
-            setUserId(auth.currentUser.uid);
-        }
-    }, [auth.currentUser]);
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (userId) {
-                console.log('Fetching data for userId:', userId);
-
-                try {
-                    const userDocRef = doc(db, 'users', userId);
-                    const userDoc = await getDoc(userDocRef)
-
-                    if (userDoc.exists()) {
-                        console.log('Document data:', userDoc.data());
-                        const userData = userDoc.data();
-                        if (userData.lessonProgress) {
-                            if (!userData.lessonProgress.includes(5)) {
-                                if (count === 4) {
-                                    await updateDoc(userDocRef, {
-                                        lessonProgress: arrayUnion(5),
-                                    });
-                                    handleTaskCompletion("Complete 2 lessons");
-                                    handleTaskCompletion("Complete all lessons");
+const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
+                
+                    useEffect(()=>{
+                        if (auth.currentUser){
+                          setUserId(auth.currentUser.uid);
+                        }
+                      }, [auth.currentUser]);
+                    
+                      useEffect(()=>{
+                          const fetchUserData= async()=>{
+                            if(userId){
+                              console.log('Fetching data for userId:', userId);
+                      
+                              try{
+                                const userDocRef= doc(db, 'users', userId);
+                                const userDoc = await getDoc(userDocRef)
+                                
+                                if (userDoc.exists()) {
+                                  console.log('Document data:', userDoc.data());
+                                  const userData = userDoc.data();
+                                  if(userData.lessonProgress){
+                                    if(!userData.lessonProgress.includes(5)){
+                                        if(count === 4){
+                                            await updateDoc(userDocRef, {
+                                                lessonProgress: arrayUnion(5),
+                                            });
+                                            handleTaskCompletion("Complete 2 quizzes");
+                                            handleTaskCompletion("Complete all quizzes");
+                                        }
+                                    }
+                                  }
+                                  else{
+                                    await setDoc(userDocRef, {
+                                        lessonProgress:[1],
+                                    }, {merge: true});
+                                  }
+                                } else {
+                                  await setDoc(userDocRef, {
+                                    lessonProgress: [1],
+                                  });
                                 }
+                        
+                              }catch(error){
+                                console.error('Error fetching user data:', error);
+                              }
                             }
-                        }
-                        else {
-                            await setDoc(userDocRef, {
-                                lessonProgress: [1],
-                            }, { merge: true });
-                        }
-                    } else {
-                        await setDoc(userDocRef, {
-                            lessonProgress: [1],
-                        });
-                    }
+                          };
+                          fetchUserData();
+                        }, [userId, count]);
 
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
-                }
-            }
-        };
-        fetchUserData();
-    }, [userId, count]);
+                        const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+                            if (!selected) return styles.quizButton;
+                            return correct ? styles.correctAnswer : styles.incorrectAnswer;
+                        };
+                                
+                        const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+                            setAnswer(option);
+                            if (option === correctAnswer) {
+                                setCount(prevCount => prevCount + 1);
+                            }
+                        };
 
-    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
-        if (!selected) return styles.quizButton;
-        return correct ? styles.correctAnswer : styles.incorrectAnswer;
-    };
-
-    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
-        setAnswer(option);
-        if (option === correctAnswer) {
-            setCount(prevCount => prevCount + 1);
-        }
-    };
 
     return (
 

@@ -14,19 +14,22 @@ type Challenge = {
 type ChallengesContextType = {
   challenges: Challenge[];
   handleTaskCompletion: (challengeTitle: string) => void;
+  loading: boolean;
 };
 
 type ChallengesProviderprops = {
   children: ReactNode;
 };
 
-const ChallengesContext = createContext<ChallengesContextType>({ challenges: [], handleTaskCompletion: () => { }, });
+const ChallengesContext = createContext<ChallengesContextType>({ challenges: [], handleTaskCompletion: () => { }, loading:true,});
 
 export const ChallengesProvider = ({ children }: ChallengesProviderprops) => {
 
   const [userId, setUserId] = useState<string>('');
 
   const [challenges, setChallenges] = useState<Challenge[]>([]);
+
+  const [loading, setLoading]=useState<boolean>(true);
 
   useEffect(()=>{
             if (auth.currentUser){
@@ -46,6 +49,7 @@ export const ChallengesProvider = ({ children }: ChallengesProviderprops) => {
   }, []);
 
   const fetchChallenges = async (userId: string) => {
+    setLoading(true);
     const userRef = doc(db, "users", userId);
     const userDoc = await getDoc(userRef);
     if(userDoc.exists()){
@@ -54,12 +58,12 @@ export const ChallengesProvider = ({ children }: ChallengesProviderprops) => {
         setChallenges(userDoc.data().challenges);
       }else{
         const defaultChallenges: Challenge[]=[
-          {title:"Complete 2 lessons", progress:0, goal:2, reward:10},
-          {title:"Create 2 new tracks", progress:0, goal:2, reward:10},
-          {title:"Use the virtual drums in a track twice", progress:0, goal:2, reward:10},
+          {title:"Complete 2 quizzes", progress:0, goal:2, reward:10},
+          {title:"Save 2 new songs", progress:0, goal:2, reward:10},
+         
           {title:"Import 2 new tracks", progress:0, goal:2, reward:10},
           {title:"Login three days in a row", progress:0, goal:3, reward:15},
-          {title:"Complete all lessons", progress:0, goal:13, reward:35},
+          {title:"Complete all quizzes", progress:0, goal:13, reward:35},
         ];
         await updateDoc(userRef, {challenges: defaultChallenges});
         setChallenges(defaultChallenges);
@@ -67,16 +71,17 @@ export const ChallengesProvider = ({ children }: ChallengesProviderprops) => {
       
     }else{
       const defaultChallenges: Challenge[]=[
-        {title:"Complete 2 lessons", progress:0, goal:2, reward:10},
-        {title:"Create 2 new tracks", progress:0, goal:2, reward:10},
-        {title:"Use the virtual drums in a track twice", progress:0, goal:2, reward:10},
+        {title:"Complete 2 quizzes", progress:0, goal:2, reward:10},
+        {title:"Save 2 new songs", progress:0, goal:2, reward:10},
+        
         {title:"Import 2 new tracks", progress:0, goal:2, reward:10},
         {title:"Login three days in a row", progress:0, goal:3, reward:15},
-        {title:"Complete all lessons", progress:0, goal:13, reward:35},
+        {title:"Complete all quizzes", progress:0, goal:13, reward:35},
       ];
       await setDoc(userRef, {challenges: defaultChallenges});
       setChallenges(defaultChallenges);
     }
+    setLoading(false);
   };
   const updateChallengeProgress= async (userId: string, challenges: Challenge[])=>{
     const userRef=doc(db, "users", userId);
@@ -122,7 +127,7 @@ export const ChallengesProvider = ({ children }: ChallengesProviderprops) => {
 
 
   return (
-    <ChallengesContext.Provider value={{ challenges, handleTaskCompletion }}>
+    <ChallengesContext.Provider value={{ challenges, handleTaskCompletion, loading }}>
       {children}
 
 

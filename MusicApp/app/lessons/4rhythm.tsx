@@ -44,8 +44,8 @@ export default function Rhythm(){
                                         await updateDoc(userDocRef, {
                                             lessonProgress: arrayUnion(4),
                                         });
-                                        handleTaskCompletion("Complete 2 lessons");
-                                        handleTaskCompletion("Complete all lessons");
+                                        handleTaskCompletion("Complete 2 quizzes");
+                                        handleTaskCompletion("Complete all quizzes");
                                     }
                                 }
                               }
