@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 35,
-    backgroundColor: "#000", // Same as original button
+    backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center",
-    bottom: 30, // Centered vertically
+    bottom: 30,
 },
 circularButtonText: {
     color: "#fff",

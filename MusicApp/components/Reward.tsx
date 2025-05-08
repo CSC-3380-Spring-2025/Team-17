@@ -5,6 +5,7 @@ import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { auth, db, updateCoins } from '@/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import {useAuth} from '../app/context/AuthContext';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type Props = {
     reward: number;
@@ -14,11 +15,8 @@ type Props = {
 export default function Reward ({ reward }: Props){
   return (
     <View style= {styles.container}>
-        <Image
-            source={require('@/assets/images/coin.png')}
-            style={styles.buttonImage}
-            resizeMode="contain"
-        />
+        <Ionicons name="diamond" size={24} color="#00BFFF"/>
+
         <Text style={styles.coins}>  :{reward}</Text>
     </View>
                       
@@ -33,12 +31,8 @@ export default function Reward ({ reward }: Props){
       justifyContent: 'flex-end',
       width: '100%',
     },
-    
-    buttonImage: {
-      width: 20,
-      height: 20,
-    },
     coins: {
       fontSize: 20,
+      color: "#fff",
     }
   });

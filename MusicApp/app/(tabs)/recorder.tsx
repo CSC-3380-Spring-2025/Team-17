@@ -7,7 +7,6 @@ import {
   Platform,
   PermissionsAndroid,
   FlatList,
-  SafeAreaView,
   Alert,
   StyleSheet,
   ScrollView,
@@ -23,6 +22,7 @@ import { useAudioContext } from './AudioContext';
 import { useLocalSearchParams } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
 import FileUploader from '@/components/fileUploader';
+import { useChallenges } from '../context/ChallengesContext';
 
 type SoundSource = 'voice' | 'virtual-instrument' | 'local-file';
 
@@ -193,7 +193,7 @@ const SoundSettingsModal: React.FC<SoundSettingsModalProps> = ({ visible, track,
                     <Slider
                       style={styles.beatTimeSlider}
                       minimumValue={0}
-                      maximumValue={5000} 
+                      maximumValue={5000}
                       step={50}
                       value={beat.time}
                       onValueChange={(value) => updateBeatTime(index, value)}
@@ -264,28 +264,28 @@ const LiveMixingPage = () => {
       sound: null,
       label: 'Kick',
       uri: require('../../assets/sounds/kick.mp3'),
-      color: '#E53935'
+      color: '#4A148C'
     },
     {
       id: 'snare',
       sound: null,
       label: 'Snare',
       uri: require('../../assets/sounds/snare.mp3'),
-      color: '#3949AB'
+      color: '#1E3A8A'
     },
     {
       id: 'hihat',
       sound: null,
       label: 'Hi-Hat',
       uri: require('../../assets/sounds/hihat.mp3'),
-      color: '#43A047'
+      color: '#B71C1C'
     },
     {
       id: 'crash',
       sound: null,
       label: 'Crash',
       uri: require('../../assets/sounds/crash.mp3'),
-      color: '#FB8C00'
+      color: '#2C6B2F'
     },
   ]);
 
@@ -398,7 +398,12 @@ const LiveMixingPage = () => {
       showRecordingsModal,
     };
     const fileUri = `${FileSystem.documentDirectory}liveMixingPageState_${name}.json`;
-    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+    if (Platform.OS === 'web') {
+      console.log("File system operations are not directly supported on the web.");
+    }
+    else {
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
+    }
   };
 
   const loadState = async (name: string) => {
@@ -512,7 +517,7 @@ const LiveMixingPage = () => {
 
       for (const track of tracks) {
         if (track.sourceType === 'virtual-instrument' && track.drumSequence) {
-          
+
           playDrumSequence(track, isLooping);
         } else if (track.url) {
           const { sound } = await Audio.Sound.createAsync(
@@ -543,7 +548,7 @@ const LiveMixingPage = () => {
     soundObjects.forEach(sound => {
       sound.setIsLoopingAsync(newLoopingState);
     });
-    
+
     if (isPlayingAll) {
       tracks.forEach(track => {
         if (track.sourceType === 'virtual-instrument' && track.drumSequence) {
@@ -555,10 +560,10 @@ const LiveMixingPage = () => {
 
   const stopAllPlayback = async () => {
     try {
-      
+
       await Promise.all(soundObjects.map(sound => sound.stopAsync()));
       setSoundObjects([]);
-      
+
       drumTimeouts.forEach(timeout => clearTimeout(timeout));
       setDrumTimeouts([]);
 
@@ -672,7 +677,7 @@ const LiveMixingPage = () => {
   const playDrumSequence = async (track: AudioTrack, loop = false) => {
     if (!track.drumSequence) return;
 
-    
+
     drumTimeouts.forEach(timeout => clearTimeout(timeout));
     setDrumTimeouts([]);
 
@@ -816,11 +821,61 @@ const LiveMixingPage = () => {
     }
   };
 
+  const { handleTaskCompletion } = useChallenges();
+
+  const [editingTrackId, setEditingTrackId] = useState<string | null>(null);
+  const [editingTrackName, setEditingTrackName] = useState('');
+
+  const startEditingTrack = (track: AudioTrack) => {
+    setEditingTrackId(track.id);
+    setEditingTrackName(track.title);
+  };
+
+  const saveTrackName = () => {
+    if (editingTrackId) {
+      setTracks(prev => prev.map(track =>
+        track.id === editingTrackId ? { ...track, title: editingTrackName } : track
+      ));
+      setEditingTrackId(null);
+    }
+  };
+
+  const cancelEditing = () => {
+    setEditingTrackId(null);
+  };
+
 
   const renderTrackItem = ({ item }: { item: AudioTrack }) => (
     <View style={styles.trackItem}>
       <View style={styles.trackInfo}>
-        <Text style={styles.trackTitle} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+        {editingTrackId === item.id ? (
+          <View style={styles.recordingInfo}>
+            <TextInput
+              style={[styles.recordingName, styles.recordingNameInput]}
+              value={editingTrackName}
+              onChangeText={setEditingTrackName}
+              onBlur={saveTrackName}
+              onSubmitEditing={saveTrackName}
+              autoFocus
+            />
+            <TouchableOpacity
+              onPress={cancelEditing}
+              style={styles.editButton}
+            >
+              <MaterialIcons name="close" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.recordingInfo}>
+            <Text style={styles.recordingName}>{item.title}</Text>
+            <TouchableOpacity
+              onPress={() => startEditingTrack(item)}
+              style={styles.editButton}
+            >
+              <MaterialIcons name="edit" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
+        )}
         <Text style={styles.trackType}>{item.sourceType}</Text>
 
         <View style={styles.trackMeta}>
@@ -863,8 +918,9 @@ const LiveMixingPage = () => {
     </View>
   );
 
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.addButton}
@@ -884,7 +940,7 @@ const LiveMixingPage = () => {
 
       {tracks.length === 0 ? (
         <View style={styles.emptyState}>
-          <MaterialIcons name="queue-music" size={64} color="#4243FF" />
+          <MaterialIcons name="queue-music" size={64} color="#5543A5" />
           <Text style={styles.emptyStateText}>No tracks added yet</Text>
           <Text style={styles.emptyStateSubtext}>Add your first track to begin mixing</Text>
         </View>
@@ -925,8 +981,6 @@ const LiveMixingPage = () => {
           <MaterialIcons name="loop" size={28} color="white" />
         </TouchableOpacity>
       </View>
-
-      {/* Add Track Modal */}
       <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -956,8 +1010,6 @@ const LiveMixingPage = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Recordings Selection Modal */}
       <Modal animationType="slide" transparent={true} visible={showRecordingsModal} onRequestClose={() => setShowRecordingsModal(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -994,8 +1046,6 @@ const LiveMixingPage = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Song Name Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -1014,7 +1064,10 @@ const LiveMixingPage = () => {
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.saveButton]}
-                onPress={handleSaveSongName}>
+                onPress={() => {
+                  handleSaveSongName();
+                  handleTaskCompletion("Save 2 new songs");
+                }}>
                 <Text style={styles.modalButtonText}>Save</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -1026,8 +1079,6 @@ const LiveMixingPage = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Drum Kit Modal */}
       <Modal
         animationType="slide"
         transparent={false}
@@ -1085,7 +1136,7 @@ const LiveMixingPage = () => {
         onClose={() => setSettingsModalVisible(false)}
         onSave={saveTrackSettings}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -1094,6 +1145,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1C1D1F',
+    paddingBottom: 50
   },
   timeInput: {
     width: 60,
@@ -1141,14 +1193,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
   },
-  drumBeatItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
   drumBeatText: {
     color: 'white',
     fontSize: 14,
@@ -1168,7 +1212,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     flexDirection: 'row',
-    backgroundColor: '#4243FF',
+    backgroundColor: '#5543A5',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
@@ -1225,12 +1269,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 12,
   },
-  trackTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 6,
-  },
   trackType: {
     fontSize: 14,
     color: '#666',
@@ -1266,11 +1304,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  recordingInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 16,
+  },
+  recordingName: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 12,
+    flexShrink: 1,
+  },
+  recordingNameInput: {
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 16,
+    padding: 5,
+    width: 150,
+    borderRadius: 4,
+  },
+  editButton: {
+    marginLeft: 12,
+    padding: 4,
+  },
   playButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#00BFA6',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
@@ -1311,6 +1373,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -5 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
+    paddingBottom: 70,
   },
   controlButton: {
     width: 64,
@@ -1326,19 +1389,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   recordButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: '#E53935',
   },
   playAllButton: {
-    backgroundColor: '#388E3C',
+    backgroundColor: '#5543A5',
     width: 72,
     height: 72,
     borderRadius: 36,
   },
   loopButton: {
-    backgroundColor: '#4243FF',
+    backgroundColor: '#00BFA6',
   },
   loopButtonActive: {
-    backgroundColor: '#F57C00',
+    backgroundColor: '#FFD54F',
   },
   modalContainer: {
     flex: 1,
@@ -1398,7 +1461,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   saveButton: {
-    backgroundColor: '#4243FF',
+    backgroundColor: '#5543A5',
   },
   cancelButton: {
     backgroundColor: '#1C1D1F',
@@ -1418,7 +1481,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   reverbActive: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#00BFA6',
   },
   reverbInactive: {
     backgroundColor: '#1C1D1F',
@@ -1480,17 +1543,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   drumRecordButtonActive: {
-    backgroundColor: '#FF5252',
+    backgroundColor: '#E64A19',
   },
   drumRecordButtonText: {
     color: 'white',
     fontSize: 18,
     marginLeft: 10,
   },
+  recordingStatusText: {
+    color: 'white',
+    fontSize: 16,
+    marginTop: 10,
+  },
   drumKitCloseButton: {
     marginTop: 20,
     padding: 12,
-    backgroundColor: '#4243FF',
+    backgroundColor: '#616161',
     borderRadius: 8,
   },
   drumKitCloseButtonText: {

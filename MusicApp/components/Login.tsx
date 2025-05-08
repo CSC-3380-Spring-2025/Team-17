@@ -28,7 +28,7 @@ const Login = () => {
       if (user) {
         if (user.emailVerified) {
           await login({ name: user.displayName || "" });
-          await StoreLoginDate(user.uid); // Pass handleTaskCompletion here
+          await StoreLoginDate(user.uid);
           const userDoc = await getDoc(doc(db, "users", user.uid));
           const loginDates = userDoc.data()?.loginDates || [];
           const consecutiveDays = checkConsecutiveDays(loginDates, user.uid);
@@ -102,12 +102,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'Inter_700Bold',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#fff',
-  },
-  title: {
-    fontSize: 24,
     marginBottom: 20,
     textAlign: 'center',
     color: '#fff',

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Acti
 import { getAuth, updatePassword, EmailAuthProvider, reauthenticateWithCredential, updateProfile } from 'firebase/auth';
 import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
 
+
 const profilePictureKeys = [
   'aesthetic',
   'bluemusic',
@@ -170,144 +171,146 @@ const AccountPage = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.profileHeader}>
-        <TouchableOpacity
-          onPress={() => isEditing && setShowPictureSelector(true)}
-          disabled={!isEditing}
-        >
-          {renderProfilePicture()}
-          {isEditing && (
-            <Text style={styles.changePhotoText}>Change Profile Picture</Text>
-          )}
-        </TouchableOpacity>
-      </View>
+    <>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.profileHeader}>
+          <TouchableOpacity
+            onPress={() => isEditing && setShowPictureSelector(true)}
+            disabled={!isEditing}
+          >
+            {renderProfilePicture()}
+            {isEditing && (
+              <Text style={styles.changePhotoText}>Change Profile Picture</Text>
+            )}
+          </TouchableOpacity>
+        </View>
 
-      {showPictureSelector ? (
-        renderProfilePictureSelector()
-      ) : (
-        <View style={styles.contentContainer}>
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Account Information</Text>
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={styles.textBox}
-                value={userEmail}
-                editable={false}
-              />
-            </View>
+        {showPictureSelector ? (
+          renderProfilePictureSelector()
+        ) : (
+          <View style={styles.contentContainer}>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Account Information</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.textBox}
+                  value={userEmail}
+                  editable={false}
+                />
+              </View>
 
-            {isEditing ? (
-              <>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Display Name</Text>
-                  <TextInput
-                    style={styles.textBox}
-                    value={displayName}
-                    onChangeText={setDisplayName}
-                    placeholder="Enter your display name"
-                    autoCapitalize="words"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Current Password</Text>
-                  <TextInput
-                    style={styles.textBox}
-                    value={currentPassword}
-                    onChangeText={setCurrentPassword}
-                    secureTextEntry
-                    placeholder="Enter current password"
-                    autoCapitalize="none"
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>New Password</Text>
-                  <TextInput
-                    style={styles.textBox}
-                    value={newPassword}
-                    onChangeText={setNewPassword}
-                    secureTextEntry
-                    placeholder="Leave empty to keep current"
-                    autoCapitalize="none"
-                  />
-                </View>
-
-                {newPassword ? (
+              {isEditing ? (
+                <>
                   <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Confirm New Password</Text>
+                    <Text style={styles.label}>Display Name</Text>
                     <TextInput
                       style={styles.textBox}
-                      value={confirmPassword}
-                      onChangeText={setConfirmPassword}
+                      value={displayName}
+                      onChangeText={setDisplayName}
+                      placeholder="Enter your display name"
+                      autoCapitalize="words"
+                    />
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Current Password</Text>
+                    <TextInput
+                      style={styles.textBox}
+                      value={currentPassword}
+                      onChangeText={setCurrentPassword}
                       secureTextEntry
-                      placeholder="Confirm new password"
+                      placeholder="Enter current password"
                       autoCapitalize="none"
                     />
                   </View>
-                ) : null}
-              </>
-            ) : (
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                  style={styles.textBox}
-                  value="*********"
-                  editable={false}
-                  secureTextEntry
-                />
-              </View>
-            )}
-          </View>
 
-          <View style={styles.buttonContainer}>
-            {isEditing ? (
-              <>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>New Password</Text>
+                    <TextInput
+                      style={styles.textBox}
+                      value={newPassword}
+                      onChangeText={setNewPassword}
+                      secureTextEntry
+                      placeholder="Leave empty to keep current"
+                      autoCapitalize="none"
+                    />
+                  </View>
+
+                  {newPassword ? (
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.label}>Confirm New Password</Text>
+                      <TextInput
+                        style={styles.textBox}
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry
+                        placeholder="Confirm new password"
+                        autoCapitalize="none"
+                      />
+                    </View>
+                  ) : null}
+                </>
+              ) : (
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Password</Text>
+                  <TextInput
+                    style={styles.textBox}
+                    value="*********"
+                    editable={false}
+                    secureTextEntry
+                  />
+                </View>
+              )}
+            </View>
+
+            <View style={styles.buttonContainer}>
+              {isEditing ? (
+                <>
+                  <TouchableOpacity
+                    style={[styles.button, styles.saveButton, isLoading && styles.disabledButton]}
+                    onPress={handleSaveChanges}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.buttonText}>Save Changes</Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={() => {
+                      setIsEditing(false);
+                      setCurrentPassword('');
+                      setNewPassword('');
+                      setConfirmPassword('');
+                      setShowPictureSelector(false);
+                    }}
+                    disabled={isLoading}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
                 <TouchableOpacity
-                  style={[styles.button, styles.saveButton, isLoading && styles.disabledButton]}
-                  onPress={handleSaveChanges}
-                  disabled={isLoading}
+                  style={[styles.button, styles.editButton]}
+                  onPress={() => setIsEditing(true)}
                 >
-                  {isLoading ? (
-                    <ActivityIndicator color="#fff" />
-                  ) : (
-                    <Text style={styles.buttonText}>Save Changes</Text>
-                  )}
+                  <Text style={styles.buttonText}>Edit Profile</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, styles.cancelButton]}
-                  onPress={() => {
-                    setIsEditing(false);
-                    setCurrentPassword('');
-                    setNewPassword('');
-                    setConfirmPassword('');
-                    setShowPictureSelector(false);
-                  }}
-                  disabled={isLoading}
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <TouchableOpacity
-                style={[styles.button, styles.editButton]}
-                onPress={() => setIsEditing(true)}
-              >
-                <Text style={styles.buttonText}>Edit Profile</Text>
-              </TouchableOpacity>
-            )}
+              )}
+            </View>
           </View>
-        </View>
-      )}
-    </ScrollView>
+        )}
+      </ScrollView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#D2D2D2',
+    backgroundColor: '#1C1D1F',
     paddingBottom: 30,
   },
   profileHeader: {
@@ -365,10 +368,10 @@ const styles = StyleSheet.create({
     color: '#777',
   },
   changePhotoText: {
-    color: '#5543A5',
-    marginBottom: 5,
+    color: '#B39DDB',
+    marginBottom: 0,
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '500',
   },
   inputGroup: {
@@ -431,7 +434,7 @@ const styles = StyleSheet.create({
   profilePictureContainer: {
     width: '100%',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF',
   },
   selectorTitle: {
     fontSize: 16,

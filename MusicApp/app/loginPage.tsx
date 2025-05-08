@@ -1,97 +1,78 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, Image } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Login from '../components/Login';
-import Register from '../components/Register';
-import { Link, Stack } from 'expo-router';
 import { ChallengesProvider } from './context/ChallengesContext';
+import Svg, { Line, Polygon } from 'react-native-svg';
+import { MaterialIcons } from '@expo/vector-icons';
+
+const { width, height } = Dimensions.get('window');
 
 const account = () => {
   return (
     <ChallengesProvider>
-    <>
-      
       <View style={styles.container}>
-        
-        <Login />
-        
-
+        <View style={styles.topSection}>
+          <Svg height="100%" width="100%" style={styles.diagonalContainer}>
+            <Polygon
+              points={`0,0 ${width},0 ${width},${height * 0.3} 0,${height * 0.4}`}
+              fill="#5543A5"
+            />
+            <Line
+              x1="0"
+              y1={height * 0.4}
+              x2={width}
+              y2={height * 0.3}
+              stroke="#fff"
+              strokeWidth="2"
+            />
+          </Svg>
+          <View style={styles.headerContent}>
+            <MaterialIcons name="queue-music" size={128} color="#fff" />
+            <Text style={styles.melodifyLogo}>Melodify</Text>
+          </View>
+        </View>
+        <View style={styles.loginContainer}>
+          <Login />
+        </View>
       </View>
-      
-    </>
     </ChallengesProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    alignItems: "center",
-    paddingTop: 30,
-  },
   container: {
     flex: 1,
     backgroundColor: '#333232',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    flexDirection: 'column',
   },
-  linkText: {
-    color: "#0000FF",
-    fontSize: 16,
-    alignItems:'center',
-    justifyContent:'center'
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  topSection: {
+    height: height * 0.4,
     width: '100%',
+    position: 'relative',
   },
-  titleContainer: {
+  diagonalContainer: {
     position: 'absolute',
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerTitle: {
-    fontSize: 28,
-    color: "#fff",
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  imageButton: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textDecorationLine: 'none',
-  },
-  buttonImage: {
     width: '100%',
     height: '100%',
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#fff',
+  loginContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
-  input: {
-    height: 30,
-    borderColor: '#fff',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    color: '#fff',
+  headerContent: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -100 }, { translateY: -100 }],
+    alignItems: 'center',
+    width: 200,
   },
-  createLink: {
-    marginTop: 20,
-    alignSelf: 'center',
-  }, 
-  createLinkText: {
+  melodifyLogo: {
     color: '#fff',
-    fontSize: 16,
-    textDecorationLine: 'underline',
+    fontSize: 36,
+    fontWeight: 'bold',
+    marginTop: 10,
+    fontFamily: 'Inter_700Bold',
   },
 });
 

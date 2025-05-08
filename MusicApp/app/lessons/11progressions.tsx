@@ -1,9 +1,13 @@
-import React, {useEffect, useRef} from 'react';
-import {Text, ScrollView, StyleSheet, View, Image, Button} from 'react-native';
-import {Link} from 'expo-router';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
+import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
+import { useChallenges } from '../context/ChallengesContext';
 
-export default function Progressions(){
+
+export default function Progressions() {
     const major = useRef(new Audio.Sound());
     const minor = useRef(new Audio.Sound());
     const dominant = useRef(new Audio.Sound());
@@ -17,7 +21,7 @@ export default function Progressions(){
     const deceptive_cadence = useRef(new Audio.Sound());
 
     useEffect(() => {
-        const loadSounds = async() => {
+        const loadSounds = async () => {
             await major.current.loadAsync(require('@/assets/sounds/major_triads.mp3'));
             await minor.current.loadAsync(require('@/assets/sounds/minortriads.mp3'));
             await dominant.current.loadAsync(require('@/assets/sounds/dominant.mp3'));
@@ -48,370 +52,708 @@ export default function Progressions(){
         };
     }, []);
 
-    return(
-        <ScrollView 
-            contentContainerStyle={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.container}>
-                <Text style={styles.title}>
-                    Harmonic Progressions
-                </Text>
-                
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        Chords are the basis of harmony in music. A song or composition moves from one chord to another in a <Text style={styles.bold}>harmonic progression</Text>.
-                        In a progression, certain chords have important functions that are instrumental in creating stable and effective harmonic progressions.
-                        These will be discussed in more detail later. However, to understand the functions of chords, one must learn to identify them 
-                        using Roman numerals. 
-                    </Text>
-                </View>
 
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Roman Numerals
-                    </Text>
-                    <Text style={styles.text}>
-                        Roman numerals are used by musicians to identify chords within the context of key signatures. Roman numerals identify the scale 
-                        degree of the chord's root. Because they are based on scale degrees rather than specific pitches, Roman numerals are useful for 
-                        understanding how harmonies function similarly in different keys. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/Rnumerals.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.text}>
-                        Besides indicating the root of the chord, Roman numerals also indicate the quality of the chord. Uppercase Roman 
-                        numerals indicate major triads & lowercase Roman numerals indicate minor triads. Lowercase Roman numerals followed 
-                        by a superscript "o" represent diminished triads. Uppercase Roman numerals followed by a + sign represent augmented 
-                        triads. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/Rqualities.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.text}>
-                        Just as scale degrees & solfege are the same across keys, so are Roman numerals. The examples below show the 
-                        Roman numerals for G major & G minor, but the same Roman numerals would be used regardless of which pitch is the 
-                        tonic. Remember that if the leading tone is raised in minor, the chord quality changes, and thus, the Roman numerals 
-                        change. The minor v chord becomes a major V chord, and the subtonic VII chord becomes a diminished viio chord. This 
-                        means that a Roman numeral sometimes implies a raised leading tone, so remember that when there is a V or viio in a 
-                        minor key, the leading tone will be raised.  
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/major_numerals.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play triads"
-                            onPress={() => major.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause triads"
-                            onPress={() => major.current.pauseAsync()}
-                        />
-                    </View>
-                    <Image 
-                        source={require('@/assets/images/minor_numerals.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play triads"
-                            onPress={() => minor.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause triads"
-                            onPress={() => minor.current.pauseAsync()}
-                        />
-                    </View>
-                </View>
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const [quiz4Answer, setQ4Answer] = useState<string | null>(null);
+    const [quiz5Answer, setQ5Answer] = useState<string | null>(null);
+    const [quiz6Answer, setQ6Answer] = useState<string | null>(null);
+    const [quiz7Answer, setQ7Answer] = useState<string | null>(null);
+    const [quiz8Answer, setQ8Answer] = useState<string | null>(null);
+    const answer1 = "True";
+    const answer2 = "Major & Diminished";
+    const answer3 = "False";
+    const answer4 = "False";
+    const answer5 = "None";
+    const answer6 = "Phyrgian Cadence";
+    const answer7 = "Tonic"
+    const answer8 = "False"
 
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        I: Tonic Chords
-                    </Text>
-                    <Text style={styles.text}>
-                        The <Text style={styles.bold}>tonic chord</Text> is the chord built on the tonic note, which is the first note of a scale, and it is represented by I in 
-                        major keys and i in minor keys. For example, in the key of C major, the tonic chord would be the C major chord. Likewise, in the key of C minor, 
-                        the tonic chord would be the C minor chord. The tonic chord represents stability and serves as the center of a key and a point of resolution in most musical works. 
-                        Music will often begin and end on the tonic chord I. The tonic chord will either appear in root position or 1st inversion as I6. 
-                        It will rarely appear in 2nd inversion as I 6/4 because of the dissonant 4th.
-                    </Text>  
-                </View>
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId] = useState<string>('');
+    const { handleTaskCompletion } = useChallenges();
 
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        V & viio: Dominant Chords
-                    </Text>
-                    <Text style={styles.text}>
-                        The <Text style={styles.bold}>dominant chord</Text> is the chord build on the dominant note, which is the fifth note of a scale, and it is represented by V in 
-                        major keys. In minor keys, the leading tone is raised, so the dominant chord is represented by V. For example, in the key of C major, the dominant chord would be 
-                        the G major chord. Likewise, in the key of C minor, the dominant chord would also be the G major chord instead of G minor because of the raised leading tone. The 
-                        dominant chord represents instability and always seeks to resolve to the tonic for stability. This is why the leading tone is raised in minor. A raised leading tone 
-                        in a major V chord allows for better resolution to i than the subtonic in a minor v chord. A V chord can appear in root position or 1st inversion as V6, which always 
-                        resolves to root-position I since the leading tone is in the bass.  
-                    </Text>
-                    <Text style={styles.text}>
-                        Additionally, the viio chord can also serve a dominant function and resolve to the tonic. However, it is a much weaker dominant chord than the V chord and is not 
-                        commonly used. It must always be in 1st inversion because in root position, the diminished 5th creates a dissonance. In minor keys, VII is built on the subtonic major 
-                        chord. Because it does not have a raised leading tone, it does not have a dominant function. It is often used to change key from minor to the relative major. It can also 
-                        lead directly to the dominant V6 chord. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/dominant.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play dominant"
-                            onPress={() => dominant.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause dominant"
-                            onPress={() => dominant.current.pauseAsync()}
-                        />
-                    </View>
-                </View>
+    useEffect(() => {
+        if (auth.currentUser) {
+            setUserId(auth.currentUser.uid);
+        }
+    }, [auth.currentUser]);
 
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        IV & ii: Subdominant Chords
-                    </Text>
-                    <Text style={styles.text}>
-                        The <Text style={styles.bold}>subdominant chord</Text> is the chord built upon the subdominant note, which is the fourth note of a scale, and it is represented by IV in 
-                        major keys and iv in minor keys. For example in the key of C major, the subdominant chord would be the F major chord. Likewise in the key of C minor, the subdominant chord 
-                        would be the F minor chord. The subdominant chord has a tendency to move to the dominant chord and usually leads to the V chord. However, the subdominant chord can also be 
-                        used to embellish the tonic. Instead of moving to V, the IV chord can lead to I or I6 to prolong the tonic. The IV chord usually appears in root position, but it can also be
-                        used in 1st inversion as IV6, which moves to the V chord in root position. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/subdominant.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play subdominant"
-                            onPress={() => subdominant.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause subdominant"
-                            onPress={() => subdominant.current.pauseAsync()}
-                        />
-                    </View>
-                    <Text style={styles.text}>
-                        Additionally, the ii chord can also serve a subdominant function and lead to the dominant. Usually, the ii chord appears in 1st inversion as ii6 so that scale degree 4 will be 
-                        in the bass, thus giving it a strong subdominant function. However, a root position ii chord can also serve this purpose in major keys. In minor keys, a root position iio chord is 
-                        diminished, thus creating a dissonance. Therefore, the root position iio chord should never be used in minor. Only a 1st inversion iio6 chord can be used for subdominant function in minor.
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/subdominant2.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play subdominant"
-                            onPress={() => subdominant2.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause subdominant"
-                            onPress={() => subdominant2.current.pauseAsync()}
-                        />
-                    </View>
-                </View>
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userId) {
+                console.log('Fetching data for userId:', userId);
 
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        vi & iii: Other Chords
-                    </Text>
-                    <Text style={styles.text}>
-                        The vi chord & the iii chord do not have any real functions. They mainly act as intermediaries between functions and can briefly adopt certain functions in a particular context.
-                        The vi chord can lead from the tonic to the subdominant with a pattern of descending 3rds in the bass. It can also lead to other subdominant chords like ii & IV6. Plus, vi can lead 
-                        to I6 before moving to a subdominant harmony, thus embellishing the tonic. It is less common for vi to lead directly to a dominant chord like V or V6. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/vi_chord.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play vi"
-                            onPress={() => vi_chord.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause vi"
-                            onPress={() => vi_chord.current.pauseAsync()}
-                        />
-                    </View>
-                    <Text style={styles.text}>
-                        The iii chord can be used to move between functions. It shares the same bass & also has two tones in common with I6, so it can briefly adopt a tonic function & replace I6. 
-                        By carrying a tonic function, the iii chord can lead to subdominant or dominant harmonies. In a III chord in minor keys, the scale degree 7 is not raised and thus does not need to resolve to the tonic, 
-                        so III is used to harmonic melodies where 7 descends to 6. The iii chord can be used in 1st inversion as iii6 & III6+, both of which have scale degree 5 in the bass & are thus treated 
-                        as a root-position V chord with an embellishing 6th. They carry a dominant function & can substitute for V. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/iii_chord.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play iii"
-                            onPress={() => iii_chord.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause iii"
-                            onPress={() => iii_chord.current.pauseAsync()}
-                        />
-                    </View>
-                </View>
+                try {
+                    const userDocRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
 
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Cadences
+                    if (userDoc.exists()) {
+                        console.log('Document data:', userDoc.data());
+                        const userData = userDoc.data();
+                        if (userData.lessonProgress) {
+                            if (!userData.lessonProgress.includes(9)) {
+                                if (count === 8) {
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(9),
+                                    });
+                                    handleTaskCompletion("Complete 2 quizzes");
+                                    handleTaskCompletion("Complete all quizzes");
+                                }
+                            }
+                        }
+                        else {
+                            await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                            }, { merge: true });
+                        }
+                    } else {
+                        await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                        });
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, [userId, count]);
+
+    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+        if (!selected) return styles.quizButton;
+        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+    };
+
+    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+        setAnswer(option);
+        if (option === correctAnswer) {
+            setCount(prevCount => prevCount + 1);
+        }
+    };
+
+    return (
+        <>
+            <ScrollView
+
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>
+                        Harmonic Progressions
                     </Text>
-                    <Text style={styles.text}>
-                        A <Text style={styles.bold}>cadence</Text> is the end of a musical phrase. It is like the punctuation at the end of a 
-                        sentence or clause. Cadences consist of one or two chords that complete the musical thought. All chords in a cadence must be 
-                        in root position.
-                    </Text>
-                    <Text style={styles.text}>
-                        A <Text style={styles.bold}>half cadence</Text> occurs when a phrase ends on an unresolved dominant V chord. Since dominant chords 
-                        are unstable, ending a phrase on an unresolved V chord creates a lack of harmonic closure. The phrase feels incomplete, as 
-                        if the music ends at a cliffhanger, and there is yet more to come. Half cadences are mostly used in the middle of a musical work 
-                        to build suspense & anticipation for the music that will come next. A <Text style={styles.bold}>Phrygian cadence</Text> is a 
-                        special type of half cadence that occurs in minor keys. It consists of a iv6 chord resolving to a V chord. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/half_cadence.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play cadence"
-                            onPress={() => half_cadence.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause cadence"
-                            onPress={() => half_cadence.current.pauseAsync()}
-                        />
+
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            Chords are the basis of harmony in music. A song or composition moves from one chord to another in a <Text style={styles.bold}>harmonic progression</Text>.
+                            In a progression, certain chords have important functions that are instrumental in creating stable and effective harmonic progressions.
+                            These will be discussed in more detail later. However, to understand the functions of chords, one must learn to identify them
+                            using Roman numerals.
+                        </Text>
                     </View>
-                    <Text style={styles.text}>
-                        An <Text style={styles.bold}>authentic cadence</Text> occurs when a phrase ends on a dominant V chord followed by a tonic I chord. 
-                        Because the unstable dominant is able to resolve to the stable tonic, there is a sense of harmonic closure and completeness as the 
-                        phrase comes to a satisfying end. There are two types of authentic cadences. A <Text style={styles.bold}>perfect authentic cadence </Text>
-                        consists of not only the V-I harmonic resolution, but also satisfies a melodic condition where the melody or the highest note in the tonic 
-                        chord ends on scale degree 1. An <Text style={styles.bold}>imperfect authentic cadence</Text> does not meet the melodic condition, but it 
-                        still has the V-I harmonic resolution. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/authentic_cadence.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play cadence"
-                            onPress={() => authentic_cadence.current.playAsync()}
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Roman Numerals
+                        </Text>
+                        <Text style={styles.text}>
+                            Roman numerals are used by musicians to identify chords within the context of key signatures. Roman numerals identify the scale
+                            degree of the chord's root. Because they are based on scale degrees rather than specific pitches, Roman numerals are useful for
+                            understanding how harmonies function similarly in different keys.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/Rnumerals.png')}
+                            style={styles.image}
+                            resizeMode="contain"
                         />
-                        <Button 
-                            color="#F44336"
-                            title="Pause cadence"
-                            onPress={() => authentic_cadence.current.pauseAsync()}
+                        <Text style={styles.text}>
+                            Besides indicating the root of the chord, Roman numerals also indicate the quality of the chord. Uppercase Roman
+                            numerals indicate major triads & lowercase Roman numerals indicate minor triads. Lowercase Roman numerals followed
+                            by a superscript "o" represent diminished triads. Uppercase Roman numerals followed by a + sign represent augmented
+                            triads.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/Rqualities.png')}
+                            style={styles.image}
+                            resizeMode="contain"
                         />
+                        <Text style={styles.text}>
+                            Just as scale degrees & solfege are the same across keys, so are Roman numerals. The examples below show the
+                            Roman numerals for G major & G minor, but the same Roman numerals would be used regardless of which pitch is the
+                            tonic. Remember that if the leading tone is raised in minor, the chord quality changes, and thus, the Roman numerals
+                            change. The minor v chord becomes a major V chord, and the subtonic VII chord becomes a diminished viio chord. This
+                            means that a Roman numeral sometimes implies a raised leading tone, so remember that when there is a V or viio in a
+                            minor key, the leading tone will be raised.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/major_numerals.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => major.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Triads</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => major.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Triads</Text>
+                            </Pressable>
+                        </View>
+                        <Image
+                            source={require('@/assets/images/minor_numerals.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => minor.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Triads</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => minor.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Triads</Text>
+                            </Pressable>
+                        </View>
                     </View>
-                    <Text style={styles.text}>
-                        A <Text style={styles.bold}>plagal cadence</Text> occurs when a phrase ends on a subdominant IV chord followed by a tonic I chord. 
-                        This cadence is used as a post-cadential appendix. It usually comes after an authentic cadence to confirm the end of a phrase. The 
-                        IV chord balances the V chord since V is a fifth above I, and IV is a fifth below I. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/plagal_cadence.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play cadence"
-                            onPress={() => plagal_cadence.current.playAsync()}
-                        />
-                        <Button 
-                            color="#F44336"
-                            title="Pause cadence"
-                            onPress={() => plagal_cadence.current.pauseAsync()}
-                        />
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            I: Tonic Chords
+                        </Text>
+                        <Text style={styles.text}>
+                            The <Text style={styles.bold}>tonic chord</Text> is the chord built on the tonic note, which is the first note of a scale, and it is represented by I in
+                            major keys and i in minor keys. For example, in the key of C major, the tonic chord would be the C major chord. Likewise, in the key of C minor,
+                            the tonic chord would be the C minor chord. The tonic chord represents stability and serves as the center of a key and a point of resolution in most musical works.
+                            Music will often begin and end on the tonic chord I. The tonic chord will either appear in root position or 1st inversion as I6.
+                            It will rarely appear in 2nd inversion as I 6/4 because of the dissonant 4th.
+                        </Text>
                     </View>
-                    <Text style={styles.text}>
-                        A <Text style={styles.bold}>deceptive cadence</Text> occurs when a phrase ends on a dominant V chord followed by a vi chord substituting for the tonic. 
-                        Because the unstable V chord usually resolves to the I chord, the unexpected resolution to the vi chord creates a sense of deception in the music. It 
-                        also prevents the harmony from resolving properly, which means the music needs continue and eventually end with an authentic cadence to provide proper harmonic closure. 
-                    </Text>
-                    <Image 
-                        source={require('@/assets/images/deceptive_cadence.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button 
-                            color="#4CAF50"
-                            title="Play cadence"
-                            onPress={() => deceptive_cadence.current.playAsync()}
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            V & viio: Dominant Chords
+                        </Text>
+                        <Text style={styles.text}>
+                            The <Text style={styles.bold}>dominant chord</Text> is the chord build on the dominant note, which is the fifth note of a scale, and it is represented by V in
+                            major keys. In minor keys, the leading tone is raised, so the dominant chord is represented by V. For example, in the key of C major, the dominant chord would be
+                            the G major chord. Likewise, in the key of C minor, the dominant chord would also be the G major chord instead of G minor because of the raised leading tone. The
+                            dominant chord represents instability and always seeks to resolve to the tonic for stability. This is why the leading tone is raised in minor. A raised leading tone
+                            in a major V chord allows for better resolution to i than the subtonic in a minor v chord. A V chord can appear in root position or 1st inversion as V6, which always
+                            resolves to root-position I since the leading tone is in the bass.
+                        </Text>
+                        <Text style={styles.text}>
+                            Additionally, the viio chord can also serve a dominant function and resolve to the tonic. However, it is a much weaker dominant chord than the V chord and is not
+                            commonly used. It must always be in 1st inversion because in root position, the diminished 5th creates a dissonance. In minor keys, VII is built on the subtonic major
+                            chord. Because it does not have a raised leading tone, it does not have a dominant function. It is often used to change key from minor to the relative major. It can also
+                            lead directly to the dominant V6 chord.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/dominant.png')}
+                            style={styles.image}
+                            resizeMode="contain"
                         />
-                        <Button 
-                            color="#F44336"
-                            title="Pause cadence"
-                            onPress={() => deceptive_cadence.current.pauseAsync()}
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => dominant.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Dominant</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => dominant.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Dominant</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            IV & ii: Subdominant Chords
+                        </Text>
+                        <Text style={styles.text}>
+                            The <Text style={styles.bold}>subdominant chord</Text> is the chord built upon the subdominant note, which is the fourth note of a scale, and it is represented by IV in
+                            major keys and iv in minor keys. For example in the key of C major, the subdominant chord would be the F major chord. Likewise in the key of C minor, the subdominant chord
+                            would be the F minor chord. The subdominant chord has a tendency to move to the dominant chord and usually leads to the V chord. However, the subdominant chord can also be
+                            used to embellish the tonic. Instead of moving to V, the IV chord can lead to I or I6 to prolong the tonic. The IV chord usually appears in root position, but it can also be
+                            used in 1st inversion as IV6, which moves to the V chord in root position.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/subdominant.png')}
+                            style={styles.image}
+                            resizeMode="contain"
                         />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => subdominant.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Subdominant</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => subdominant.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Subdominant</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            Additionally, the ii chord can also serve a subdominant function and lead to the dominant. Usually, the ii chord appears in 1st inversion as ii6 so that scale degree 4 will be
+                            in the bass, thus giving it a strong subdominant function. However, a root position ii chord can also serve this purpose in major keys. In minor keys, a root position iio chord is
+                            diminished, thus creating a dissonance. Therefore, the root position iio chord should never be used in minor. Only a 1st inversion iio6 chord can be used for subdominant function in minor.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/subdominant2.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => subdominant2.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Subdominant</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => subdominant2.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Subdominant</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            vi & iii: Other Chords
+                        </Text>
+                        <Text style={styles.text}>
+                            The vi chord & the iii chord do not have any real functions. They mainly act as intermediaries between functions and can briefly adopt certain functions in a particular context.
+                            The vi chord can lead from the tonic to the subdominant with a pattern of descending 3rds in the bass. It can also lead to other subdominant chords like ii & IV6. Plus, vi can lead
+                            to I6 before moving to a subdominant harmony, thus embellishing the tonic. It is less common for vi to lead directly to a dominant chord like V or V6.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/vi_chord.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => vi_chord.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play VI</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => vi_chord.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause VI</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            The iii chord can be used to move between functions. It shares the same bass & also has two tones in common with I6, so it can briefly adopt a tonic function & replace I6.
+                            By carrying a tonic function, the iii chord can lead to subdominant or dominant harmonies. In a III chord in minor keys, the scale degree 7 is not raised and thus does not need to resolve to the tonic,
+                            so III is used to harmonic melodies where 7 descends to 6. The iii chord can be used in 1st inversion as iii6 & III6+, both of which have scale degree 5 in the bass & are thus treated
+                            as a root-position V chord with an embellishing 6th. They carry a dominant function & can substitute for V.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/iii_chord.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => iii_chord.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play III</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => iii_chord.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause III</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Cadences
+                        </Text>
+                        <Text style={styles.text}>
+                            A <Text style={styles.bold}>cadence</Text> is the end of a musical phrase. It is like the punctuation at the end of a
+                            sentence or clause. Cadences consist of one or two chords that complete the musical thought. All chords in a cadence must be
+                            in root position.
+                        </Text>
+                        <Text style={styles.text}>
+                            A <Text style={styles.bold}>half cadence</Text> occurs when a phrase ends on an unresolved dominant V chord. Since dominant chords
+                            are unstable, ending a phrase on an unresolved V chord creates a lack of harmonic closure. The phrase feels incomplete, as
+                            if the music ends at a cliffhanger, and there is yet more to come. Half cadences are mostly used in the middle of a musical work
+                            to build suspense & anticipation for the music that will come next. A <Text style={styles.bold}>Phrygian cadence</Text> is a
+                            special type of half cadence that occurs in minor keys. It consists of a iv6 chord resolving to a V chord.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/half_cadence.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => half_cadence.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Cadence</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => half_cadence.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Cadence</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            An <Text style={styles.bold}>authentic cadence</Text> occurs when a phrase ends on a dominant V chord followed by a tonic I chord.
+                            Because the unstable dominant is able to resolve to the stable tonic, there is a sense of harmonic closure and completeness as the
+                            phrase comes to a satisfying end. There are two types of authentic cadences. A <Text style={styles.bold}>perfect authentic cadence </Text>
+                            consists of not only the V-I harmonic resolution, but also satisfies a melodic condition where the melody or the highest note in the tonic
+                            chord ends on scale degree 1. An <Text style={styles.bold}>imperfect authentic cadence</Text> does not meet the melodic condition, but it
+                            still has the V-I harmonic resolution.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/authentic_cadence.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => authentic_cadence.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Cadence</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => authentic_cadence.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Cadence</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            A <Text style={styles.bold}>plagal cadence</Text> occurs when a phrase ends on a subdominant IV chord followed by a tonic I chord.
+                            This cadence is used as a post-cadential appendix. It usually comes after an authentic cadence to confirm the end of a phrase. The
+                            IV chord balances the V chord since V is a fifth above I, and IV is a fifth below I.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/plagal_cadence.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => plagal_cadence.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Cadence</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => plagal_cadence.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Cadence</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            A <Text style={styles.bold}>deceptive cadence</Text> occurs when a phrase ends on a dominant V chord followed by a vi chord substituting for the tonic.
+                            Because the unstable V chord usually resolves to the I chord, the unexpected resolution to the vi chord creates a sense of deception in the music. It
+                            also prevents the harmony from resolving properly, which means the music needs continue and eventually end with an authentic cadence to provide proper harmonic closure.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/deceptive_cadence.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => deceptive_cadence.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Cadence</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => deceptive_cadence.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Cadence</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+
+                    <View>
+                        <Text style={styles.quizTitle}>
+                            Quiz
+                        </Text>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                1. The tonic chord is stable while the dominant chord is unstable.
+                            </Text>
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz1Answer === option;
+                                const correct = option === answer1;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz1Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ1Answer, answer1);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz1Answer && (
+                                <Text style={styles.result}>
+                                    {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                2. What are the qualities of the dominant and subtonic chords in minor when the leading tone is raised?
+                            </Text>
+                            {["Major & Diminished", "Minor & Augmented", "Major & Augmented", "Minor & Diminished"].map((option, index) => {
+                                const selected = quiz2Answer === option;
+                                const correct = option === answer2;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz2Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ2Answer, answer2);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz2Answer && (
+                                <Text style={styles.result}>
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                3. The viio chord has a stronger dominant function than the V chord.
+                            </Text>
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz3Answer === option;
+                                const correct = option === answer3;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz3Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ3Answer, answer3);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz3Answer && (
+                                <Text style={styles.result}>
+                                    {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                4. The iio chord & the viio chord can be used in root position.
+                            </Text>
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz4Answer === option;
+                                const correct = option === answer4;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz4Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ4Answer, answer4);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz4Answer && (
+                                <Text style={styles.result}>
+                                    {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                5. What function do the vi and iii chords have?
+                            </Text>
+                            {["Tonic", "Subdominant", "Dominant", "None"].map((option, index) => {
+                                const selected = quiz5Answer === option;
+                                const correct = option === answer5;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz5Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ5Answer, answer5);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz5Answer && (
+                                <Text style={styles.result}>
+                                    {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                6. In which cadence does a iv6 chord resolve to a V chord?
+                            </Text>
+                            {["Half Cadence", "Phrygian Cadence", "Plagal Cadence", "Deceptive Cadence"].map((option, index) => {
+                                const selected = quiz6Answer === option;
+                                const correct = option === answer6;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz6Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ6Answer, answer6);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz6Answer && (
+                                <Text style={styles.result}>
+                                    {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                7. What note must the melody end on in a perfect authentic cadence?
+                            </Text>
+                            {["Tonic", "Subdominant", "Dominant", "Leading Tone"].map((option, index) => {
+                                const selected = quiz7Answer === option;
+                                const correct = option === answer7;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz7Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ7Answer, answer7);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz7Answer && (
+                                <Text style={styles.result}>
+                                    {quiz7Answer === answer7 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                8. A deceptive cadence does not need to be followed by an authentic cadence.
+                            </Text>
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz8Answer === option;
+                                const correct = option === answer8;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz8Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ8Answer, answer8);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz8Answer && (
+                                <Text style={styles.result}>
+                                    {quiz8Answer === answer8 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+                    </View>
+
+                    <View style={styles.linksContainer}>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./10chords' style={styles.secondaryLink}>
+                                ← Previous: Chords
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                                ← Back to Home
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./12texture' style={styles.link}>
+                                Next: Musical Textures →
+                            </Link>
+                        </View>
                     </View>
                 </View>
-                
-                <View style={styles.linksContainer}>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./10chords' style={styles.secondaryLink}>
-                            ← Previous: Chords
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
-                            ← Back to Home
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./12texture' style={styles.link}>
-                            Next: Musical Textures →
-                        </Link>
-                    </View>
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </>
     );
 }
 
@@ -422,45 +764,79 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#D2D2D2',
+        backgroundColor: '#1C1D1F',
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingBottom: 40,
     },
     title: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 36,
         fontFamily: 'Inter_700Bold',
         fontWeight: 'bold',
         marginVertical: 30,
         textAlign: 'center',
         textShadowColor: 'rgba(0,0,0,0.1)',
-        textShadowOffset: {width: 1, height: 1},
+        textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 3,
     },
     card: {
-        backgroundColor: 'white',
+        backgroundColor: '#2A2A2A',
         borderRadius: 12,
-        padding: 20,
-        marginBottom: 20,
+        padding: 25,
+        marginBottom: 25,
         width: '100%',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        borderColor: 'black',
+        borderColor: '5543A5',
         borderWidth: 2,
         elevation: 3,
     },
     text: {
-        color: '#333',
+        color: '#D2D2D2',
         fontSize: 16,
-        lineHeight: 24,
+        lineHeight: 26,
         textAlign: 'left',
-        padding: 10
+
+        marginBottom: 12,
+
     },
     bold: {
+        fontWeight: '900',
+        color: '#B39DDB',
+        letterSpacing: 0.2,
+    },
+    header: {
+        color: '#fff',
+        fontSize: 24,
         fontWeight: 'bold',
+        marginBottom: 20,
+        marginTop: 20,
+        textAlign: 'left',
+    },
+    subHeader: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '600',
+        marginTop: 20,
+        marginBottom: 15,
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        marginVertical: 20,
+        borderRadius: 8,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 15,
+        width: '100%',
+    },
+    italic: {
+        fontStyle: 'italic',
         color: '#5543A5',
     },
     linksContainer: {
@@ -476,16 +852,23 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     link: {
-        color: 'white',
+        color: '#fff',
         fontSize: 18,
-        padding: 15,
-        textAlign: 'center',
-        backgroundColor: '#5543A5',
-        borderRadius: 8,
         fontWeight: '600',
+        padding: 18,
+        backgroundColor: '#5543A5',
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#5543A5',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+        elevation: 5,
+        textAlign: 'center',
     },
     secondaryLink: {
-        color: '#5543A5',
+        color: '#fff',
         fontSize: 16,
         padding: 15,
         textAlign: 'center',
@@ -495,106 +878,97 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: '600',
     },
-    header: {
-        color: '#5543A5',
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 15,
-        textAlign: 'left',
-    },
-    image: {
-        width: '100%',
-        height: 150,
-        marginVertical: 15,
-        borderRadius: 8,
-    },
-    buttons: {
-        flexDirection: 'row'
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 10,
-        marginTop: 10,
-    },
-    links: {
-        flexDirection: 'row',
-        padding: 40,
-        gap: 500
-    },
-    edgelinks: {
-        color: 'purple',
-        fontSize: 30
-    },
     homelink: {
         color: 'purple',
         fontSize: 30,
         alignSelf: 'center'
     },
     quizContainer: {
-        height: 100,
-        width: 200,
-        
-        alignItems: 'center',
-        padding:7,
+        width: '100%',
+        backgroundColor: '#2A2A2A',
+        borderRadius: 12,
+        padding: 25,
+        marginBottom: 25,
+        borderColor: '#5543A5',
+        borderWidth: 1,
     },
     quizTitle: {
-        color: 'black',
-        fontSize: 50,
-        fontFamily: 'TIMES_NEW_ROMAN',
+        color: '#fff',
+        fontSize: 32,
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
-        paddingBottom: 20
+        textAlign: 'center',
+        marginVertical: 24,
     },
     quizText: {
-        color: '#840606',
-        fontSize: 20,
-        alignSelf:'center',
+        color: '#D2D2D2',
+        fontSize: 16,
+        lineHeight: 26,
+        textAlign: 'center',
     },
     quizButton: {
-        height: 45,
-        width:150,
-        backgroundColor: 'gray',
-        alignItems: 'center',
-        padding: 5,
+        backgroundColor: '#3A3A3A',
+        padding: 15,
+    },
+    quizImage: {
+        width: 300,
+        height: 150,
+        marginVertical: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
     },
     quizButtonText: {
-        color: 'white',
-        fontSize: 15,
-        alignSelf:'center',
+        color: '#D2D2D2',
+        fontSize: 16,
+        textAlign: 'center'
     },
     correctAnswer: {
-        height: 45,
-        width: 150,
-        backgroundColor: 'green',
+        backgroundColor: '#2E7D32',
+        padding: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
-      },
-      incorrectAnswer: {
-        height: 45,
-        width: 150,
-        backgroundColor: 'red',
+    },
+    incorrectAnswer: {
+        backgroundColor: '#C62828',
+        padding: 15,
+        marginTop: 10,
+        borderRadius: 8,
+        width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5,
-      },
-      result: {
+    },
+    result: {
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'black',
-      },
-      resetButton: {
-        marginTop: 10,
-        backgroundColor: '#5543A5',
-        padding: 10,
+        color: '#fff',
+        textAlign: 'center',
+    },
+    playButton: {
+        backgroundColor: '#7E57C2',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
         borderRadius: 8,
         alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
     },
-    resetButtonText: {
+    pauseButton: {
+        backgroundColor: '#9575CD',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    buttonText: {
         color: 'white',
         fontSize: 16,
         fontWeight: '600',
+        textAlign: 'center',
     },
+
 });
