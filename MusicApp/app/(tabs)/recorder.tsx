@@ -7,7 +7,6 @@ import {
   Platform,
   PermissionsAndroid,
   FlatList,
-  ,
   Alert,
   StyleSheet,
   ScrollView,
@@ -1137,7 +1136,7 @@ const LiveMixingPage = () => {
         onClose={() => setSettingsModalVisible(false)}
         onSave={saveTrackSettings}
       />
-    </>
+    </View>
   );
 };
 

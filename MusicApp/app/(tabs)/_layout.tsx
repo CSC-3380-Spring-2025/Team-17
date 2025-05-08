@@ -89,7 +89,7 @@ export default function TabLayout() {
               tabBarBackground: () => <TabBarBackground />,
               headerStyle: {
                 backgroundColor: '#333232',
-                height: 75,
+                paddingVertical: 15,
               },
               headerTitleAlign: 'center',
               headerTitleStyle: {
@@ -98,7 +98,7 @@ export default function TabLayout() {
                 color: '#fff',
               },
               headerLeft: () => (
-                <View style={{ marginLeft: 20 }}>
+                <View style={{ marginLeft: 10 }}>
                   <Streak />
                 </View>
               ),
