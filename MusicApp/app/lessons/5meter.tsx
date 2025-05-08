@@ -85,8 +85,8 @@ export default function Meter() {
                                             await updateDoc(userDocRef, {
                                                 lessonProgress: arrayUnion(5),
                                             });
-                                            handleTaskCompletion("Complete 2 lessons");
-                                            handleTaskCompletion("Complete all lessons");
+                                            handleTaskCompletion("Complete 2 quizzes");
+                                            handleTaskCompletion("Complete all quizzes");
                                         }
                                     }
                                   }

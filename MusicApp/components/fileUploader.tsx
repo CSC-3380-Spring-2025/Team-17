@@ -34,7 +34,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({onFileUpload, setModalVisibl
         setDocument(doc);
         onFileUpload(doc);
         setModalVisible(false);
-        handleTaskCompletion("Import a new track");
+        handleTaskCompletion("Import 2 new tracks");
       } else {
         console.log("Document selection cancelled.");
       }

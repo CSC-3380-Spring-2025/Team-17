@@ -48,7 +48,7 @@ export default function ChallengesScreen() {
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Daily</Text>
       <View style={styles.challengeGroup}>
-        {challenges.slice(0, 3).map((challenge, index) =>
+        {challenges.slice(0, 2).map((challenge, index) =>
         (
           <ChallengeBox key={index}{...challenge} />
         ))}
@@ -56,7 +56,7 @@ export default function ChallengesScreen() {
 
       <Text style={styles.header}>Longterm</Text>
       <View style={styles.challengeGroup}>
-        {challenges.slice(3).map((challenge, index) => (
+        {challenges.slice(2).map((challenge, index) => (
           <ChallengeBox key={index}{...challenge} />
         ))}
       </View>

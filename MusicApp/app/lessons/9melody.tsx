@@ -69,8 +69,8 @@ export default function Melody() {
                                         await updateDoc(userDocRef, {
                                             lessonProgress: arrayUnion(9),
                                         });
-                                        handleTaskCompletion("Complete 2 lessons");
-                                        handleTaskCompletion("Complete all lessons");
+                                        handleTaskCompletion("Complete 2 quizzes");
+                                        handleTaskCompletion("Complete all quizzes");
                                     }
                                 }
                               }
