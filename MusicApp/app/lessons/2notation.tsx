@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
 
 export default function Notation() {
@@ -17,8 +17,8 @@ export default function Notation() {
     const answer2 = "False";
     const answer3 = "Mezzo Forte";
     const [count, setCount] = useState<number>(0);
-    const [userId, setUserId]= useState<string>('');
-    const {handleTaskCompletion} = useChallenges();
+    const [userId, setUserId] = useState<string>('');
+    const { handleTaskCompletion } = useChallenges();
 
     useEffect(() => {
         const loadSounds = async () => {
@@ -35,67 +35,67 @@ export default function Notation() {
             accentSound.current.unloadAsync();
         };
     }, []);
-    
-        useEffect(()=>{
-            if (auth.currentUser){
-              setUserId(auth.currentUser.uid);
-            }
-          }, [auth.currentUser]);
-        
-          useEffect(()=>{
-              const fetchUserData= async()=>{
-                if(userId){
-                  console.log('Fetching data for userId:', userId);
-          
-                  try{
-                    const userDocRef= doc(db, 'users', userId);
+
+    useEffect(() => {
+        if (auth.currentUser) {
+            setUserId(auth.currentUser.uid);
+        }
+    }, [auth.currentUser]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userId) {
+                console.log('Fetching data for userId:', userId);
+
+                try {
+                    const userDocRef = doc(db, 'users', userId);
                     const userDoc = await getDoc(userDocRef)
-                    
+
                     if (userDoc.exists()) {
-                      console.log('Document data:', userDoc.data());
-                      const userData = userDoc.data();
-                      if(userData.lessonProgress){
-                        if(!userData.lessonProgress.includes(2)){
-                            if(count === 3){
-                                await updateDoc(userDocRef, {
-                                    lessonProgress: arrayUnion(2),
-                                });
-                                handleTaskCompletion("Complete 2 lessons");
-                                handleTaskCompletion("Complete all lessons");
+                        console.log('Document data:', userDoc.data());
+                        const userData = userDoc.data();
+                        if (userData.lessonProgress) {
+                            if (!userData.lessonProgress.includes(2)) {
+                                if (count === 3) {
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(2),
+                                    });
+                                    handleTaskCompletion("Complete 2 lessons");
+                                    handleTaskCompletion("Complete all lessons");
+                                }
                             }
                         }
-                      }
-                      else{
-                        await setDoc(userDocRef, {
-                            lessonProgress:[1],
-                        }, {merge: true});
-                      }
-                    } 
-                    else {
-                      await setDoc(userDocRef, {
-                        lessonProgress: [1],
-                      });
+                        else {
+                            await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                            }, { merge: true });
+                        }
                     }
-            
-                  }catch(error){
-                    console.error('Error fetching user data:', error);
-                  }
-                }
-              };
-              fetchUserData();
-            }, [userId, count]);
+                    else {
+                        await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                        });
+                    }
 
-            const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
-                if (!selected) return styles.quizButton;
-                return correct ? styles.correctAnswer : styles.incorrectAnswer;
-            };
-        
-            const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
-                setAnswer(option);
-                if (option === correctAnswer) {
-                    setCount(prevCount => prevCount + 1);
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
                 }
-            };
+            }
+        };
+        fetchUserData();
+    }, [userId, count]);
+
+    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+        if (!selected) return styles.quizButton;
+        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+    };
+
+    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+        setAnswer(option);
+        if (option === correctAnswer) {
+            setCount(prevCount => prevCount + 1);
+        }
+    };
 
     return (
         <ScrollView
@@ -220,16 +220,18 @@ export default function Notation() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            title="Play Slur"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => slurSound.current.playAsync()}
-                            color="#7E57C2"
-                        />
-                        <Button
-                            title="Pause Slur"
+                        >
+                            <Text style={styles.buttonText}>Play Slur</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => slurSound.current.pauseAsync()}
-                            color="#9575CD"
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Slur</Text>
+                        </Pressable>
                     </View>
 
                     <Text style={styles.subHeader}>
@@ -245,16 +247,18 @@ export default function Notation() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            title="Play Staccato"
+                    <Pressable
+                            style={styles.playButton}
                             onPress={() => staccatoSound.current.playAsync()}
-                            color="#7E57C2"
-                        />
-                        <Button
-                            title="Pause Staccato"
+                        >
+                            <Text style={styles.buttonText}>Play Staccato</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => staccatoSound.current.pauseAsync()}
-                            color="#9575CD"
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Staccato</Text>
+                        </Pressable>
                     </View>
 
                     <Text style={styles.subHeader}>
@@ -270,16 +274,18 @@ export default function Notation() {
                         resizeMode="contain"
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            title="Play Accent"
+                        <Pressable
+                            style={styles.playButton}
                             onPress={() => accentSound.current.playAsync()}
-                            color="#7E57C2"
-                        />
-                        <Button
-                            title="Pause Accent"
+                        >
+                            <Text style={styles.buttonText}>Play Accent</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.pauseButton}
                             onPress={() => accentSound.current.pauseAsync()}
-                            color="#9575CD"
-                        />
+                        >
+                            <Text style={styles.buttonText}>Pause Accent</Text>
+                        </Pressable>
                     </View>
                 </View>
 
@@ -440,8 +446,8 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     bold: {
-        fontWeight: 'bold',
-        color: '#5543A5',
+        fontWeight: '900',
+        color: '#B39DDB',
     },
     header: {
         color: '#fff',
@@ -577,5 +583,31 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '600',
+    },
+    playButton: {
+        backgroundColor: '#7E57C2',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    pauseButton: {
+        backgroundColor: '#9575CD',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+        textAlign: 'center',
     },
 });

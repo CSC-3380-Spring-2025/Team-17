@@ -674,8 +674,8 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     bold: {
-        fontWeight: 'bold',
-        color: '#5543A5',
+        fontWeight: '900',
+        color: '#B39DDB',
         letterSpacing: 0.2,
     },
     header: {
@@ -728,6 +728,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 6,
         elevation: 5,
+        textAlign: 'center',
     },
     secondaryLink: {
         color: '#5543A5',
