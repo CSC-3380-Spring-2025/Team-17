@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Texture() {
     const bach = useRef(new Audio.Sound());
@@ -50,432 +51,434 @@ export default function Texture() {
     const answer3 = "True";
 
     const [count, setCount] = useState<number>(0);
-    const [userId, setUserId]= useState<string>('');
-    const {handleTaskCompletion} = useChallenges();
-                    
-                        useEffect(()=>{
-                            if (auth.currentUser){
-                              setUserId(auth.currentUser.uid);
-                            }
-                          }, [auth.currentUser]);
-                        
-                          useEffect(()=>{
-                              const fetchUserData= async()=>{
-                                if(userId){
-                                  console.log('Fetching data for userId:', userId);
-                          
-                                  try{
-                                    const userDocRef= doc(db, 'users', userId);
-                                    const userDoc = await getDoc(userDocRef)
-                                    
-                                    if (userDoc.exists()) {
-                                      console.log('Document data:', userDoc.data());
-                                      const userData = userDoc.data();
-                                      if(userData.lessonProgress){
-                                        if(!userData.lessonProgress.includes(12)){
-                                            if(count === 3){
-                                                await updateDoc(userDocRef, {
-                                                    lessonProgress: arrayUnion(12),
-                                                });
-                                                handleTaskCompletion("Complete 2 quizzes");
-                                                handleTaskCompletion("Complete all quizzes");
-                                            }
-                                        }
-                                      }else{
-                                        await setDoc(userDocRef, {
-                                            lessonProgress:[1],
-                                        }, {merge: true});
-                                      }
-                                    } else {
-                                      await setDoc(userDocRef, {
-                                        lessonProgress: [1],
-                                      });
-                                    }
-                            
-                                  }catch(error){
-                                    console.error('Error fetching user data:', error);
-                                  }
-                                }
-                              };
-                              fetchUserData();
-                            }, [userId, count]);
+    const [userId, setUserId] = useState<string>('');
+    const { handleTaskCompletion } = useChallenges();
 
-                            const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
-                                if (!selected) return styles.quizButton;
-                                return correct ? styles.correctAnswer : styles.incorrectAnswer;
-                            };
-                                    
-                            const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
-                                setAnswer(option);
-                                if (option === correctAnswer) {
-                                    setCount(prevCount => prevCount + 1);
+    useEffect(() => {
+        if (auth.currentUser) {
+            setUserId(auth.currentUser.uid);
+        }
+    }, [auth.currentUser]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userId) {
+                console.log('Fetching data for userId:', userId);
+
+                try {
+                    const userDocRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+
+                    if (userDoc.exists()) {
+                        console.log('Document data:', userDoc.data());
+                        const userData = userDoc.data();
+                        if (userData.lessonProgress) {
+                            if (!userData.lessonProgress.includes(12)) {
+                                if (count === 3) {
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(12),
+                                    });
+                                    handleTaskCompletion("Complete 2 quizzes");
+                                    handleTaskCompletion("Complete all quizzes");
                                 }
-                            };
+                            }
+                        } else {
+                            await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                            }, { merge: true });
+                        }
+                    } else {
+                        await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                        });
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, [userId, count]);
+
+    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+        if (!selected) return styles.quizButton;
+        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+    };
+
+    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+        setAnswer(option);
+        if (option === correctAnswer) {
+            setCount(prevCount => prevCount + 1);
+        }
+    };
 
     return (
-        <ScrollView
-            contentContainerStyle={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.container}>
-                <Text style={styles.title}>
-                    Musical Textures
-                </Text>
+        <SafeAreaView>
+            <ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>
+                        Musical Textures
+                    </Text>
 
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Musical texture</Text> is the density of and interaction between the different voices in
-                        a musical work. There are many different types of textures, but the four most common categories are monophony,
-                        heterophony, homophony, & polyphony.
-                    </Text>
-                </View>
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Musical texture</Text> is the density of and interaction between the different voices in
+                            a musical work. There are many different types of textures, but the four most common categories are monophony,
+                            heterophony, homophony, & polyphony.
+                        </Text>
+                    </View>
 
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Monophony
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Monophony</Text> is a texture characterized by a single, unaccompanied melodic line of music.
-                        Monophony consists of either a solo voice or instrument, or all instruments playing or singing in unison, making it the
-                        simplest & most exposed of all musical textures.
-                    </Text>
-                    <Text style={styles.text}>
-                        Johann Sebastian Bach's Cello Suite No. 1 in G Major features a solo cello that is the only voice in this work. It carries a melodic line
-                        all by itself with no accompaniment whatsoever. Thus, this is a good example of a monophonic texture.
-                    </Text>
                     <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            Cello Suite No. 1 in G Major - Johann Sebastian Bach
+                        <Text style={styles.header}>
+                            Monophony
                         </Text>
-                        <View style={styles.buttonContainer}>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => bach.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Monophony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => bach.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Monophony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                    <Text style={styles.text}>
-                        The third movement of Olivier Messiaen's Quartet for the End of Time features a solo oboe that carries a melodic line
-                        without any accompaniment. This is another good example of a monophonic texture.
-                    </Text>
-                    <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            Quartet for the End of Time: III. Abime des Oiseaux - Olivier Messiaen
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Monophony</Text> is a texture characterized by a single, unaccompanied melodic line of music.
+                            Monophony consists of either a solo voice or instrument, or all instruments playing or singing in unison, making it the
+                            simplest & most exposed of all musical textures.
                         </Text>
-                        <View style={styles.buttonContainer}>
-                        <Pressable
-                                style={styles.playButton}
-                                onPress={() => oboe.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Monophony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => oboe.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Monophony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Heterophony
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Heterophony</Text> is a texture characterized by multiple variations of the same melodic line
-                        that are heard across different voices. These variations can range from small embellishing tones to longer runs in a
-                        single voice, as long as the melodic material remains relatively constant.
-                    </Text>
-                    <Text style={styles.text}>
-                        The Song of Seikilos is the oldest song ever recovered in its entirety. It was composed by Seikilos in ancient Greece in 200 BC
-                        in memory of his dead wife. There are two voices: a plucked string instrument and a soprano voice. The two voices play the same
-                        melodic line in unison, but the soprano voice uses certain embellishments to create variation & distinction between the voices.
-                        Thus, this is a good example of a heterophonic texture.
-                    </Text>
-                    <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            Song of Seikilos
+                        <Text style={styles.text}>
+                            Johann Sebastian Bach's Cello Suite No. 1 in G Major features a solo cello that is the only voice in this work. It carries a melodic line
+                            all by itself with no accompaniment whatsoever. Thus, this is a good example of a monophonic texture.
                         </Text>
-                        <View style={styles.buttonContainer}>
-                        <Pressable
-                                style={styles.playButton}
-                                onPress={() => seikilos.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Heterophony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => seikilos.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Heterophony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                    <Text style={styles.text}>
-                        Urfaliyam Ezelden is a Turkish classical song. In the beginning, there is a melodic line performed by a plucked string
-                        instrument & a wind instrument. While both instruments play the same melody, the wind instrument performs slight embellishments
-                        to create variation & distinction between the instruments. This is another good example of a heterophonic texture.
-                    </Text>
-                    <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            Urfaliyam Ezelden
-                        </Text>
-                        <View style={styles.buttonContainer}>
-                        <Pressable
-                                style={styles.playButton}
-                                onPress={() => turkey.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Heterophony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => turkey.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Heterophony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Homophony
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Homophony</Text> is a texture characterized by multiple voices moving together harmonically at
-                        the same pace. This is the most common musical texture. This often takes the form of a single predominant voice that carries the melody
-                        while the other voices are used to provide harmonies. Homophony is sometimes divided into two subcategories: homorhythm and
-                        melody & accompaniment.
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Homorhythm</Text> is a type of homophonic texture in which all voices move in a similar or
-                        completely unison rhythm. This is mostly seen in choral music, where the melody & harmonies move in block chords. The
-                        "Hallelujah" chorus from George Frederic Handel's Messiah features homorhythmic sections where all voices are
-                        moving in the same rhythm.
-                    </Text>
-                    <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            "Hallelujah" Chorus from the Messiah - George Frederic Handel
-                        </Text>
-                        <View style={styles.buttonContainer}>
-                        <Pressable
-                                style={styles.playButton}
-                                onPress={() => handel.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Homophony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => handel.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Homophony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Melody & accompaniment</Text> is the most common type of homophony. This texture is characterized
-                        by a clear melody that is distinct from the other supporting voices, which are called an accompaniment. The melody will often
-                        have a different rhythm than the accompanying voices. The classic jazz song "Love is Here to Stay" by Louis Armstrong & Ella
-                        Fitzgerald features a prominent melody sung by both Armstrong & Fitzgerald & accompanied by harmony in the other instruments.
-                        The melody & accompaniment are never really in rhythmic unison, but the accompanying instruments support the vocal melody by
-                        filling out the texture harmonically.
-                    </Text>
-                    <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            Love is Here to Stay - Louis Armstrong & Ella Fitzgerald
-                        </Text>
-                        <View style={styles.buttonContainer}>
-                        <Pressable
-                                style={styles.playButton}
-                                onPress={() => jazz.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Homophony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => jazz.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Homophony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Polyphony
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Polyphony</Text> is a texture characterized by multiple voices having separate melodic lines &
-                        rhythms. Each voice has its own independent melodic line, and the independent voices blend together to create harmonies.
-                    </Text>
-                    <Text style={styles.text}>
-                        Johann Pachelbel's Canon in D utilizes a canon technique, in which different instruments play the melody at different times,
-                        and as the instruments sound together, the voices overlap & interwine with each other, giving each instrument its own independent melodic line.
-                        Thus, this is a good example of a polyphonic texture.
-                    </Text>
-                    <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            Canon in D - Johann Pachelbel
-                        </Text>
-                        <View style={styles.buttonContainer}>
-                        <Pressable
-                                style={styles.playButton}
-                                onPress={() => canon.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Polyphony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => canon.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Polyphony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                    <Text style={styles.text}>
-                        Chakrulo is a Georgian folk choral song that appeared in the Kakheti region. It consists of two individual vocalists
-                        singing against the background of a slow chorus. The two vocalists and the chorus are singing independent melodic lines
-                        at different rhythms. This is another good example of a polyphonic texture.
-                    </Text>
-                    <View style={styles.card}>
-                        <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
-                            Chakrulo
-                        </Text>
-                        <View style={styles.buttonContainer}>
-                        <Pressable
-                                style={styles.playButton}
-                                onPress={() => chakrulo.current.playAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Play Polyphony</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.playButton}
-                                onPress={() => chakrulo.current.pauseAsync()}
-                            >
-                                <Text style={styles.buttonText} textBreakStrategy="simple">Pause Polyphony</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
-
-                <View>
-                    <Text style={styles.quizTitle}>Quiz</Text>
-
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            1. The four most common types of textures are Monophony, Heterophony, Homophony, & _______
-                        </Text>
-                        {["Multiphony", "Solophony", "Cacophony", "Polyphony"].map((option, index) => {
-                            const selected = quiz1Answer === option;
-                            const correct = option === answer1;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz1Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ1Answer, answer1);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz1Answer && (
-                            <Text style={styles.result}>
-                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                Cello Suite No. 1 in G Major - Johann Sebastian Bach
                             </Text>
-                        )}
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => bach.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Monophony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => bach.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Monophony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                        <Text style={styles.text}>
+                            The third movement of Olivier Messiaen's Quartet for the End of Time features a solo oboe that carries a melodic line
+                            without any accompaniment. This is another good example of a monophonic texture.
+                        </Text>
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                Quartet for the End of Time: III. Abime des Oiseaux - Olivier Messiaen
+                            </Text>
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => oboe.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Monophony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => oboe.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Monophony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            2. The Song of Seikilos has what kind of texture?
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Heterophony
                         </Text>
-                        {["Monophony", "Heterophony", "Homophony", "Polyphony"].map((option, index) => {
-                            const selected = quiz2Answer === option;
-                            const correct = option === answer2;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz2Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ2Answer, answer2);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz2Answer && (
-                            <Text style={styles.result}>
-                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Heterophony</Text> is a texture characterized by multiple variations of the same melodic line
+                            that are heard across different voices. These variations can range from small embellishing tones to longer runs in a
+                            single voice, as long as the melodic material remains relatively constant.
+                        </Text>
+                        <Text style={styles.text}>
+                            The Song of Seikilos is the oldest song ever recovered in its entirety. It was composed by Seikilos in ancient Greece in 200 BC
+                            in memory of his dead wife. There are two voices: a plucked string instrument and a soprano voice. The two voices play the same
+                            melodic line in unison, but the soprano voice uses certain embellishments to create variation & distinction between the voices.
+                            Thus, this is a good example of a heterophonic texture.
+                        </Text>
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                Song of Seikilos
                             </Text>
-                        )}
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => seikilos.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Heterophony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => seikilos.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Heterophony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                        <Text style={styles.text}>
+                            Urfaliyam Ezelden is a Turkish classical song. In the beginning, there is a melodic line performed by a plucked string
+                            instrument & a wind instrument. While both instruments play the same melody, the wind instrument performs slight embellishments
+                            to create variation & distinction between the instruments. This is another good example of a heterophonic texture.
+                        </Text>
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                Urfaliyam Ezelden
+                            </Text>
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => turkey.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Heterophony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => turkey.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Heterophony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            3. Homorhythm is a type of homophonic texture in which all voices move in a similar or
-                            completely unison rhythm.
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Homophony
                         </Text>
-                        {["True", "False"].map((option, index) => {
-                            const selected = quiz3Answer === option;
-                            const correct = option === answer3;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz3Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ3Answer, answer3);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz3Answer && (
-                            <Text style={styles.result}>
-                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Homophony</Text> is a texture characterized by multiple voices moving together harmonically at
+                            the same pace. This is the most common musical texture. This often takes the form of a single predominant voice that carries the melody
+                            while the other voices are used to provide harmonies. Homophony is sometimes divided into two subcategories: homorhythm and
+                            melody & accompaniment.
+                        </Text>
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Homorhythm</Text> is a type of homophonic texture in which all voices move in a similar or
+                            completely unison rhythm. This is mostly seen in choral music, where the melody & harmonies move in block chords. The
+                            "Hallelujah" chorus from George Frederic Handel's Messiah features homorhythmic sections where all voices are
+                            moving in the same rhythm.
+                        </Text>
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                "Hallelujah" Chorus from the Messiah - George Frederic Handel
                             </Text>
-                        )}
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => handel.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Homophony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => handel.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Homophony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Melody & accompaniment</Text> is the most common type of homophony. This texture is characterized
+                            by a clear melody that is distinct from the other supporting voices, which are called an accompaniment. The melody will often
+                            have a different rhythm than the accompanying voices. The classic jazz song "Love is Here to Stay" by Louis Armstrong & Ella
+                            Fitzgerald features a prominent melody sung by both Armstrong & Fitzgerald & accompanied by harmony in the other instruments.
+                            The melody & accompaniment are never really in rhythmic unison, but the accompanying instruments support the vocal melody by
+                            filling out the texture harmonically.
+                        </Text>
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                Love is Here to Stay - Louis Armstrong & Ella Fitzgerald
+                            </Text>
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => jazz.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Homophony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => jazz.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Homophony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Polyphony
+                        </Text>
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Polyphony</Text> is a texture characterized by multiple voices having separate melodic lines &
+                            rhythms. Each voice has its own independent melodic line, and the independent voices blend together to create harmonies.
+                        </Text>
+                        <Text style={styles.text}>
+                            Johann Pachelbel's Canon in D utilizes a canon technique, in which different instruments play the melody at different times,
+                            and as the instruments sound together, the voices overlap & interwine with each other, giving each instrument its own independent melodic line.
+                            Thus, this is a good example of a polyphonic texture.
+                        </Text>
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                Canon in D - Johann Pachelbel
+                            </Text>
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => canon.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Polyphony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => canon.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Polyphony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                        <Text style={styles.text}>
+                            Chakrulo is a Georgian folk choral song that appeared in the Kakheti region. It consists of two individual vocalists
+                            singing against the background of a slow chorus. The two vocalists and the chorus are singing independent melodic lines
+                            at different rhythms. This is another good example of a polyphonic texture.
+                        </Text>
+                        <View style={styles.card}>
+                            <Text style={{ fontSize: 30, color: '#5543A5', textAlign: 'center' }}>
+                                Chakrulo
+                            </Text>
+                            <View style={styles.buttonContainer}>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => chakrulo.current.playAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Play Polyphony</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.playButton}
+                                    onPress={() => chakrulo.current.pauseAsync()}
+                                >
+                                    <Text style={styles.buttonText} textBreakStrategy="simple">Pause Polyphony</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View>
+                        <Text style={styles.quizTitle}>Quiz</Text>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                1. The four most common types of textures are Monophony, Heterophony, Homophony, & _______
+                            </Text>
+                            {["Multiphony", "Solophony", "Cacophony", "Polyphony"].map((option, index) => {
+                                const selected = quiz1Answer === option;
+                                const correct = option === answer1;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz1Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ1Answer, answer1);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz1Answer && (
+                                <Text style={styles.result}>
+                                    {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                2. The Song of Seikilos has what kind of texture?
+                            </Text>
+                            {["Monophony", "Heterophony", "Homophony", "Polyphony"].map((option, index) => {
+                                const selected = quiz2Answer === option;
+                                const correct = option === answer2;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz2Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ2Answer, answer2);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz2Answer && (
+                                <Text style={styles.result}>
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                3. Homorhythm is a type of homophonic texture in which all voices move in a similar or
+                                completely unison rhythm.
+                            </Text>
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz3Answer === option;
+                                const correct = option === answer3;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz3Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ3Answer, answer3);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz3Answer && (
+                                <Text style={styles.result}>
+                                    {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+                    </View>
+                    <View style={styles.linksContainer}>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./11progressions' style={styles.secondaryLink}>
+                                ← Previous: Harmonic Progressions
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                                ← Back to Home
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./13structure' style={styles.link}>
+                                Next: Song Structures →
+                            </Link>
+                        </View>
                     </View>
                 </View>
-                <View style={styles.linksContainer}>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./11progressions' style={styles.secondaryLink}>
-                            ← Previous: Harmonic Progressions
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
-                            ← Back to Home
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./13structure' style={styles.link}>
-                            Next: Song Structures →
-                        </Link>
-                    </View>
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 

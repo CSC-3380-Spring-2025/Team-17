@@ -5,6 +5,7 @@ import { Audio } from 'expo-av';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Notation() {
     const slurSound = useRef(new Audio.Sound());
@@ -100,307 +101,309 @@ export default function Notation() {
     };
 
     return (
-        <ScrollView
-            contentContainerStyle={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.container}>
-                <Text style={styles.title}>
-                    Music Notation
-                </Text>
-
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        Music is an auditory art form that can be represented visually with notation.
-                    </Text>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        A musical note indicates both pitch and rhythm. The pitch of the note is determined
-                        based on its location on a staff. A <Text style={styles.bold}>staff</Text> is a series of five horizontal lines like
-                        the one seen below.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/staff.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        Notes with a higher pitch are written higher on the staff than notes with a lower pitch.
-                        Essentially, higher notes are placed above lower ones.
-                    </Text>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Music Notes
-                    </Text>
-                    <Text style={styles.text}>
-                        A note is shaped like an oval and can be filled in or left empty depending on its rhythmic value.
-                        The size of a note should be such that if it is located on a line, it should occupy half of each space
-                        above and below the line. If it is located on a space, it should occupy the whole area of the space between
-                        the lines, but not go beyond the lines. Notes also have stems that can point up or down depending on its location
-                        on the staff.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/notes.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Ledger Lines
-                    </Text>
-                    <Text style={styles.text}>
-                        If notes are too high or too low to be written on a staff, one can use <Text style={styles.bold}>ledger lines</Text> to extend the staff
-                        and write higher & lower notes.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/ledger.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Dynamics
-                    </Text>
-                    <Text style={styles.text}>
-                        One important aspect of music notation is dynamics. <Text style={styles.bold}>Dynamics</Text> indicate the loudness or volume of
-                        certain notes. Since Western music theory originated in Italy, musicians use italicized Italian words to denote
-                        dynamics. They are usually written above or below the staff.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/dynamics.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Tempo
-                    </Text>
-                    <Text style={styles.text}>
-                        Another important aspect of notation is tempo. <Text style={styles.bold}>Tempo</Text> is the speed of the composition and determines
-                        how fast or how slow the notes are played. Tempo is usually marked specifically, with metronome markings or
-                        unspecifically, with textual indications.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/tempo.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Articulation
-                    </Text>
-                    <Text style={styles.text}>
-                        One more important aspect of notation is articulation. <Text style={styles.bold}>Articulation</Text> is the connection or separation between
-                        notes and the accent level at the beginning of the note (the attack).
+        <SafeAreaView>
+            <ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>
+                        Music Notation
                     </Text>
 
-                    <Text style={styles.subHeader}>
-                        Legato
-                    </Text>
-                    <Text style={styles.text}>
-                        Play or sing notes smoothly and connected. This articulation is indicated by a curved slur over the
-                        notes.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/slur.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => slurSound.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Slur</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.pauseButton}
-                            onPress={() => slurSound.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Slur</Text>
-                        </Pressable>
-                    </View>
-
-                    <Text style={styles.subHeader}>
-                        Staccato
-                    </Text>
-                    <Text style={styles.text}>
-                        Play or sing notes separately, leaving space in between. This articulation is indicated by
-                        placing dots above or below each of the notes.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/stacatto.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => staccatoSound.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Staccato</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.pauseButton}
-                            onPress={() => staccatoSound.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Staccato</Text>
-                        </Pressable>
-                    </View>
-
-                    <Text style={styles.subHeader}>
-                        Accent
-                    </Text>
-                    <Text style={styles.text}>
-                        Play or sing a note with extra emphasis. This articulation is indicated by a sideways V over the
-                        notes.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/accent.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => accentSound.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Accent</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.pauseButton}
-                            onPress={() => accentSound.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Accent</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-
-
-
-                <View>
-                    <Text style={styles.quizTitle}>Quiz</Text>
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            1. A musical note represents what?
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            Music is an auditory art form that can be represented visually with notation.
                         </Text>
-                        {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) => {
-                            const selected = quiz1Answer === option;
-                            const correct = option === answer1;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz1Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ1Answer, answer1);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz1Answer && (
-                            <Text style={styles.result}>
-                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            2. If a note is in a space, it can go beyond the lines.
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            A musical note indicates both pitch and rhythm. The pitch of the note is determined
+                            based on its location on a staff. A <Text style={styles.bold}>staff</Text> is a series of five horizontal lines like
+                            the one seen below.
                         </Text>
-                        {["True", "False"].map((option, index) => {
-                            const selected = quiz2Answer === option;
-                            const correct = option === answer2;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz2Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ2Answer, answer2);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz2Answer && (
-                            <Text style={styles.result}>
-                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
+                        <Image
+                            source={require('@/assets/images/staff.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            3. What term means moderately loud?
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            Notes with a higher pitch are written higher on the staff than notes with a lower pitch.
+                            Essentially, higher notes are placed above lower ones.
                         </Text>
-                        {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) => {
-                            const selected = quiz3Answer === option;
-                            const correct = option === answer3;
+                    </View>
 
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz3Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ3Answer, answer3);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz3Answer && (
-                            <Text style={styles.result}>
-                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Music Notes
+                        </Text>
+                        <Text style={styles.text}>
+                            A note is shaped like an oval and can be filled in or left empty depending on its rhythmic value.
+                            The size of a note should be such that if it is located on a line, it should occupy half of each space
+                            above and below the line. If it is located on a space, it should occupy the whole area of the space between
+                            the lines, but not go beyond the lines. Notes also have stems that can point up or down depending on its location
+                            on the staff.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/notes.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Ledger Lines
+                        </Text>
+                        <Text style={styles.text}>
+                            If notes are too high or too low to be written on a staff, one can use <Text style={styles.bold}>ledger lines</Text> to extend the staff
+                            and write higher & lower notes.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/ledger.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Dynamics
+                        </Text>
+                        <Text style={styles.text}>
+                            One important aspect of music notation is dynamics. <Text style={styles.bold}>Dynamics</Text> indicate the loudness or volume of
+                            certain notes. Since Western music theory originated in Italy, musicians use italicized Italian words to denote
+                            dynamics. They are usually written above or below the staff.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/dynamics.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Tempo
+                        </Text>
+                        <Text style={styles.text}>
+                            Another important aspect of notation is tempo. <Text style={styles.bold}>Tempo</Text> is the speed of the composition and determines
+                            how fast or how slow the notes are played. Tempo is usually marked specifically, with metronome markings or
+                            unspecifically, with textual indications.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/tempo.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Articulation
+                        </Text>
+                        <Text style={styles.text}>
+                            One more important aspect of notation is articulation. <Text style={styles.bold}>Articulation</Text> is the connection or separation between
+                            notes and the accent level at the beginning of the note (the attack).
+                        </Text>
+
+                        <Text style={styles.subHeader}>
+                            Legato
+                        </Text>
+                        <Text style={styles.text}>
+                            Play or sing notes smoothly and connected. This articulation is indicated by a curved slur over the
+                            notes.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/slur.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => slurSound.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Slur</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => slurSound.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Slur</Text>
+                            </Pressable>
+                        </View>
+
+                        <Text style={styles.subHeader}>
+                            Staccato
+                        </Text>
+                        <Text style={styles.text}>
+                            Play or sing notes separately, leaving space in between. This articulation is indicated by
+                            placing dots above or below each of the notes.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/stacatto.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => staccatoSound.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Staccato</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => staccatoSound.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Staccato</Text>
+                            </Pressable>
+                        </View>
+
+                        <Text style={styles.subHeader}>
+                            Accent
+                        </Text>
+                        <Text style={styles.text}>
+                            Play or sing a note with extra emphasis. This articulation is indicated by a sideways V over the
+                            notes.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/accent.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => accentSound.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Accent</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.pauseButton}
+                                onPress={() => accentSound.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Accent</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+
+
+
+                    <View>
+                        <Text style={styles.quizTitle}>Quiz</Text>
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                1. A musical note represents what?
                             </Text>
-                        )}
-                    </View>
-                </View>
+                            {["Tone and Rhythm", "Pitch and Rhythm", "Tempo and Harmony", "Timbre and Melody"].map((option, index) => {
+                                const selected = quiz1Answer === option;
+                                const correct = option === answer1;
 
-                <View style={styles.linksContainer}>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./1intro' style={styles.secondaryLink}>
-                            ← Previous: Introduction
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
-                            ← Back to Home
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./3pitch' style={styles.link}>
-                            Next: Pitch →
-                        </Link>
-                    </View>
-                </View>
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz1Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ1Answer, answer1);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz1Answer && (
+                                <Text style={styles.result}>
+                                    {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
 
-            </View>
-        </ScrollView>
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                2. If a note is in a space, it can go beyond the lines.
+                            </Text>
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz2Answer === option;
+                                const correct = option === answer2;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz2Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ2Answer, answer2);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz2Answer && (
+                                <Text style={styles.result}>
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                3. What term means moderately loud?
+                            </Text>
+                            {["Pianissimo", "Crescendo", "Mezzo Forte", "Fortissimo"].map((option, index) => {
+                                const selected = quiz3Answer === option;
+                                const correct = option === answer3;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz3Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ3Answer, answer3);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz3Answer && (
+                                <Text style={styles.result}>
+                                    {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+                    </View>
+
+                    <View style={styles.linksContainer}>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./1intro' style={styles.secondaryLink}>
+                                ← Previous: Introduction
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                                ← Back to Home
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./3pitch' style={styles.link}>
+                                Next: Pitch →
+                            </Link>
+                        </View>
+                    </View>
+
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 

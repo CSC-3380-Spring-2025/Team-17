@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Modes() {
     const lydian = useRef(new Audio.Sound());
@@ -14,7 +15,6 @@ export default function Modes() {
     const aeolian = useRef(new Audio.Sound());
     const phrygian = useRef(new Audio.Sound());
     const locrian = useRef(new Audio.Sound());
-
 
     useEffect(() => {
         const loadSounds = async () => {
@@ -54,537 +54,539 @@ export default function Modes() {
     const answer6 = "Locrian";
 
     const [count, setCount] = useState<number>(0);
-    const [userId, setUserId]= useState<string>('');
-    const {handleTaskCompletion} = useChallenges();
-                        
-                            useEffect(()=>{
-                                if (auth.currentUser){
-                                  setUserId(auth.currentUser.uid);
+    const [userId, setUserId] = useState<string>('');
+    const { handleTaskCompletion } = useChallenges();
+
+    useEffect(() => {
+        if (auth.currentUser) {
+            setUserId(auth.currentUser.uid);
+        }
+    }, [auth.currentUser]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userId) {
+                console.log('Fetching data for userId:', userId);
+
+                try {
+                    const userDocRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+
+                    if (userDoc.exists()) {
+                        console.log('Document data:', userDoc.data());
+                        const userData = userDoc.data();
+                        if (userData.lessonProgress) {
+                            if (!userData.lessonProgress.includes(7)) {
+                                if (count === 6) {
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(7),
+                                    });
+                                    handleTaskCompletion("Complete 2 quizzes");
+                                    handleTaskCompletion("Complete all quizzes");
                                 }
-                              }, [auth.currentUser]);
-                            
-                              useEffect(()=>{
-                                  const fetchUserData= async()=>{
-                                    if(userId){
-                                      console.log('Fetching data for userId:', userId);
-                              
-                                      try{
-                                        const userDocRef= doc(db, 'users', userId);
-                                        const userDoc = await getDoc(userDocRef)
-                                        
-                                        if (userDoc.exists()) {
-                                          console.log('Document data:', userDoc.data());
-                                          const userData = userDoc.data();
-                                          if(userData.lessonProgress){
-                                            if(!userData.lessonProgress.includes(7)){
-                                                if(count === 6){
-                                                    await updateDoc(userDocRef, {
-                                                        lessonProgress: arrayUnion(7),
-                                                    });
-                                                    handleTaskCompletion("Complete 2 quizzes");
-                                                    handleTaskCompletion("Complete all quizzes");
-                                                }
-                                            }
-                                          }
-                                          else{
-                                            await setDoc(userDocRef, {
-                                                lessonProgress:[1],
-                                            }, {merge: true});
-                                          }
-                                        } else {
-                                          await setDoc(userDocRef, {
-                                            lessonProgress: [1],
-                                          });
-                                        }
-                                
-                                      }catch(error){
-                                        console.error('Error fetching user data:', error);
-                                      }
-                                    }
-                                  };
-                                  fetchUserData();
-                                }, [userId, count]);
+                            }
+                        }
+                        else {
+                            await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                            }, { merge: true });
+                        }
+                    } else {
+                        await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                        });
+                    }
 
-                                const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
-                                    if (!selected) return styles.quizButton;
-                                    return correct ? styles.correctAnswer : styles.incorrectAnswer;
-                                };
-                                        
-                                const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
-                                    setAnswer(option);
-                                    if (option === correctAnswer) {
-                                        setCount(prevCount => prevCount + 1);
-                                    }
-                                };
-                                
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, [userId, count]);
+
+    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+        if (!selected) return styles.quizButton;
+        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+    };
+
+    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+        setAnswer(option);
+        if (option === correctAnswer) {
+            setCount(prevCount => prevCount + 1);
+        }
+    };
+
     return (
-        <ScrollView
-            contentContainerStyle={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.container}>
-                <Text style={styles.title}>
-                    Modes
-                </Text>
+        <SafeAreaView>
+            <ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>
+                        Modes
+                    </Text>
 
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Modes</Text> are an extension of scales. They are ordered collections of whole steps and half steps that can be described
-                        within a continuum of <Text style={styles.bold}>modal brightness</Text>: brighter modes sound more like a major scale while darker modes sound more
-                        like a minor scale.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/mode_range.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Lydian Mode
-                    </Text>
-                    <Text style={styles.text}>
-                        The brightest mode is the <Text style={styles.bold}>lydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        W, W, W, H, W, W, H. You can think of this mode as a major scale with a raised 4 (<Text style={styles.italic}>fi</Text>). You can also find this mode if you
-                        play all the white keys on a piano keyboard starting from F.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/f_lydian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Image
-                        source={require('@/assets/images/lydian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => lydian.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Lydian</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => lydian.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Lydian</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Ionian Mode
-                    </Text>
-                    <Text style={styles.text}>
-                        The next bright mode is the <Text style={styles.bold}>ionian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        the exact same as in the major scale: W, W, H, W, W, W, H. You can find this mode if you play all the white keys on a
-                        piano keyboard starting from C.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/c_ionian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Image
-                        source={require('@/assets/images/ionian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => ionian.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Ionian</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => ionian.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Ionian</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Mixolydian Mode
-                    </Text>
-                    <Text style={styles.text}>
-                        The next bright mode is the <Text style={styles.bold}>mixolydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        W, W, H, W, W, H, W. You can think of this mode as a major scale with a lowered 7 (<Text style={styles.italic}>te</Text>). You can also find this mode
-                        if you play all the white keys on a piano keyboard starting from G.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/g_mixolydian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Image
-                        source={require('@/assets/images/mixolydian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => mixolydian.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Mixolydian</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => mixolydian.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Mixolydian</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        The lydian, ionian, and mixolydian modes are considered the brighter modes because they contain an unaltered 3 instead of
-                        a lowered 3 (<Text style={styles.italic}>mi</Text> instead of <Text style={styles.italic}>me</Text>). The dorian, aeolian, phrygian, and locrian modes are considered darker because
-                        they contain a lowered 3 instead of an unaltered 3 (<Text style={styles.italic}>me</Text> instead of <Text style={styles.italic}>mi</Text>).
-                    </Text>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Dorian Mode
-                    </Text>
-                    <Text style={styles.text}>
-                        The first dark mode is the <Text style={styles.bold}>dorian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        W, H, W, W, W, H, W. You can think of this mode as a minor scale with a raised 6 (<Text style={styles.italic}>la</Text>). You can also find this mode if
-                        you play all the white keys on a piano keyboard starting from D.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/d_dorian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Image
-                        source={require('@/assets/images/dorian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => dorian.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Dorian</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => dorian.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Dorian</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Aeolian Mode
-                    </Text>
-                    <Text style={styles.text}>
-                        The next dark mode is the <Text style={styles.bold}>aeolian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is the
-                        exact same as in the minor scale: W, H, W, W, H, W, W. You can also find this mode if you play all the white keys on a
-                        piano keyboard starting from A.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/a_aeolian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Image
-                        source={require('@/assets/images/aeolian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => aeolian.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Aeolian</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => aeolian.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Aeolian</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Phrygian Mode
-                    </Text>
-                    <Text style={styles.text}>
-                        The next dark mode is the <Text style={styles.bold}>phrygian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        H, W, W, W, H, W, W. You can think of this mode as a minor scale with a lowered 2 (<Text style={styles.italic}>ra</Text>). You can also find this mode
-                        if you play all the white keys on a piano keyboard starting from E.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/e_phrygian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Image
-                        source={require('@/assets/images/phrygian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => phrygian.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Phrygian</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => phrygian.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Phrygian</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Locrian Mode
-                    </Text>
-                    <Text style={styles.text}>
-                        The darkest mode is the <Text style={styles.bold}>locrian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
-                        H, W, W, H, W, W, W. You can think of this mode as a minor scale with a lowered 2 (<Text style={styles.italic}>ra</Text>) & a lowered 5 (<Text style={styles.italic}>se</Text>).
-                        You can also find this mode if you play all the white keys on a piano keyboard starting from B.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/b_locrian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Image
-                        source={require('@/assets/images/locrian.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                    <Pressable
-                            style={styles.playButton}
-                            onPress={() => locrian.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Locrian</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => locrian.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Locrian</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View>
-                    <Text style={styles.quizTitle}>Quiz</Text>
-
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            1. Which of the following modes is just like the major scale?
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Modes</Text> are an extension of scales. They are ordered collections of whole steps and half steps that can be described
+                            within a continuum of <Text style={styles.bold}>modal brightness</Text>: brighter modes sound more like a major scale while darker modes sound more
+                            like a minor scale.
                         </Text>
-                        {["Lydian", "Ionian", "Mixolydian", "Aeolian"].map((option, index) => {
-                            const selected = quiz1Answer === option;
-                            const correct = option === answer1;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz1Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ1Answer, answer1);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz1Answer && (
-                            <Text style={styles.result}>
-                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
+                        <Image
+                            source={require('@/assets/images/mode_range.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            2. Which of the following modes is just like the minor scale?
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Lydian Mode
                         </Text>
-                        {["Lydian", "Ionian", "Mixolydian", "Aeolian"].map((option, index) => {
-                            const selected = quiz2Answer === option;
-                            const correct = option === answer2;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz2Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ2Answer, answer2);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz2Answer && (
-                            <Text style={styles.result}>
-                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
-                    </View>
-
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            3. Which of the following modes is just like a major scale with a raised 4?
+                        <Text style={styles.text}>
+                            The brightest mode is the <Text style={styles.bold}>lydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
+                            W, W, W, H, W, W, H. You can think of this mode as a major scale with a raised 4 (<Text style={styles.italic}>fi</Text>). You can also find this mode if you
+                            play all the white keys on a piano keyboard starting from F.
                         </Text>
-                        {["Lydian", "Ionian", "Mixolydian", "Locrian"].map((option, index) => {
-                            const selected = quiz3Answer === option;
-                            const correct = option === answer3;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz3Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ3Answer, answer3);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz3Answer && (
-                            <Text style={styles.result}>
-                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
+                        <Image
+                            source={require('@/assets/images/f_lydian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('@/assets/images/lydian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => lydian.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Lydian</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => lydian.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Lydian</Text>
+                            </Pressable>
+                        </View>
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            4. Which of the following modes is just like a minor scale with a lowered 2?
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Ionian Mode
                         </Text>
-                        {["Dorian", "Aeolian", "Phrygian", "Locrian"].map((option, index) => {
-                            const selected = quiz4Answer === option;
-                            const correct = option === answer4;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz4Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ4Answer, answer4);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz4Answer && (
-                            <Text style={styles.result}>
-                                {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
-                    </View>
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            5. Which of the following modes is just like a major scale with a lowered 7?
+                        <Text style={styles.text}>
+                            The next bright mode is the <Text style={styles.bold}>ionian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
+                            the exact same as in the major scale: W, W, H, W, W, W, H. You can find this mode if you play all the white keys on a
+                            piano keyboard starting from C.
                         </Text>
-                        {["Lydian", "Ionian", "Mixolydian", "Dorian"].map((option, index) => {
-                            const selected = quiz5Answer === option;
-                            const correct = option === answer5;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz5Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ5Answer, answer5);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz5Answer && (
-                            <Text style={styles.result}>
-                                {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
+                        <Image
+                            source={require('@/assets/images/c_ionian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('@/assets/images/ionian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => ionian.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Ionian</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => ionian.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Ionian</Text>
+                            </Pressable>
+                        </View>
                     </View>
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            6. Which of the following modes is just like a minor scale with a lowered 2 & a lowered 5?
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Mixolydian Mode
                         </Text>
-                        {["Dorian", "Aeolian", "Phrygian", "Locrian"].map((option, index) => {
-                            const selected = quiz6Answer === option;
-                            const correct = option === answer6;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz6Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ6Answer, answer6);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz6Answer && (
-                            <Text style={styles.result}>
-                                {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
+                        <Text style={styles.text}>
+                            The next bright mode is the <Text style={styles.bold}>mixolydian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
+                            W, W, H, W, W, H, W. You can think of this mode as a major scale with a lowered 7 (<Text style={styles.italic}>te</Text>). You can also find this mode
+                            if you play all the white keys on a piano keyboard starting from G.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/g_mixolydian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('@/assets/images/mixolydian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => mixolydian.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Mixolydian</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => mixolydian.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Mixolydian</Text>
+                            </Pressable>
+                        </View>
                     </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            The lydian, ionian, and mixolydian modes are considered the brighter modes because they contain an unaltered 3 instead of
+                            a lowered 3 (<Text style={styles.italic}>mi</Text> instead of <Text style={styles.italic}>me</Text>). The dorian, aeolian, phrygian, and locrian modes are considered darker because
+                            they contain a lowered 3 instead of an unaltered 3 (<Text style={styles.italic}>me</Text> instead of <Text style={styles.italic}>mi</Text>).
+                        </Text>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Dorian Mode
+                        </Text>
+                        <Text style={styles.text}>
+                            The first dark mode is the <Text style={styles.bold}>dorian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
+                            W, H, W, W, W, H, W. You can think of this mode as a minor scale with a raised 6 (<Text style={styles.italic}>la</Text>). You can also find this mode if
+                            you play all the white keys on a piano keyboard starting from D.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/d_dorian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('@/assets/images/dorian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => dorian.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Dorian</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => dorian.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Dorian</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Aeolian Mode
+                        </Text>
+                        <Text style={styles.text}>
+                            The next dark mode is the <Text style={styles.bold}>aeolian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is the
+                            exact same as in the minor scale: W, H, W, W, H, W, W. You can also find this mode if you play all the white keys on a
+                            piano keyboard starting from A.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/a_aeolian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('@/assets/images/aeolian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => aeolian.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Aeolian</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => aeolian.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Aeolian</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Phrygian Mode
+                        </Text>
+                        <Text style={styles.text}>
+                            The next dark mode is the <Text style={styles.bold}>phrygian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
+                            H, W, W, W, H, W, W. You can think of this mode as a minor scale with a lowered 2 (<Text style={styles.italic}>ra</Text>). You can also find this mode
+                            if you play all the white keys on a piano keyboard starting from E.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/e_phrygian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('@/assets/images/phrygian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => phrygian.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Phrygian</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => phrygian.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Phrygian</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Locrian Mode
+                        </Text>
+                        <Text style={styles.text}>
+                            The darkest mode is the <Text style={styles.bold}>locrian mode</Text>. In this mode, the ascending pattern of whole steps and half steps is
+                            H, W, W, H, W, W, W. You can think of this mode as a minor scale with a lowered 2 (<Text style={styles.italic}>ra</Text>) & a lowered 5 (<Text style={styles.italic}>se</Text>).
+                            You can also find this mode if you play all the white keys on a piano keyboard starting from B.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/b_locrian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('@/assets/images/locrian.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => locrian.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Locrian</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => locrian.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Locrian</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    <View>
+                        <Text style={styles.quizTitle}>Quiz</Text>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                1. Which of the following modes is just like the major scale?
+                            </Text>
+                            {["Lydian", "Ionian", "Mixolydian", "Aeolian"].map((option, index) => {
+                                const selected = quiz1Answer === option;
+                                const correct = option === answer1;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz1Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ1Answer, answer1);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz1Answer && (
+                                <Text style={styles.result}>
+                                    {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                2. Which of the following modes is just like the minor scale?
+                            </Text>
+                            {["Lydian", "Ionian", "Mixolydian", "Aeolian"].map((option, index) => {
+                                const selected = quiz2Answer === option;
+                                const correct = option === answer2;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz2Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ2Answer, answer2);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz2Answer && (
+                                <Text style={styles.result}>
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                3. Which of the following modes is just like a major scale with a raised 4?
+                            </Text>
+                            {["Lydian", "Ionian", "Mixolydian", "Locrian"].map((option, index) => {
+                                const selected = quiz3Answer === option;
+                                const correct = option === answer3;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz3Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ3Answer, answer3);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz3Answer && (
+                                <Text style={styles.result}>
+                                    {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                4. Which of the following modes is just like a minor scale with a lowered 2?
+                            </Text>
+                            {["Dorian", "Aeolian", "Phrygian", "Locrian"].map((option, index) => {
+                                const selected = quiz4Answer === option;
+                                const correct = option === answer4;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz4Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ4Answer, answer4);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz4Answer && (
+                                <Text style={styles.result}>
+                                    {quiz4Answer === answer4 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                5. Which of the following modes is just like a major scale with a lowered 7?
+                            </Text>
+                            {["Lydian", "Ionian", "Mixolydian", "Dorian"].map((option, index) => {
+                                const selected = quiz5Answer === option;
+                                const correct = option === answer5;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz5Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ5Answer, answer5);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz5Answer && (
+                                <Text style={styles.result}>
+                                    {quiz5Answer === answer5 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                6. Which of the following modes is just like a minor scale with a lowered 2 & a lowered 5?
+                            </Text>
+                            {["Dorian", "Aeolian", "Phrygian", "Locrian"].map((option, index) => {
+                                const selected = quiz6Answer === option;
+                                const correct = option === answer6;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz6Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ6Answer, answer6);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz6Answer && (
+                                <Text style={styles.result}>
+                                    {quiz6Answer === answer6 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+                    </View>
+
+
+                    <View style={styles.linksContainer}>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./6scales' style={styles.secondaryLink}>
+                                ← Previous: Scales
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                                ← Back to Home
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./8intervals' style={styles.link}>
+                                Next: Intervals →
+                            </Link>
+                        </View>
+                    </View>
+
                 </View>
 
-
-                <View style={styles.linksContainer}>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./6scales' style={styles.secondaryLink}>
-                            ← Previous: Scales
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
-                            ← Back to Home
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./8intervals' style={styles.link}>
-                            Next: Intervals →
-                        </Link>
-                    </View>
-                </View>
-
-            </View>
-
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 

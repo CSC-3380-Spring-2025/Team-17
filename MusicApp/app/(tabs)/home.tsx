@@ -10,7 +10,7 @@ import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 import LiveMixingPage from './recorder';
 import * as FileSystem from 'expo-file-system';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 type LessonLink =
@@ -207,8 +207,8 @@ export default function HomeScreen() {
     }
   }, [refresh]);
 
-  const handleRefresh=()=>{
-    setRefresh(prev=>!prev);
+  const handleRefresh = () => {
+    setRefresh(prev => !prev);
   };
 
 
@@ -219,55 +219,57 @@ export default function HomeScreen() {
 
   return (
     <>
-      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-        <Link href={lessonLink} asChild>
-          <Pressable style={styles.lessonBox}>
+      <SafeAreaView>
+        <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+          <Link href={lessonLink} asChild>
+            <Pressable style={styles.lessonBox}>
 
-            <View style={styles.lessonTextContainer}>
-              <Text style={styles.sectionTitle}>Lesson {lessonNumber}</Text>
-              <Text style={styles.sectionSubtitle}>{lessonTitle}</Text>
-            </View>
-            <View style={styles.dividerLine} />
-            <View style={styles.lessonImageContainer}>
-              <Image
-                source={lessonImage}
-                style={styles.lessonImage}
-                resizeMode="cover"
-              />
-            </View>
-          </Pressable>
-        </Link>
-
-
-        {savedSongs.map((song, index) => (
-          <Pressable
-            key={index}
-            style={styles.recordingBox}
-            onPress={() => handleLoadSong(song)}
-          >
-            <Text style={styles.recordingTitle}>{song}</Text>
-            <View style={styles.recordingDetails}>
-              <Text style={styles.recordingDate}>Date Unknown</Text>
-              <Text style={styles.recordingDuration}>Duration Unknown</Text>
-            </View>
-          </Pressable>
-
-        ))}
-
-
-
-        <Pressable style={styles.createButton}>
-          <Link href="/recorder" asChild>
-            <Text style={styles.createButtonText}>Create New Track</Text>
+              <View style={styles.lessonTextContainer}>
+                <Text style={styles.sectionTitle}>Lesson {lessonNumber}</Text>
+                <Text style={styles.sectionSubtitle}>{lessonTitle}</Text>
+              </View>
+              <View style={styles.dividerLine} />
+              <View style={styles.lessonImageContainer}>
+                <Image
+                  source={lessonImage}
+                  style={styles.lessonImage}
+                  resizeMode="cover"
+                />
+              </View>
+            </Pressable>
           </Link>
-        </Pressable>
-      </ScrollView>
 
-      <View style={styles.footer}>
-        <Pressable style={styles.refreshButton} onPress={handleRefresh}>
-          <Text style={styles.createButtonText}>Refresh</Text>
-        </Pressable>
-      </View>
+
+          {savedSongs.map((song, index) => (
+            <Pressable
+              key={index}
+              style={styles.recordingBox}
+              onPress={() => handleLoadSong(song)}
+            >
+              <Text style={styles.recordingTitle}>{song}</Text>
+              <View style={styles.recordingDetails}>
+                <Text style={styles.recordingDate}>Date Unknown</Text>
+                <Text style={styles.recordingDuration}>Duration Unknown</Text>
+              </View>
+            </Pressable>
+
+          ))}
+
+
+
+          <Pressable style={styles.createButton}>
+            <Link href="/recorder" asChild>
+              <Text style={styles.createButtonText}>Create New Track</Text>
+            </Link>
+          </Pressable>
+        </ScrollView>
+
+        <View style={styles.footer}>
+          <Pressable style={styles.refreshButton} onPress={handleRefresh}>
+            <Text style={styles.createButtonText}>Refresh</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
     </>
   );
 }

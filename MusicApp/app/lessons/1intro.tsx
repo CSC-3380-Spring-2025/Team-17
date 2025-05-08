@@ -1,112 +1,114 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
-import {Link} from 'expo-router';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
-
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { Link } from 'expo-router';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Intro() {
-    const [userId, setUserId]= useState('');
+    const [userId, setUserId] = useState('');
 
-    useEffect(()=>{
-        if (auth.currentUser){
-          setUserId(auth.currentUser.uid);
+    useEffect(() => {
+        if (auth.currentUser) {
+            setUserId(auth.currentUser.uid);
         }
-      }, []);
-    
-      useEffect(()=>{
-          const fetchUserData= async()=>{
-            if(userId){
-              console.log('Fetching data for userId:', userId);
-      
-              try{
-                const userDocRef= doc(db, 'users', userId);
-                const userDoc = await getDoc(userDocRef)
-                
-                if (userDoc.exists()) {
-                  console.log('Document data:', userDoc.data());
-                  const userData = userDoc.data();
-                  if(userData.lessonProgress){
-                    if(!userData.lessonProgress.includes(1)){
-                        await updateDoc(userDocRef, {
-                            lessonProgress: arrayUnion(1),
+    }, []);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userId) {
+                console.log('Fetching data for userId:', userId);
+
+                try {
+                    const userDocRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+
+                    if (userDoc.exists()) {
+                        console.log('Document data:', userDoc.data());
+                        const userData = userDoc.data();
+                        if (userData.lessonProgress) {
+                            if (!userData.lessonProgress.includes(1)) {
+                                await updateDoc(userDocRef, {
+                                    lessonProgress: arrayUnion(1),
+                                });
+                            }
+                        } else {
+                            await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                            }, { merge: true });
+                        }
+                    } else {
+                        await setDoc(userDocRef, {
+                            lessonProgress: [1],
                         });
                     }
-                  }else{
-                    await setDoc(userDocRef, {
-                        lessonProgress:[1],
-                    }, {merge: true});
-                  }
-                } else {
-                  await setDoc(userDocRef, {
-                    lessonProgress: [1],
-                  });
-                }
-        
-              }catch(error){
-                console.error('Error fetching user data:', error);
-              }
-            }
-          };
-          fetchUserData();
-        }, [userId]);
-    
 
-    return(
-        <ScrollView 
-            contentContainerStyle={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-            style={styles.container}
-        >
-            <View style={styles.contentContainer}>
-                <Text style={styles.title}>
-                    Introduction
-                </Text>
-                
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        Hello there, and welcome to the Music Theory Lessons! Are you trying to write an original song
-                        but have no idea where to start? Well, you have come to the right place! 
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, [userId]);
+
+
+    return (
+        <SafeAreaView>
+            <ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+                style={styles.container}
+            >
+                <View style={styles.contentContainer}>
+                    <Text style={styles.title}>
+                        Introduction
                     </Text>
-                </View>
-                
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        In these lessons, you will learn everything you need to know about writing original melodies, 
-                        building strong harmonies, and creating your own music. These lessons will allow you to dive 
-                        deep into topics like music notation, pitch & rhythm, scales & modes, chords & progressions, 
-                        textures & structures.
-                    </Text>
-                </View>
-                
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        At the end of it all, you will be well-educated in music theory and will be able to create 
-                        your own music and share it with the world. Well, what are you waiting for? Let's get started!
-                    </Text>
-                </View>
-                
-                <View style={styles.ctaContainer}>
-                    <Text style={styles.ctaText}>Click below to begin your journey</Text>
-                </View>
-                
-                <View style={styles.linksContainer}>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./2notation' asChild>
-                            <Pressable style={styles.link}>
-                                <Text style={styles.linkText}>Next: Music Notation →</Text>
-                            </Pressable>
-                        </Link>
+
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            Hello there, and welcome to the Music Theory Lessons! Are you trying to write an original song
+                            but have no idea where to start? Well, you have come to the right place!
+                        </Text>
                     </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='../(tabs)/home' asChild>
-                            <Pressable style={styles.secondaryLink}>
-                                <Text style={styles.secondaryLinkText}>← Back to Home</Text>
-                            </Pressable>
-                        </Link>
+
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            In these lessons, you will learn everything you need to know about writing original melodies,
+                            building strong harmonies, and creating your own music. These lessons will allow you to dive
+                            deep into topics like music notation, pitch & rhythm, scales & modes, chords & progressions,
+                            textures & structures.
+                        </Text>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            At the end of it all, you will be well-educated in music theory and will be able to create
+                            your own music and share it with the world. Well, what are you waiting for? Let's get started!
+                        </Text>
+                    </View>
+
+                    <View style={styles.ctaContainer}>
+                        <Text style={styles.ctaText}>Click below to begin your journey</Text>
+                    </View>
+
+                    <View style={styles.linksContainer}>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./2notation' asChild>
+                                <Pressable style={styles.link}>
+                                    <Text style={styles.linkText}>Next: Music Notation →</Text>
+                                </Pressable>
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='../(tabs)/home' asChild>
+                                <Pressable style={styles.secondaryLink}>
+                                    <Text style={styles.secondaryLinkText}>← Back to Home</Text>
+                                </Pressable>
+                            </Link>
+                        </View>
                     </View>
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 

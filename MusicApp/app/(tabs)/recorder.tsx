@@ -194,7 +194,7 @@ const SoundSettingsModal: React.FC<SoundSettingsModalProps> = ({ visible, track,
                     <Slider
                       style={styles.beatTimeSlider}
                       minimumValue={0}
-                      maximumValue={5000} 
+                      maximumValue={5000}
                       step={50}
                       value={beat.time}
                       onValueChange={(value) => updateBeatTime(index, value)}
@@ -402,7 +402,7 @@ const LiveMixingPage = () => {
     if (Platform.OS === 'web') {
       console.log("File system operations are not directly supported on the web.");
     }
-    else{
+    else {
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(state));
     }
   };
@@ -518,7 +518,7 @@ const LiveMixingPage = () => {
 
       for (const track of tracks) {
         if (track.sourceType === 'virtual-instrument' && track.drumSequence) {
-          
+
           playDrumSequence(track, isLooping);
         } else if (track.url) {
           const { sound } = await Audio.Sound.createAsync(
@@ -549,7 +549,7 @@ const LiveMixingPage = () => {
     soundObjects.forEach(sound => {
       sound.setIsLoopingAsync(newLoopingState);
     });
-    
+
     if (isPlayingAll) {
       tracks.forEach(track => {
         if (track.sourceType === 'virtual-instrument' && track.drumSequence) {
@@ -561,10 +561,10 @@ const LiveMixingPage = () => {
 
   const stopAllPlayback = async () => {
     try {
-      
+
       await Promise.all(soundObjects.map(sound => sound.stopAsync()));
       setSoundObjects([]);
-      
+
       drumTimeouts.forEach(timeout => clearTimeout(timeout));
       setDrumTimeouts([]);
 
@@ -678,7 +678,7 @@ const LiveMixingPage = () => {
   const playDrumSequence = async (track: AudioTrack, loop = false) => {
     if (!track.drumSequence) return;
 
-    
+
     drumTimeouts.forEach(timeout => clearTimeout(timeout));
     setDrumTimeouts([]);
 
@@ -822,7 +822,7 @@ const LiveMixingPage = () => {
     }
   };
 
-  const {handleTaskCompletion} = useChallenges();
+  const { handleTaskCompletion } = useChallenges();
 
   const [editingTrackId, setEditingTrackId] = useState<string | null>(null);
   const [editingTrackName, setEditingTrackName] = useState('');
@@ -831,7 +831,7 @@ const LiveMixingPage = () => {
     setEditingTrackId(track.id);
     setEditingTrackName(track.title);
   };
-  
+
   const saveTrackName = () => {
     if (editingTrackId) {
       setTracks(prev => prev.map(track =>
@@ -840,7 +840,7 @@ const LiveMixingPage = () => {
       setEditingTrackId(null);
     }
   };
-  
+
   const cancelEditing = () => {
     setEditingTrackId(null);
   };
@@ -851,31 +851,31 @@ const LiveMixingPage = () => {
       <View style={styles.trackInfo}>
         {editingTrackId === item.id ? (
           <View style={styles.recordingInfo}>
-          <TextInput
-            style={[styles.recordingName, styles.recordingNameInput]}
-            value={editingTrackName}
-            onChangeText={setEditingTrackName}
-            onBlur={saveTrackName}
-            onSubmitEditing={saveTrackName}
-            autoFocus
-          />
-          <TouchableOpacity 
-            onPress={cancelEditing} 
-            style={styles.editButton}
-          >
-            <MaterialIcons name="close" size={20} color="white" />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={styles.recordingInfo}>
-          <Text style={styles.recordingName}>{item.title}</Text>
-          <TouchableOpacity 
-            onPress={() => startEditingTrack(item)} 
-            style={styles.editButton}
+            <TextInput
+              style={[styles.recordingName, styles.recordingNameInput]}
+              value={editingTrackName}
+              onChangeText={setEditingTrackName}
+              onBlur={saveTrackName}
+              onSubmitEditing={saveTrackName}
+              autoFocus
+            />
+            <TouchableOpacity
+              onPress={cancelEditing}
+              style={styles.editButton}
             >
-            <MaterialIcons name="edit" size={20} color="white" />
-          </TouchableOpacity>
-        </View>
+              <MaterialIcons name="close" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.recordingInfo}>
+            <Text style={styles.recordingName}>{item.title}</Text>
+            <TouchableOpacity
+              onPress={() => startEditingTrack(item)}
+              style={styles.editButton}
+            >
+              <MaterialIcons name="edit" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
         )}
         <Text style={styles.trackType}>{item.sourceType}</Text>
 
@@ -919,7 +919,7 @@ const LiveMixingPage = () => {
     </View>
   );
 
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

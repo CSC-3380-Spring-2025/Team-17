@@ -1,210 +1,211 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions, ImageBackground, ScrollView } from "react-native";
 import { Link } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function lessonsScreen() {
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.buttonsContainer}>
-                <Link href="/lessons/1intro" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/intro.jpeg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>1 - Intro</Text>
+        <SafeAreaView>
+            <ScrollView contentContainerStyle={styles.container}>
+                <View style={styles.buttonsContainer}>
+                    <Link href="/lessons/1intro" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/intro.jpeg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>1 - Intro</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/2notation" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/notation.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>2 - Notation</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/2notation" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/notation.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>2 - Notation</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/3pitch" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/pitch.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>3 - Pitch</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/3pitch" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/pitch.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>3 - Pitch</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/4rhythm" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/rhythm.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>4 - Rhythm</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/4rhythm" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/rhythm.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>4 - Rhythm</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/5meter" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/meter.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>5 - Meter</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/5meter" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/meter.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>5 - Meter</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/6scales" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/scales.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>6 - Scales</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/6scales" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/scales.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>6 - Scales</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/7modes" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/modes.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>7 - Modes</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/7modes" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/modes.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>7 - Modes</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/8intervals" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/intervals.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>8 - Intervals</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/8intervals" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/intervals.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>8 - Intervals</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/9melody" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/melody.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>9 - Melody</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/9melody" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/melody.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>9 - Melody</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/10chords" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/chords.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>10 - Chords</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/10chords" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/chords.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>10 - Chords</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/11progressions" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/progressions.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>11 - Progressions</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/11progressions" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/progressions.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>11 - Progressions</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/12texture" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/texture.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>12 - Texture</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/12texture" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/texture.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>12 - Texture</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-                <Link href="/lessons/13structure" asChild>
-                    <Pressable style={styles.squareButton}>
-                        <View style={styles.buttonContent}>
-                            <ImageBackground
-                                source={require('@/assets/lessonPics/structure.jpg')}
-                                style={styles.imageContainer}
-                                imageStyle={styles.imageStyle}
-                            />
-                            <View style={styles.line} />
-                            <View style={styles.textWrapper}>
-                                <Text style={styles.buttonText}>13 - Structure</Text>
+                        </Pressable>
+                    </Link>
+                    <Link href="/lessons/13structure" asChild>
+                        <Pressable style={styles.squareButton}>
+                            <View style={styles.buttonContent}>
+                                <ImageBackground
+                                    source={require('@/assets/lessonPics/structure.jpg')}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.imageStyle}
+                                />
+                                <View style={styles.line} />
+                                <View style={styles.textWrapper}>
+                                    <Text style={styles.buttonText}>13 - Structure</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                </Link>
-            </View>
-        </ScrollView>
-
-
+                        </Pressable>
+                    </Link>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
         padding: 15,
         paddingBottom: 100,
     },
-    buttonsContainer: { 
+    buttonsContainer: {
         flex: 1,
         justifyContent: 'center',
         gap: 20,

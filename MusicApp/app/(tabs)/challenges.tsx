@@ -5,6 +5,7 @@ import { useChallenges } from '../context/ChallengesContext'
 import ChallengeBox from '../../components/ChallengeBox'
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/firebaseConfig";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChallengesScreen() {
   const [userId, setUserId] = useState('');
@@ -45,22 +46,24 @@ export default function ChallengesScreen() {
   }, [userId]);
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      <Text style={styles.header}>Daily</Text>
-      <View style={styles.challengeGroup}>
-        {challenges.slice(0, 2).map((challenge, index) =>
-        (
-          <ChallengeBox key={index}{...challenge} />
-        ))}
-      </View>
+    <SafeAreaView>
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.header}>Daily</Text>
+        <View style={styles.challengeGroup}>
+          {challenges.slice(0, 2).map((challenge, index) =>
+          (
+            <ChallengeBox key={index}{...challenge} />
+          ))}
+        </View>
 
-      <Text style={styles.header}>Longterm</Text>
-      <View style={styles.challengeGroup}>
-        {challenges.slice(2).map((challenge, index) => (
-          <ChallengeBox key={index}{...challenge} />
-        ))}
-      </View>
-    </ScrollView>
+        <Text style={styles.header}>Longterm</Text>
+        <View style={styles.challengeGroup}>
+          {challenges.slice(2).map((challenge, index) => (
+            <ChallengeBox key={index}{...challenge} />
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Button, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Audio } from 'expo-av';
-import {doc, getDoc, setDoc, updateDoc, arrayUnion} from 'firebase/firestore'
-import {auth, db} from '../../firebaseConfig'
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { auth, db } from '../../firebaseConfig'
 import { useChallenges } from '../context/ChallengesContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Melody() {
     const conjunct = useRef(new Audio.Sound());
@@ -42,321 +43,322 @@ export default function Melody() {
     const resetQuiz3 = () => setQ3Answer(null);
 
     const [count, setCount] = useState<number>(0);
-    const [userId, setUserId]= useState<string>('');
-    const {handleTaskCompletion} = useChallenges();
-            
-                useEffect(()=>{
-                    if (auth.currentUser){
-                      setUserId(auth.currentUser.uid);
-                    }
-                  }, [auth.currentUser]);
-                
-                  useEffect(()=>{
-                      const fetchUserData= async()=>{
-                        if(userId){
-                          console.log('Fetching data for userId:', userId);
-                  
-                          try{
-                            const userDocRef= doc(db, 'users', userId);
-                            const userDoc = await getDoc(userDocRef)
-                            
-                            if (userDoc.exists()) {
-                              console.log('Document data:', userDoc.data());
-                              const userData = userDoc.data();
-                              if(userData.lessonProgress){
-                                if(!userData.lessonProgress.includes(9)){
-                                    if(count === 3){
-                                        await updateDoc(userDocRef, {
-                                            lessonProgress: arrayUnion(9),
-                                        });
-                                        handleTaskCompletion("Complete 2 quizzes");
-                                        handleTaskCompletion("Complete all quizzes");
-                                    }
-                                }
-                              }
-                              else{
-                                await setDoc(userDocRef, {
-                                    lessonProgress:[1],
-                                }, {merge: true});
-                              }
-                            } else {
-                              await setDoc(userDocRef, {
-                                lessonProgress: [1],
-                              });
-                            }
-                    
-                          }catch(error){
-                            console.error('Error fetching user data:', error);
-                          }
-                        }
-                      };
-                      fetchUserData();
-                    }, [userId, count]);
+    const [userId, setUserId] = useState<string>('');
+    const { handleTaskCompletion } = useChallenges();
 
-                    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
-                        if (!selected) return styles.quizButton;
-                        return correct ? styles.correctAnswer : styles.incorrectAnswer;
-                    };
-                            
-                    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
-                        setAnswer(option);
-                        if (option === correctAnswer) {
-                            setCount(prevCount => prevCount + 1);
+    useEffect(() => {
+        if (auth.currentUser) {
+            setUserId(auth.currentUser.uid);
+        }
+    }, [auth.currentUser]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userId) {
+                console.log('Fetching data for userId:', userId);
+
+                try {
+                    const userDocRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userDocRef)
+
+                    if (userDoc.exists()) {
+                        console.log('Document data:', userDoc.data());
+                        const userData = userDoc.data();
+                        if (userData.lessonProgress) {
+                            if (!userData.lessonProgress.includes(9)) {
+                                if (count === 3) {
+                                    await updateDoc(userDocRef, {
+                                        lessonProgress: arrayUnion(9),
+                                    });
+                                    handleTaskCompletion("Complete 2 quizzes");
+                                    handleTaskCompletion("Complete all quizzes");
+                                }
+                            }
                         }
-                    };
-    
+                        else {
+                            await setDoc(userDocRef, {
+                                lessonProgress: [1],
+                            }, { merge: true });
+                        }
+                    } else {
+                        await setDoc(userDocRef, {
+                            lessonProgress: [1],
+                        });
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, [userId, count]);
+
+    const getButtonStyle = (option: string, selected: boolean, correct: boolean): object => {
+        if (!selected) return styles.quizButton;
+        return correct ? styles.correctAnswer : styles.incorrectAnswer;
+    };
+
+    const handlePress = (option: string, setAnswer: React.Dispatch<React.SetStateAction<string | null>>, correctAnswer: string): void => {
+        setAnswer(option);
+        if (option === correctAnswer) {
+            setCount(prevCount => prevCount + 1);
+        }
+    };
+
 
     return (
-
-        <ScrollView
-            contentContainerStyle={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.container}>
-                <Text style={styles.title}>
-                    Melody
-                </Text>
-
-
-                <View style={styles.card}>
-                    <Text style={styles.text}>
-                        With the knowledge of pitch, rhythm, meter, scales, & intervals, it is now possible to create original melodies. A
-                        <Text style={styles.bold}> melody</Text> is a sequence of singular notes organized in a rhythmic manner, forming the main tune of a song or
-                        composition. Ideally, a good melody should be catchy, singable, and easy to remember.
+        <SafeAreaView>
+            <ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>
+                        Melody
                     </Text>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Melodic Characteristics
-                    </Text>
-                    <Text style={styles.text}>
-                        A melody is primarily defined by pitches, rhythms, and intervals. Melodies are created from a series of notes, each
-                        with a specific pitch & duration. These notes are arranged in a pattern of rhythm, which adds to its overall musical
-                        character. A melody follows a <Text style={styles.bold}>contour</Text>, which is a direction determined by how the melody rises & falls in pitch.
-                        Usually, a melody will reach a <Text style={styles.bold}>focal point</Text>, which is the highest or lowest note in a melody that serves as a
-                        climactic moment and leads to a change in the direction of the contour.
-                    </Text>
-                    <Text style={styles.text}>
-                        A melody can be conjunct or disjunct depending on the prominence of certain melodic intervals. <Text style={styles.bold}>Conjunct melodies </Text>
-                        move primarily through stepwise motion. This means that conjunct melodies have mostly intervals of 2nds, keeping the notes
-                        close together and creating a sense of smoothness throughout the melody.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/conjunct.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => conjunct.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Conjunct</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => conjunct.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Conjunct</Text>
-                        </Pressable>
-                    </View>
-                    <Text style={styles.text}>
-                        <Text style={styles.bold}>Disjunct melodies</Text> move primarily through leaps, which are intervals larger than a 2nd. This keeps the notes apart
-                        and creates a sense of separation throughout the melody.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/disjunct.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => disjunct.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Disjunct</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => disjunct.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Disjunct</Text>
-                        </Pressable>
-                    </View>
-                    <Text style={styles.text}>
-                        Usually, a melody will consist mostly of stepwise motion and occasional leaps of a 3rd or more, which often serve as
-                        the most memorable parts of a melody.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/condis.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => condis.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Melody</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => condis.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Melody</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.header}>
-                        Melodic Structure
-                    </Text>
-                    <Text style={styles.text}>
-                        A melody is structured in phrases. A <Text style={styles.bold}>melodic phrase</Text> encompasses a complete musical statement, similar to a
-                        sentence or a clause in spoken language. A melodic phrase usually defines itself by resting, holding, or coming to
-                        some point of rhythmic or tonal resolution. Short phrases can be grouped together to form a longer phrase. In most
-                        melodies, phrases will start the same way, but the melodic ideas they contain will be developed differently.
-                    </Text>
-                    <Image
-                        source={require('@/assets/images/phrases.png')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => phrases.current.playAsync()}
-                        >
-                            <Text style={styles.buttonText}>Play Melody</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.playButton}
-                            onPress={() => phrases.current.pauseAsync()}
-                        >
-                            <Text style={styles.buttonText}>Pause Melody</Text>
-                        </Pressable>
-                    </View>
-                    <Text style={styles.text}>
-                        In general, great melodies are memorable because they utilize short, clear phrases as well as repetition of melodic ideas.
-                        Popular tunes like "Twinkle, Twinkle, Little Star" & "Happy Birthday" are ingrained into our minds because their combination
-                        of simplicity & repetition makes them easy to recall and sing along with.
-                    </Text>
-                </View>
 
 
-                <View>
-                    <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
-
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            1. Melodies are comprised of singular notes organized rhythmically.
+                    <View style={styles.card}>
+                        <Text style={styles.text}>
+                            With the knowledge of pitch, rhythm, meter, scales, & intervals, it is now possible to create original melodies. A
+                            <Text style={styles.bold}> melody</Text> is a sequence of singular notes organized in a rhythmic manner, forming the main tune of a song or
+                            composition. Ideally, a good melody should be catchy, singable, and easy to remember.
                         </Text>
-                        {["True", "False"].map((option, index) => {
-                            const selected = quiz1Answer === option;
-                            const correct = option === answer1;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz1Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ1Answer, answer1);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz1Answer && (
-                            <Text style={styles.result}>
-                                {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-                            2. The highest/lowest note in a melody is a ______.
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Melodic Characteristics
                         </Text>
-                        {["Focal Point", "Contour", "Summit", "Climax"].map((option, index) => {
-                            const selected = quiz2Answer === option;
-                            const correct = option === answer2;
-
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz2Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ2Answer, answer2);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz2Answer && (
-                            <Text style={styles.result}>
-                                {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
-                            </Text>
-                        )}
+                        <Text style={styles.text}>
+                            A melody is primarily defined by pitches, rhythms, and intervals. Melodies are created from a series of notes, each
+                            with a specific pitch & duration. These notes are arranged in a pattern of rhythm, which adds to its overall musical
+                            character. A melody follows a <Text style={styles.bold}>contour</Text>, which is a direction determined by how the melody rises & falls in pitch.
+                            Usually, a melody will reach a <Text style={styles.bold}>focal point</Text>, which is the highest or lowest note in a melody that serves as a
+                            climactic moment and leads to a change in the direction of the contour.
+                        </Text>
+                        <Text style={styles.text}>
+                            A melody can be conjunct or disjunct depending on the prominence of certain melodic intervals. <Text style={styles.bold}>Conjunct melodies </Text>
+                            move primarily through stepwise motion. This means that conjunct melodies have mostly intervals of 2nds, keeping the notes
+                            close together and creating a sense of smoothness throughout the melody.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/conjunct.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => conjunct.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Conjunct</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => conjunct.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Conjunct</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            <Text style={styles.bold}>Disjunct melodies</Text> move primarily through leaps, which are intervals larger than a 2nd. This keeps the notes apart
+                            and creates a sense of separation throughout the melody.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/disjunct.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => disjunct.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Disjunct</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => disjunct.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Disjunct</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            Usually, a melody will consist mostly of stepwise motion and occasional leaps of a 3rd or more, which often serve as
+                            the most memorable parts of a melody.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/condis.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => condis.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Melody</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => condis.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Melody</Text>
+                            </Pressable>
+                        </View>
                     </View>
 
-                    <View style={styles.quizContainer}>
-                        <Text style={styles.quizText}>
-
-                            3. Short phrases can be grouped together to form a longer phrase.
-
+                    <View style={styles.card}>
+                        <Text style={styles.header}>
+                            Melodic Structure
                         </Text>
-                        {["True", "False"].map((option, index) => {
-                            const selected = quiz3Answer === option;
-                            const correct = option === answer3;
+                        <Text style={styles.text}>
+                            A melody is structured in phrases. A <Text style={styles.bold}>melodic phrase</Text> encompasses a complete musical statement, similar to a
+                            sentence or a clause in spoken language. A melodic phrase usually defines itself by resting, holding, or coming to
+                            some point of rhythmic or tonal resolution. Short phrases can be grouped together to form a longer phrase. In most
+                            melodies, phrases will start the same way, but the melodic ideas they contain will be developed differently.
+                        </Text>
+                        <Image
+                            source={require('@/assets/images/phrases.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => phrases.current.playAsync()}
+                            >
+                                <Text style={styles.buttonText}>Play Melody</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.playButton}
+                                onPress={() => phrases.current.pauseAsync()}
+                            >
+                                <Text style={styles.buttonText}>Pause Melody</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.text}>
+                            In general, great melodies are memorable because they utilize short, clear phrases as well as repetition of melodic ideas.
+                            Popular tunes like "Twinkle, Twinkle, Little Star" & "Happy Birthday" are ingrained into our minds because their combination
+                            of simplicity & repetition makes them easy to recall and sing along with.
+                        </Text>
+                    </View>
 
-                            return (
-                                <Pressable
-                                    key={index}
-                                    style={getButtonStyle(option, selected, correct)}
-                                    disabled={!!quiz3Answer}
-                                    onPress={() => {
-                                        handlePress(option, setQ3Answer, answer3);
-                                    }}
-                                >
-                                    <Text style={styles.quizButtonText}>{option}</Text>
-                                </Pressable>
-                            );
-                        })}
-                        {quiz3Answer && (
-                            <Text style={styles.result}>
-                                {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+
+                    <View>
+                        <Text style={styles.quizTitle}>Quiz{"\n"}</Text>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                1. Melodies are comprised of singular notes organized rhythmically.
                             </Text>
-                        )}
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz1Answer === option;
+                                const correct = option === answer1;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz1Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ1Answer, answer1);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz1Answer && (
+                                <Text style={styles.result}>
+                                    {quiz1Answer === answer1 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+                                2. The highest/lowest note in a melody is a ______.
+                            </Text>
+                            {["Focal Point", "Contour", "Summit", "Climax"].map((option, index) => {
+                                const selected = quiz2Answer === option;
+                                const correct = option === answer2;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz2Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ2Answer, answer2);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz2Answer && (
+                                <Text style={styles.result}>
+                                    {quiz2Answer === answer2 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.quizText}>
+
+                                3. Short phrases can be grouped together to form a longer phrase.
+
+                            </Text>
+                            {["True", "False"].map((option, index) => {
+                                const selected = quiz3Answer === option;
+                                const correct = option === answer3;
+
+                                return (
+                                    <Pressable
+                                        key={index}
+                                        style={getButtonStyle(option, selected, correct)}
+                                        disabled={!!quiz3Answer}
+                                        onPress={() => {
+                                            handlePress(option, setQ3Answer, answer3);
+                                        }}
+                                    >
+                                        <Text style={styles.quizButtonText}>{option}</Text>
+                                    </Pressable>
+                                );
+                            })}
+                            {quiz3Answer && (
+                                <Text style={styles.result}>
+                                    {quiz3Answer === answer3 ? "Correct!" : "Try Again"}
+                                </Text>
+                            )}
+                        </View>
+                    </View>
+
+
+
+                    <View style={styles.linksContainer}>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./8intervals' style={styles.secondaryLink}>
+                                ← Previous: Intervals
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='../(tabs)/home' style={styles.secondaryLink}>
+                                ← Back to Home
+                            </Link>
+                        </View>
+                        <View style={styles.linkWrapper}>
+                            <Link href='./10chords' style={styles.link}>
+                                Next: Chords →
+                            </Link>
+                        </View>
                     </View>
                 </View>
-
-
-
-                <View style={styles.linksContainer}>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./8intervals' style={styles.secondaryLink}>
-                            ← Previous: Intervals
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='../(tabs)/home' style={styles.secondaryLink}>
-                            ← Back to Home
-                        </Link>
-                    </View>
-                    <View style={styles.linkWrapper}>
-                        <Link href='./10chords' style={styles.link}>
-                            Next: Chords →
-                        </Link>
-                    </View>
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -587,6 +589,4 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textAlign: 'center',
     },
-
-       
 });
