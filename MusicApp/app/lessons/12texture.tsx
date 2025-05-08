@@ -28,17 +28,30 @@ export default function Texture() {
             await chakrulo.current.loadAsync(require('@/assets/sounds/chakrulo.mp3'));
         };
 
+        loadSounds();
 
-        const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
-        const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
-        const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
-        const answer1 = "Polyphony";
-        const answer2 = "Heterophony";
-        const answer3 = "True";
+        return () => {
+            bach.current.unloadAsync();
+            oboe.current.unloadAsync();
+            seikilos.current.unloadAsync();
+            turkey.current.unloadAsync();
+            handel.current.unloadAsync();
+            jazz.current.unloadAsync();
+            canon.current.unloadAsync();
+            chakrulo.current.unloadAsync();
+        };
+    }, []);
 
-        const [count, setCount] = useState<number>(0);
-        const [userId, setUserId]= useState<string>('');
-        const {handleTaskCompletion} = useChallenges();
+    const [quiz1Answer, setQ1Answer] = useState<string | null>(null);
+    const [quiz2Answer, setQ2Answer] = useState<string | null>(null);
+    const [quiz3Answer, setQ3Answer] = useState<string | null>(null);
+    const answer1 = "Polyphony";
+    const answer2 = "Heterophony";
+    const answer3 = "True";
+
+    const [count, setCount] = useState<number>(0);
+    const [userId, setUserId]= useState<string>('');
+    const {handleTaskCompletion} = useChallenges();
                     
                         useEffect(()=>{
                             if (auth.currentUser){
@@ -98,26 +111,6 @@ export default function Texture() {
                                     setCount(prevCount => prevCount + 1);
                                 }
                             };
-
-
-        return () => {
-            bach.current.unloadAsync();
-            oboe.current.unloadAsync();
-            seikilos.current.unloadAsync();
-            turkey.current.unloadAsync();
-            handel.current.unloadAsync();
-            jazz.current.unloadAsync();
-            canon.current.unloadAsync();
-            chakrulo.current.unloadAsync();
-        };
-    }, []);
-
-    const [quiz1Answer, setQ1Answer] = useState(null);
-    const [quiz2Answer, setQ2Answer] = useState(null);
-    const [quiz3Answer, setQ3Answer] = useState(null);
-    const answer1 = "G,A,B,C,D,E,F,G,A";
-    const answer2 = "Raises the Note by a 1/2 Step";
-    const answer3 = "False";
 
     return (
         <ScrollView
