@@ -1,8 +1,7 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { View, Dimensions, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AudioProvider } from './AudioContext';
-import { Svg, Path } from 'react-native-svg';
 import { usePathname, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
@@ -10,7 +9,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Streak from '@/components/streak';
 import Coins from '@/components/coins';
 import { ChallengesProvider } from '../context/ChallengesContext';
-import { AuthProvider } from '../context/AuthContext';
+
 
 const profileImages = {
   'aesthetic': require('../../assets/profilepictures/aesthetic.jpg'),

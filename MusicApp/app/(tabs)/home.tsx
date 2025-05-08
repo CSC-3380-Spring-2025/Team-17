@@ -1,17 +1,12 @@
 import { Text, View, StyleSheet, Pressable, ScrollView, Image, Platform } from "react-native";
 
 import { Link, Stack, useRouter, useNavigation } from 'expo-router';
-import ProfilePictureButton from '../../components/profilePictureButton';
-import Coins from '../../components/coins'
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import Streak from '../../components/streak';
+import React, { useState, useEffect, useRef, } from 'react';
 import { useChallenges } from '../context/ChallengesContext';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
-import LiveMixingPage from './recorder';
 import * as FileSystem from 'expo-file-system';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 const PlaceholderImage = require('@/assets/images/dog.jpg');
 type LessonLink =
   | "/lessons/1intro"
