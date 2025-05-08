@@ -45,7 +45,7 @@ export default function ChallengesScreen() {
   }, [userId]);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <Text style={styles.header}>Daily</Text>
       <View style={styles.challengeGroup}>
         {challenges.slice(0, 2).map((challenge, index) =>
@@ -69,6 +69,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1C1D1F",
+    padding: 20,
+  },
+  scrollContent: {
+    paddingBottom: 80,
     padding: 20,
   },
   header: {
